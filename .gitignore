@@ -19,3 +19,11 @@
 /Crytex.Client/bin
 /TestApp/obj
 /TestApp/bin
+/Crytex.Background/obj
+/Crytex.Background/bin
+/Crytex.LogSystem/obj
+/Crytex.LogSystem/bin
+/Crytex.WCF.Receiver/obj
+/Crytex.WCF.Receiver/bin
+/Crytex.ExecutorTask/obj
+/Crytex.ExecutorTask/bin
