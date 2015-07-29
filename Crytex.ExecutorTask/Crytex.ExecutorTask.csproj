@@ -40,13 +40,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Executor.cs" />
+    <Compile Include="Hyper_V\HyperVExecutor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Task\CreateVMTask.cs" />
+    <Compile Include="Task\RemoveVmTask.cs" />
+    <Compile Include="Task\UpdateVmTask.cs" />
+    <Compile Include="TypeVm.cs" />
+    <Compile Include="VmWare\VmWareExecutor.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Hyper_V\" />
-    <Folder Include="InterfaceExecutor\" />
-    <Folder Include="VmWare\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
