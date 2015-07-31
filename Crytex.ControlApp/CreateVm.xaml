@@ -1,0 +1,21 @@
+﻿<Window x:Class="Crytex.ControlApp.CreateVm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Crytex.ControlApp"
+        mc:Ignorable="d"
+        Title="CreateVm" Height="300" Width="300">
+    <Grid>
+        <Button x:Name="btnCreateVm" Content="Создать" HorizontalAlignment="Left" Margin="180,229,0,0" VerticalAlignment="Top" Width="75" Click="btnCreateVm_Click"/>
+        <TextBox x:Name="txtCore" HorizontalAlignment="Left" Height="23" Margin="135,23,0,0" TextWrapping="Wrap" Text="2" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtRam" HorizontalAlignment="Left" Height="23" Margin="135,51,0,0" TextWrapping="Wrap" Text="2048" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="txtHdd" HorizontalAlignment="Left" Height="23" Margin="135,79,0,0" TextWrapping="Wrap" Text="90" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label" HorizontalAlignment="Left" Margin="48,23,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1" HorizontalAlignment="Left" Margin="35,15,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1_Copy2" Content="Памяти" HorizontalAlignment="Left" Margin="42,51,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1_Copy3" Content="Жесткий" HorizontalAlignment="Left" Margin="42,79,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="label1_Copy1" Content="Ядер" HorizontalAlignment="Left" Margin="42,23,0,0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

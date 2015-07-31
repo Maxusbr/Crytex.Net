@@ -12,6 +12,13 @@ namespace Crytex.WCF.Receiver
     public interface IControlService
     {
         [OperationContract]
-        void DoWork();
+        void CreateVm(Int32 ID);
+
+        [OperationContract]
+        void RemoveVM(Int32 ID);
+
+        [OperationContract]
+        void StandartVmTask(Int32 ID);
+
     }
 }

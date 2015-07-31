@@ -10,28 +10,27 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Crytex.ExecutorTask;
-using Microsoft.Practices.Unity;
+using Project.Service.IService;
 
 namespace Crytex.ControlApp
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для CreateVm.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CreateVm : Window
     {
-        public MainWindow()
+        private ITaskVmService _taskVmService;
+    
+        public CreateVm(ITaskVmService taskVmService)
         {
             InitializeComponent();
+            _taskVmService = taskVmService;
         }
 
-        private void button_Click(object sender, RoutedEventArgs e)
+        private void btnCreateVm_Click(object sender, RoutedEventArgs e)
         {
-            var window= UnityConfig.GetConfiguredContainer().Resolve<CreateVm>();
-     
-            window.ShowDialog();
+           
         }
     }
 }

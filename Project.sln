@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Web", "Project.Web\Project.Web.csproj", "{18B19F4A-6FEE-4C6D-A819-8308049853EF}"
 EndProject
@@ -14,13 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Service", "Project.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Project.Test", "Project.Test\Project.Test.csproj", "{AA1D53C6-5F8B-4A75-ABF3-E72DD053AC7F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{5CD6ABF5-B298-4EBD-B640-C07A0FA5B4B2}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Client", "Crytex.Client\Crytex.Client.csproj", "{09C73CB9-A4C8-4CA2-AAE7-09E485D6C79A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Admin", "Crytex.Admin\Crytex.Admin.csproj", "{A1C6881C-00F5-42A9-9D1D-11AF53807AD4}"
@@ -30,10 +23,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApp", "TestApp\TestApp.csproj", "{C16D3F77-B4FB-4847-BE25-19748F5E959B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.ExecutorTask", "Crytex.ExecutorTask\Crytex.ExecutorTask.csproj", "{80D3FD00-5ADE-4BB0-ADA8-6450346BFC05}"
+	ProjectSection(ProjectDependencies) = postProject
+		{FC3571DB-2D14-4280-8F07-31599F2A7D5B} = {FC3571DB-2D14-4280-8F07-31599F2A7D5B}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.LogSystem", "Crytex.LogSystem\Crytex.LogSystem.csproj", "{8DA98FDF-8F70-49DD-B6FD-07344E116C05}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.WCF.Receiver", "Crytex.WCF.Receiver\Crytex.WCF.Receiver.csproj", "{785010DB-30C0-4E38-8E04-B111408F607C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.ControlApp", "Crytex.ControlApp\Crytex.ControlApp.csproj", "{470E6554-DC90-439B-BEC5-315141EE98AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,6 +175,22 @@ Global
 		{785010DB-30C0-4E38-8E04-B111408F607C}.Release|ARM.ActiveCfg = Release|Any CPU
 		{785010DB-30C0-4E38-8E04-B111408F607C}.Release|x64.ActiveCfg = Release|Any CPU
 		{785010DB-30C0-4E38-8E04-B111408F607C}.Release|x86.ActiveCfg = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|ARM.Build.0 = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|x64.Build.0 = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Debug|x86.Build.0 = Debug|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|ARM.ActiveCfg = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|ARM.Build.0 = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|x64.ActiveCfg = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|x64.Build.0 = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|x86.ActiveCfg = Release|Any CPU
+		{470E6554-DC90-439B-BEC5-315141EE98AD}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -51,12 +51,7 @@ namespace Project.Web.App_Start
             container.RegisterType<DbContext, ApplicationDbContext>();
             container.RegisterType<ApplicationUserManager>();
 
-            container.RegisterType<IMessageRepository, MessageRepository>();
-            container.RegisterType<IUnitOfWork, UnitOfWork>(new PerThreadLifetimeManager());
-            container.RegisterType<IDatabaseFactory, DatabaseFactory>(new PerThreadLifetimeManager());
-
-            container.RegisterType<IMessageService, MessageService>();
-
+            Service.UnityConfig.Register(container);
 
 
             container.RegisterType<SampleHub, SampleHub>(new TransientLifetimeManager());
