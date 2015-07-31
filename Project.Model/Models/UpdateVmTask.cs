@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Project.Model.Models
 {
-    public class RemoveVmTask : BaseEntity
+    public class UpdateVmTask : ConfigTask
     {
+        public  Int32 VmId { get; set; }
     }
 }

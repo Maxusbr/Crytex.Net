@@ -23,10 +23,9 @@ namespace Project.Data
 
         public DbSet<Message> Messages { get; set; }
 
-        public DbSet<CreateVmTask> CreateVmTasks { get; set; }
         public DbSet<RemoveVmTask> RemoveVmTasks { get; set; }
         public DbSet<StandartVmTask> StandartVmTasks { get; set; }
-        public DbSet<UpdateVmTask> UpdateVmTasks { get; set; }
+        public DbSet<CreateVm> UpdateVmTasks { get; set; }
         public DbSet<UserVm> UserVms { get; set; }
     }
 }

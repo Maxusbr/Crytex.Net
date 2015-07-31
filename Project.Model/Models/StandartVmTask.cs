@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace Project.Model.Models
 {
-    public class StandartVmTask : BaseEntity
+    public class StandartVmTask : BaseTask
     {
+        public Int32 VmId { get; set; }
     }
 
 
     public enum TypeStandartVmTask
     {
         Stop,
-        Start
+        Start,
+        Remove
     }
 }

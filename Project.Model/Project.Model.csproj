@@ -60,10 +60,11 @@
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseTask.cs" />
+    <Compile Include="Models\ConfigVmTask.cs" />
     <Compile Include="Models\CreateVmTask.cs" />
     <Compile Include="Models\Message.cs" />
-    <Compile Include="Models\RemoveVmTask.cs" />
     <Compile Include="Models\StandartVmTask.cs" />
+    <Compile Include="Models\UpdateVmTask.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
