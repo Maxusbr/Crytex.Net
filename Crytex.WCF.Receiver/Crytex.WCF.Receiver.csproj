@@ -44,8 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControlService.cs" />
-    <Compile Include="IControlService.cs" />
+    <Compile Include="ReceiverService.cs" />
+    <Compile Include="IReceiverService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -7,9 +7,9 @@ using System.Text;
 
 namespace Crytex.WCF.Receiver
 {
-    // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени интерфейса "IControlService" в коде и файле конфигурации.
+    // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени интерфейса "IReceiverService" в коде и файле конфигурации.
     [ServiceContract]
-    public interface IControlService
+    public interface IReceiverService
     {
         [OperationContract]
         void CreateVm(Int32 ID);

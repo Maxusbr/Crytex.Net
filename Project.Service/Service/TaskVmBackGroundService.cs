@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Project.Data.Infrastructure;
 using Project.Data.IRepository;
 using Project.Service.IService;
+using Project.Service.Model;
 
 namespace Project.Service.Service
 {
@@ -18,6 +19,21 @@ namespace Project.Service.Service
       
             _unitOfWork = unitOfWork;
             _sender = Sender;
+        }
+
+        public void CreateVm(CreateVmOption createVmOption)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveVm(RemoveVmOption removeVm)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateVmOption(UpdateVmOption updateVmOption)
+        {
+            throw new NotImplementedException();
         }
     }
 }
