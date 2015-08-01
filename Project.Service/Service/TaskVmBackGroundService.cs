@@ -9,11 +9,11 @@ using Project.Service.IService;
 
 namespace Project.Service.Service
 {
-    public class TaskVmService : ITaskVmService
+    public class TaskVmBackGroundService : ITaskVmBackGroundService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ISender _sender;
-        public TaskVmService( IUnitOfWork unitOfWork, ISender Sender)
+        public TaskVmBackGroundService( IUnitOfWork unitOfWork, ISender Sender)
         {
       
             _unitOfWork = unitOfWork;

@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="ISender.cs" />
     <Compile Include="IService\IMessageService.cs" />
+    <Compile Include="IService\ITaskVmBackGroundService.cs" />
     <Compile Include="IService\ITaskVmService.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
@@ -60,7 +61,7 @@
     <Compile Include="SenderWcf.cs" />
     <Compile Include="Service\MessageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service\TaskVmService.cs" />
+    <Compile Include="Service\TaskVmBackGroundService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>

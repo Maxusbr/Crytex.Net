@@ -60,7 +60,7 @@
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseTask.cs" />
-    <Compile Include="Models\ConfigVmTask.cs" />
+    <Compile Include="Models\ConfigTask.cs" />
     <Compile Include="Models\CreateVmTask.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\StandartVmTask.cs" />

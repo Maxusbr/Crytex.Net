@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Project.Service.IService
+namespace Project.Data.IRepository
 {
-    public interface ITaskVmService
+    public interface IStandartVmTaskRepository
     {
-
     }
 }

@@ -20,12 +20,12 @@ namespace Crytex.ControlApp
     /// </summary>
     public partial class CreateVm : Window
     {
-        private ITaskVmService _taskVmService;
+        private ITaskVmBackGroundService _taskVmBackGroundService;
     
-        public CreateVm(ITaskVmService taskVmService)
+        public CreateVm(ITaskVmBackGroundService taskVmBackGroundService)
         {
             InitializeComponent();
-            _taskVmService = taskVmService;
+            _taskVmBackGroundService = taskVmBackGroundService;
         }
 
         private void btnCreateVm_Click(object sender, RoutedEventArgs e)

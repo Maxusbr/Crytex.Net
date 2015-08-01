@@ -9,9 +9,9 @@ namespace Project.Model.Models
 {
     public class ConfigTask :BaseTask
     {
-        public Int32 Cpu;
-        public Int32 Ram;
-        public Int32 Hdd;
-        public String Name;
+        public Int32 Cpu { get; set; }
+        public Int32 Ram { get; set; }
+        public Int32 Hdd { get; set; }
+        public String Name { get; set; }
     }
 }

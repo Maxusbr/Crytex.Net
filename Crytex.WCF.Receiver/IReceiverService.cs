@@ -15,7 +15,8 @@ namespace Crytex.WCF.Receiver
         void CreateVm(Int32 ID);
 
         [OperationContract]
-        void RemoveVM(Int32 ID);
+        void UpdateVm(Int32 ID);
+
 
         [OperationContract]
         void StandartVmTask(Int32 ID);
