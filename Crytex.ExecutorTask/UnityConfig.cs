@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crytex.ExecutorTask.Hyper_V;
+using Crytex.ExecutorTask.VmWare;
 using Microsoft.Practices.Unity;
 
 namespace Crytex.ExecutorTask
@@ -33,7 +35,11 @@ namespace Crytex.ExecutorTask
         public static void RegisterTypes(IUnityContainer container)
         {
             
-            Project.Service.UnityConfig.Register(container);
+            Project.Service.UnityConfig.Register(container, new ContainerControlledLifetimeManager());
+
+            container.RegisterType<Executor>();
+            container.RegisterType<IHyperVExecutor, HyperVFakeExecutor>();
+            container.RegisterType<IWmWareExecutor, WmWareFakeExecutor>();
 
         }
     }

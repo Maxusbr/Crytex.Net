@@ -16,6 +16,8 @@
         <Label x:Name="label1_Copy2" Content="Памяти" HorizontalAlignment="Left" Margin="42,51,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label1_Copy3" Content="Жесткий" HorizontalAlignment="Left" Margin="42,79,0,0" VerticalAlignment="Top"/>
         <Label x:Name="label1_Copy1" Content="Ядер" HorizontalAlignment="Left" Margin="42,23,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="135,117,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label x:Name="label2" Content="Название" HorizontalAlignment="Left" Margin="41,122,0,0" VerticalAlignment="Top" Width="67"/>
 
     </Grid>
 </Window>

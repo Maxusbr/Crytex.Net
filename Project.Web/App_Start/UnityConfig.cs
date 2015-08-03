@@ -51,13 +51,12 @@ namespace Project.Web.App_Start
             container.RegisterType<DbContext, ApplicationDbContext>();
             container.RegisterType<ApplicationUserManager>();
 
-            Service.UnityConfig.Register(container);
+            Service.UnityConfig.Register(container, new PerRequestLifetimeManager());
 
 
             container.RegisterType<SampleHub, SampleHub>(new TransientLifetimeManager());
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
-            // TODO: Register your types here
-            // container.RegisterType<IProductRepository, ProductRepository>();
+           
         }
     }
 }

@@ -14,12 +14,11 @@ namespace Project.Service
 {
     public class UnityConfig
     {
-        public static void Register(IUnityContainer container)
+        public static void Register(IUnityContainer container,LifetimeManager lifetimeManager )
         {
             container.RegisterType<IMessageRepository, MessageRepository>();
-            container.RegisterType<IUnitOfWork, UnitOfWork>(new PerThreadLifetimeManager());
-            container.RegisterType<IDatabaseFactory, DatabaseFactory>(new PerThreadLifetimeManager());
-
+            container.RegisterType<IUnitOfWork, UnitOfWork>(lifetimeManager);
+            container.RegisterType<IDatabaseFactory, DatabaseFactory>(lifetimeManager);
             container.RegisterType<ISender, SenderWcf>();
             container.RegisterType<IMessageService, MessageService>();
 

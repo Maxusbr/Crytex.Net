@@ -10,6 +10,6 @@ namespace Project.Model.Models
    public  class BaseEntity
     {
         [Key]
-        public Int32 Key { get; set; }
+        public Int32 Id { get; set; }
     }
 }

@@ -6,10 +6,18 @@ using System.Threading.Tasks;
 
 namespace Project.Model.Models
 {
-    public class BaseTask
+    public class BaseTask: BaseEntity
     {
         public StatusTask StatusTask { get; set; }
-        public String UserId;
+        public String UserId { get; set; }
+        public TypeVirtualization Virtualization { get; set; }
+    }
+
+    public enum TypeVirtualization
+    {
+        HyperV
+            ,
+        WmWare
     }
 
     public enum StatusTask

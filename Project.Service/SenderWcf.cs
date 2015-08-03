@@ -11,7 +11,8 @@ namespace Project.Service
     {
         public void SendCommand(CreateVmTask task)
         {
-            throw new NotImplementedException();
+            var sender= new Executor.ReceiverServiceClient();
+            sender.CreateVm(task.Id);
         }
 
         public void SendCommand(UpdateVmTask task)

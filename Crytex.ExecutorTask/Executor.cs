@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,11 +12,20 @@ namespace Crytex.ExecutorTask
 {
     public class Executor
     {
-        private HyperVExecutor _hyperVExecutor = new HyperVExecutor();
-        private VmWareExecutor _vmWareExecutor = new VmWareExecutor();
+        private IHyperVExecutor _hyperVExecutor;
+   
+        private IWmWareExecutor _vmWareExecutor;
+
+        public Executor(IHyperVExecutor iHyperVExecutor, IWmWareExecutor vmWareExecutor)
+        {
+            _vmWareExecutor = vmWareExecutor;
+            _hyperVExecutor = iHyperVExecutor;
+        }
 
 
-       
-
+        public void RunCreateVm(Int32 id)
+        {
+            
+        }
     }
 }

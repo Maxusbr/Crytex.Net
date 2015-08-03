@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Project.Service.IService;
+using Project.Service.Model;
 
 namespace Crytex.ControlApp
 {
@@ -30,7 +31,18 @@ namespace Crytex.ControlApp
 
         private void btnCreateVm_Click(object sender, RoutedEventArgs e)
         {
-           
+            var name = txtName.Text;
+            var cpu = Convert.ToInt32(txtCore.Text);
+            var ram = Convert.ToInt32(txtRam);
+            var hdd = Convert.ToInt32(txtHdd.Text);
+            _taskVmBackGroundService.CreateVm(new CreateVmOption()
+            {
+                Cpu = cpu,
+                Hdd = hdd,
+                Name=name,
+                Ram = ram,
+                UserId = ""
+            });
         }
     }
 }
