@@ -1,5 +1,4 @@
 /packages
-/.nuget
 /Project.Web/bin
 /Project.Web/obj
 /Project.Test/bin
