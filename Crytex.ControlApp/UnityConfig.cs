@@ -28,7 +28,8 @@ namespace Crytex.ControlApp
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
-            Project.Service.UnityConfig.Register(container,new TransientLifetimeManager());
+            Project.Service.UnityConfig.Register<TransientLifetimeManager>(container);
+            container.RegisterType<CreateVm, CreateVm>();
         }
     }
 }

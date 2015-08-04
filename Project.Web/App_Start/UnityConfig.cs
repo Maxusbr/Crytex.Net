@@ -51,8 +51,7 @@ namespace Project.Web.App_Start
             container.RegisterType<DbContext, ApplicationDbContext>();
             container.RegisterType<ApplicationUserManager>();
 
-            Service.UnityConfig.Register(container, new PerRequestLifetimeManager());
-
+            Service.UnityConfig.Register<PerRequestLifetimeManager>(container);
 
             container.RegisterType<SampleHub, SampleHub>(new TransientLifetimeManager());
             container.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));

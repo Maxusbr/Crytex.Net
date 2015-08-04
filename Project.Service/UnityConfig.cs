@@ -7,6 +7,7 @@ using Microsoft.Practices.Unity;
 using Project.Data.Infrastructure;
 using Project.Data.IRepository;
 using Project.Data.Repository;
+using Project.Service.IService;
 using Project.Service.Service;
 using Sample.Service.IService;
 
@@ -14,14 +15,20 @@ namespace Project.Service
 {
     public class UnityConfig
     {
-        public static void Register(IUnityContainer container,LifetimeManager lifetimeManager )
+        public static void Register<TLifetimeManager>(IUnityContainer container) where TLifetimeManager :LifetimeManager,new()
         {
             container.RegisterType<IMessageRepository, MessageRepository>();
-            container.RegisterType<IUnitOfWork, UnitOfWork>(lifetimeManager);
-            container.RegisterType<IDatabaseFactory, DatabaseFactory>(lifetimeManager);
+            container.RegisterType<ICreateVmTaskRepository,CreateVmTaskRepository>();
+            container.RegisterType<IUpdateVmTaskRepository, UpdateTaskVmRepository>();
+            container.RegisterType<IStandartVmTaskRepository, StandartVmTaskRepository >();
+
+
+            container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
+            container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
             container.RegisterType<ISender, SenderWcf>();
             container.RegisterType<IMessageService, MessageService>();
-
+      
+            container.RegisterType<ITaskVmBackGroundService,TaskVmBackGroundService>();
         }
     }
 }

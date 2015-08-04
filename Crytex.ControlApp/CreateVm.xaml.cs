@@ -33,7 +33,7 @@ namespace Crytex.ControlApp
         {
             var name = txtName.Text;
             var cpu = Convert.ToInt32(txtCore.Text);
-            var ram = Convert.ToInt32(txtRam);
+            var ram = Convert.ToInt32(txtRam.Text);
             var hdd = Convert.ToInt32(txtHdd.Text);
             _taskVmBackGroundService.CreateVm(new CreateVmOption()
             {
