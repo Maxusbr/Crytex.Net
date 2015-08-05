@@ -54,6 +54,10 @@
     <Compile Include="Migrations\201508051224415_UserVmMigration.Designer.cs">
       <DependentUpon>201508051224415_UserVmMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508051250574_HelpDeskRequestMigration.cs" />
+    <Compile Include="Migrations\201508051250574_HelpDeskRequestMigration.Designer.cs">
+      <DependentUpon>201508051250574_HelpDeskRequestMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\CreateVmTaskRepository.cs" />
@@ -78,6 +82,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508051224415_UserVmMigration.resx">
       <DependentUpon>201508051224415_UserVmMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508051250574_HelpDeskRequestMigration.resx">
+      <DependentUpon>201508051250574_HelpDeskRequestMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

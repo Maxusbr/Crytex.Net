@@ -66,6 +66,7 @@
     <Compile Include="Models\CreateVmTask.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\StandartVmTask.cs" />
+    <Compile Include="Models\HelpDeskRequest.cs" />
     <Compile Include="Models\UpdateVmTask.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

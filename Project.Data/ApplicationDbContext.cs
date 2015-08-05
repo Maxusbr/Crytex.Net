@@ -24,6 +24,8 @@ namespace Project.Data
 
         public DbSet<Message> Messages { get; set; }
 
+        public DbSet<HelpDeskRequest> HelpDeskRequests { get; set; }
+
         public DbSet<CreateVmTask> CreateVmTasks { get; set; }
         public DbSet<StandartVmTask> StandartVmTasks { get; set; }
         public DbSet<UpdateVmTask> UpdateVmTasks { get; set; }
