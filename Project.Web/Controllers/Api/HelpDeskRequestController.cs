@@ -100,8 +100,9 @@ namespace Project.Web.Controllers.Api
         public HttpResponseMessage Create(HelpDeskRequestViewModel model)
         {
             if(ModelState.IsValid){
-                var userId = "test"; // Temporary solution !
-                var newRequest = this._helpDeskRequestService.CreateNew(model.Summary, model.Details, userId);
+                var userName = this.User.Identity.Name;
+                var user = this._userManager.Users.Single(u => u.UserName == userName);
+                var newRequest = this._helpDeskRequestService.CreateNew(model.Summary, model.Details, user.Id);
 
                 return Request.CreateResponse(HttpStatusCode.Created, new { id = newRequest.Id});
             }
