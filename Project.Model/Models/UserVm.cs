@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Project.Model.Models
 {
-    public class UserVm
+    public class UserVm : BaseEntity
     {
     }
 

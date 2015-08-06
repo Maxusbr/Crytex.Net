@@ -34,8 +34,8 @@ namespace Crytex.ExecutorTask
         /// change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.</remarks>
         public static void RegisterTypes(IUnityContainer container)
         {
-            
-            Project.Service.UnityConfig.Register(container, new ContainerControlledLifetimeManager());
+
+            Project.Service.UnityConfig.Register<ContainerControlledLifetimeManager>(container);
 
             container.RegisterType<Executor>();
             container.RegisterType<IHyperVExecutor, HyperVFakeExecutor>();

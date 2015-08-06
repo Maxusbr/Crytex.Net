@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 
 namespace Project.Model.Models
@@ -15,5 +17,8 @@ namespace Project.Model.Models
             // Здесь добавьте утверждения пользователя
             return userIdentity;
         }
+
+        [InverseProperty("User")]
+        public virtual ICollection<HelpDeskRequest> HelpDeskRequests { get; set; }
     }
 }

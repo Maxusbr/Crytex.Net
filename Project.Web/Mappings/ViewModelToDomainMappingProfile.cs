@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
 using AutoMapper;
+using Project.Web.Models.JsonModels;
+using Project.Model.Models;
 
 namespace Project.Web.Mappings
 {
@@ -16,7 +18,7 @@ namespace Project.Web.Mappings
 
         protected override void Configure()
         {
-           
+            Mapper.CreateMap<HelpDeskRequestViewModel, HelpDeskRequest>();
         }
     }
 }
