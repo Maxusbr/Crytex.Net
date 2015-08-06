@@ -34,29 +34,11 @@ namespace Project.Web.Controllers.Api
             else
             {
                 var page = this._helpDeskRequestService.GetPage(pageNumber, pageSize);
-                var modelItems = ToModelItems(page);
-                var viewModel = new HelpRequestPageViewModel
-                {
-                    Items = modelItems,
-                    TotalPages = page.PageCount,
-                    TotalRows = page.TotalItemCount
-                };
+                var viewModel = AutoMapper.Mapper.Map<HelpRequestPageViewModel>(page);
                 return Request.CreateResponse(HttpStatusCode.OK, viewModel);
             }
 
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-        }
-
-        private IEnumerable<HelpDeskRequestViewModel> ToModelItems(IPagedList<HelpDeskRequest> page)
-        {
-            return page.Select(i => new HelpDeskRequestViewModel
-            {
-                Details = i.Details,
-                Summary = i.Summary,
-                CreationDate = i.CreationDate,
-                Status = i.Status,
-                Id = i.Id
-            });
         }
 
         // GET: api/HelpDeskRequest/5
@@ -64,13 +46,7 @@ namespace Project.Web.Controllers.Api
         public HelpDeskRequestViewModel GetById(int id)
         {
             var request =  this._helpDeskRequestService.GeById(id);
-            var model = new HelpDeskRequestViewModel
-            {
-                Status = request.Status,
-                Summary = request.Summary,
-                Details = request.Details,
-                CreationDate = request.CreationDate
-            };
+            var model = AutoMapper.Mapper.Map<HelpDeskRequestViewModel>(request);
 
             return model;
         }
@@ -80,13 +56,8 @@ namespace Project.Web.Controllers.Api
         {
             if (ModelState.IsValid)
             {
-                var userRequest = new HelpDeskRequest
-                {
-                    Id = id,
-                    Details = model.Details,
-                    Status = model.Status,
-                    Summary = model.Summary
-                };
+                var userRequest = AutoMapper.Mapper.Map<HelpDeskRequest>(model);
+                userRequest.Id = id;
                 this._helpDeskRequestService.Update(userRequest);
 
                 return new HttpResponseMessage(HttpStatusCode.OK);

@@ -6,6 +6,7 @@ using System.Web;
 using AutoMapper;
 using Project.Model.Models;
 using Project.Web.Models.JsonModels;
+using PagedList;
 
 namespace Project.Web.Mappings
 {
@@ -19,7 +20,11 @@ namespace Project.Web.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<Message, MessageViewModel>();
-
+            Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>();
+            Mapper.CreateMap<IPagedList<HelpDeskRequest>, HelpRequestPageViewModel>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(source => source.ToList()))
+                .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(source => source.PageCount))
+                .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(source => source.TotalItemCount));
         }
     }
 }
