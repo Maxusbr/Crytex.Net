@@ -19,5 +19,13 @@ namespace Project.Service.IService
         void DeleteById(int id);
 
         IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize);
+
+        IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id);
+
+        HelpDeskRequestComment CreateComment(int requestId, string comment, string userId);
+
+        void DeleteCommentById(int id);
+
+        void UpdateComment(int commentId, string comment);
     }
 }
