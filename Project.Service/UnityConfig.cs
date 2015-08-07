@@ -22,6 +22,7 @@ namespace Project.Service
             container.RegisterType<IUpdateVmTaskRepository, UpdateTaskVmRepository>();
             container.RegisterType<IStandartVmTaskRepository, StandartVmTaskRepository >();
             container.RegisterType<IHelpDeskRequestRepository, HelpDeskRequestRepository>();
+            container.RegisterType<IHelpDeskRequestCommentRepository, HelpDeskRequestCommentRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());

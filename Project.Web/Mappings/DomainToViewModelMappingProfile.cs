@@ -25,6 +25,7 @@ namespace Project.Web.Mappings
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(source => source.ToList()))
                 .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(source => source.PageCount))
                 .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(source => source.TotalItemCount));
+            Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
         }
     }
 }

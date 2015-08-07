@@ -21,6 +21,9 @@ namespace Project.Model.Models
 
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
+        
+        [InverseProperty("Request")]
+        public virtual ICollection<HelpDeskRequestComment> Comments { get; set; }
     }
 
     public enum RequestStatus
