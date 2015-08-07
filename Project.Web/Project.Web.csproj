@@ -236,6 +236,7 @@
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\FileController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestCommentController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />
@@ -250,6 +251,7 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JsonModels\FileDescriptorViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestCommentViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestViewModel.cs" />
     <Compile Include="Models\JsonModels\MessageViewModel.cs" />

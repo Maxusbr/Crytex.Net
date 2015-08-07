@@ -23,12 +23,14 @@ namespace Project.Service
             container.RegisterType<IStandartVmTaskRepository, StandartVmTaskRepository >();
             container.RegisterType<IHelpDeskRequestRepository, HelpDeskRequestRepository>();
             container.RegisterType<IHelpDeskRequestCommentRepository, HelpDeskRequestCommentRepository>();
+            container.RegisterType<IFileDescriptorRepository, FileDescriptorRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
             container.RegisterType<ISender, SenderWcf>();
             container.RegisterType<IMessageService, MessageService>();
             container.RegisterType<IHelpDeskRequestService, HelpDeskRequestService>();
+            container.RegisterType<IFileService, FileService>();
       
             container.RegisterType<ITaskVmBackGroundService,TaskVmBackGroundService>();
         }
