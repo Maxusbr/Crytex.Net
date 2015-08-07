@@ -32,5 +32,7 @@ namespace Project.Data
         public DbSet<UserVm> UserVms { get; set; }
 
         public DbSet<FileDescriptor> Files { get; set; }
+        public DbSet<OperatingSystem> OperatingSystems { get; set; }
+        public DbSet<ServerTemplate> ServerTemplates { get; set; }
     }
 }
