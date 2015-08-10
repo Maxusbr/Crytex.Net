@@ -8,6 +8,28 @@ namespace Project.Data.Migrations
         public override void Up()
         {
             CreateTable(
+                "dbo.ServerTemplates",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Name = c.String(),
+                        Description = c.String(),
+                        MinCoreCount = c.Int(nullable: false),
+                        MinRamCount = c.Int(nullable: false),
+                        MinHardDriveSize = c.Int(nullable: false),
+                        ImageFileId = c.Int(nullable: false),
+                        OperatingSystemId = c.Int(nullable: false),
+                        UserId = c.String(maxLength: 128),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.FileDescriptors", t => t.ImageFileId, cascadeDelete: true)
+                .ForeignKey("dbo.OperatingSystems", t => t.OperatingSystemId, cascadeDelete: true)
+                .ForeignKey("dbo.AspNetUsers", t => t.UserId)
+                .Index(t => t.ImageFileId)
+                .Index(t => t.OperatingSystemId)
+                .Index(t => t.UserId);
+            
+            CreateTable(
                 "dbo.OperatingSystems",
                 c => new
                     {
@@ -23,39 +45,22 @@ namespace Project.Data.Migrations
                 .Index(t => t.ImageFileId)
                 .Index(t => t.LoaderFileId);
             
-            CreateTable(
-                "dbo.ServerTemplates",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Name = c.String(),
-                        Description = c.String(),
-                        MinCoreCount = c.Int(nullable: false),
-                        MinRamCount = c.Int(nullable: false),
-                        MinHardDriveSize = c.Int(nullable: false),
-                        ImageFileId = c.Int(nullable: false),
-                        OperatingSystemId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.FileDescriptors", t => t.ImageFileId, cascadeDelete: true)
-                .ForeignKey("dbo.OperatingSystems", t => t.OperatingSystemId, cascadeDelete: true)
-                .Index(t => t.ImageFileId)
-                .Index(t => t.OperatingSystemId);
-            
         }
         
         public override void Down()
         {
+            DropForeignKey("dbo.ServerTemplates", "UserId", "dbo.AspNetUsers");
             DropForeignKey("dbo.ServerTemplates", "OperatingSystemId", "dbo.OperatingSystems");
-            DropForeignKey("dbo.ServerTemplates", "ImageFileId", "dbo.FileDescriptors");
             DropForeignKey("dbo.OperatingSystems", "LoaderFileId", "dbo.FileDescriptors");
             DropForeignKey("dbo.OperatingSystems", "ImageFileId", "dbo.FileDescriptors");
-            DropIndex("dbo.ServerTemplates", new[] { "OperatingSystemId" });
-            DropIndex("dbo.ServerTemplates", new[] { "ImageFileId" });
+            DropForeignKey("dbo.ServerTemplates", "ImageFileId", "dbo.FileDescriptors");
             DropIndex("dbo.OperatingSystems", new[] { "LoaderFileId" });
             DropIndex("dbo.OperatingSystems", new[] { "ImageFileId" });
-            DropTable("dbo.ServerTemplates");
+            DropIndex("dbo.ServerTemplates", new[] { "UserId" });
+            DropIndex("dbo.ServerTemplates", new[] { "OperatingSystemId" });
+            DropIndex("dbo.ServerTemplates", new[] { "ImageFileId" });
             DropTable("dbo.OperatingSystems");
+            DropTable("dbo.ServerTemplates");
         }
     }
 }

@@ -63,6 +63,8 @@
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\IMessageService.cs" />
+    <Compile Include="IService\IOperatingSystemsService.cs" />
+    <Compile Include="IService\IServerTemplateService.cs" />
     <Compile Include="IService\ITaskVmBackGroundService.cs" />
     <Compile Include="IService\ITaskVmService.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
@@ -78,6 +80,8 @@
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\MessageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\OperatingSystemService.cs" />
+    <Compile Include="Service\ServerTemplateService.cs" />
     <Compile Include="Service\TaskVmBackGroundService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>

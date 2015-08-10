@@ -7,6 +7,7 @@ using AutoMapper;
 using Project.Model.Models;
 using Project.Web.Models.JsonModels;
 using PagedList;
+using OperatingSystem = Project.Model.Models.OperatingSystem;
 
 namespace Project.Web.Mappings
 {
@@ -26,6 +27,8 @@ namespace Project.Web.Mappings
                 .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(source => source.PageCount))
                 .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(source => source.TotalItemCount));
             Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
+            Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
+                .ForMember(dest => dest.ImageFilePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path));
         }
     }
 }

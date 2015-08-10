@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
     <Compile Include="Infrastructure\DatabaseFactory.cs" />
@@ -46,6 +47,8 @@
     <Compile Include="IRepository\IHelpDeskRequestCommentRepository.cs" />
     <Compile Include="IRepository\IHelpDeskRequestRepository.cs" />
     <Compile Include="IRepository\IMessageRepository.cs" />
+    <Compile Include="IRepository\IOperatingSystemRepository.cs" />
+    <Compile Include="IRepository\IServerTemplateRepository.cs" />
     <Compile Include="IRepository\IUpdateVmTaskRepository.cs" />
     <Compile Include="IRepository\IStandartVmTaskRepository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
@@ -69,9 +72,9 @@
     <Compile Include="Migrations\201508071000308_FileDescriptorMigration.Designer.cs">
       <DependentUpon>201508071000308_FileDescriptorMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201508071409104_ServerTemplateAndOperatingSystemMigration.cs" />
-    <Compile Include="Migrations\201508071409104_ServerTemplateAndOperatingSystemMigration.Designer.cs">
-      <DependentUpon>201508071409104_ServerTemplateAndOperatingSystemMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201508100815035_ServerTemplateAndOperatingSystemMigration.cs" />
+    <Compile Include="Migrations\201508100815035_ServerTemplateAndOperatingSystemMigration.Designer.cs">
+      <DependentUpon>201508100815035_ServerTemplateAndOperatingSystemMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +83,8 @@
     <Compile Include="Repository\HelpDeskRequestCommentRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestRepository.cs" />
     <Compile Include="Repository\MessageRepository.cs" />
+    <Compile Include="Repository\OperatingSystemRepository.cs" />
+    <Compile Include="Repository\ServerTemplateRepository.cs" />
     <Compile Include="Repository\StandartVmTaskRepository.cs" />
     <Compile Include="Repository\UpdateTaskVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
@@ -110,8 +115,8 @@
     <EmbeddedResource Include="Migrations\201508071000308_FileDescriptorMigration.resx">
       <DependentUpon>201508071000308_FileDescriptorMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201508071409104_ServerTemplateAndOperatingSystemMigration.resx">
-      <DependentUpon>201508071409104_ServerTemplateAndOperatingSystemMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201508100815035_ServerTemplateAndOperatingSystemMigration.resx">
+      <DependentUpon>201508100815035_ServerTemplateAndOperatingSystemMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

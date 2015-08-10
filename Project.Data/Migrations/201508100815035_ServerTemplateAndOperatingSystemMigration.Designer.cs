@@ -13,7 +13,7 @@ namespace Project.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201508071409104_ServerTemplateAndOperatingSystemMigration"; }
+            get { return "201508100815035_ServerTemplateAndOperatingSystemMigration"; }
         }
         
         string IMigrationMetadata.Source

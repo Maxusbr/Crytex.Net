@@ -240,6 +240,8 @@
     <Compile Include="Controllers\Api\HelpDeskRequestCommentController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />
+    <Compile Include="Controllers\Api\OperatingSystemController.cs" />
+    <Compile Include="Controllers\Api\ServerTemplateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
@@ -256,6 +258,10 @@
     <Compile Include="Models\JsonModels\HelpDeskRequestViewModel.cs" />
     <Compile Include="Models\JsonModels\MessageViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpRequestPageViewModel.cs" />
+    <Compile Include="Models\JsonModels\OperatingSystemEditViewModel.cs" />
+    <Compile Include="Models\JsonModels\OperatingSystemViewModel.cs" />
+    <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
+    <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

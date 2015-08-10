@@ -16,10 +16,14 @@ namespace Project.Model.Models
         public int MinHardDriveSize { get; set; }
         public Int32 ImageFileId { get; set; }
         public Int32 OperatingSystemId { get; set; }
+        public string UserId { get; set; }
+
 
         [ForeignKey("ImageFileId")]
         public FileDescriptor ImageFileDescriptor { get; set; }
         [ForeignKey("OperatingSystemId")]
         public OperatingSystem OperatingSystem { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
     }
 }
