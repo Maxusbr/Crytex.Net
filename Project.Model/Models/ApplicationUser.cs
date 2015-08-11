@@ -22,5 +22,7 @@ namespace Project.Model.Models
         public virtual ICollection<HelpDeskRequest> HelpDeskRequests { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<HelpDeskRequestComment> HelpDeskRequestComments { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<ServerTemplate> ServerTemplates { get; set; }
     }
 }

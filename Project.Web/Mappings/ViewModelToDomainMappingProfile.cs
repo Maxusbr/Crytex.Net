@@ -6,6 +6,7 @@ using System.Web;
 using AutoMapper;
 using Project.Web.Models.JsonModels;
 using Project.Model.Models;
+using OperatingSystem = Project.Model.Models.OperatingSystem;
 
 namespace Project.Web.Mappings
 {
@@ -19,6 +20,8 @@ namespace Project.Web.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<HelpDeskRequestViewModel, HelpDeskRequest>();
+            Mapper.CreateMap<OperatingSystemEditViewModel, OperatingSystem>();
+            Mapper.CreateMap<ServerTemplateEditViewModel, ServerTemplate>();
         }
     }
 }
