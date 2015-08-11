@@ -22,7 +22,7 @@ namespace Project.Web.Auth
 
             var unityContainer = Project.Web.App_Start.UnityConfig.GetConfiguredContainer();
             var userManager = (ApplicationUserManager)unityContainer.Resolve(typeof(ApplicationUserManager),"");
-            IdentityUser user = await userManager.FindAsync(context.UserName, context.Password);//await _repo.FindUser(context.UserName, context.Password);
+            IdentityUser user = await userManager.FindAsync(context.UserName, context.Password);
 
             if (user == null)
             {
@@ -31,8 +31,6 @@ namespace Project.Web.Auth
             }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-            identity.AddClaim(new Claim("sub", context.UserName));
-            identity.AddClaim(new Claim("role", "user"));
 
             context.Validated(identity);
 
