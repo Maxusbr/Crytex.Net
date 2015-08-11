@@ -5,6 +5,8 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using Project.Model.Models;
+using Microsoft.Owin.Security.OAuth;
+using Project.Web.Auth;
 
 namespace Project.Web
 {
@@ -60,6 +62,24 @@ namespace Project.Web
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            ConfigureOAuth(app);
+        }
+
+        public void ConfigureOAuth(IAppBuilder app)
+        {
+            var OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            {
+                AllowInsecureHttp = true,
+                TokenEndpointPath = new PathString("/token"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
+                Provider = new SimpleAuthorizationServerProvider()
+            };
+
+            // Token Generation
+            app.UseOAuthAuthorizationServer(OAuthServerOptions);
+            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
+
         }
     }
 }
