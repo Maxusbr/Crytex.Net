@@ -5,6 +5,7 @@ using Project.Model.Models;
 
 namespace Project.Data
 {
+    [DbConfigurationType(typeof(DbConfig))] 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
