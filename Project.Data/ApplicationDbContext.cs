@@ -8,10 +8,8 @@ namespace Project.Data
     [DbConfigurationType(typeof(DbConfig))] 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        private const string CONNECTION_STRING = @"Data Source=.\SQLEXPRESS;Initial Catalog=CrytexTest;Integrated Security=True";
-
         public ApplicationDbContext()
-            : base(CONNECTION_STRING, throwIfV1Schema: false)
+            : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
         public virtual void Commit()
