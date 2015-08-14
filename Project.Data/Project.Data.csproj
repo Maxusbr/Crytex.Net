@@ -42,7 +42,7 @@
     <Compile Include="Infrastructure\Page.cs" />
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
-    <Compile Include="IRepository\CreateVmTaskRepository.cs" />
+    <Compile Include="IRepository\ICreateVmTaskRepository.cs" />
     <Compile Include="IRepository\IFileDescriptorRepository.cs" />
     <Compile Include="IRepository\IHelpDeskRequestCommentRepository.cs" />
     <Compile Include="IRepository\IHelpDeskRequestRepository.cs" />
@@ -142,6 +142,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\PagedList.css" />
