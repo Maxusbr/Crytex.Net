@@ -34,6 +34,7 @@
   <PropertyGroup />
   <ItemGroup>
     <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="DbConfig.cs" />
     <Compile Include="Infrastructure\DatabaseFactory.cs" />
     <Compile Include="Infrastructure\Disposable.cs" />
     <Compile Include="Infrastructure\IDatabaseFactory.cs" />
