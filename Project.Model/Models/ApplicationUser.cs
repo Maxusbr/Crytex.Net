@@ -18,11 +18,15 @@ namespace Project.Model.Models
             return userIdentity;
         }
 
+        public virtual UserInfo UserInfo { get; set; }
+
         [InverseProperty("User")]
         public virtual ICollection<HelpDeskRequest> HelpDeskRequests { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<HelpDeskRequestComment> HelpDeskRequestComments { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<ServerTemplate> ServerTemplates { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<BillingTransaction> BillingTransactions { get; set; }
     }
 }

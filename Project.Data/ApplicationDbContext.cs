@@ -30,9 +30,10 @@ namespace Project.Data
         public DbSet<StandartVmTask> StandartVmTasks { get; set; }
         public DbSet<UpdateVmTask> UpdateVmTasks { get; set; }
         public DbSet<UserVm> UserVms { get; set; }
-
         public DbSet<FileDescriptor> Files { get; set; }
         public DbSet<OperatingSystem> OperatingSystems { get; set; }
         public DbSet<ServerTemplate> ServerTemplates { get; set; }
+        public DbSet<UserInfo> UserInfos { get; set; }
+        public DbSet<BillingTransaction> BillingTransactions { get; set; }
     }
 }
