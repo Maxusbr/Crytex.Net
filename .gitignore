@@ -30,3 +30,5 @@
 /WpfApplication1/obj
 /Crytex.ControlApp/obj
 /Crytex.ControlApp/bin
+.vs/config/applicationhost.config
+.vs/Project/v14/.suo
