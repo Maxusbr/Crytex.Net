@@ -5,6 +5,7 @@ using Microsoft.Practices.Unity;
 
 namespace Crytex.Background
 {
+    using Quartz.Spi;
 
     public class UnityConfig : UnityConfigBase
     {
@@ -13,6 +14,7 @@ namespace Crytex.Background
             UnityConfigureFunc = unityContainer =>
             {
                 unityContainer.RegisterType<ISchedulerJobs, SchedulerJobs>();
+                unityContainer.RegisterType<IJobFactory, UnityJobFactory>();
             };
         }
 

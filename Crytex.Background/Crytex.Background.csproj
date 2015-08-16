@@ -73,6 +73,7 @@
     <Compile Include="Tasks\BillingJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
     <Compile Include="UnityConfig.cs" />
+    <Compile Include="UnityJobFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

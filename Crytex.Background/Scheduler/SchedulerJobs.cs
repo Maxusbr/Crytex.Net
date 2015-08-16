@@ -8,6 +8,7 @@
     using Quartz.Impl;
     using Quartz.Impl.Matchers;
     using Quartz.Impl.Triggers;
+    using Quartz.Spi;
 
     public class SchedulerJobs : ISchedulerJobs
     {
@@ -19,6 +20,7 @@
         {
             _jobKeys = new List<JobKey>();
             _scheduler = StdSchedulerFactory.GetDefaultScheduler();
+            _scheduler.JobFactory = UnityConfig.Resolve<IJobFactory>();
             LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter { Level = LogLevel.Info };
         }
 
