@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Unity;
 using Project.Data.Infrastructure;
 using Project.Data.IRepository;
 using Project.Data.Repository;
@@ -13,6 +8,7 @@ using Sample.Service.IService;
 
 namespace Project.Service
 {
+
     public class UnityConfig
     {
         public static void Register<TLifetimeManager>(IUnityContainer container) where TLifetimeManager :LifetimeManager,new()

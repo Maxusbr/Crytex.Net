@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Configuration;
-using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using System.Text;
-using System.Threading.Tasks;
 using Crytex.ExecutorTask;
 
 namespace Crytex.WCF.Receiver
@@ -14,6 +11,8 @@ namespace Crytex.WCF.Receiver
       
         static void Main(string[] args)
         {
+            UnityConfig.Configure();
+
             Uri baseAddress = new Uri(ConfigurationManager.AppSettings["host"]);
             using (ServiceHost host = new ServiceHost(typeof(ReceiverService), baseAddress))
             {

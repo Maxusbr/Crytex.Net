@@ -1,33 +1,21 @@
+using Crytex.Background.Scheduler;
+using Project.Core;
+using Microsoft.Practices.Unity;
+
+
 namespace Crytex.Background
 {
-    using System;
-    using Scheduler;
-    using Microsoft.Practices.Unity;
 
-    public class UnityConfig
+    public class UnityConfig : UnityConfigBase
     {
-        #region Unity Container
-        private static Lazy<IUnityContainer> container = new Lazy<IUnityContainer>(() =>
+        public static void Configure()
         {
-            var container = new UnityContainer();
-            RegisterTypes(container);
-            return container;
-        });
-
-        public static IUnityContainer GetConfiguredContainer()
-        {
-            return container.Value;
+            UnityConfigureFunc = unityContainer =>
+            {
+                unityContainer.RegisterType<ISchedulerJobs, SchedulerJobs>();
+            };
         }
 
-        public static T Resolve<T>()
-        {
-            return container.Value.Resolve<T>();
-        }
-        #endregion
-
-        public static void RegisterTypes(IUnityContainer container)
-        {
-            container.RegisterType<ISchedulerJobs, SchedulerJobs>();      
-        }
+        
     }
 }
