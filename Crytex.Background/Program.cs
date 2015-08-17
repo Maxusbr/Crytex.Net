@@ -7,6 +7,7 @@
     {
         public static void Main(string[] args)
         {
+            UnityConfig.Configure();
             var scheduler = UnityConfig.Resolve<ISchedulerJobs>();
 
             scheduler.StartScheduler();

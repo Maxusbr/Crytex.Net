@@ -99,6 +99,10 @@
     <None Include="Service References\Executor\ReceiverService.wsdl" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Project.Core\Project.Core.csproj">
+      <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
+      <Name>Project.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Project.Data\Project.Data.csproj">
       <Project>{4CAB19D5-AA00-43E1-9450-15F3B8D72AB2}</Project>
       <Name>Project.Data</Name>

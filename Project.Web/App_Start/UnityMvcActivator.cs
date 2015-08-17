@@ -9,17 +9,22 @@ using Microsoft.Practices.Unity.Mvc;
 
 namespace Project.Web.App_Start
 {
+    using System.Web.Http;
+
     /// <summary>Provides the bootstrapping for integrating Unity with ASP.NET MVC.</summary>
     public static class UnityWebActivator
     {
         /// <summary>Integrates Unity when the application starts.</summary>
         public static void Start() 
         {
+            UnityConfig.Configure();
             var container = UnityConfig.GetConfiguredContainer();
 
             FilterProviders.Providers.Remove(FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().First());
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
+
+            GlobalConfiguration.Configuration.DependencyResolver = new Microsoft.Practices.Unity.WebApi.UnityDependencyResolver(container);
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 
             GlobalHost.DependencyResolver.Register(typeof(IHubActivator),() => new UnityHubActivator(container));
@@ -32,8 +37,7 @@ namespace Project.Web.App_Start
         /// <summary>Disposes the Unity container when the application is shut down.</summary>
         public static void Shutdown()
         {
-            var container = UnityConfig.GetConfiguredContainer();
-            container.Dispose();
+            UnityConfig.Dispose();
         }
     }
 }

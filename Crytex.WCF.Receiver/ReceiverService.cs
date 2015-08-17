@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.Text;
 using Crytex.ExecutorTask;
 using Microsoft.Practices.Unity;
 
 namespace Crytex.WCF.Receiver
 {
+
     // ПРИМЕЧАНИЕ. Команду "Переименовать" в меню "Рефакторинг" можно использовать для одновременного изменения имени класса "ControlService" в коде и файле конфигурации.
     public class ReceiverService : IReceiverService
     {
-        private Executor _executor =UnityConfig.GetConfiguredContainer().Resolve<Executor>();
+        private Executor _executor = UnityConfig.GetConfiguredContainer().Resolve<Executor>();
         
         public void CreateVm(int ID)
         {
