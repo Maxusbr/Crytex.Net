@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Project.Data</RootNamespace>
     <AssemblyName>Project.Data</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -168,9 +169,17 @@
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>copy $(ProjectDir)connectionStrings.config $(SolutionDir)Project.Web</PreBuildEvent>
-    <PreBuildEvent>copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ControlApp\bin\debug</PreBuildEvent>
-    <PreBuildEvent>copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ControlApp\bin\release</PreBuildEvent>
+    <PreBuildEvent>copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ControlApp\bin\release
+copy $(ProjectDir)connectionStrings.config $(SolutionDir)Project.Web
+copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ExecutorTask\bin\debug
+copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ExecutorTask\bin\realese
+copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.BackGround\bin\debug
+copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.BackGround\bin\realese
+</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
