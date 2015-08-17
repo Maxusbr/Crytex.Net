@@ -63,6 +63,7 @@
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseTask.cs" />
+    <Compile Include="Models\BillingTransaction.cs" />
     <Compile Include="Models\ConfigTask.cs" />
     <Compile Include="Models\CreateVmTask.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="Models\StandartVmTask.cs" />
     <Compile Include="Models\HelpDeskRequest.cs" />
     <Compile Include="Models\UpdateVmTask.cs" />
+    <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
