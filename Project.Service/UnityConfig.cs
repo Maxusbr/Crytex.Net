@@ -26,6 +26,8 @@ namespace Project.Service
             container.RegisterType<IFileDescriptorRepository, FileDescriptorRepository>();
             container.RegisterType<IOperatingSystemRepository, OperatingSystemRepository>();
             container.RegisterType<IServerTemplateRepository, ServerTemplateRepository>();
+            container.RegisterType<IBillingTransactionRepository, BillingTransactionRepository>();
+            container.RegisterType<IUserInfoRepository, UserInfoRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -35,6 +37,7 @@ namespace Project.Service
             container.RegisterType<IFileService, FileService>();
             container.RegisterType<IOperatingSystemsService, OperatingSystemService>();
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
+            container.RegisterType<IPaymentService, PaymentService>();
       
             container.RegisterType<ITaskVmBackGroundService,TaskVmBackGroundService>();
         }
