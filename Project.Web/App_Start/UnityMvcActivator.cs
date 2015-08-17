@@ -9,6 +9,8 @@ using Microsoft.Practices.Unity.Mvc;
 
 namespace Project.Web.App_Start
 {
+    using System.Web.Http;
+
     /// <summary>Provides the bootstrapping for integrating Unity with ASP.NET MVC.</summary>
     public static class UnityWebActivator
     {
@@ -21,6 +23,8 @@ namespace Project.Web.App_Start
             FilterProviders.Providers.Remove(FilterProviders.Providers.OfType<FilterAttributeFilterProvider>().First());
             FilterProviders.Providers.Add(new UnityFilterAttributeFilterProvider(container));
 
+
+            GlobalConfiguration.Configuration.DependencyResolver = new Microsoft.Practices.Unity.WebApi.UnityDependencyResolver(container);
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
 
             GlobalHost.DependencyResolver.Register(typeof(IHubActivator),() => new UnityHubActivator(container));
