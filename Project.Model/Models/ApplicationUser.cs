@@ -28,5 +28,7 @@ namespace Project.Model.Models
         public virtual ICollection<ServerTemplate> ServerTemplates { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<BillingTransaction> BillingTransactions { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<CreditPaymentOrder> CreditPaymentOrders { get; set; }
     }
 }

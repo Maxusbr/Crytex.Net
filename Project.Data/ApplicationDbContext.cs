@@ -36,5 +36,6 @@ namespace Project.Data
         public DbSet<ServerTemplate> ServerTemplates { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<BillingTransaction> BillingTransactions { get; set; }
+        public DbSet<CreditPaymentOrder> CreditPaymentOrders { get; set; }
     }
 }
