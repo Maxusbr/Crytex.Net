@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
 
 namespace Project.Web.Models.JsonModels
 {
-    public class HelpRequestPageViewModel
+    public class PageModel<T>
     {
-        public IEnumerable<HelpDeskRequestViewModel> Items { get; set; }
+        public IEnumerable<T> Items { get; set; }
         public int TotalPages { get; set; }
         public int TotalRows { get; set; }
     }

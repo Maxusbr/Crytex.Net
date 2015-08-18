@@ -34,7 +34,7 @@ namespace Project.Web.Controllers.Api
             else
             {
                 var page = this._helpDeskRequestService.GetPage(pageNumber, pageSize);
-                var viewModel = AutoMapper.Mapper.Map<HelpRequestPageViewModel>(page);
+                var viewModel = AutoMapper.Mapper.Map<PageModel<HelpDeskRequestViewModel>>(page);
                 return Request.CreateResponse(HttpStatusCode.OK, viewModel);
             }
 
