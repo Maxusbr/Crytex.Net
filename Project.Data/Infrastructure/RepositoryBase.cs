@@ -54,6 +54,12 @@ namespace Project.Data.Infrastructure
         {
             return dbset.Find(id);
         }
+
+        public virtual T GetById(Guid id)
+        {
+            return dbset.Find(id);
+        }
+
         public virtual IEnumerable<T> GetAll()
         {
             return dbset.ToList();

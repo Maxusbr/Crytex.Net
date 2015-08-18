@@ -240,6 +240,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
     <Compile Include="Controllers\Api\FileController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestCommentController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestController.cs" />
@@ -257,13 +258,14 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
     <Compile Include="Models\JsonModels\FileDescriptorViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestCommentViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestViewModel.cs" />
     <Compile Include="Models\JsonModels\MessageViewModel.cs" />
-    <Compile Include="Models\JsonModels\HelpRequestPageViewModel.cs" />
     <Compile Include="Models\JsonModels\OperatingSystemEditViewModel.cs" />
     <Compile Include="Models\JsonModels\OperatingSystemViewModel.cs" />
+    <Compile Include="Models\JsonModels\PageModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

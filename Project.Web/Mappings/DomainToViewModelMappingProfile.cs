@@ -22,13 +22,22 @@ namespace Project.Web.Mappings
         {
             Mapper.CreateMap<Message, MessageViewModel>();
             Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>();
-            Mapper.CreateMap<IPagedList<HelpDeskRequest>, HelpRequestPageViewModel>()
-                .ForMember(dest => dest.Items, opt => opt.MapFrom(source => source.ToList()))
-                .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(source => source.PageCount))
-                .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(source => source.TotalItemCount));
             Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
                 .ForMember(dest => dest.ImageFilePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path));
+            Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
+
+            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
+            this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
+        }
+
+        protected void MapPagedList<TSource, TDest>()
+        {
+            Mapper.CreateMap<IPagedList<TSource>, PageModel<TDest>>()
+                .ForMember(dest => dest.Items, opt => opt.MapFrom(source => source.ToList()))
+                .ForMember(dest => dest.TotalPages, opt => opt.MapFrom(source => source.PageCount))
+                .ForMember(dest => dest.TotalRows, opt => opt.MapFrom(source => source.TotalItemCount));
         }
     }
 }
