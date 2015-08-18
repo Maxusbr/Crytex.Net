@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Crytex.ExecutorTask.Hyper_V;
 using Crytex.ExecutorTask.VmWare;
 using Project.Data.IRepository;
@@ -12,9 +6,12 @@ using System.Threading.Tasks.Dataflow;
 using Project.Model.Models;
 using Project.Data.Infrastructure;
 using Project.Service.IService;
+using System.Collections.Generic;
+using System.Threading;
 
 namespace Crytex.ExecutorTask
 {
+    
     public class Executor
     {
         private HyperVExecutor _hyperVExecutor;

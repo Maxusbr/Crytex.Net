@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crytex.LogSystem
+namespace Project.Service.IService
 {
-    public class Class1
+    public interface IPaymentService
     {
     }
 }

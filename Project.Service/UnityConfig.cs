@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Unity;
 using Project.Data.Infrastructure;
 using Project.Data.IRepository;
 using Project.Data.Repository;
@@ -13,6 +8,7 @@ using Sample.Service.IService;
 
 namespace Project.Service
 {
+
     public class UnityConfig
     {
         public static void Register<TLifetimeManager>(IUnityContainer container) where TLifetimeManager :LifetimeManager,new()
@@ -26,6 +22,8 @@ namespace Project.Service
             container.RegisterType<IFileDescriptorRepository, FileDescriptorRepository>();
             container.RegisterType<IOperatingSystemRepository, OperatingSystemRepository>();
             container.RegisterType<IServerTemplateRepository, ServerTemplateRepository>();
+            container.RegisterType<IBillingTransactionRepository, BillingTransactionRepository>();
+            container.RegisterType<IUserInfoRepository, UserInfoRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -34,6 +32,7 @@ namespace Project.Service
             container.RegisterType<IFileService, FileService>();
             container.RegisterType<IOperatingSystemsService, OperatingSystemService>();
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
+            container.RegisterType<IPaymentService, PaymentService>();
       
             container.RegisterType<ITaskVmService,TaskVmService>();
         }
