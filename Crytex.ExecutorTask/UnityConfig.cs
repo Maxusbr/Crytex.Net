@@ -1,6 +1,4 @@
-﻿using Crytex.ExecutorTask.Hyper_V;
-using Crytex.ExecutorTask.VmWare;
-using Microsoft.Practices.Unity;
+﻿using Microsoft.Practices.Unity;
 using Project.Core;
 
 namespace Crytex.ExecutorTask
@@ -13,8 +11,6 @@ namespace Crytex.ExecutorTask
             UnityConfigureFunc = unityContainer =>
             {
                 Project.Service.UnityConfig.Register<ContainerControlledLifetimeManager>(unityContainer);
-
-                unityContainer.RegisterType<Executor>();
             };
         }
     }

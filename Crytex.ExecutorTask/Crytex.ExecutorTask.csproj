@@ -53,20 +53,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="alt\FakeTaskHandler.cs" />
-    <Compile Include="alt\ITaskHandler.cs" />
-    <Compile Include="alt\TaskExecutionResult.cs" />
-    <Compile Include="alt\TaskHandlerFactory.cs" />
-    <Compile Include="alt\TaskManager.cs" />
-    <Compile Include="alt\TaskQueueManager.cs" />
-    <Compile Include="BaseTaskExecutor.cs" />
-    <Compile Include="Executor.cs" />
-    <Compile Include="Hyper_V\HyperVExecutor.cs" />
-    <Compile Include="ITaskExecutor.cs" />
+    <Compile Include="TaskHandler\HyperV\CreateVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
+    <Compile Include="TaskHandler\PendingTaskHandlerBox.cs" />
+    <Compile Include="TaskHandler\TaskHandlerManager.cs" />
+    <Compile Include="TaskHandler\FakeTaskHandler.cs" />
+    <Compile Include="TaskHandler\ITaskHandler.cs" />
+    <Compile Include="TaskHandler\TaskExecutionResult.cs" />
+    <Compile Include="TaskHandler\TaskHandlerFactory.cs" />
+    <Compile Include="TaskManager.cs" />
+    <Compile Include="TaskQueueManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TypeVm.cs" />
     <Compile Include="UnityConfig.cs" />
-    <Compile Include="VmWare\VmWareExecutor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Project.Model\Project.Model.csproj">

@@ -1,4 +1,5 @@
-﻿using Project.Model.Models;
+﻿using Crytex.ExecutorTask.TaskHandler;
+using Project.Model.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,17 +7,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 
-namespace Crytex.ExecutorTask.alt
+namespace Crytex.ExecutorTask
 {
     public class TaskQueueManager
     {
         private BufferBlock<ITaskHandler> _taskHandlerBuffer = new BufferBlock<ITaskHandler>();
         private BufferBlock<TaskExecutionResult> _taskResultsBuffer = new BufferBlock<TaskExecutionResult>();
-        private TaskHandlerFactory _taskHandlerFactory = new TaskHandlerFactory();
 
-        public void AddToQueue(BaseTask task)
+        public void AddToQueue(ITaskHandler handler)
         {
-            var handler = this._taskHandlerFactory.GetHandler(task);
             _taskHandlerBuffer.Post(handler);
         }
 
