@@ -1,4 +1,5 @@
 ﻿using Crytex.ExecutorTask;
+using Crytex.ExecutorTask.alt;
 using Crytex.ExecutorTask.Hyper_V;
 using Crytex.ExecutorTask.VmWare;
 using Project.Data.Infrastructure;
@@ -22,8 +23,10 @@ namespace TaskExecutorConsoleTest
             var standartRepo = new StandartVmTaskRepository(dbFactory);
             var unitOfWork = new UnitOfWork(dbFactory);
             var service = new TaskVmService(unitOfWork, createRepo, upRepo, standartRepo);
-            var executor = new Executor(service);
-            executor.Run();
+            var taskManager = new TaskManager(service);
+
+            taskManager.Run();
+
             Console.ReadLine();
         }
     }

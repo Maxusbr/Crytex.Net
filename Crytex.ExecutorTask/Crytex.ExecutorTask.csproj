@@ -53,6 +53,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="alt\FakeTaskHandler.cs" />
+    <Compile Include="alt\ITaskHandler.cs" />
+    <Compile Include="alt\TaskExecutionResult.cs" />
+    <Compile Include="alt\TaskHandlerFactory.cs" />
+    <Compile Include="alt\TaskManager.cs" />
+    <Compile Include="alt\TaskQueueManager.cs" />
     <Compile Include="BaseTaskExecutor.cs" />
     <Compile Include="Executor.cs" />
     <Compile Include="Hyper_V\HyperVExecutor.cs" />
@@ -84,6 +90,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
