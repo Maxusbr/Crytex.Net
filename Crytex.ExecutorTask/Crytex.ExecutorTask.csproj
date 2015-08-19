@@ -53,7 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TaskHandler\HyperV\CreateVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\BaseTaskHandler.cs" />
+    <Compile Include="TaskHandler\HyperV\BaseHyperVTaskHandler.cs" />
+    <Compile Include="TaskHandler\HyperV\FakeHypeVControl.cs" />
+    <Compile Include="TaskHandler\HyperV\HyperVCreateVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\HyperV\HyperVStandartTaskHandler.cs" />
+    <Compile Include="TaskHandler\HyperV\HyperVUpdateVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\HyperV\IHyperVControl.cs" />
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
     <Compile Include="TaskHandler\PendingTaskHandlerBox.cs" />
     <Compile Include="TaskHandler\TaskHandlerManager.cs" />
@@ -61,6 +67,12 @@
     <Compile Include="TaskHandler\ITaskHandler.cs" />
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />
     <Compile Include="TaskHandler\TaskHandlerFactory.cs" />
+    <Compile Include="TaskHandler\VmWare\BaseVmWareTaskHandler.cs" />
+    <Compile Include="TaskHandler\VmWare\FakeVmWareControl.cs" />
+    <Compile Include="TaskHandler\VmWare\IVmWareControl.cs" />
+    <Compile Include="TaskHandler\VmWare\VmWareCreateTaskHandler.cs" />
+    <Compile Include="TaskHandler\VmWare\VmWareStandartVmWareTaskHandler.cs" />
+    <Compile Include="TaskHandler\VmWare\VmWareUpdateTaskHandler.cs" />
     <Compile Include="TaskManager.cs" />
     <Compile Include="TaskQueueManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

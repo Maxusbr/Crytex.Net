@@ -12,14 +12,16 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         private ITaskVmService _taskService;
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
+        private IDictionary<Type, Action<int, StatusTask>> _updateActionDict;
 
-        private IDictionary<Type, Action<int>> _updateActionDict;
         public TaskHandlerManager(ITaskVmService taskService)
         {
             this._taskService = taskService;
-            this._updateActionDict = new Dictionary<Type, Action<int>>
+            this._updateActionDict = new Dictionary<Type, Action<int, StatusTask>>
             {
-                {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate}
+                {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate},
+                {typeof(UpdateVmTask), this.UpdateUpdateTaskkStatusDelegate},
+                {typeof(StandartVmTask), this.UpdateStandartTaskStatusDelegate}
             };
         }
 
@@ -50,6 +52,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 
                 var handler = this._handlerFactory.GetHandler(task);
                 handler.ProcessingStarted += this.ProcessingStartedEventHandler;
+                handler.ProcessingFinished += this.ProcessingFinishedEventHandler;
                 switch (task.Virtualization)
                 {
                     case TypeVirtualization.HyperV:
@@ -62,19 +65,28 @@ namespace Crytex.ExecutorTask.TaskHandler
             }
         }
 
+        private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult e)
+        {
+            var taskEntity = ((ITaskHandler)sender).TaskEntity;
+            this._updateActionDict[taskEntity.GetType()].Invoke(taskEntity.Id, StatusTask.End);
+        }
+
         private void ProcessingStartedEventHandler(object sender, BaseTask task)
         {
-            this.UpdateTaskStatus(task);
+            this._updateActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing);
         }
 
-        public void UpdateTaskStatus(BaseTask task)
+        private void UpdateCreateTaskStatusDelegate(int id, StatusTask status)
         {
-            this._updateActionDict[task.GetType()].Invoke(task.Id);
+            this._taskService.UpdateTaskStatus<CreateVmTask>(id, status);
         }
-
-        private void UpdateCreateTaskStatusDelegate(int id)
+        private void UpdateUpdateTaskkStatusDelegate(int id, StatusTask status)
         {
-            this._taskService.UpdateTaskStatus<CreateVmTask>(id, StatusTask.Processing);
+            this._taskService.UpdateTaskStatus<UpdateVmTask>(id, status);
+        }
+        private void UpdateStandartTaskStatusDelegate(int id, StatusTask status)
+        {
+            this._taskService.UpdateTaskStatus<StandartVmTask>(id, status);
         }
     }
 }

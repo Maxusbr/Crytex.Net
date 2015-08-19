@@ -48,7 +48,6 @@ namespace Crytex.ExecutorTask
             foreach (var handler in handlers)
             {
                 queueManager.AddToQueue(handler);
-                //this._taskHandlerManager.UpdateTaskStatus(handler);
             }
         }
 
