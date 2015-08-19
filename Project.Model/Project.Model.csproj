@@ -73,6 +73,7 @@
     <Compile Include="Models\CreditPaymentOrder.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
     <Compile Include="Models\HelpDeskRequestComment.cs" />
+    <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Notifications\ExampleNotification.cs" />
     <Compile Include="Models\OperatingSystem.cs" />
@@ -88,6 +89,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

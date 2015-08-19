@@ -91,6 +91,7 @@
     <Compile Include="Migrations\201508180839575_CreditPaymentOrderMigration.Designer.cs">
       <DependentUpon>201508180839575_CreditPaymentOrderMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508182020207_LogSystemMigration.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\BillingTransactionRepository.cs" />
