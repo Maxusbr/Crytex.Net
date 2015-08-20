@@ -28,7 +28,6 @@ namespace Project.Service
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
-            container.RegisterType<ISender, SenderWcf>();
             container.RegisterType<IMessageService, MessageService>();
             container.RegisterType<IHelpDeskRequestService, HelpDeskRequestService>();
             container.RegisterType<IFileService, FileService>();
@@ -36,7 +35,7 @@ namespace Project.Service
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
             container.RegisterType<IPaymentService, PaymentService>();
       
-            container.RegisterType<ITaskVmBackGroundService,TaskVmBackGroundService>();
+            container.RegisterType<ITaskVmService,TaskVmService>();
         }
     }
 }

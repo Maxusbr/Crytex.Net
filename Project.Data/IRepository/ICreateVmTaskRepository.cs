@@ -8,7 +8,7 @@ using Project.Data.Infrastructure;
 
 namespace Project.Data.IRepository
 {
-   public  interface ICreateVmTaskRepository : IRepository<CreateVmTask>
+    public interface ICreateVmTaskRepository : IRepository<CreateVmTask>
     {
     }
 }

@@ -30,6 +30,8 @@
 /WpfApplication1/obj
 /Crytex.ControlApp/obj
 /Crytex.ControlApp/bin
+/TaskExecutorConsoleTest/bin
+/TaskExecutorConsoleTest/obj
 .vs/config/applicationhost.config
 .vs/Project/v14/.suo
 /Project.Web/connectionStrings.config

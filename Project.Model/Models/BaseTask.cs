@@ -15,15 +15,15 @@ namespace Project.Model.Models
 
     public enum TypeVirtualization
     {
-        HyperV
-            ,
-        WmWare
+        HyperV = 0,
+        WmWare = 1
     }
 
     public enum StatusTask
     {
-        Start,
-        Pending,
-        End
+        Start = 0,
+        Pending = 1,
+        Processing = 2,
+        End = 3
     }
 }

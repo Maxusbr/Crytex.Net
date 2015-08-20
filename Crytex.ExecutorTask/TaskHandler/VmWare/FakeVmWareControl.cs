@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crytex.ExecutorTask.Task
+namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
-    public class CreateVMTask
+    public class FakeVmWareControl : IVmWareControl
     {
     }
 }

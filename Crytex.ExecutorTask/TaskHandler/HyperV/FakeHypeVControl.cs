@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crytex.ExecutorTask
+namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
-    public enum TypeVm
+    public class FakeHypeVControl : IHyperVControl
     {
-        HyperV,
-        Wmware
     }
 }

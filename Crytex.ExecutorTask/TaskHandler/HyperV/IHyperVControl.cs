@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Crytex.ExecutorTask.Task
+namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
-    class UpdateVmTask
+    public interface IHyperVControl
     {
     }
 }
