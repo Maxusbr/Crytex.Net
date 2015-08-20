@@ -66,6 +66,7 @@
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\IMessageService.cs" />
+    <Compile Include="IService\INotificationService.cs" />
     <Compile Include="IService\IOperatingSystemsService.cs" />
     <Compile Include="IService\IPaymentService.cs" />
     <Compile Include="IService\IServerTemplateService.cs" />

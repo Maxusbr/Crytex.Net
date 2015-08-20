@@ -35,3 +35,5 @@
 .vs/config/applicationhost.config
 .vs/Project/v14/.suo
 /Project.Web/connectionStrings.config
+/Crytex.Notification/bin/Debug
+/Crytex.Notification/obj/Debug
