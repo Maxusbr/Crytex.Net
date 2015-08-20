@@ -18,11 +18,15 @@ namespace Crytex.Notification
         private IEmailNotificationBuilder _emailNotificationBuilder;
         private ISignalRNotificationBuilder _signalRNotificationBuilder;
 
-        public NotificationManager(ISignalRSender signalRSender, IEmailSender emailSender, INotificationService notificationService)
+        public NotificationManager(ISignalRSender signalRSender, IEmailSender emailSender,
+            INotificationService notificationService, IEmailNotificationBuilder emailNotificationBuilder,
+            ISignalRNotificationBuilder signalRNotificationBuilder)
         {
             this._signalRSender = signalRSender;
             this._emailSender = emailSender;
             this._notificationService = notificationService;
+            this._emailNotificationBuilder = emailNotificationBuilder;
+            this._signalRNotificationBuilder = signalRNotificationBuilder;
         }
 
         public void SendNotification(ExampleNotification notification)
