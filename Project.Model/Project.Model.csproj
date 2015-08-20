@@ -74,6 +74,7 @@
     <Compile Include="Models\FileDescriptor.cs" />
     <Compile Include="Models\HelpDeskRequestComment.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\Notifications\ExampleNotification.cs" />
     <Compile Include="Models\OperatingSystem.cs" />
     <Compile Include="Models\ServerTemplate.cs" />
     <Compile Include="Models\StandartVmTask.cs" />
