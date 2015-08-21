@@ -10,6 +10,7 @@ namespace Project.Web.App_Start
     using Model.Models;
     using Hubs;
     using Core;
+    using Project.Web.Service;
 
     public class UnityConfig: UnityConfigBase
     {
@@ -17,7 +18,7 @@ namespace Project.Web.App_Start
         {
             UnityConfigureFunc = unityContainer =>
                                  {
-                                     Service.UnityConfig.Register<PerRequestLifetimeManager>(unityContainer);
+                                     Project.Service.UnityConfig.Register<PerRequestLifetimeManager>(unityContainer);
 
                                      unityContainer.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
                                      unityContainer.RegisterType<UserManager<ApplicationUser>>();
@@ -25,6 +26,7 @@ namespace Project.Web.App_Start
                                      unityContainer.RegisterType<ApplicationUserManager>();
                                      unityContainer.RegisterType<SampleHub, SampleHub>(new TransientLifetimeManager());
                                      unityContainer.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
+                                     unityContainer.RegisterType<ICrytexContext, CrytexContext>();
                                  };
         }
     }

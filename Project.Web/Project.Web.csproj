@@ -241,6 +241,7 @@
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
+    <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Controllers\Api\FileController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestCommentController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestController.cs" />
@@ -270,6 +271,8 @@
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\CrytexContext.cs" />
+    <Compile Include="Service\ICrytexContext.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
