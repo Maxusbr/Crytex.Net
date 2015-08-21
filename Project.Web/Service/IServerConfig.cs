@@ -7,5 +7,7 @@ namespace Project.Web.Service
 {
     public interface IServerConfig
     {
+        string GetValue(string key);
+        bool TryGetValue<T>(string key, out T result);
     }
 }
