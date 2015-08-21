@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Principal;
 using System.Web;
+using Microsoft.AspNet.Identity;
 
 namespace Project.Web.Service
 {
@@ -18,8 +19,8 @@ namespace Project.Web.Service
 
         public string GetUserId()
         {
-            var user = this._userManager.Users.SingleOrDefault(u => u.UserName == this._identity.Name);
-            return user == null ? null : user.Id ;
+            var userId = this._identity.GetUserId();
+            return userId ;
         }
 
         public bool IsAuth()
