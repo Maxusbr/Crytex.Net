@@ -11,6 +11,7 @@ namespace Project.Web.App_Start
     using Hubs;
     using Core;
     using Project.Web.Service;
+    using System.Security.Principal;
 
     public class UnityConfig: UnityConfigBase
     {
@@ -26,7 +27,13 @@ namespace Project.Web.App_Start
                                      unityContainer.RegisterType<ApplicationUserManager>();
                                      unityContainer.RegisterType<SampleHub, SampleHub>(new TransientLifetimeManager());
                                      unityContainer.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
+                                     
                                      unityContainer.RegisterType<ICrytexContext, CrytexContext>();
+                                     unityContainer.RegisterType<IServerConfig, ServerConfig>();
+                                     unityContainer.RegisterType<IHttp, Http>();
+                                     unityContainer.RegisterType<HttpRequest>(new InjectionFactory(o => HttpContext.Current.Request));
+                                     unityContainer.RegisterType<IUserInfoProvider, UserInfoProvider>();
+                                     unityContainer.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.User.Identity));
                                  };
         }
     }

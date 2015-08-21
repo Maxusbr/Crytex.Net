@@ -271,8 +271,14 @@
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\UserInfoProvider.cs" />
     <Compile Include="Service\CrytexContext.cs" />
+    <Compile Include="Service\Http.cs" />
+    <Compile Include="Service\IUserInfoProvider.cs" />
     <Compile Include="Service\ICrytexContext.cs" />
+    <Compile Include="Service\IHttp.cs" />
+    <Compile Include="Service\IServerConfig.cs" />
+    <Compile Include="Service\ServerConfig.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
