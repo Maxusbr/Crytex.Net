@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
+using Project.Web.Filters;
 
 namespace Project.Web
 {
+
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
@@ -28,6 +27,9 @@ namespace Project.Web
             var settings = jsonFormatter.SerializerSettings;
             settings.Formatting = Formatting.Indented;
             settings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+
+            config.Filters.Add(new ExceptionHandlingApiFilter());
+            config.Filters.Add(new SetLogPropertyApiFilter());
         }
     }
 }

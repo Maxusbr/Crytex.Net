@@ -48,6 +48,18 @@
       <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog.EntityFramework, Version=1.0.0.0, Culture=neutral, PublicKeyToken=84d9c54a636a9bc8, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.EntityFramework.1.0.0\lib\net40\NLog.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="NLog.Extended, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.Extended.4.0.0.1\lib\net45-full\NLog.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,10 +70,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Logger\LoggerCrytex.cs" />
+    <Compile Include="Logger\SourceLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnityConfigBase.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="NLog.config" />
+    <None Include="app.config" />
+    <None Include="connectionStrings.config" />
+    <None Include="NLog.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
