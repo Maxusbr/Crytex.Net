@@ -6,6 +6,7 @@ using Mandrill;
 using Mandrill.Models;
 using Mandrill.Requests.Messages;
 using Mandrill.Requests.Templates;
+using Project.Core;
 using Project.Model.Models.Notifications;
 using Project.Service.IService;
 
@@ -51,6 +52,8 @@ namespace Crytex.Notification
         {
             var templateName = await GetTemplateNameAndAddIfNotExists(emailTemplate);
 
+            CheckEmailParameters(emailInfo, emailTemplate);
+
             var email = new EmailMessage
             {
                 FromEmail = emailInfo.From,
@@ -71,14 +74,9 @@ namespace Crytex.Notification
             return result;
         }
 
-        private void AddUserDynamicContent(EmailMessage emailMessage, string to, List<KeyValuePair<string, string>> parameters)
-        {
-            for (int j = 0; j < parameters.Count; j++)
-            {
-                emailMessage.AddRecipientVariable(to, MandrillUtil.GetMergeTag(parameters.ElementAt(j).Key), parameters.ElementAt(j).Value);
-            }
-        }
+        
 
+        
         private async Task<string> GetTemplateNameAndAddIfNotExists(EmailTemplate template)
         {
             var templateName = MandrillUtil.GenerateName(template);
@@ -111,6 +109,22 @@ namespace Crytex.Notification
             return template != null;
         }
 
+        private static void AddUserDynamicContent(EmailMessage emailMessage, string to, List<KeyValuePair<string, string>> parameters)
+        {
+            for (int j = 0; j < parameters.Count; j++)
+            {
+                emailMessage.AddRecipientVariable(to, MandrillUtil.GetMergeTag(parameters.ElementAt(j).Key), parameters.ElementAt(j).Value);
+            }
+        }
+
+        private static void CheckEmailParameters(EmailInfo emailInfo, EmailTemplate emailTemplate)
+        {
+            var emailParameters = emailInfo.SubjectParamsList.Union(emailInfo.BodyParamsList).Select(x => x.Key).ToList();
+            var templateParameters = emailTemplate.ParameterNamesList.Select(x => x.Key).ToList();
+            templateParameters.Add("qwer");
+            if (!templateParameters.All(emailParameters.Contains))
+                LoggerCrytex.Logger.Error("Email(id: " + emailInfo.Id + ") and Template(id: " + emailTemplate.Id + ", type: " + emailTemplate.EmailTemplateTypeEnum + ") parameters are not the same.");
+        }
         #endregion
 
     }
