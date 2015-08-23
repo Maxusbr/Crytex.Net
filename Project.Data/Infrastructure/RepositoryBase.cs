@@ -89,5 +89,10 @@ namespace Project.Data.Infrastructure
         {
             return dbset.Where(where).FirstOrDefault<T>();
         }
+
+        public virtual void SaveChanges()
+        {
+            dataContext.SaveChanges();
+        }
     }
 }
