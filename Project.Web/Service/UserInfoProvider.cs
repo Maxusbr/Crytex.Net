@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Web;
 using Microsoft.AspNet.Identity;
+using Project.Model.Models;
 
 namespace Project.Web.Service
 {
@@ -26,6 +27,27 @@ namespace Project.Web.Service
         public bool IsAuth()
         {
             return this._identity.IsAuthenticated;
+        }
+
+
+        public ApplicationUser GetCurrentUser()
+        {
+            var user = this._userManager.FindById(GetUserId());
+            return user;
+        }
+
+
+        public IEnumerable<string> GetRolesForCurrentUser()
+        {
+            var roles = this._userManager.GetRoles(this.GetUserId());
+            return roles;
+        }
+
+
+        public bool IsCurrentUserInRole(string roleName)
+        {
+            bool isIn = this._userManager.IsInRole(this.GetUserId(), roleName);
+            return isIn;
         }
     }
 }
