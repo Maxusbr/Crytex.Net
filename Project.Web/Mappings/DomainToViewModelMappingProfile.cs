@@ -27,9 +27,12 @@ namespace Project.Web.Mappings
                 .ForMember(dest => dest.ImageFilePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path));
             Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
+            Mapper.CreateMap<CreateVmTask, CreateVmTaskViewModel>()
+                .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ServerTemplate.ImageFileDescriptor.Path));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
+            this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

@@ -244,6 +244,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\CreateVmTaskController.cs" />
     <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Controllers\Api\FileController.cs" />
@@ -267,6 +268,7 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JsonModels\CreateVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
     <Compile Include="Models\JsonModels\FileDescriptorViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestCommentViewModel.cs" />
