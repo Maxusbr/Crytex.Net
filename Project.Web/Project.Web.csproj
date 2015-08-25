@@ -245,6 +245,7 @@
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
+    <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Controllers\Api\FileController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestCommentController.cs" />
     <Compile Include="Controllers\Api\HelpDeskRequestController.cs" />
@@ -278,6 +279,14 @@
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\UserInfoProvider.cs" />
+    <Compile Include="Service\CrytexContext.cs" />
+    <Compile Include="Service\Http.cs" />
+    <Compile Include="Service\IUserInfoProvider.cs" />
+    <Compile Include="Service\ICrytexContext.cs" />
+    <Compile Include="Service\IHttp.cs" />
+    <Compile Include="Service\IServerConfig.cs" />
+    <Compile Include="Service\ServerConfig.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -288,6 +297,10 @@
       <Link>NLog.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+    </Content>
+    <Content Include="..\Project.Data\connectionStrings.config">
+      <Link>connectionStrings.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
@@ -348,6 +361,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crytex.Notification\Crytex.Notification.csproj">
+      <Project>{B7071332-988E-4A1E-82BE-8078A8243460}</Project>
+      <Name>Crytex.Notification</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Project.Core\Project.Core.csproj">
       <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
       <Name>Project.Core</Name>
@@ -374,6 +391,9 @@
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
   <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
     <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <Target Name="CopyLinkedContentFiles" BeforeTargets="Build">
+    <Copy SourceFiles="%(Content.Identity)" DestinationFiles="%(Content.Link)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Condition="'%(Content.Link)' != ''" />
   </Target>
   <ProjectExtensions>
     <VisualStudio>

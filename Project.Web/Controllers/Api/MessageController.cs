@@ -11,7 +11,7 @@ using Sample.Service.IService;
 
 namespace Project.Web.Controllers.Api
 {
-    public class MessageController : ApiController
+    public class MessageController : CrytexApiController
     {
         private readonly IMessageService _messageService;
 

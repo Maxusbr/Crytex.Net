@@ -11,7 +11,7 @@ namespace Project.Service.IService
 {
     public interface ITaskVmService
     {
-        void CreateVm(CreateVmOption createVmOption);
+        CreateVmTask CreateVm(CreateVmTask createVmOption);
         void RemoveVm(RemoveVmOption removeVm);
         void UpdateVmOption(UpdateVmOption updateVmOption);
 

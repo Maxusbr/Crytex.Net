@@ -8,21 +8,6 @@ namespace Project.Data.Migrations
         public override void Up()
         {
             DropPrimaryKey("dbo.UserVms");
-            CreateTable(
-                "dbo.LogEntries",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        UserId = c.String(maxLength: 128),
-                        Date = c.String(),
-                        Message = c.String(),
-                        StackTrace = c.String(),
-                        Level = c.String(),
-                        Source = c.String(),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.AspNetUsers", t => t.UserId)
-                .Index(t => t.UserId);
             
             AddColumn("dbo.CreateVmTasks", "ServerTemplateId", c => c.Int(nullable: false));
             AddColumn("dbo.CreateVmTasks", "CreationDate", c => c.DateTime(nullable: false));

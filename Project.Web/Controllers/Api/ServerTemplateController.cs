@@ -10,14 +10,12 @@ using Project.Web.Models.JsonModels;
 
 namespace Project.Web.Controllers.Api
 {
-    public class ServerTemplateController : ApiController
+    public class ServerTemplateController : CrytexApiController
     {
         private readonly IServerTemplateService _serverTemplateService;
-        private readonly ApplicationUserManager _userManager;
 
-        public ServerTemplateController(IServerTemplateService serverTemplateService, ApplicationUserManager userManager)
+        public ServerTemplateController(IServerTemplateService serverTemplateService)
         {
-            this._userManager = userManager;
             this._serverTemplateService = serverTemplateService;
         }
 
@@ -25,8 +23,8 @@ namespace Project.Web.Controllers.Api
         [HttpGet]
         public IEnumerable<ServerTemplateViewModel> GetAllForUser()
         {
-            var user = this._userManager.Users.Single(u => u.UserName == this.User.Identity.Name);
-            var servers = this._serverTemplateService.GeAllForUser(user.Id).ToList();
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            var servers = this._serverTemplateService.GeAllForUser(userId).ToList();
             var model = AutoMapper.Mapper.Map<List<ServerTemplate>, List<ServerTemplateViewModel>>(servers);
 
             return model;

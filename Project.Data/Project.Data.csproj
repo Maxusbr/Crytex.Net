@@ -49,6 +49,8 @@
     <Compile Include="IRepository\ICreateVmTaskRepository.cs" />
     <Compile Include="IRepository\IBillingTransactionRepository.cs" />
     <Compile Include="IRepository\ICreditPaymentOrderRepository.cs" />
+    <Compile Include="IRepository\IEmailInfoRepository.cs" />
+    <Compile Include="IRepository\IEmailTemplateRepository.cs" />
     <Compile Include="IRepository\IFileDescriptorRepository.cs" />
     <Compile Include="IRepository\IHelpDeskRequestCommentRepository.cs" />
     <Compile Include="IRepository\IHelpDeskRequestRepository.cs" />
@@ -91,8 +93,15 @@
     <Compile Include="Migrations\201508180839575_CreditPaymentOrderMigration.Designer.cs">
       <DependentUpon>201508180839575_CreditPaymentOrderMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201508182020207_LogSystemMigration.cs" />
-    <Compile Include="Migrations\201508251019546_UserVmCreateVmTaskMigration.cs" />
+    <Compile Include="Migrations\201508231634403_LogSystemMigration.cs" />
+    <Compile Include="Migrations\201508231634403_LogSystemMigration.Designer.cs">
+      <DependentUpon>201508231634403_LogSystemMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201508231827107_EmailInfo.cs" />
+    <Compile Include="Migrations\201508231827107_EmailInfo.Designer.cs">
+      <DependentUpon>201508231827107_EmailInfo.cs</DependentUpon>
+    </Compile>
+	<Compile Include="Migrations\201508251019546_UserVmCreateVmTaskMigration.cs" />
     <Compile Include="Migrations\201508251019546_UserVmCreateVmTaskMigration.Designer.cs">
       <DependentUpon>201508251019546_UserVmCreateVmTaskMigration.cs</DependentUpon>
     </Compile>
@@ -101,6 +110,8 @@
     <Compile Include="Repository\BillingTransactionRepository.cs" />
     <Compile Include="Repository\CreateVmTaskRepository.cs" />
     <Compile Include="Repository\CreditPayementOrderRepository.cs" />
+    <Compile Include="Repository\EmailInfoRepository.cs" />
+    <Compile Include="Repository\EmailTemplateRepository.cs" />
     <Compile Include="Repository\FileDescriptorRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestCommentRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestRepository.cs" />
@@ -148,8 +159,15 @@
     <EmbeddedResource Include="Migrations\201508180839575_CreditPaymentOrderMigration.resx">
       <DependentUpon>201508180839575_CreditPaymentOrderMigration.cs</DependentUpon>
     </EmbeddedResource>
+
     <EmbeddedResource Include="Migrations\201508251019546_UserVmCreateVmTaskMigration.resx">
       <DependentUpon>201508251019546_UserVmCreateVmTaskMigration.cs</DependentUpon>
+	</EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508231634403_LogSystemMigration.resx">
+      <DependentUpon>201508231634403_LogSystemMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508231827107_EmailInfo.resx">
+      <DependentUpon>201508231827107_EmailInfo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -190,13 +208,8 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ControlApp\bin\release
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Project.Web
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ExecutorTask\bin\debug
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ExecutorTask\bin\realese
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.BackGround\bin\debug
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.BackGround\bin\realese
-</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

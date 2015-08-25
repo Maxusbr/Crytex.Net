@@ -18,27 +18,33 @@ namespace Project.Service.Service
         private readonly ICreateVmTaskRepository _createVmTaskRepository;
         private readonly IUpdateVmTaskRepository _updateVmTaskRepository;
         private readonly IStandartVmTaskRepository _standartVmTaskRepository;
+        private readonly IUserVmRepository _userVmRepository;
+        private readonly IServerTemplateRepository _serverTemplateRepository;
 
         public TaskVmService(IUnitOfWork unitOfWork, ICreateVmTaskRepository createVmTaskRepository, IUpdateVmTaskRepository updateVmTaskRepository,
-            IStandartVmTaskRepository standartVmTaskRepository)
+            IStandartVmTaskRepository standartVmTaskRepository, IUserVmRepository userVmRepository, IServerTemplateRepository serverTemplateRepository)
         {
             this._unitOfWork = unitOfWork;
             this._createVmTaskRepository = createVmTaskRepository;
             this._updateVmTaskRepository = updateVmTaskRepository;
             this._standartVmTaskRepository = standartVmTaskRepository;
+            this._userVmRepository = userVmRepository;
+            this._serverTemplateRepository = serverTemplateRepository;
         }
 
-        public void CreateVm(CreateVmOption createVmOption)
+        public CreateVmTask CreateVm(CreateVmTask createVmTask)
         {
-            var task = new CreateVmTask();
-            task.Name = createVmOption.Name;
-            task.Cpu = createVmOption.Cpu;
-            task.Hdd = createVmOption.Hdd;
-            task.Ram = createVmOption.Ram;
-            task.StatusTask = StatusTask.Pending;
+            var template = this._serverTemplateRepository.GetById(createVmTask.ServerTemplateId);
+            
+            // !!validate!!
 
-            _createVmTaskRepository.Add(task);
+            createVmTask.StatusTask = StatusTask.Pending;
+            createVmTask.CreationDate = DateTime.UtcNow;
+
+            _createVmTaskRepository.Add(createVmTask);
             _unitOfWork.Commit();
+
+            return createVmTask;
         }
 
         public void RemoveVm(RemoveVmOption removeVm)

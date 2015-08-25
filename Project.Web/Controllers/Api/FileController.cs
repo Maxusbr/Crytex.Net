@@ -9,7 +9,7 @@ using Project.Web.Models.JsonModels;
 
 namespace Project.Web.Controllers.Api
 {
-    public class FileController : ApiController
+    public class FileController : CrytexApiController
     {
         private readonly IFileService _fileService;
 

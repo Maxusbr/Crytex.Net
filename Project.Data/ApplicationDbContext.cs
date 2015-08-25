@@ -5,6 +5,8 @@ using Project.Model.Models;
 
 namespace Project.Data
 {
+    using Project.Model.Models.Notifications;
+
     [DbConfigurationType(typeof(DbConfig))] 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -38,5 +40,7 @@ namespace Project.Data
         public DbSet<BillingTransaction> BillingTransactions { get; set; }
         public DbSet<CreditPaymentOrder> CreditPaymentOrders { get; set; }
         public DbSet<LogEntry> LogEntries { get; set; }
+        public DbSet<EmailInfo> EmailInfos { get; set; }
+        public DbSet<EmailTemplate> EmailTemplates { get; set; }
     }
 }
