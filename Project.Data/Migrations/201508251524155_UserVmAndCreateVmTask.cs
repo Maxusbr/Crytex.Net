@@ -7,10 +7,6 @@ namespace Project.Data.Migrations
     {
         public override void Up()
         {
-            
-            AddColumn("dbo.CreateVmTasks", "ServerTemplateId", c => c.Int(nullable: false));
-            AddColumn("dbo.CreateVmTasks", "CreationDate", c => c.DateTime(nullable: false));
-
             DropTable("dbo.UserVms");
             CreateTable(
                 "dbo.UserVms",
@@ -19,12 +15,14 @@ namespace Project.Data.Migrations
                     Id = c.Guid(nullable: false, identity: true)
                 })
                 .PrimaryKey(t => t.Id);
+            AddColumn("dbo.CreateVmTasks", "ServerTemplateId", c => c.Int(nullable: false));
+            AddColumn("dbo.CreateVmTasks", "CreationDate", c => c.DateTime(nullable: false));
             AddColumn("dbo.UserVms", "CoreCount", c => c.Int(nullable: false));
             AddColumn("dbo.UserVms", "RamCount", c => c.Int(nullable: false));
             AddColumn("dbo.UserVms", "HardDriveSize", c => c.Int(nullable: false));
             AddColumn("dbo.UserVms", "Status", c => c.Int(nullable: false));
             AddColumn("dbo.UserVms", "ServerTemplateId", c => c.Int(nullable: false));
-            
+            AddColumn("dbo.UserVms", "Name", c => c.String());
             CreateIndex("dbo.CreateVmTasks", "ServerTemplateId");
             CreateIndex("dbo.UserVms", "ServerTemplateId");
             AddForeignKey("dbo.CreateVmTasks", "ServerTemplateId", "dbo.ServerTemplates", "Id", cascadeDelete: true);
@@ -39,6 +37,9 @@ namespace Project.Data.Migrations
             DropIndex("dbo.CreateVmTasks", new[] { "ServerTemplateId" });
             DropPrimaryKey("dbo.UserVms");
             AlterColumn("dbo.UserVms", "Id", c => c.Int(nullable: false, identity: true));
+            AlterColumn("dbo.LogEntries", "Date", c => c.String());
+            AlterColumn("dbo.EmailInfoes", "DateSending", c => c.DateTime(nullable: false));
+            DropColumn("dbo.UserVms", "Name");
             DropColumn("dbo.UserVms", "ServerTemplateId");
             DropColumn("dbo.UserVms", "Status");
             DropColumn("dbo.UserVms", "HardDriveSize");

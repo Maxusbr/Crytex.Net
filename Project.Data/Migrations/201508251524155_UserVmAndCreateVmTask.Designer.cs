@@ -13,7 +13,7 @@ namespace Project.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201508251228161_UserVmAndCreateVmTask"; }
+            get { return "201508251524155_UserVmAndCreateVmTask"; }
         }
         
         string IMigrationMetadata.Source

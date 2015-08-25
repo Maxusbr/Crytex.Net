@@ -18,6 +18,7 @@ namespace Project.Model.Models
         public int HardDriveSize { get; set; }
         public StatusVM Status { get; set; }
         public Int32 ServerTemplateId { get; set; }
+        public string Name { get; set; }
 
         [ForeignKey("ServerTemplateId")]
         public ServerTemplate ServerTemplate { get; set; }
