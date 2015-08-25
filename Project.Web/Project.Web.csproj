@@ -357,6 +357,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crytex.Notification\Crytex.Notification.csproj">
+      <Project>{B7071332-988E-4A1E-82BE-8078A8243460}</Project>
+      <Name>Crytex.Notification</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Project.Core\Project.Core.csproj">
       <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
       <Name>Project.Core</Name>

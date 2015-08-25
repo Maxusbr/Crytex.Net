@@ -10,10 +10,10 @@ namespace Project.Web.App_Start
     using Model.Models;
     using Hubs;
     using Core;
+
     using Project.Web.Service;
     using System.Security.Principal;
-
-    public class UnityConfig: UnityConfigBase
+  using Crytex.Notification;    public class UnityConfig: UnityConfigBase
     {
         public static void  Configure()
         {
@@ -27,7 +27,8 @@ namespace Project.Web.App_Start
                                      unityContainer.RegisterType<ApplicationUserManager>();
                                      unityContainer.RegisterType<SampleHub, SampleHub>(new TransientLifetimeManager());
                                      unityContainer.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
-                                     
+                                     unityContainer.RegisterType<IEmailSender, EmailMandrillSender>();
+                                     unityContainer.RegisterType<INotificationManager, NotificationManager>();
                                      unityContainer.RegisterType<ICrytexContext, CrytexContext>();
                                      unityContainer.RegisterType<IServerConfig, ServerConfig>();
                                      unityContainer.RegisterType<IHttp, Http>();

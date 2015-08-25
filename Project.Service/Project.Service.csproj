@@ -48,6 +48,10 @@
       <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.0.1\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
       <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
       <Private>True</Private>
@@ -63,10 +67,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IService\IEmailTemplateService.cs" />
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\IMessageService.cs" />
-    <Compile Include="IService\INotificationService.cs" />
+    <Compile Include="IService\IEmailInfoService.cs" />
     <Compile Include="IService\IOperatingSystemsService.cs" />
     <Compile Include="IService\IPaymentService.cs" />
     <Compile Include="IService\IServerTemplateService.cs" />
@@ -74,6 +79,8 @@
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
+    <Compile Include="Service\EmailInfoService.cs" />
+    <Compile Include="Service\EmailTemplateService.cs" />
     <Compile Include="Service\FileService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\MessageService.cs" />

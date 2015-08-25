@@ -36,6 +36,11 @@ namespace Project.Service
             container.RegisterType<IPaymentService, PaymentService>();
       
             container.RegisterType<ITaskVmService,TaskVmService>();
+            
+            container.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();
+            container.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
+            container.RegisterType<IEmailInfoService, EmailInfoService>();
+            container.RegisterType<IEmailTemplateService, EmailTemplateService>();
         }
     }
 }
