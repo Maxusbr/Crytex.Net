@@ -200,13 +200,8 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ControlApp\bin\release
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Project.Web
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ExecutorTask\bin\debug
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.ExecutorTask\bin\realese
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.BackGround\bin\debug
-copy $(ProjectDir)connectionStrings.config $(SolutionDir)Crytex.BackGround\bin\realese
-</PreBuildEvent>
+    <PreBuildEvent>
+    </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>
