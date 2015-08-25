@@ -97,6 +97,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Project.Data\connectionStrings.config">
+      <Link>connectionStrings.config</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

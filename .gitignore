@@ -37,3 +37,4 @@
 /Project.Web/connectionStrings.config
 /Crytex.Notification/bin/Debug
 /Crytex.Notification/obj/Debug
+/Project.Web/NLog.config
