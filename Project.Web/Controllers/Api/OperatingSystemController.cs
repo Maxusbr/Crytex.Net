@@ -10,14 +10,13 @@ using OperatingSystem = Project.Model.Models.OperatingSystem;
 
 namespace Project.Web.Controllers.Api
 {
-    public class OperatingSystemController : ApiController
+    public class OperatingSystemController : CrytexApiController
     {
         private readonly IOperatingSystemsService _oparaingSystemsService;
         private readonly ApplicationUserManager _userManager;
 
-        public OperatingSystemController(IOperatingSystemsService operatingSystemsService, ApplicationUserManager userManager)
+        public OperatingSystemController(IOperatingSystemsService operatingSystemsService)
         {
-            this._userManager = userManager;
             this._oparaingSystemsService = operatingSystemsService;
         }
 
