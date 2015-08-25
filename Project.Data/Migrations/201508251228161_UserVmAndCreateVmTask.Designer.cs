@@ -7,18 +7,18 @@ namespace Project.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class UserVmCreateVmTaskMigration : IMigrationMetadata
+    public sealed partial class UserVmAndCreateVmTask : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UserVmCreateVmTaskMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UserVmAndCreateVmTask));
         
         string IMigrationMetadata.Id
         {
-            get { return "201508251019546_UserVmCreateVmTaskMigration"; }
+            get { return "201508251228161_UserVmAndCreateVmTask"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return Resources.GetString("Source"); }
+            get { return null; }
         }
         
         string IMigrationMetadata.Target

@@ -12,7 +12,7 @@ namespace Project.Model.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Guid { get; set; }
+        public Guid Id { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }
         public int HardDriveSize { get; set; }
@@ -20,7 +20,7 @@ namespace Project.Model.Models
         public Int32 ServerTemplateId { get; set; }
 
         [ForeignKey("ServerTemplateId")]
-        public virtual ServerTemplate ServerTemplate { get; set; }
+        public ServerTemplate ServerTemplate { get; set; }
     }
 
 

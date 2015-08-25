@@ -101,9 +101,9 @@
     <Compile Include="Migrations\201508231827107_EmailInfo.Designer.cs">
       <DependentUpon>201508231827107_EmailInfo.cs</DependentUpon>
     </Compile>
-	<Compile Include="Migrations\201508251019546_UserVmCreateVmTaskMigration.cs" />
-    <Compile Include="Migrations\201508251019546_UserVmCreateVmTaskMigration.Designer.cs">
-      <DependentUpon>201508251019546_UserVmCreateVmTaskMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201508251228161_UserVmAndCreateVmTask.cs" />
+    <Compile Include="Migrations\201508251228161_UserVmAndCreateVmTask.Designer.cs">
+      <DependentUpon>201508251228161_UserVmAndCreateVmTask.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -159,15 +159,14 @@
     <EmbeddedResource Include="Migrations\201508180839575_CreditPaymentOrderMigration.resx">
       <DependentUpon>201508180839575_CreditPaymentOrderMigration.cs</DependentUpon>
     </EmbeddedResource>
-
-    <EmbeddedResource Include="Migrations\201508251019546_UserVmCreateVmTaskMigration.resx">
-      <DependentUpon>201508251019546_UserVmCreateVmTaskMigration.cs</DependentUpon>
-	</EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508231634403_LogSystemMigration.resx">
       <DependentUpon>201508231634403_LogSystemMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508231827107_EmailInfo.resx">
       <DependentUpon>201508231827107_EmailInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508251228161_UserVmAndCreateVmTask.resx">
+      <DependentUpon>201508251228161_UserVmAndCreateVmTask.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

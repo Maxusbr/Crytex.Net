@@ -13,6 +13,6 @@ namespace Project.Model.Models
         public DateTime CreationDate { get; set; }
 
         [ForeignKey("ServerTemplateId")]
-        public virtual ServerTemplate ServerTemplate { get; set; }
+        public ServerTemplate ServerTemplate { get; set; }
     }
 }

@@ -19,8 +19,10 @@ namespace TaskExecutorConsoleTest
             var upRepo = new UpdateTaskVmRepository(dbFactory);
             var createRepo = new CreateVmTaskRepository(dbFactory);
             var standartRepo = new StandartVmTaskRepository(dbFactory);
+            var userVmRepository = new UserVmRepository(dbFactory);
+            var serverTempalateRepo = new ServerTemplateRepository(dbFactory);
             var unitOfWork = new UnitOfWork(dbFactory);
-            var service = new TaskVmService(unitOfWork, createRepo, upRepo, standartRepo);
+            var service = new TaskVmService(unitOfWork, createRepo, upRepo, standartRepo, userVmRepository, serverTempalateRepo);
             var handlerManager = new TaskHandlerManager(service);
             var taskManager = new TaskManager(handlerManager);
 
