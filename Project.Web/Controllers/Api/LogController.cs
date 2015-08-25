@@ -23,14 +23,17 @@ namespace Project.Web.Controllers.Api
         // GET api/<controller>
         public List<LogEntryViewModel> Get(int pageSize = 20, int pageIndex = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string sourceLog = null)
         {
-            return _logService.GetLogEntries(pageSize, pageIndex, dateFrom, dateTo, sourceLog).Select(x => new LogEntryViewModel(x)).ToList();
+            var logEntries = _logService.GetLogEntries(pageSize, pageIndex, dateFrom, dateTo, sourceLog);
+            var model = AutoMapper.Mapper.Map<List<LogEntry>, List<LogEntryViewModel>>(logEntries);
+            return model;
         }
 
         // GET api/<controller>/5
         public LogEntryViewModel Get(int id)
         {
             var logEntry = _logService.GetLogEntry(id);
-            return new LogEntryViewModel(logEntry);
+            var model = AutoMapper.Mapper.Map<LogEntry, LogEntryViewModel>(logEntry);
+            return model;
         }
     }
 }
