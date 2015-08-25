@@ -13,15 +13,13 @@ using System.Web.Http;
 
 namespace Project.Web.Controllers.Api
 {
-    public class HelpDeskRequestController : ApiController
+    public class HelpDeskRequestController : CrytexApiController
     {
         private readonly IHelpDeskRequestService _helpDeskRequestService;
-        private readonly ApplicationUserManager _userManager;
 
-        public HelpDeskRequestController(IHelpDeskRequestService helpDeskRequstService, ApplicationUserManager userManager)
+        public HelpDeskRequestController(IHelpDeskRequestService helpDeskRequstService)
         {
             this._helpDeskRequestService = helpDeskRequstService;
-            this._userManager = userManager;
         }
 
         [HttpGet]
@@ -71,9 +69,8 @@ namespace Project.Web.Controllers.Api
         public HttpResponseMessage Create(HelpDeskRequestViewModel model)
         {
             if(ModelState.IsValid){
-                var userName = this.User.Identity.Name;
-                var user = this._userManager.Users.Single(u => u.UserName == userName);
-                var newRequest = this._helpDeskRequestService.CreateNew(model.Summary, model.Details, user.Id);
+                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+                var newRequest = this._helpDeskRequestService.CreateNew(model.Summary, model.Details, userId);
 
                 return Request.CreateResponse(HttpStatusCode.Created, new { id = newRequest.Id});
             }

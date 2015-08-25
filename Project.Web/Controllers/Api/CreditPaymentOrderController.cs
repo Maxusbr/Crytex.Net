@@ -9,15 +9,13 @@ using System.Web.Http;
 
 namespace Project.Web.Controllers.Api
 {
-    public class CreditPaymentOrderController : ApiController
+    public class CreditPaymentOrderController : CrytexApiController
     {
         private readonly IPaymentService _paymentService;
-        private readonly ApplicationUserManager _userManager;
 
-        public CreditPaymentOrderController(IPaymentService paymentService, ApplicationUserManager userManager)
+        public CreditPaymentOrderController(IPaymentService paymentService)
         {
             this._paymentService = paymentService;
-            this._userManager = userManager;
         }
 
         [HttpGet]
@@ -60,9 +58,8 @@ namespace Project.Web.Controllers.Api
         {
             if (ModelState.IsValid)
             {
-                var userName = this.User.Identity.Name;
-                var user = this._userManager.Users.Single(u => u.UserName == userName);
-                var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, user.Id, model.PaymentSystem.Value);
+                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+                var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, model.PaymentSystem.Value);
 
                 return Request.CreateResponse(HttpStatusCode.Created, new { id = newOrder.Guid });
             }

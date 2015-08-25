@@ -10,15 +10,13 @@ using Project.Model.Models;
 
 namespace Project.Web.Controllers.Api
 {
-    public class HelpDeskRequestCommentController : ApiController
+    public class HelpDeskRequestCommentController : CrytexApiController
     {
         private readonly IHelpDeskRequestService _helpDeskRequestService;
-        private readonly ApplicationUserManager _userManager;
 
-        public HelpDeskRequestCommentController(IHelpDeskRequestService helpDeskRequstService, ApplicationUserManager userManager)
+        public HelpDeskRequestCommentController(IHelpDeskRequestService helpDeskRequstService)
         {
             this._helpDeskRequestService = helpDeskRequstService;
-            this._userManager = userManager;
         }
 
         // GET: api/HelpDeskRequestComment/5
@@ -37,9 +35,8 @@ namespace Project.Web.Controllers.Api
         {
             if(this.ModelState.IsValid)
             {
-                var userName = this.User.Identity.Name;
-                var user = this._userManager.Users.Single(u => u.UserName == userName);
-                var newComment = this._helpDeskRequestService.CreateComment(id, model.Comment, user.Id);
+                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+                var newComment = this._helpDeskRequestService.CreateComment(id, model.Comment, userId);
                 return Request.CreateResponse(HttpStatusCode.Created, new { id = newComment.Id});
             }
 
@@ -52,8 +49,6 @@ namespace Project.Web.Controllers.Api
         {
             if(this.ModelState.IsValid)
             {
-                var userName = this.User.Identity.Name;
-                var user = this._userManager.Users.Single(u => u.UserName == userName);
                 this._helpDeskRequestService.UpdateComment(id, model.Comment);
                 return Request.CreateResponse(HttpStatusCode.OK);
             }
