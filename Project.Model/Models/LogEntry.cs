@@ -1,11 +1,13 @@
-﻿namespace Project.Model.Models
+﻿using System;
+
+namespace Project.Model.Models
 {
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class LogEntry : BaseEntity
     {
         public string UserId { get; set; }
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
         public string Message { get; set; }
         public string StackTrace { get; set; }
         public string Level { get; set; }

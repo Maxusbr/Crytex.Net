@@ -1,21 +1,24 @@
-﻿namespace Project.Service.Service
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Project.Core;
-    using Project.Data.IRepository;
-    using Project.Model.Enums;
-    using Project.Model.Models.Notifications;
-    using Project.Service.IService;
+﻿using Project.Data.Infrastructure;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Project.Core;
+using Project.Data.IRepository;
+using Project.Model.Enums;
+using Project.Model.Models.Notifications;
+using Project.Service.IService;
 
+namespace Project.Service.Service
+{
     public class EmailInfoService :  IEmailInfoService
     {
         private IEmailInfoRepository _emailInfoRepository { get; }
+        private IUnitOfWork _unitOfWork { get; set; }
 
-        public EmailInfoService(IEmailInfoRepository emailInfoRepository)
+        public EmailInfoService(IEmailInfoRepository emailInfoRepository, IUnitOfWork unitOfWork)
         {
             _emailInfoRepository = emailInfoRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public EmailInfo GetEmail(int id)
@@ -34,17 +37,17 @@
                            {
                                    From = from,
                                    To = to, 
-                                   EmailTemplateTypeEnum =  emailTemplateType,
+                                   EmailTemplateType =  emailTemplateType,
                                    SubjectParamsList = subjectParams,
                                    BodyParamsList = bodyParams,
                                    DateSending = dateSending
                            };
 
             if (!isSentImmediately)
-                newEmail.EmailResultStatusEnum = EmailResultStatus.Queued;
+                newEmail.EmailResultStatus = EmailResultStatus.Queued;
 
             _emailInfoRepository.Add(newEmail);
-            _emailInfoRepository.SaveChanges();
+            _unitOfWork.Commit();
             return newEmail;
         }
 
@@ -52,20 +55,20 @@
         {
             var email = _emailInfoRepository.GetById(id);
             email.IsProcessed = true;
-            email.EmailResultStatusEnum = emailResultStatus;
+            email.EmailResultStatus = emailResultStatus;
             if (reason != null)
                 email.Reason = reason;
             email.DateSending = DateTime.UtcNow;
 
             _emailInfoRepository.Update(email);
-            _emailInfoRepository.SaveChanges();
+            _unitOfWork.Commit();
         }
 
         public void DeleteEmail(int id)
         {
             var email = _emailInfoRepository.GetById(id);
             _emailInfoRepository.Delete(email);
-            _emailInfoRepository.SaveChanges();
+            _unitOfWork.Commit();
             LoggerCrytex.Logger.Warn("Email (to: "+ email.To + ", type: "+email.EmailTemplateType+") was deleted");
         }
     }

@@ -12,7 +12,7 @@ namespace Project.Data.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         UserId = c.String(maxLength: 128),
-                        Date = c.String(),
+                        Date = c.DateTime(nullable: false),
                         Message = c.String(),
                         StackTrace = c.String(),
                         Level = c.String(),

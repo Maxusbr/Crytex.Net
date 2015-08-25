@@ -14,39 +14,24 @@ namespace Project.Model.Models.Notifications
         public string To { get; set; }
         public string SubjectParams { get; set; }
         public string BodyParams { get; set; } 
-        public int EmailTemplateType { get; set; }
+        public EmailTemplateType EmailTemplateType { get; set; }
         public bool IsProcessed { get; set; }
-        public int? EmailResultStatus { get; set; }
+        public EmailResultStatus? EmailResultStatus { get; set; }
         public string Reason { get; set; }
 
 
         [NotMapped]
         public List<KeyValuePair<string, string>> SubjectParamsList
         {
-            get { return JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(SubjectParams); }
-            set { SubjectParams = JsonConvert.SerializeObject(value); }
+            get { return JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(SubjectParams) ?? new List<KeyValuePair<string, string>>(); }
+            set { SubjectParams = JsonConvert.SerializeObject(value ?? new List<KeyValuePair<string, string>>()); }
         }
 
         [NotMapped]
         public List<KeyValuePair<string, string>> BodyParamsList
         {
-            get { return JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(BodyParams); }
-            set { BodyParams = JsonConvert.SerializeObject(value); }
+            get { return JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(BodyParams) ?? new List<KeyValuePair<string, string>>(); }
+            set { BodyParams = JsonConvert.SerializeObject(value ?? new List<KeyValuePair<string, string>>()); }
         }
-
-        [NotMapped]
-        public EmailTemplateType EmailTemplateTypeEnum
-        {
-            get { return (Enums.EmailTemplateType)EmailTemplateType; }
-            set { EmailTemplateType = (int)value; }
-        }
-
-        [NotMapped]
-        public EmailResultStatus? EmailResultStatusEnum
-        {
-            get { return EmailResultStatus != null ? (EmailResultStatus?)(EmailResultStatus)EmailResultStatus : null; }
-            set { EmailResultStatus = (int)value; }
-        }
-
     }
 }

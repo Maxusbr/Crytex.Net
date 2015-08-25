@@ -33,7 +33,7 @@ namespace Crytex.Notification
 
         public async Task<List<EmailResult>> SendEmails(List<EmailInfo> emailMessages)
         {
-            var templateTypes = emailMessages.GroupBy(x => x.EmailTemplateTypeEnum).Select(x => x.Key).ToList();
+            var templateTypes = emailMessages.GroupBy(x => x.EmailTemplateType).Select(x => x.Key).ToList();
             var templates = _emailTemplateService.GetTemplateByTypes(templateTypes);
 
             var resultList = new List<EmailResult>();
@@ -121,10 +121,11 @@ namespace Crytex.Notification
         {
             var emailParameters = emailInfo.SubjectParamsList.Union(emailInfo.BodyParamsList).Select(x => x.Key).ToList();
             var templateParameters = emailTemplate.ParameterNamesList.Select(x => x.Key).ToList();
-            templateParameters.Add("qwer");
+
             if (!templateParameters.All(emailParameters.Contains))
-                LoggerCrytex.Logger.Error("Email(id: " + emailInfo.Id + ") and Template(id: " + emailTemplate.Id + ", type: " + emailTemplate.EmailTemplateTypeEnum + ") parameters are not the same.");
+                LoggerCrytex.Logger.Error("Email(id: " + emailInfo.Id + ") and Template(id: " + emailTemplate.Id + ", type: " + emailTemplate.EmailTemplateType + ") parameters are not the same.");
         }
+
         #endregion
 
     }
