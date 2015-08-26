@@ -42,6 +42,9 @@ namespace Project.Service
             container.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
             container.RegisterType<IEmailInfoService, EmailInfoService>();
             container.RegisterType<IEmailTemplateService, EmailTemplateService>();
+
+            container.RegisterType<ILogRepository,LogRepository>();
+            container.RegisterType<ILogService,LogService>();
         }
     }
 }

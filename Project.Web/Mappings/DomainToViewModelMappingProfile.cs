@@ -7,6 +7,7 @@ using AutoMapper;
 using Project.Model.Models;
 using Project.Web.Models.JsonModels;
 using PagedList;
+using Project.Web.Models.ViewModels;
 using OperatingSystem = Project.Model.Models.OperatingSystem;
 
 namespace Project.Web.Mappings
@@ -31,6 +32,9 @@ namespace Project.Web.Mappings
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ServerTemplate.ImageFileDescriptor.Path));
             Mapper.CreateMap<CreateVmTask, CreateVmTaskAdminViewModel>()
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ServerTemplate.ImageFileDescriptor.Path));
+
+            Mapper.CreateMap<LogEntry, LogEntryViewModel>()
+                    .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
