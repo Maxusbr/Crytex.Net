@@ -9,7 +9,7 @@ using Project.Service.IService;
 
 namespace Project.Web.Controllers.Api
 {
-    public class UserVmController : ApiController
+    public class UserVmController : CrytexApiController
     {
         private IUserVmService _userVmService;
 
@@ -27,7 +27,8 @@ namespace Project.Web.Controllers.Api
             }
             else
             {
-                var page = this._userVmService.GetPage(pageNumber, pageSize);
+                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+                var page = this._userVmService.GetPage(pageNumber, pageSize, userId);
                 var viewModel = AutoMapper.Mapper.Map<PageModel<UserVmViewModel>>(page);
                 return Request.CreateResponse(HttpStatusCode.OK, viewModel);
             }
@@ -36,12 +37,18 @@ namespace Project.Web.Controllers.Api
         }
 
         [HttpGet]
-        public UserVmViewModel Get(int id)
+        public HttpResponseMessage Get(string id)
         {
-            var vm = this._userVmService.GetVmById(id);
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                this.ModelState.AddModelError("id", "Invalid Guid format");
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }
+            var vm = this._userVmService.GetVmById(guid);
             var model = AutoMapper.Mapper.Map<UserVmViewModel>(vm);
-            
-            return model;
+
+            return this.Request.CreateResponse(HttpStatusCode.OK, model);
         }
     }
 }

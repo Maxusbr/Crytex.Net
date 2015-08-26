@@ -35,11 +35,14 @@ namespace Project.Web.Mappings
 
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
                     .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
+            Mapper.CreateMap<UserVm, UserVmViewModel>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Id.ToString()));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskAdminViewModel>();
+            this.MapPagedList<UserVm, UserVmViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

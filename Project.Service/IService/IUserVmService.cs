@@ -10,8 +10,8 @@ namespace Project.Service.IService
 {
     public interface IUserVmService
     {
-        UserVm GetVmById(int id);
+        UserVm GetVmById(Guid id);
 
-        IPagedList<UserVm> GetPage(int pageNumber, int pageSize);
+        IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId);
     }
 }

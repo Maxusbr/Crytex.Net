@@ -23,7 +23,7 @@ namespace Project.Service.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public UserVm GetVmById(int id)
+        public UserVm GetVmById(Guid id)
         {
             var vm = this._userVmRepo.GetById(id);
             if (vm == null)
@@ -35,10 +35,10 @@ namespace Project.Service.Service
         }
 
 
-        public IPagedList<UserVm> GetPage(int pageNumber, int pageSize)
+        public IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId)
         {
             var page = new Page(pageNumber, pageSize);
-            var list = this._userVmRepo.GetPage(page, x => true, x => x.Id);
+            var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.Id);
             return list;
         }
     }
