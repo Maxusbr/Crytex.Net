@@ -20,6 +20,11 @@ namespace Project.Web.Filters
                     context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, context.ActionContext.ModelState);
                     return;
                 }
+                if(context.Exception is TaskOperationException)
+                {
+                    context.Response = context.Request.CreateResponse(HttpStatusCode.Conflict, new {errorMessage = context.Exception.Message});
+                    return;
+                }
             }
             else{
                 LoggerCrytex.Logger.Error(context.Exception);

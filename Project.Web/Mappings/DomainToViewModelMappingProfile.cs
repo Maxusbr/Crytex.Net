@@ -29,10 +29,13 @@ namespace Project.Web.Mappings
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
             Mapper.CreateMap<CreateVmTask, CreateVmTaskViewModel>()
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ServerTemplate.ImageFileDescriptor.Path));
+            Mapper.CreateMap<CreateVmTask, CreateVmTaskAdminViewModel>()
+                .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ServerTemplate.ImageFileDescriptor.Path));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
+            this.MapPagedList<CreateVmTask, CreateVmTaskAdminViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

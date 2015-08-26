@@ -1,27 +1,27 @@
-﻿using Project.Service.IService;
+﻿using Project.Model.Models;
+using Project.Service.IService;
+using Project.Web.Models.JsonModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Project.Web.Models.JsonModels;
-using Project.Model.Models;
 
 namespace Project.Web.Controllers.Api
 {
-    public class CreateVmTaskController : CrytexApiController
+    public class CreateVmTaskAdminController : ApiController
     {
         private readonly ITaskVmService _taskVmService;
 
-        public CreateVmTaskController(ITaskVmService taskVmService)
+        public CreateVmTaskAdminController(ITaskVmService taskVmService)
         {
             this._taskVmService = taskVmService;
         }
 
-        // GET: api/CreateVmTask
+        // GET: api/CreateVmTaskAdmin
         [HttpGet]
-        public HttpResponseMessage GetPage(int pageNumber, int pageSize, DateTime? from = null, DateTime? to =null)
+        public HttpResponseMessage GetPage(int pageNumber, int pageSize, string userId = null, DateTime? from = null, DateTime? to = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
@@ -29,28 +29,43 @@ namespace Project.Web.Controllers.Api
             }
             else
             {
-                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
                 var page = this._taskVmService.GetCreateVmTasksForUser(pageNumber, pageSize, userId, from, to);
-                var viewModel = AutoMapper.Mapper.Map<PageModel<CreateVmTaskViewModel>>(page);
+                var viewModel = AutoMapper.Mapper.Map<PageModel<CreateVmTaskAdminViewModel>>(page);
                 return Request.CreateResponse(HttpStatusCode.OK, viewModel);
             }
 
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
         }
 
-        // POST: api/CreateVmTask
-        public HttpResponseMessage Post(CreateVmTaskViewModel model)
+        // GET: api/CreateVmTask/5
+        [HttpGet]
+        public CreateVmTaskViewModel GetById(int id)
+        {
+            var task = this._taskVmService.GetCreateVmTaskById(id);
+            var model = AutoMapper.Mapper.Map<CreateVmTaskAdminViewModel>(task);
+
+            return model;
+        }
+
+        // POST: api/CreateVmTaskAdmin
+        public HttpResponseMessage Create(CreateVmTaskAdminViewModel model)
         {
             if (this.ModelState.IsValid)
             {
                 var newTask = AutoMapper.Mapper.Map<CreateVmTask>(model);
-                newTask.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
                 newTask = this._taskVmService.CreateVm(newTask);
 
                 return Request.CreateResponse(HttpStatusCode.Created, new { id = newTask.Id });
             }
 
             return Request.CreateErrorResponse(HttpStatusCode.BadRequest, this.ModelState);
+        }
+
+        // DELETE: api/CreateVmTaskAdmin/5
+        public HttpResponseMessage Delete(int id)
+        {
+            this._taskVmService.DeleteCreateVmTaskById(id);
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 }

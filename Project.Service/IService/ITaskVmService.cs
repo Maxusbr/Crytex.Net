@@ -25,6 +25,8 @@ namespace Project.Service.IService
 
         void UpdateTaskStatus<T>(int id, StatusTask newStatus) where T : BaseTask;
 
-        object GetCreateVmTaskById(int id);
+        CreateVmTask GetCreateVmTaskById(int id);
+
+        void DeleteCreateVmTaskById(int id);
     }
 }

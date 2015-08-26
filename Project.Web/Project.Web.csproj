@@ -244,6 +244,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\Api\CreateVmTaskAdminController.cs" />
     <Compile Include="Controllers\Api\CreateVmTaskController.cs" />
     <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
@@ -268,6 +269,7 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
     <Compile Include="Models\JsonModels\FileDescriptorViewModel.cs" />
@@ -405,7 +407,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3053</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3053/</IISUrl>
+          <IISUrl>http://localhost:3054/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

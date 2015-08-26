@@ -141,11 +141,19 @@ namespace Project.Service.Service
             var expression = this.BuildSearchExpression(userId, from, to);
             var tasks = this._createVmTaskRepository.GetPage(page, expression, t=>t.CreationDate);
 
+            // Get server templates for tasks
+            var serverTemplateIds = tasks.Select(t => t.ServerTemplateId).Distinct();
+            var serverTemplates = this._serverTemplateRepository.GetMany(t => serverTemplateIds.Contains(t.Id));
+            
+            // Get image file descriptors for server templates
+            var imageFileDescriptorIds = serverTemplates.Select(t => t.ImageFileId).Distinct();
+            var imageFileDescriptors = this._fileDescriptorRepo.GetMany(d => imageFileDescriptorIds.Contains(d.Id));
+            
+            // Assign server templates to tasks and image file descriptors to server templates
             foreach (var task in tasks)
             {
-                //Refactor this!
-                var serverTemplate = this._serverTemplateRepository.GetById(task.ServerTemplateId);
-                var imageFileDescriptor = this._fileDescriptorRepo.GetById(serverTemplate.ImageFileId);
+                var serverTemplate = serverTemplates.Single(t => t.Id == task.ServerTemplateId);
+                var imageFileDescriptor = imageFileDescriptors.Single(d => d.Id == serverTemplate.ImageFileId);
                 serverTemplate.ImageFileDescriptor = imageFileDescriptor;
                 task.ServerTemplate = serverTemplate;
             }
@@ -163,7 +171,7 @@ namespace Project.Service.Service
             {
                 to = DateTime.MaxValue;
             }
-            Expression<Func<CreateVmTask, bool>> exp = x => x.UserId == userId && x.CreationDate >= from && x.CreationDate <= to;
+            Expression<Func<CreateVmTask, bool>> exp = x => userId == null ? true : x.UserId == userId && x.CreationDate >= from && x.CreationDate <= to;
 
             return exp;
         }
@@ -178,7 +186,31 @@ namespace Project.Service.Service
                 throw new InvalidIdentifierException(string.Format("CreateVmTask with id={0] doesnt exist", id));
             }
 
+            var serverTemplate = this._serverTemplateRepository.GetById(task.ServerTemplateId);
+            var imageFileDescriptor = this._fileDescriptorRepo.GetById(serverTemplate.ImageFileId);
+            task.ServerTemplate = serverTemplate;
+            serverTemplate.ImageFileDescriptor = imageFileDescriptor;
+
             return task;
+        }
+
+
+        public void DeleteCreateVmTaskById(int id)
+        {
+            var task = this._createVmTaskRepository.GetById(id);
+            if (task == null)
+            {
+                throw new InvalidIdentifierException(string.Format("CreateVmTask with id={0] doesnt exist", id));
+            }
+            if (task.StatusTask == StatusTask.Processing || task.StatusTask == StatusTask.Start)
+            {
+                throw new TaskOperationException(string.Format("Cannot delete task with status {0}", task.StatusTask));
+            }
+
+            this._createVmTaskRepository.Delete(task);
+            this._unitOfWork.Commit();
+
+            return;
         }
     }
 }
