@@ -16,5 +16,7 @@
         void MarkEmailAsSent(int id, EmailResultStatus emailResultStatus, string reason = null);
 
         void DeleteEmail(int id);
+
+        List<EmailInfo> GetEmailInQueue();
     }
 }
