@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Project.Service.IService;
 using Project.Service.Model;
+using Project.Model.Models;
 
 namespace Crytex.ControlApp
 {
@@ -35,7 +36,7 @@ namespace Crytex.ControlApp
             var cpu = Convert.ToInt32(txtCore.Text);
             var ram = Convert.ToInt32(txtRam.Text);
             var hdd = Convert.ToInt32(txtHdd.Text);
-            _taskVmBackGroundService.CreateVm(new CreateVmOption()
+            _taskVmBackGroundService.CreateVm(new CreateVmTask()
             {
                 Cpu = cpu,
                 Hdd = hdd,
