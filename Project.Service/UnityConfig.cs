@@ -25,6 +25,7 @@ namespace Project.Service
             container.RegisterType<IBillingTransactionRepository, BillingTransactionRepository>();
             container.RegisterType<IUserInfoRepository, UserInfoRepository>();
             container.RegisterType<ICreditPaymentOrderRepository, CreditPayementOrderRepository>();
+            container.RegisterType<IUserVmRepository, UserVmRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -34,8 +35,8 @@ namespace Project.Service
             container.RegisterType<IOperatingSystemsService, OperatingSystemService>();
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
             container.RegisterType<IPaymentService, PaymentService>();
-      
             container.RegisterType<ITaskVmService,TaskVmService>();
+            container.RegisterType<IUserVmService, UserVmService>();
             
             container.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();
             container.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
