@@ -16,5 +16,9 @@ namespace Project.Service.IService
         void DeleteTemplate(EmailTemplateType emailTemplateType);
 
         List<EmailTemplate> GetTemplateByTypes(List<EmailTemplateType> templateTypes);
+
+        List<EmailTemplate> GetAllTemplates();
+
+        EmailTemplate GetTemplateById(int id);
     }
 }

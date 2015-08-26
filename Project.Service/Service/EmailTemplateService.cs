@@ -60,7 +60,7 @@ namespace Project.Service.Service
             if (!templates.Any())
                 LoggerCrytex.Logger.Error("Attempt to get a non-existent email template: " + emailTemplateType);
 
-            return templates.First();
+            return templates.FirstOrDefault();
         }
 
         public void DeleteTemplate(int id)
@@ -81,6 +81,16 @@ namespace Project.Service.Service
         public List<EmailTemplate> GetTemplateByTypes(List<EmailTemplateType> templateTypes)
         {
             return _emailTemplateRepository.GetMany(x => templateTypes.Contains(x.EmailTemplateType)).ToList();
+        }
+
+        public List<EmailTemplate> GetAllTemplates()
+        {
+            return _emailTemplateRepository.GetAll().ToList();
+        }
+
+        public EmailTemplate GetTemplateById(int id)
+        {
+            return _emailTemplateRepository.GetById(id);
         }
     }
 }
