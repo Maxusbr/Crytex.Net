@@ -22,6 +22,8 @@ namespace Project.Web.Mappings
             Mapper.CreateMap<HelpDeskRequestViewModel, HelpDeskRequest>();
             Mapper.CreateMap<OperatingSystemEditViewModel, OperatingSystem>();
             Mapper.CreateMap<ServerTemplateEditViewModel, ServerTemplate>();
+            Mapper.CreateMap<CreateVmTaskViewModel, CreateVmTask>();
+            Mapper.CreateMap<CreateVmTaskAdminViewModel, CreateVmTask>();
         }
     }
 }

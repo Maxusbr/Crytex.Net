@@ -9,6 +9,9 @@ using Project.Model.Models;
 using Project.Service.IService;
 using Project.Service.Model;
 using Microsoft.Practices.Unity.Utility;
+using Project.Model.Exceptions;
+using PagedList;
+using System.Linq.Expressions;
 
 namespace Project.Service.Service
 {
@@ -18,27 +21,55 @@ namespace Project.Service.Service
         private readonly ICreateVmTaskRepository _createVmTaskRepository;
         private readonly IUpdateVmTaskRepository _updateVmTaskRepository;
         private readonly IStandartVmTaskRepository _standartVmTaskRepository;
+        private readonly IUserVmRepository _userVmRepository;
+        private readonly IServerTemplateRepository _serverTemplateRepository;
+        private readonly IFileDescriptorRepository _fileDescriptorRepo;
 
         public TaskVmService(IUnitOfWork unitOfWork, ICreateVmTaskRepository createVmTaskRepository, IUpdateVmTaskRepository updateVmTaskRepository,
-            IStandartVmTaskRepository standartVmTaskRepository)
+            IStandartVmTaskRepository standartVmTaskRepository, IUserVmRepository userVmRepository, IServerTemplateRepository serverTemplateRepository,
+            IFileDescriptorRepository fileDescriptorRepo)
         {
             this._unitOfWork = unitOfWork;
             this._createVmTaskRepository = createVmTaskRepository;
             this._updateVmTaskRepository = updateVmTaskRepository;
             this._standartVmTaskRepository = standartVmTaskRepository;
+            this._userVmRepository = userVmRepository;
+            this._serverTemplateRepository = serverTemplateRepository;
+            this._fileDescriptorRepo = fileDescriptorRepo;
         }
 
-        public void CreateVm(CreateVmOption createVmOption)
+        public CreateVmTask CreateVm(CreateVmTask createVmTask)
         {
-            var task = new CreateVmTask();
-            task.Name = createVmOption.Name;
-            task.Cpu = createVmOption.Cpu;
-            task.Hdd = createVmOption.Hdd;
-            task.Ram = createVmOption.Ram;
-            task.StatusTask = StatusTask.Pending;
+            // Validation block
+            var template = this._serverTemplateRepository.GetById(createVmTask.ServerTemplateId);
+            var existedNameTaskOrVm = this._userVmRepository.Get(m => m.Name == createVmTask.Name) as object ??
+                this._createVmTaskRepository.Get(t => t.Name == createVmTask.Name) as object;
 
-            _createVmTaskRepository.Add(task);
+            if (existedNameTaskOrVm != null)
+            {
+                throw new ValidationException(string.Format("VM with name {0} already exists for this user.", createVmTask.Name));
+            }
+            if (template.MinCoreCount > createVmTask.Cpu)
+            {
+                throw new ValidationException(string.Format("VM's CoreCount cannot be less than it's template value in {0} template", template.Name));
+            }
+            if (template.MinRamCount > createVmTask.Ram)
+            {
+                throw new ValidationException(string.Format("VM's Ram cannot be less than it's template value in {0} template", template.Name));
+            }
+            if (template.MinHardDriveSize > createVmTask.Hdd)
+            {
+                throw new ValidationException(string.Format("VM's HDD size cannot be less than it's template value in {0} template", template.Name));
+            }
+            //End validation
+
+            createVmTask.StatusTask = StatusTask.Pending;
+            createVmTask.CreationDate = DateTime.UtcNow;
+
+            _createVmTaskRepository.Add(createVmTask);
             _unitOfWork.Commit();
+
+            return createVmTask;
         }
 
         public void RemoveVm(RemoveVmOption removeVm)
@@ -101,6 +132,63 @@ namespace Project.Service.Service
             taskToUpdate.StatusTask = newStatus;
             repo.Update(taskToUpdate);
             this._unitOfWork.Commit();
+        }
+
+
+        public IPagedList<CreateVmTask> GetCreateVmTasksForUser(int pageNumber, int pageSize, string userId, DateTime? from, DateTime? to)
+        {
+            var page = new Page(pageNumber, pageSize);
+            var expression = this.BuildSearchExpression(userId, from, to);
+            var tasks = this._createVmTaskRepository.GetPageWithContents(page);
+
+            return tasks;
+        }
+
+        private Expression<Func<CreateVmTask, bool>> BuildSearchExpression(string userId, DateTime? from, DateTime? to)
+        {
+            if (from == null)
+            {
+                from = DateTime.MinValue;
+            }
+            if (to == null)
+            {
+                to = DateTime.MaxValue;
+            }
+            Expression<Func<CreateVmTask, bool>> exp = x => userId == null ? true : x.UserId == userId && x.CreationDate >= from && x.CreationDate <= to;
+
+            return exp;
+        }
+
+
+        public CreateVmTask GetCreateVmTaskById(int id)
+        {
+            var task = this._createVmTaskRepository.GetByIdWithContents(id);
+
+            if (task == null)
+            {
+                throw new InvalidIdentifierException(string.Format("CreateVmTask with id={0] doesnt exist", id));
+            }
+
+            return task;
+        }
+
+
+        public void DeleteCreateVmTaskById(int id)
+        {
+            var task = this._createVmTaskRepository.GetById(id);
+            if (task == null)
+            {
+                throw new InvalidIdentifierException(string.Format("CreateVmTask with id={0] doesnt exist", id));
+            }
+            if (task.StatusTask == StatusTask.Processing || task.StatusTask == StatusTask.Start)
+            {
+                throw new TaskOperationException(string.Format("Cannot delete task with status {0}", task.StatusTask));
+            }
+
+            this._createVmTaskRepository.Delete(task);
+            this._unitOfWork.Commit();
+
+            return;
         }
     }
 }

@@ -102,6 +102,10 @@
     <Compile Include="Migrations\201508231827107_EmailInfo.Designer.cs">
       <DependentUpon>201508231827107_EmailInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508251524155_UserVmAndCreateVmTask.cs" />
+    <Compile Include="Migrations\201508251524155_UserVmAndCreateVmTask.Designer.cs">
+      <DependentUpon>201508251524155_UserVmAndCreateVmTask.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\BillingTransactionRepository.cs" />
@@ -162,6 +166,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508231827107_EmailInfo.resx">
       <DependentUpon>201508231827107_EmailInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508251524155_UserVmAndCreateVmTask.resx">
+      <DependentUpon>201508251524155_UserVmAndCreateVmTask.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

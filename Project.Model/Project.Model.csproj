@@ -78,6 +78,8 @@
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
+    <Compile Include="Exceptions\TaskOperationException.cs" />
+    <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseTask.cs" />

@@ -3,6 +3,8 @@ using System.Net.Http;
 using System.Web.Http.Filters;
 using Microsoft.AspNet.Identity;
 using Project.Core;
+using Project.Model.Exceptions;
+using System;
 
 namespace Project.Web.Filters
 {
@@ -11,9 +13,23 @@ namespace Project.Web.Filters
         public override void OnException(HttpActionExecutedContext context)
         {
             LoggerCrytex.SetUserId(context.ActionContext?.ControllerContext?.RequestContext?.Principal?.Identity?.GetUserId());
-            LoggerCrytex.Logger.Error(context.Exception);
 
-            context.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            if(context.Exception is ApplicationException){
+                if(context.Exception is ValidationException){
+                    context.ActionContext.ModelState.AddModelError("", context.Exception.Message);
+                    context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, context.ActionContext.ModelState);
+                    return;
+                }
+                if(context.Exception is TaskOperationException)
+                {
+                    context.Response = context.Request.CreateResponse(HttpStatusCode.Conflict, new {errorMessage = context.Exception.Message});
+                    return;
+                }
+            }
+            else{
+                LoggerCrytex.Logger.Error(context.Exception);
+                context.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
+            }
         }
     }
 }
