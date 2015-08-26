@@ -139,24 +139,7 @@ namespace Project.Service.Service
         {
             var page = new Page(pageNumber, pageSize);
             var expression = this.BuildSearchExpression(userId, from, to);
-            var tasks = this._createVmTaskRepository.GetPage(page, expression, t=>t.CreationDate);
-
-            // Get server templates for tasks
-            var serverTemplateIds = tasks.Select(t => t.ServerTemplateId).Distinct();
-            var serverTemplates = this._serverTemplateRepository.GetMany(t => serverTemplateIds.Contains(t.Id));
-            
-            // Get image file descriptors for server templates
-            var imageFileDescriptorIds = serverTemplates.Select(t => t.ImageFileId).Distinct();
-            var imageFileDescriptors = this._fileDescriptorRepo.GetMany(d => imageFileDescriptorIds.Contains(d.Id));
-            
-            // Assign server templates to tasks and image file descriptors to server templates
-            foreach (var task in tasks)
-            {
-                var serverTemplate = serverTemplates.Single(t => t.Id == task.ServerTemplateId);
-                var imageFileDescriptor = imageFileDescriptors.Single(d => d.Id == serverTemplate.ImageFileId);
-                serverTemplate.ImageFileDescriptor = imageFileDescriptor;
-                task.ServerTemplate = serverTemplate;
-            }
+            var tasks = this._createVmTaskRepository.GetPageWithContents(page);
 
             return tasks;
         }
@@ -179,17 +162,12 @@ namespace Project.Service.Service
 
         public CreateVmTask GetCreateVmTaskById(int id)
         {
-            var task = this._createVmTaskRepository.GetById(id);
+            var task = this._createVmTaskRepository.GetByIdWithContents(id);
 
             if (task == null)
             {
                 throw new InvalidIdentifierException(string.Format("CreateVmTask with id={0] doesnt exist", id));
             }
-
-            var serverTemplate = this._serverTemplateRepository.GetById(task.ServerTemplateId);
-            var imageFileDescriptor = this._fileDescriptorRepo.GetById(serverTemplate.ImageFileId);
-            task.ServerTemplate = serverTemplate;
-            serverTemplate.ImageFileDescriptor = imageFileDescriptor;
 
             return task;
         }

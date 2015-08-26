@@ -39,7 +39,7 @@ namespace Project.Web.Controllers.Api
 
         // GET: api/CreateVmTask/5
         [HttpGet]
-        public CreateVmTaskViewModel GetById(int id)
+        public CreateVmTaskAdminViewModel GetById(int id)
         {
             var task = this._taskVmService.GetCreateVmTaskById(id);
             var model = AutoMapper.Mapper.Map<CreateVmTaskAdminViewModel>(task);
