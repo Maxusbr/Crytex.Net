@@ -71,5 +71,11 @@ namespace Project.Service.Service
             _unitOfWork.Commit();
             LoggerCrytex.Logger.Warn("Email (to: "+ email.To + ", type: "+email.EmailTemplateType+") was deleted");
         }
+
+        public List<EmailInfo> GetEmailInQueue()
+        {
+            var emails = _emailInfoRepository.GetMany(x => !x.IsProcessed).ToList();
+            return emails;
+        }
     }
 }

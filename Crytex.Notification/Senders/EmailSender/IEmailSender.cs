@@ -7,7 +7,7 @@ namespace Crytex.Notification
 {  
     public interface IEmailSender
     {
-        Task<EmailResult> SendEmail(EmailInfo emailInfo);
-        Task<List<EmailResult>> SendEmails(List<EmailInfo> emailMessages);
+        Task<KeyValuePair<int, EmailResult>> SendEmail(EmailInfo emailInfo);
+        Task<List<KeyValuePair<int, EmailResult>>> SendEmails(List<EmailInfo> emailMessages);
     }
 }

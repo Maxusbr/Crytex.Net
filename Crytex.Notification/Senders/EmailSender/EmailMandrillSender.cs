@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ using Project.Model.Models.Notifications;
 using Project.Service.IService;
 
 namespace Crytex.Notification
-{    
+{
     public class EmailMandrillSender : IEmailSender
     {
         MandrillApi _mandrillApi { get; }
@@ -22,26 +23,37 @@ namespace Crytex.Notification
         public EmailMandrillSender(IEmailTemplateService emailTemplateService)
         {
             _emailTemplateService = emailTemplateService;
-            _mandrillApi = new MandrillApi(ConfigurationManager.AppSettings["MandrillApiKey"]);
+            var apiKey = ConfigurationManager.AppSettings["MandrillApiKey"];
+            if (apiKey == null)
+                throw new ArgumentNullException(nameof(apiKey));
+
+            _mandrillApi = new MandrillApi(apiKey);
         }
 
-        public async Task<EmailResult> SendEmail(EmailInfo emailInfo)
+        public async Task<KeyValuePair<int, EmailResult>> SendEmail(EmailInfo emailInfo)
         {
             var resultLIst = await SendEmails(new List<EmailInfo> { emailInfo });
             return resultLIst.First();
         }
 
-        public async Task<List<EmailResult>> SendEmails(List<EmailInfo> emailMessages)
+        public async Task<List<KeyValuePair<int, EmailResult>>> SendEmails(List<EmailInfo> emailMessages)
         {
             var templateTypes = emailMessages.GroupBy(x => x.EmailTemplateType).Select(x => x.Key).ToList();
             var templates = _emailTemplateService.GetTemplateByTypes(templateTypes);
 
-            var resultList = new List<EmailResult>();
+            var resultList = new List<KeyValuePair<int, EmailResult>>();
             foreach (var emailMessage in emailMessages)
             {
                 var emailTemplate = templates.First(x => x.EmailTemplateType == emailMessage.EmailTemplateType);
-                var resultSending = await ExecuteSendingEmail(emailMessage, emailTemplate);
-                resultList.AddRange(resultSending);
+                try
+                {
+                    var resultSending = await ExecuteSendingEmail(emailMessage, emailTemplate);
+                    resultList.Add(new KeyValuePair<int, EmailResult>(emailMessage.Id, resultSending.First()));
+                }
+                catch (Exception e)
+                {
+                    LoggerCrytex.Logger.Error(e);
+                }
             }
             return resultList;
         }
@@ -67,16 +79,18 @@ namespace Crytex.Notification
 
             var request = new SendMessageTemplateRequest(email, templateName, null);
 
-            if (emailInfo.DateSending != null)
-                request.SendAt = emailInfo.DateSending;
+            //TODO: отправка в определнное время только для платного акка Mandrill
+            //if (emailInfo.DateSending != null)
+            //    request.SendAt = emailInfo.DateSending;
+
 
             List<EmailResult> result = await _mandrillApi.SendMessageTemplate(request);
             return result;
         }
 
-        
 
-        
+
+
         private async Task<string> GetTemplateNameAndAddIfNotExists(EmailTemplate template)
         {
             var templateName = MandrillUtil.GenerateName(template);
