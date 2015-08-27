@@ -77,6 +77,7 @@
     <Compile Include="IService\IPaymentService.cs" />
     <Compile Include="IService\IServerTemplateService.cs" />
     <Compile Include="IService\ITaskVmService.cs" />
+    <Compile Include="IService\IUserVmService.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Service\PaymentService.cs" />
     <Compile Include="Service\ServerTemplateService.cs" />
     <Compile Include="Service\TaskVmService.cs" />
+    <Compile Include="Service\UserVmService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>

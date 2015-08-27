@@ -255,6 +255,7 @@
     <Compile Include="Controllers\Api\MessageController.cs" />
     <Compile Include="Controllers\Api\OperatingSystemController.cs" />
     <Compile Include="Controllers\Api\ServerTemplateController.cs" />
+    <Compile Include="Controllers\Api\UserVmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Filters\ExceptionHandlingWebFilter .cs" />
@@ -282,6 +283,7 @@
     <Compile Include="Models\JsonModels\PageModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
+    <Compile Include="Models\JsonModels\UserVmViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ViewModels\LogEntryViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -408,7 +410,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3053</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3053/</IISUrl>
+          <IISUrl>http://localhost:3054/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -35,8 +35,8 @@ namespace Project.Service
             container.RegisterType<IOperatingSystemsService, OperatingSystemService>();
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
             container.RegisterType<IPaymentService, PaymentService>();
-      
             container.RegisterType<ITaskVmService,TaskVmService>();
+            container.RegisterType<IUserVmService, UserVmService>();
             
             container.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();
             container.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
