@@ -12,7 +12,7 @@ using Project.Web.Models.JsonModels;
 
 namespace Project.Web.Controllers.Api.Admin
 {
-    public class EmailTemplateController : ApiController
+    public class EmailTemplateController : CrytexApiController
     {
         private IEmailTemplateService _emailTemplateService { get; set; }
 
@@ -38,6 +38,13 @@ namespace Project.Web.Controllers.Api.Admin
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Email Tepmlate with id = '" + id + "' is not found.");
 
             var model = AutoMapper.Mapper.Map<EmailTemplate, EmailTemplateViewModel>(emailTemplate);
+            return Request.CreateResponse(HttpStatusCode.OK, model);
+        }
+
+        [HttpPost]
+        public HttpResponseMessage GetTypes()
+        {
+            var model = Enum.GetValues(typeof(EmailTemplateType)).Cast<EmailTemplateType>().Select(x => new KeyValuePair<string, int>(x.ToString(), (int)x)).ToList();
             return Request.CreateResponse(HttpStatusCode.OK, model);
         }
 
