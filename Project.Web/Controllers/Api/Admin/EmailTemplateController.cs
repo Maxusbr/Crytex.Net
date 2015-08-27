@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Project.Model.Enums;
 using Project.Model.Models.Notifications;
 using Project.Service.IService;
@@ -23,73 +22,72 @@ namespace Project.Web.Controllers.Api.Admin
 
 
         // GET api/EmailTemplate
-        public JsonResult<List<EmailTemplateViewModel>> Get()
+        public IHttpActionResult Get()
         {
             var emailTemplates = _emailTemplateService.GetAllTemplates();
             var model = AutoMapper.Mapper.Map<List<EmailTemplate>, List<EmailTemplateViewModel>>(emailTemplates);
-            return Json(model);
+            return Ok(model);
         }
 
         // GET api/EmailTemplate/5
-        public HttpResponseMessage Get(int id)
+        public IHttpActionResult Get(int id)
         {
             var emailTemplate = _emailTemplateService.GetTemplateById(id);
             if (emailTemplate == null)
-                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Email Tepmlate with id = '" + id + "' is not found.");
+                return NotFound();
 
             var model = AutoMapper.Mapper.Map<EmailTemplate, EmailTemplateViewModel>(emailTemplate);
-            return Request.CreateResponse(HttpStatusCode.OK, model);
+            return Ok(model);
         }
 
         [HttpPost]
-        public HttpResponseMessage GetTypes()
+        public IHttpActionResult GetTypes()
         {
             var model = Enum.GetValues(typeof(EmailTemplateType)).Cast<EmailTemplateType>().Select(x => new KeyValuePair<string, int>(x.ToString(), (int)x)).ToList();
-            return Request.CreateResponse(HttpStatusCode.OK, model);
+            return Ok(model);
         }
 
-        
 
         // POST api/EmailTemplate
-        public HttpResponseMessage Post([FromBody]EmailTemplateViewModel model)
+        public IHttpActionResult Post([FromBody]EmailTemplateViewModel model)
         {
             if (!ModelState.IsValid || model == null)
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
 
             //когда ParameterNames введены в неправильном формате
-            if(!string.IsNullOrEmpty(model.ParameterNames) && !model.ParameterNamesList.Any())
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "ParameterNames has not valid format");
+            if (!string.IsNullOrEmpty(model.ParameterNames) && !model.ParameterNamesList.Any())
+                return BadRequest("ParameterNames has not valid format");
 
             //когда Body и Subject содержат не все переменные из ParameterNames
             var emailText = (model.Subject + model.Body);
             if (!model.ParameterNamesList.TrueForAll(x => emailText.IndexOf("{" + x.Key + "}", StringComparison.Ordinal) >= 0))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Subject and Body contain not all properties that are noticed in ParameterNames.");
+                return BadRequest("Subject and Body contain not all properties that are noticed in ParameterNames.");
 
             var templates = _emailTemplateService.GetTemplateByType(model.EmailTemplateType);
             if (templates != null)
-                return Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Email Template with such Type already exists.");
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "Email Template with such Type already exists."));
 
             var emailTemplate = _emailTemplateService.AddTemplate(model.Subject, model.Body, model.EmailTemplateType, model.ParameterNamesList);
-            return Request.CreateResponse(HttpStatusCode.Created, new { id = emailTemplate.Id });
+            return Ok(new { id = emailTemplate.Id });
         }
 
         // PUT api/EmailTemplate/5
-        public HttpResponseMessage Put(int id, [FromBody]UpdateEmailTemplateViewModel model)
+        public IHttpActionResult Put(int id, [FromBody]UpdateEmailTemplateViewModel model)
         {
             if (!ModelState.IsValid || model == null)
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
 
             var emailText = model.Subject + model.Body;
             if (!model.ParameterNamesList.TrueForAll(x => emailText.IndexOf("{" + x.Key + "}", StringComparison.Ordinal) >= 0))
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Subject and Body contain not all properties that are noticed in ParameterNames.");
+                return BadRequest("Subject and Body contain not all properties that are noticed in ParameterNames.");
 
             var template = _emailTemplateService.GetTemplateById(id);
 
             if (template == null)
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Email Tepmlate with id = '"+id+"' is not found.");
+                return NotFound();
 
             _emailTemplateService.UpdateTemplate(id, model.Subject, model.Body, model.ParameterNamesList);
-            return Request.CreateResponse(HttpStatusCode.OK);
+            return Ok();
         }
 
         // DELETE api/EmailTemplate/5
