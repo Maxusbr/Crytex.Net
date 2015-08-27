@@ -14,9 +14,9 @@ namespace Project.Data.Infrastructure
         T GetById(long id);
         T GetById(string id);
         T GetById(Guid id);
-        T Get(Expression<Func<T, bool>> where);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> GetMany(Expression<Func<T, bool>> where);
-        IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order);
+        T Get(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
+        IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes);
+        IEnumerable<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
+        IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, params Expression<Func<T, object>>[] includes);
     }
 }

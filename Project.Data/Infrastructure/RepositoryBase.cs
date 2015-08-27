@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using PagedList;
+using Project.Model.Models;
 
 namespace Project.Data.Infrastructure
 {
@@ -50,6 +51,7 @@ namespace Project.Data.Infrastructure
         {
             return dbset.Find(id);
         }
+
         public virtual T GetById(string id)
         {
             return dbset.Find(id);
@@ -60,14 +62,19 @@ namespace Project.Data.Infrastructure
             return dbset.Find(id);
         }
 
-        public virtual IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
         {
-            return dbset.ToList();
+            var query = this.AppendIncludes(dbset, includes);
+
+            return query.ToList();
         }
 
-        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where)
+        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
         {
-            return dbset.Where(where).ToList();
+            var query = dbset.Where(where);
+            query = this.AppendIncludes(query, includes);
+
+            return query.ToList();
         }
 
         /// <summary>
@@ -78,16 +85,34 @@ namespace Project.Data.Infrastructure
         /// <param name="where">Where clause to apply</param>
         /// <param name="order">Order by to apply</param>
         /// <returns></returns>
-        public virtual IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order)
+        public virtual IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order,
+            params Expression<Func<T, object>>[] includes)
         {
-            var results = dbset.OrderBy(order).Where(where).GetPage(page).ToList();
+            var query = dbset.OrderBy(order).Where(where).GetPage(page);
+            query = this.AppendIncludes(query, includes);
+            
+            var results = query.ToList();
             var total = dbset.Count(where);
+
             return new StaticPagedList<T>(results, page.PageNumber, page.PageSize, total);
         }
 
-        public T Get(Expression<Func<T, bool>> where)
+        public T Get(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
         {
-            return dbset.Where(where).FirstOrDefault<T>();
+            var query = this.dbset.Where(where);
+            query = this.AppendIncludes(query, includes);
+
+            return query.FirstOrDefault<T>();
+        }
+
+        private IQueryable<T> AppendIncludes(IQueryable<T> query, IEnumerable<Expression<Func<T, object>>> includes)
+        {
+            foreach (var inc in includes)
+            {
+                query = query.Include(inc);
+            }
+
+            return query;
         }
     }
 }
