@@ -19,7 +19,20 @@ namespace Project.Web.Controllers.Api
         }
 
         [HttpGet]
+        [Authorize(Roles="Admin,Support")]
+        public HttpResponseMessage GetPage(int pageNumber, int pageSize, string userId)
+        {
+            return this.GetPageInner(pageNumber, pageSize, userId);
+        }
+
+        [HttpGet]
         public HttpResponseMessage GetPage(int pageNumber, int pageSize)
+        {
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            return this.GetPageInner(pageNumber, pageSize, userId);
+        }
+
+        private HttpResponseMessage GetPageInner(int pageNumber, int pageSize, string userId)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
@@ -27,7 +40,7 @@ namespace Project.Web.Controllers.Api
             }
             else
             {
-                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+                
                 var page = this._userVmService.GetPage(pageNumber, pageSize, userId);
                 var viewModel = AutoMapper.Mapper.Map<PageModel<UserVmViewModel>>(page);
                 return Request.CreateResponse(HttpStatusCode.OK, viewModel);

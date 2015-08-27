@@ -14,5 +14,9 @@ namespace Project.Web.Models.JsonModels
         public int HardDriveSize { get; set; }
         public StatusVM Status { get; set; }
         public string Name { get; set; }
+        public string UserId { get; set; }
+        public string UserName { get; set; }
+        public string OsImageFilePath { get; set; }
+        public string OsName { get; set; }
     }
 }
