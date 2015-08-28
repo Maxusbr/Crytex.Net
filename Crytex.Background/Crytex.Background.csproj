@@ -76,6 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\BackgroundConfig.cs" />
+    <Compile Include="Config\IBackgroundConfig.cs" />
     <Compile Include="Scheduler\ISchedulerJobs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

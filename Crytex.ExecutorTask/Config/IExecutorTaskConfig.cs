@@ -3,11 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
-namespace Project.Web.Service
+namespace Crytex.ExecutorTask.Config
 {
-    public interface IServerConfig : IAppConfig
+    public interface IExecutorTaskConfig : IAppConfig
     {
-        
     }
 }
