@@ -12,7 +12,7 @@ namespace Project.Data.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        DateSending = c.DateTime(nullable: false),
+                        DateSending = c.DateTime(),
                         From = c.String(),
                         To = c.String(),
                         SubjectParams = c.String(),

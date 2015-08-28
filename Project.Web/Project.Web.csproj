@@ -162,6 +162,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -246,6 +247,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\CreateVmTaskAdminController.cs" />
     <Compile Include="Controllers\Api\CreateVmTaskController.cs" />
+    <Compile Include="Controllers\Api\Admin\EmailTemplateController.cs" />
     <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Controllers\Api\FileController.cs" />
@@ -273,7 +275,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskViewModel.cs" />
+    <Compile Include="Models\JsonModels\UpdateEmailTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
+    <Compile Include="Models\JsonModels\EmailTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\FileDescriptorViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestCommentViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestViewModel.cs" />
