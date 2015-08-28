@@ -72,6 +72,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Project.Core\Project.Core.csproj">
+      <Project>{0b23b88c-b5fc-42f6-ac62-27725f34487b}</Project>
+      <Name>Project.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Project.Model\Project.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
       <Name>Project.Model</Name>
