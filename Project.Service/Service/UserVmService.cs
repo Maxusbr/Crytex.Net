@@ -28,7 +28,7 @@ namespace Project.Service.Service
             var vm = this._userVmRepo.GetById(id);
             if (vm == null)
             {
-                throw new InvalidIdentifierException(string.Format("UserVm with id={0] doesnt exist.", id));
+                throw new InvalidIdentifierException(string.Format("UserVm with id={0} doesnt exist.", id));
             }
 
             return vm;
