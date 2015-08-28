@@ -11,8 +11,5 @@ namespace Project.Data.IRepository
 {
     public interface ICreateVmTaskRepository : IRepository<CreateVmTask>
     {
-        IPagedList<CreateVmTask> GetPageWithContents(Page page);
-
-        CreateVmTask GetByIdWithContents(int id);
     }
 }

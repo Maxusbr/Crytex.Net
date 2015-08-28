@@ -139,7 +139,9 @@ namespace Project.Service.Service
         {
             var page = new Page(pageNumber, pageSize);
             var expression = this.BuildSearchExpression(userId, from, to);
-            var tasks = this._createVmTaskRepository.GetPageWithContents(page);
+            var tasks = this._createVmTaskRepository.GetPage(page, expression, x => x.CreationDate,
+                x => x.ServerTemplate,
+                x => x.ServerTemplate.ImageFileDescriptor);
 
             return tasks;
         }
@@ -162,7 +164,9 @@ namespace Project.Service.Service
 
         public CreateVmTask GetCreateVmTaskById(int id)
         {
-            var task = this._createVmTaskRepository.GetByIdWithContents(id);
+            var task = this._createVmTaskRepository.Get(x => x.Id == id,
+                x => x.ServerTemplate,
+                x => x.ServerTemplate.ImageFileDescriptor);
 
             if (task == null)
             {
