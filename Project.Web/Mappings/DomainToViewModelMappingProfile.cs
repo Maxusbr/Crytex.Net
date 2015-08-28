@@ -36,7 +36,10 @@ namespace Project.Web.Mappings
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
                     .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<UserVm, UserVmViewModel>()
-                .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Id.ToString()));
+                .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Id.ToString()))
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source =>source.User.UserName))
+                .ForMember(x => x.OsImageFilePath, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.ImageFileDescriptor.Path))
+                .ForMember(x => x.OsName, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.Name));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
