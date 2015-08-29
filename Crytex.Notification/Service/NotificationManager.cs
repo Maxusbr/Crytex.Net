@@ -1,15 +1,15 @@
 ﻿using System;
-using Project.Service.IService;
+using Crytex.Service.IService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Project.Model.Enums;
+using Crytex.Model.Enums;
 using System.Threading.Tasks;
 using Mandrill.Models;
 using NLog;
-using Project.Core;
-using Project.Model.Models.Notifications;
-using EmailResultStatus = Project.Model.Enums.EmailResultStatus;
+using Crytex.Core;
+using Crytex.Model.Models.Notifications;
+using EmailResultStatus = Crytex.Model.Enums.EmailResultStatus;
 
 namespace Crytex.Notification
 {

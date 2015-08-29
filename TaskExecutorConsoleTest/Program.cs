@@ -1,8 +1,8 @@
 ﻿using Crytex.ExecutorTask;
 using Crytex.ExecutorTask.TaskHandler;
-using Project.Data.Infrastructure;
-using Project.Data.Repository;
-using Project.Service.Service;
+using Crytex.Data.Infrastructure;
+using Crytex.Data.Repository;
+using Crytex.Service.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;

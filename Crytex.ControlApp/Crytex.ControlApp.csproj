@@ -115,17 +115,17 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Project.Model\Project.Model.csproj">
+    <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
-      <Name>Project.Model</Name>
-	</ProjectReference>
-    <ProjectReference Include="..\Project.Core\Project.Core.csproj">
-      <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
-      <Name>Project.Core</Name>
+      <Name>Crytex.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Service\Project.Service.csproj">
+    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
+      <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
+      <Name>Crytex.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crytex.Service\Crytex.Service.csproj">
       <Project>{fc3571db-2d14-4280-8f07-31599f2a7d5b}</Project>
-      <Name>Project.Service</Name>
+      <Name>Crytex.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

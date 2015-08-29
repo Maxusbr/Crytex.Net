@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Mandrill.Models;
-using Project.Model.Models.Notifications;
+using Crytex.Model.Models.Notifications;
 
 namespace Crytex.Notification
 {  

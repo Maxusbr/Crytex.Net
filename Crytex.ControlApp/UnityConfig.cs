@@ -1,7 +1,7 @@
 ﻿namespace Crytex.ControlApp
 {
     using Microsoft.Practices.Unity;
-    using Project.Core;
+    using Crytex.Core;
 
     public class UnityConfig: UnityConfigBase
     {
@@ -9,7 +9,7 @@
         {
             UnityConfigureFunc = unityContainer =>
                                  {
-                                     Project.Service.UnityConfig.Register<TransientLifetimeManager>(unityContainer);
+                                     Crytex.Service.UnityConfig.Register<TransientLifetimeManager>(unityContainer);
                                      unityContainer.RegisterType<CreateVm, CreateVm>();
                                  };
         }

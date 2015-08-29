@@ -11,9 +11,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Project.Service.IService;
-using Project.Service.Model;
-using Project.Model.Models;
+using Crytex.Service.IService;
+using Crytex.Service.Model;
+using Crytex.Model.Models;
 
 namespace Crytex.ControlApp
 {

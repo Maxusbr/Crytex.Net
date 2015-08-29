@@ -1,4 +1,4 @@
-﻿using Project.Core.AppConfig;
+﻿using Crytex.Core.AppConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
