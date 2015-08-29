@@ -1,6 +1,6 @@
 ﻿using System;
 using Crytex.Notification;
-using Project.Core;
+using Crytex.Core;
 using Quartz;
 
 namespace Crytex.Background.Tasks

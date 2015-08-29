@@ -1,12 +1,12 @@
 using Crytex.Background.Scheduler;
 using Crytex.Notification;
-using Project.Core;
+using Crytex.Core;
 using Microsoft.Practices.Unity;
-using Project.Data.Infrastructure;
-using Project.Data.IRepository;
-using Project.Data.Repository;
-using Project.Service.IService;
-using Project.Service.Service;
+using Crytex.Data.Infrastructure;
+using Crytex.Data.IRepository;
+using Crytex.Data.Repository;
+using Crytex.Service.IService;
+using Crytex.Service.Service;
 
 namespace Crytex.Background
 {

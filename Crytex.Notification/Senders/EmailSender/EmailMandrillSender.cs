@@ -7,9 +7,9 @@ using Mandrill;
 using Mandrill.Models;
 using Mandrill.Requests.Messages;
 using Mandrill.Requests.Templates;
-using Project.Core;
-using Project.Model.Models.Notifications;
-using Project.Service.IService;
+using Crytex.Core;
+using Crytex.Model.Models.Notifications;
+using Crytex.Service.IService;
 
 namespace Crytex.Notification
 {

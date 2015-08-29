@@ -74,21 +74,21 @@
     <Compile Include="Utils\MandrillUtil.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Project.Core\Project.Core.csproj">
+    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
       <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
-      <Name>Project.Core</Name>
+      <Name>Crytex.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Data\Project.Data.csproj">
+    <ProjectReference Include="..\Crytex.Data\Crytex.Data.csproj">
       <Project>{4CAB19D5-AA00-43E1-9450-15F3B8D72AB2}</Project>
-      <Name>Project.Data</Name>
+      <Name>Crytex.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Model\Project.Model.csproj">
+    <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
-      <Name>Project.Model</Name>
+      <Name>Crytex.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Service\Project.Service.csproj">
+    <ProjectReference Include="..\Crytex.Service\Crytex.Service.csproj">
       <Project>{FC3571DB-2D14-4280-8F07-31599F2A7D5B}</Project>
-      <Name>Project.Service</Name>
+      <Name>Crytex.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -65,17 +65,17 @@
       <Project>{80d3fd00-5ade-4bb0-ada8-6450346bfc05}</Project>
       <Name>Crytex.ExecutorTask</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Data\Project.Data.csproj">
+    <ProjectReference Include="..\Crytex.Data\Crytex.Data.csproj">
       <Project>{4cab19d5-aa00-43e1-9450-15f3b8d72ab2}</Project>
-      <Name>Project.Data</Name>
+      <Name>Crytex.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Model\Project.Model.csproj">
+    <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
-      <Name>Project.Model</Name>
+      <Name>Crytex.Model</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Service\Project.Service.csproj">
+    <ProjectReference Include="..\Crytex.Service\Crytex.Service.csproj">
       <Project>{fc3571db-2d14-4280-8f07-31599f2a7d5b}</Project>
-      <Name>Project.Service</Name>
+      <Name>Crytex.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

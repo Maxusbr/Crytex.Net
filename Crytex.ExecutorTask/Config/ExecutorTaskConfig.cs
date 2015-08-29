@@ -1,9 +1,4 @@
-﻿using Project.Core.AppConfig;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Crytex.Core.AppConfig;
 
 namespace Crytex.ExecutorTask.Config
 {
