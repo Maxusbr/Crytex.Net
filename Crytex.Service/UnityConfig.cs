@@ -45,6 +45,8 @@ namespace Crytex.Service
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();
+            container.RegisterType<IApplicationUserRepository,ApplicationUserRepository>();
+            container.RegisterType<IApplicationUserService,ApplicationUserService>();
         }
     }
 }
