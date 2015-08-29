@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Newtonsoft.Json;
-using Crytex.Model.Enums;
 
 namespace Crytex.Web.Models.JsonModels
 {

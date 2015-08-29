@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using NLog;
 
 namespace Crytex.Web.Filters
 {

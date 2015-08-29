@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
-using AutoMapper;
+﻿using AutoMapper;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;

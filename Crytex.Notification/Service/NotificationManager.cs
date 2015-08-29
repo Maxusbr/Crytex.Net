@@ -6,7 +6,6 @@ using System.Text;
 using Crytex.Model.Enums;
 using System.Threading.Tasks;
 using Mandrill.Models;
-using NLog;
 using Crytex.Core;
 using Crytex.Model.Models.Notifications;
 using EmailResultStatus = Crytex.Model.Enums.EmailResultStatus;

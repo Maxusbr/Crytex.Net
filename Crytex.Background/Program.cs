@@ -1,6 +1,4 @@
-﻿using System.Configuration;
-
-namespace Crytex.Background
+﻿namespace Crytex.Background
 {
     using Crytex.Core;
     using Scheduler;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Crytex.Web.Service
+﻿namespace Crytex.Web.Service
 {
     public class CrytexContext : ICrytexContext
     {

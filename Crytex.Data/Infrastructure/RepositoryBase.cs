@@ -4,7 +4,6 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using PagedList;
-using Crytex.Model.Models;
 
 namespace Crytex.Data.Infrastructure
 {

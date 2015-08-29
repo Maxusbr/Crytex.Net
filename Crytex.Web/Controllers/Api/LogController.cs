@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using Crytex.Core;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.ViewModels;
