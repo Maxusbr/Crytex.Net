@@ -6,7 +6,7 @@ using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Controllers.Api.Admin
 {
-    public class UserController : ApiController
+    public class UserController : CrytexApiController
     {
         public UserController(IApplicationUserService applicationUserService)
         {
