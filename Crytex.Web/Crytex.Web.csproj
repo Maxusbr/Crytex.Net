@@ -257,6 +257,7 @@
     <Compile Include="Controllers\Api\MessageController.cs" />
     <Compile Include="Controllers\Api\OperatingSystemController.cs" />
     <Compile Include="Controllers\Api\ServerTemplateController.cs" />
+    <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
     <Compile Include="Controllers\Api\UserVmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -273,8 +274,10 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JsonModels\CreateStandartVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskViewModel.cs" />
+    <Compile Include="Models\JsonModels\StandartVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateEmailTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailTemplateViewModel.cs" />

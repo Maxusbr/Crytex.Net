@@ -17,6 +17,7 @@ namespace Crytex.Service
             container.RegisterType<ICreateVmTaskRepository,CreateVmTaskRepository>();
             container.RegisterType<IUpdateVmTaskRepository, UpdateTaskVmRepository>();
             container.RegisterType<IStandartVmTaskRepository, StandartVmTaskRepository >();
+            container.RegisterType<IStandartVmTaskService, StandartVmTaskService>();
             container.RegisterType<IHelpDeskRequestRepository, HelpDeskRequestRepository>();
             container.RegisterType<IHelpDeskRequestCommentRepository, HelpDeskRequestCommentRepository>();
             container.RegisterType<IFileDescriptorRepository, FileDescriptorRepository>();

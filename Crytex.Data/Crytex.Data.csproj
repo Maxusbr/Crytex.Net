@@ -110,6 +110,10 @@
     <Compile Include="Migrations\201508262341090_UserVmUserIdMigration.Designer.cs">
       <DependentUpon>201508262341090_UserVmUserIdMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201508300857423_ChangedStandartVmTaskMigration.cs" />
+    <Compile Include="Migrations\201508300857423_ChangedStandartVmTaskMigration.Designer.cs">
+      <DependentUpon>201508300857423_ChangedStandartVmTaskMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\BillingTransactionRepository.cs" />
@@ -176,6 +180,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201508262341090_UserVmUserIdMigration.resx">
       <DependentUpon>201508262341090_UserVmUserIdMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201508300857423_ChangedStandartVmTaskMigration.resx">
+      <DependentUpon>201508300857423_ChangedStandartVmTaskMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
