@@ -1,5 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
-using Project.Core;
+using Crytex.Core;
 
 namespace Crytex.ExecutorTask
 {
@@ -10,7 +10,7 @@ namespace Crytex.ExecutorTask
         {
             UnityConfigureFunc = unityContainer =>
             {
-                Project.Service.UnityConfig.Register<ContainerControlledLifetimeManager>(unityContainer);
+                Crytex.Service.UnityConfig.Register<ContainerControlledLifetimeManager>(unityContainer);
             };
         }
     }

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Security.Cryptography;
     using System.Text;
-    using Project.Model.Models.Notifications;
+    using Crytex.Model.Models.Notifications;
 
     public static class MandrillUtil
     {

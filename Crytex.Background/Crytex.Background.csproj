@@ -76,6 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\BackgroundConfig.cs" />
+    <Compile Include="Config\IBackgroundConfig.cs" />
     <Compile Include="Scheduler\ISchedulerJobs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,12 +89,12 @@
     <Compile Include="UnityJobFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Project.Core\NLog.config">
+    <None Include="..\Crytex.Core\NLog.config">
       <Link>NLog.config</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
-    <Content Include="..\Project.Data\connectionStrings.config">
+    <Content Include="..\Crytex.Data\connectionStrings.config">
       <Link>connectionStrings.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -107,17 +109,17 @@
       <Project>{B7071332-988E-4A1E-82BE-8078A8243460}</Project>
       <Name>Crytex.Notification</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Core\Project.Core.csproj">
+    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
       <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
-      <Name>Project.Core</Name>
+      <Name>Crytex.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Data\Project.Data.csproj">
+    <ProjectReference Include="..\Crytex.Data\Crytex.Data.csproj">
       <Project>{4CAB19D5-AA00-43E1-9450-15F3B8D72AB2}</Project>
-      <Name>Project.Data</Name>
+      <Name>Crytex.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Project.Service\Project.Service.csproj">
+    <ProjectReference Include="..\Crytex.Service\Crytex.Service.csproj">
       <Project>{FC3571DB-2D14-4280-8F07-31599F2A7D5B}</Project>
-      <Name>Project.Service</Name>
+      <Name>Crytex.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
