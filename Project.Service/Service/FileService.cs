@@ -4,6 +4,7 @@ using Project.Model.Models;
 using Project.Service.IService;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,6 +35,22 @@ namespace Project.Service.Service
             this._unitOfWork.Commit();
 
             return newDescriptor;
+        }
+
+        public FileDescriptor SaveFile(Stream inputStream, string fileName, string directoryPath, FileType fileType)
+        {
+            var fileExt = Path.GetExtension(fileName);
+            var fsFileName = Guid.NewGuid().ToString() + fileExt;
+            var fsFilePath = Path.Combine(directoryPath, fsFileName);
+            using (var fs = File.Create(fsFilePath))
+            {
+                byte[] bytes = new byte[inputStream.Length];
+                inputStream.Read(bytes, 0, (int)inputStream.Length);
+                fs.Write(bytes, 0, (int)inputStream.Length);
+            }
+
+            var fileDescriptor = this.CreateFileDescriptor(Path.GetFileNameWithoutExtension(fileName), fileType, fsFilePath);
+            return fileDescriptor;
         }
     }
 }

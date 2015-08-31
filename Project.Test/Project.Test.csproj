@@ -64,14 +64,21 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeImplementations\FakeFileDescriptorRepo.cs" />
+    <Compile Include="FakeImplementations\FakeUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerConfigTests.cs" />
+    <Compile Include="FileServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Project.Data\Project.Data.csproj">
+      <Project>{4cab19d5-aa00-43e1-9450-15f3b8d72ab2}</Project>
+      <Name>Project.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Project.Model\Project.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
       <Name>Project.Model</Name>
