@@ -3,6 +3,6 @@
     public interface IAppConfig
     {
         string GetValue(string key);
-        bool TryGetValue<T>(string key, out T result);
+        T GetValue<T>(string key);
     }
 }
