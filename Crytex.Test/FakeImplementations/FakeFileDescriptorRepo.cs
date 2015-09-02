@@ -47,22 +47,22 @@ namespace Crytex.Test.FakeImplementations
             throw new NotImplementedException();
         }
 
-        public Model.Models.FileDescriptor Get(System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where)
+        public Model.Models.FileDescriptor Get(System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where, params System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }
 
-        public System.Collections.Generic.IEnumerable<Model.Models.FileDescriptor> GetAll()
+        public IEnumerable<Model.Models.FileDescriptor> GetAll(params System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }
 
-        public System.Collections.Generic.IEnumerable<Model.Models.FileDescriptor> GetMany(System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where)
+        public IEnumerable<Model.Models.FileDescriptor> GetMany(System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where, params System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }
 
-        public PagedList.IPagedList<Model.Models.FileDescriptor> GetPage<TOrder>(Data.Infrastructure.Page page, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, TOrder>> order)
+        public PagedList.IPagedList<Model.Models.FileDescriptor> GetPage<TOrder>(Data.Infrastructure.Page page, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, TOrder>> order, params System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }
