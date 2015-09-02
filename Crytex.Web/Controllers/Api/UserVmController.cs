@@ -9,19 +9,21 @@ namespace Crytex.Web.Controllers.Api
 {
     public class UserVmController : CrytexApiController
     {
-        private IUserVmService _userVmService;
+        private readonly IUserVmService _userVmService;
 
         public UserVmController(IUserVmService userVmService)
         {
             this._userVmService = userVmService;
         }
 
-        [HttpGet]
-        [Authorize(Roles="Admin,Support")]
-        public HttpResponseMessage GetPage(int pageNumber, int pageSize, string userId)
-        {
-            return this.GetPageInner(pageNumber, pageSize, userId);
-        }
+        //TODO: разобраться со следующими двумя методами, они должны быть по стандарту REST API (метод Get) - читать вики проекта
+        //TODO: стараться избегать перегрузок методов в API контроллерах
+        //[HttpGet]
+        //[Authorize(Roles="Admin,Support")]
+        //public HttpResponseMessage GetPageAsAdmin(int pageNumber, int pageSize, string userId)
+        //{
+        //    return this.GetPageInner(pageNumber, pageSize, userId);
+        //}
 
         [HttpGet]
         public HttpResponseMessage GetPage(int pageNumber, int pageSize)
@@ -35,16 +37,12 @@ namespace Crytex.Web.Controllers.Api
             if (pageNumber <= 0 || pageSize <= 0)
             {
                 this.ModelState.AddModelError("", "PageNumber and PageSize must be grater than 1");
-            }
-            else
-            {
-                
-                var page = this._userVmService.GetPage(pageNumber, pageSize, userId);
-                var viewModel = AutoMapper.Mapper.Map<PageModel<UserVmViewModel>>(page);
-                return Request.CreateResponse(HttpStatusCode.OK, viewModel);
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
             }
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            var page = this._userVmService.GetPage(pageNumber, pageSize, userId);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<UserVmViewModel>>(page);
+            return Request.CreateResponse(HttpStatusCode.OK, viewModel);
         }
 
         [HttpGet]
