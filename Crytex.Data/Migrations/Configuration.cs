@@ -30,6 +30,7 @@ namespace Crytex.Data.Migrations
             if (!roleManager.Roles.Any())
             {
                 roleManager.Create(new IdentityRole { Name = "Admin" });
+                roleManager.Create(new IdentityRole { Name = "Support" });
                 roleManager.Create(new IdentityRole { Name = "User" });
             }
 
