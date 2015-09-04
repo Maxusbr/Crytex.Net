@@ -4,6 +4,7 @@ using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
+using Crytex.Web.Service;
 using Microsoft.AspNet.Identity;
 
 namespace Crytex.Web.Controllers.Api
@@ -18,14 +19,22 @@ namespace Crytex.Web.Controllers.Api
         IStandartVmTaskService _standartVmTaskService { get; }
 
         // GET api/<controller>
-        public IHttpActionResult Get(int pageSize = 20, int pageIndex = 1, DateTime? dateFrom = null, DateTime? dateTo = null, int? vmId = null)
+        public IHttpActionResult Get(int pageSize = 20, int pageIndex = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string userId = null, int? vmId = null)
         {
             List<StandartVmTask> tasks = new List<StandartVmTask>();
-            if (vmId.HasValue && !User.IsInRole("Admin") && !User.IsInRole("Support"))
-                return Unauthorized();
 
-            tasks = _standartVmTaskService.GetPage(pageSize, pageIndex, dateFrom, dateTo, vmId);
-            var model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);
+            var userInfoProvider = CrytexContext.UserInfoProvider;
+            List<StandartVmTaskViewModel> model;
+            if (vmId.HasValue && (userInfoProvider.IsCurrentUserInAnyRole(new List<string> { "Admin", "Support" }) || _standartVmTaskService.IsOwnerVm(vmId.Value, userInfoProvider.GetUserId())))
+            {
+                tasks = _standartVmTaskService.GetPageByVmId(pageSize, pageIndex, dateFrom, dateTo, vmId.Value);
+                model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);
+                return Ok(model);
+            }
+
+            userId = userId ?? userInfoProvider.GetUserId();
+            tasks = _standartVmTaskService.GetPageByUserId(pageSize, pageIndex, dateFrom, dateTo, userId);
+            model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);
             return Ok(model);
         }
 
