@@ -16,19 +16,19 @@ namespace Crytex.Web.Controllers.Api
             this._userVmService = userVmService;
         }
 
-        //TODO: разобраться со следующими двумя методами, они должны быть по стандарту REST API (метод Get) - читать вики проекта
-        //TODO: стараться избегать перегрузок методов в API контроллерах
-        //[HttpGet]
-        //[Authorize(Roles="Admin,Support")]
-        //public HttpResponseMessage GetPageAsAdmin(int pageNumber, int pageSize, string userId)
-        //{
-        //    return this.GetPageInner(pageNumber, pageSize, userId);
-        //}
-
         [HttpGet]
-        public HttpResponseMessage GetPage(int pageNumber, int pageSize)
+        [Authorize]
+        public HttpResponseMessage GetPage(int pageNumber, int pageSize, string userId = null)
         {
-            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            if (userId == null)
+            {
+                userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            }
+            else if (!(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
+                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "Only Admin and Support user can acces other user Vm info");
+            }
             return this.GetPageInner(pageNumber, pageSize, userId);
         }
 
