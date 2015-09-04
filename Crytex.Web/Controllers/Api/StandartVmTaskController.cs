@@ -25,7 +25,7 @@ namespace Crytex.Web.Controllers.Api
 
             var userInfoProvider = CrytexContext.UserInfoProvider;
             List<StandartVmTaskViewModel> model;
-            if (vmId.HasValue && (userInfoProvider.IsCurrentUserInAnyRole(new List<string> { "Admin", "Support" }) || _standartVmTaskService.IsOwnerVm(vmId.Value, userInfoProvider.GetUserId())))
+            if (vmId.HasValue && (userInfoProvider.IsCurrentUserAdmin() || userInfoProvider.IsCurrentUserSupport() || _standartVmTaskService.IsOwnerVm(vmId.Value, userInfoProvider.GetUserId())))
             {
                 tasks = _standartVmTaskService.GetPageByVmId(pageSize, pageIndex, dateFrom, dateTo, vmId.Value);
                 model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);

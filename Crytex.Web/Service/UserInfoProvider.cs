@@ -52,5 +52,15 @@ namespace Crytex.Web.Service
         {
             return roleName.Any(IsCurrentUserInRole);
         }
+
+        public bool IsCurrentUserAdmin()
+        {
+            return IsCurrentUserInRole("Admin");
+        }
+
+        public bool IsCurrentUserSupport()
+        {
+            return IsCurrentUserInRole("Support");
+        }
     }
 }
