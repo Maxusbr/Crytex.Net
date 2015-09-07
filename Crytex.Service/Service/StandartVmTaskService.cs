@@ -19,10 +19,19 @@ namespace Crytex.Service.Service
         IStandartVmTaskRepository _standartVmTaskRepository { get; }
         IUnitOfWork _unitOfWork { get; set; }
 
-        public List<StandartVmTask> GetPage(int pageSize, int pageIndex, DateTime? dateFrom, DateTime? dateTo, int? vmId = null)
+        public List<StandartVmTask> GetPageByVmId(int pageSize, int pageIndex, DateTime? dateFrom, DateTime? dateTo, int vmId)
         {
             var tasks = _standartVmTaskRepository.GetPage(new Page(pageIndex, pageSize),
-                x => (!vmId.HasValue || x.VmId == vmId.Value) &&
+                x => (x.VmId == vmId) &&
+                (!dateFrom.HasValue || !dateTo.HasValue || x.CreatedDate > dateFrom.Value && x.CreatedDate < dateTo.Value),
+                x => x.CreatedDate).ToList();
+            return tasks;
+        }
+
+        public List<StandartVmTask> GetPageByUserId(int pageSize, int pageIndex, DateTime? dateFrom, DateTime? dateTo, string userId)
+        {
+            var tasks = _standartVmTaskRepository.GetPage(new Page(pageIndex, pageSize),
+                x => (x.UserId == userId) &&
                 (!dateFrom.HasValue || !dateTo.HasValue || x.CreatedDate > dateFrom.Value && x.CreatedDate < dateTo.Value),
                 x => x.CreatedDate).ToList();
             return tasks;
@@ -53,6 +62,12 @@ namespace Crytex.Service.Service
         {
             _standartVmTaskRepository.Delete(x => x.Id == id);
             _unitOfWork.Commit();
+        }
+
+        public bool IsOwnerVm(int vmId, string userId)
+        {
+            var vm = _standartVmTaskRepository.GetById(vmId);
+            return vm != null && vm.UserId == userId;
         }
     }
 }

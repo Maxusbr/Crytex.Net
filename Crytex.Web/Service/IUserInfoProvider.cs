@@ -9,5 +9,10 @@ namespace Crytex.Web.Service
         ApplicationUser GetCurrentUser();
         IEnumerable<string> GetRolesForCurrentUser();
         bool IsCurrentUserInRole(string roleName);
+        bool IsCurrentUserInAnyRole(List<string> roleName);
+
+        bool IsCurrentUserAdmin();
+
+        bool IsCurrentUserSupport();
     }
 }
