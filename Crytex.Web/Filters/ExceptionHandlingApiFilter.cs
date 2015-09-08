@@ -16,13 +16,18 @@ namespace Crytex.Web.Filters
 
             if(context.Exception is ApplicationException){
                 if(context.Exception is ValidationException){
-                    context.ActionContext.ModelState.AddModelError("", context.Exception.Message);
+                    context.ActionContext.ModelState.AddModelError("ValidationError", context.Exception.Message);
                     context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, context.ActionContext.ModelState);
                     return;
                 }
                 if(context.Exception is TaskOperationException)
                 {
                     context.Response = context.Request.CreateResponse(HttpStatusCode.Conflict, new {errorMessage = context.Exception.Message});
+                    return;
+                }
+                if(context.Exception is SecurityException)
+                {
+                    context.Response = context.Request.CreateResponse(HttpStatusCode.Forbidden, new {errorMessage = context.Exception.Message});
                     return;
                 }
             }
