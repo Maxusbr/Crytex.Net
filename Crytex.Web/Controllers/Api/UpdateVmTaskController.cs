@@ -26,7 +26,7 @@ namespace Crytex.Web.Controllers.Api
         /// <returns></returns>
         [Authorize]
         [HttpPost]        
-        public IHttpActionResult CreateTask(UpdateVmTaskViewModel model)
+        public IHttpActionResult Post(UpdateVmTaskViewModel model)
         {
             if (this.ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace Crytex.Web.Controllers.Api
         /// <returns></returns>
         [Authorize]
         [HttpGet]
-        public IHttpActionResult GetById(int id)
+        public IHttpActionResult Get(int id)
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             UpdateVmTask task;
@@ -74,7 +74,7 @@ namespace Crytex.Web.Controllers.Api
 
         [Authorize]
         [HttpGet]
-        public IHttpActionResult GetPage(int pageNumber, int pageSize, string userId = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
         {
             if (userId == null)
             {
