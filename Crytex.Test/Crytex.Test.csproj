@@ -64,14 +64,21 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FakeImplementations\FakeFileDescriptorRepo.cs" />
+    <Compile Include="FakeImplementations\FakeUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerConfigTests.cs" />
+    <Compile Include="FileServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crytex.Data\Crytex.Data.csproj">
+      <Project>{4cab19d5-aa00-43e1-9450-15f3b8d72ab2}</Project>
+      <Name>Crytex.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
       <Project>{0b23b88c-b5fc-42f6-ac62-27725f34487b}</Project>
       <Name>Crytex.Core</Name>

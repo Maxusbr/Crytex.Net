@@ -77,6 +77,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
+    <Compile Include="Exceptions\ApplicationConfigException.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
     <Compile Include="Exceptions\TaskOperationException.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
