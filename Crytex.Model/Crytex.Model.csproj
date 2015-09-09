@@ -82,6 +82,7 @@
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="Models\Notifications\BaseNotify.cs" />
     <Compile Include="Models\BaseTask.cs" />
     <Compile Include="Models\BillingTransaction.cs" />
     <Compile Include="Models\ConfigTask.cs" />
