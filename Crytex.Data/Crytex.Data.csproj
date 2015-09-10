@@ -115,9 +115,9 @@
     <Compile Include="Migrations\201508300857423_ChangedStandartVmTaskMigration.Designer.cs">
       <DependentUpon>201508300857423_ChangedStandartVmTaskMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509100955012_SystemCenterVirtualManagerMigration.cs" />
-    <Compile Include="Migrations\201509100955012_SystemCenterVirtualManagerMigration.Designer.cs">
-      <DependentUpon>201509100955012_SystemCenterVirtualManagerMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.cs" />
+    <Compile Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.Designer.cs">
+      <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,8 +190,8 @@
     <EmbeddedResource Include="Migrations\201508300857423_ChangedStandartVmTaskMigration.resx">
       <DependentUpon>201508300857423_ChangedStandartVmTaskMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509100955012_SystemCenterVirtualManagerMigration.resx">
-      <DependentUpon>201509100955012_SystemCenterVirtualManagerMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.resx">
+      <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

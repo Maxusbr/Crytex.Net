@@ -13,7 +13,7 @@ namespace Crytex.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201509100955012_SystemCenterVirtualManagerMigration"; }
+            get { return "201509101144112_SystemCenterVirtualManagerMigration"; }
         }
         
         string IMigrationMetadata.Source

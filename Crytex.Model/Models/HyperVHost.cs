@@ -21,6 +21,7 @@ namespace Crytex.Model.Models
         public bool Valid { get; set; }
         public DateTime DateAdded { get; set; }
         public Guid SystemCenterVirtualManagerId { get; set; }
+        public bool Deleted { get; set; }
 
         [ForeignKey("SystemCenterVirtualManagerId")]
         public SystemCenterVirtualManager VirtualManager { get; set; }

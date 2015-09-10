@@ -17,6 +17,7 @@ namespace Crytex.Model.Models
         public bool Valid { get; set; }
         public DateTime UpdateDate { get; set; }
         public Guid HyperVHostId { get; set; }
+        public bool Deleted { get; set; }
 
         [ForeignKey("HyperVHostId")]
         public HyperVHost HyperVHost { get; set; }

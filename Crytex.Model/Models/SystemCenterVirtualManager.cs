@@ -18,6 +18,7 @@ namespace Crytex.Model.Models
         public string Password { get; set; }
         public bool Synchronize { get; set; }
         public string Name { get; set; }
+        public bool Deleted { get; set; }
 
         [InverseProperty("VirtualManager")]
         public virtual ICollection<HyperVHost> HyperVHosts { get; set; }

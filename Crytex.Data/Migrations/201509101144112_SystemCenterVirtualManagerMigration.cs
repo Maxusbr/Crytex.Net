@@ -17,6 +17,7 @@ namespace Crytex.Data.Migrations
                         Valid = c.Boolean(nullable: false),
                         UpdateDate = c.DateTime(nullable: false),
                         HyperVHostId = c.Guid(nullable: false),
+                        Deleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.HyperVHosts", t => t.HyperVHostId, cascadeDelete: true)
@@ -35,6 +36,7 @@ namespace Crytex.Data.Migrations
                         Valid = c.Boolean(nullable: false),
                         DateAdded = c.DateTime(nullable: false),
                         SystemCenterVirtualManagerId = c.Guid(nullable: false),
+                        Deleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
                 .ForeignKey("dbo.SystemCenterVirtualManagers", t => t.SystemCenterVirtualManagerId, cascadeDelete: true)
@@ -50,6 +52,7 @@ namespace Crytex.Data.Migrations
                         Password = c.String(),
                         Synchronize = c.Boolean(nullable: false),
                         Name = c.String(),
+                        Deleted = c.Boolean(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
