@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskExecutorConsoleTest", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Notification", "Crytex.Notification\Crytex.Notification.csproj", "{B7071332-988E-4A1E-82BE-8078A8243460}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytext.HyperVVirtualization", "Crytext.HyperVVirtualization\Crytext.HyperVVirtualization.csproj", "{C5872F6D-676A-4420-B694-D4A7F5F6490B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +181,16 @@ Global
 		{B7071332-988E-4A1E-82BE-8078A8243460}.Release|ARM.ActiveCfg = Release|Any CPU
 		{B7071332-988E-4A1E-82BE-8078A8243460}.Release|x64.ActiveCfg = Release|Any CPU
 		{B7071332-988E-4A1E-82BE-8078A8243460}.Release|x86.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|x64.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
