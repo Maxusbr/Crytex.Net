@@ -59,6 +59,7 @@
     <Compile Include="IRepository\IMessageRepository.cs" />
     <Compile Include="IRepository\IOperatingSystemRepository.cs" />
     <Compile Include="IRepository\IServerTemplateRepository.cs" />
+    <Compile Include="IRepository\ISystemCenterVirtualManagerRepository.cs" />
     <Compile Include="IRepository\IUpdateVmTaskRepository.cs" />
     <Compile Include="IRepository\IStandartVmTaskRepository.cs" />
     <Compile Include="IRepository\IUserInfoRepository.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Repository\OperatingSystemRepository.cs" />
     <Compile Include="Repository\ServerTemplateRepository.cs" />
     <Compile Include="Repository\StandartVmTaskRepository.cs" />
+    <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />
     <Compile Include="Repository\UpdateTaskVmRepository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />

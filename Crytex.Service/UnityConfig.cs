@@ -48,6 +48,9 @@ namespace Crytex.Service
             container.RegisterType<ILogService,LogService>();
             container.RegisterType<IApplicationUserRepository,ApplicationUserRepository>();
             container.RegisterType<IApplicationUserService,ApplicationUserService>();
+
+            container.RegisterType<ISystemCenterVirtualManagerRepository, SystemCenterVirtualManagerRepository>();
+            container.RegisterType<ISystemCenterVirtualManagerService, SystemCenterVirtualManagerService>();
         }
     }
 }

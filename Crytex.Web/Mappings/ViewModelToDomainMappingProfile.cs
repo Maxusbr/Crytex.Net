@@ -19,6 +19,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<ServerTemplateEditViewModel, ServerTemplate>();
             Mapper.CreateMap<CreateVmTaskViewModel, CreateVmTask>();
             Mapper.CreateMap<CreateVmTaskAdminViewModel, CreateVmTask>();
+            Mapper.CreateMap<SystemCenterVirtualManagerViewModel, SystemCenterVirtualManager>();
         }
     }
 }
