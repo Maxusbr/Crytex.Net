@@ -45,12 +45,15 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<EmailTemplate, EmailTemplateViewModel>();
             Mapper.CreateMap<EmailTemplate, UpdateEmailTemplateViewModel>();
+            Mapper.CreateMap<UpdateVmTask, UpdateVmTaskViewModel>()
+                .ForMember(x => x.VmId, opt => opt.MapFrom(source => source.VmId.ToString()));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskAdminViewModel>();
             this.MapPagedList<UserVm, UserVmViewModel>();
+            this.MapPagedList<UpdateVmTask, UpdateVmTaskViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

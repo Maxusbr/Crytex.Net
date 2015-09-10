@@ -1,9 +1,13 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Crytex.Model.Models
 {
     public class UpdateVmTask : ConfigTask
     {
-        public  Int32 VmId { get; set; }
+        public Guid VmId { get; set; }
+
+        [ForeignKey("VmId")]
+        public UserVm Vm { get; set; }
     }
 }
