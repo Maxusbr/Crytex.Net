@@ -7,7 +7,8 @@ namespace Crytex.Data.Migrations
     {
         public override void Up()
         {
-            AlterColumn("dbo.UpdateVmTasks", "VmId", c => c.Guid(nullable: false));
+            DropColumn("dbo.UpdateVmTasks", "VmId");
+            AddColumn("dbo.UpdateVmTasks", "VmId", c => c.Guid(nullable: false));
             CreateIndex("dbo.UpdateVmTasks", "VmId");
             AddForeignKey("dbo.UpdateVmTasks", "VmId", "dbo.UserVms", "Id", cascadeDelete: true);
         }
@@ -16,7 +17,9 @@ namespace Crytex.Data.Migrations
         {
             DropForeignKey("dbo.UpdateVmTasks", "VmId", "dbo.UserVms");
             DropIndex("dbo.UpdateVmTasks", new[] { "VmId" });
-            AlterColumn("dbo.UpdateVmTasks", "VmId", c => c.Int(nullable: false));
+            DropColumn("dbo.UpdateVmTasks", "VmId");
+            AddColumn("dbo.UpdateVmTasks", "VmId", c => c.Int(nullable: false));
+           
         }
     }
 }
