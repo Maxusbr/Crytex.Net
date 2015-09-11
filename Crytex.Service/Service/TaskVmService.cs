@@ -142,6 +142,14 @@ namespace Crytex.Service.Service
             return tasks;
         }
 
+        public IPagedList<UpdateVmTask> GetUpdateVmTasksForUser(int pageNumber, int pageSize, string userId)
+        {
+            var page = new Page(pageNumber, pageSize);
+            var tasks = this._updateVmTaskRepository.GetPage(page, x => x.UserId == userId, x=> x.Id);
+
+            return tasks;
+        }
+
         private Expression<Func<CreateVmTask, bool>> BuildSearchExpression(string userId, DateTime? from, DateTime? to)
         {
             if (from == null)
@@ -187,6 +195,57 @@ namespace Crytex.Service.Service
 
             this._createVmTaskRepository.Delete(task);
             this._unitOfWork.Commit();
+        }
+
+
+        public UpdateVmTask CreateUpdateVmTask(UpdateVmTask task, string userId = null)
+        {
+            var vmToUpdate = this._userVmRepository.Get(vm => vm.Id == task.VmId, vm=>vm.ServerTemplate);
+
+            // Validation block
+            if (userId != null && vmToUpdate.UserId != userId)
+            {
+                throw new SecurityException("Cannot create Update task because the VM doesnt belong to user");
+            }
+
+            string validationExceptionMessage = null;
+            if (task.Hdd <= vmToUpdate.HardDriveSize)
+            {
+                validationExceptionMessage = "Hard drive size must be grater than current.";
+            }
+            if (task.Ram < vmToUpdate.ServerTemplate.MinRamCount)
+            {
+                validationExceptionMessage = "Ram size cannot be less than server template's MinRam value";
+            }
+            if (task.Cpu < vmToUpdate.ServerTemplate.MinCoreCount)
+            {
+                validationExceptionMessage = "Number of cores cannot be less than server template's MinCoreCount value";
+            }
+
+            if (validationExceptionMessage != null)
+            {
+                throw new ValidationException(validationExceptionMessage);
+            }
+            // end validation block
+
+            task.UserId = vmToUpdate.UserId;
+
+            this._updateVmTaskRepository.Add(task);
+            this._unitOfWork.Commit();
+
+            return task;
+        }
+
+        public UpdateVmTask GetUpdateTaskById(int id, string userId = null)
+        {
+            var task = this._updateVmTaskRepository.Get(t => t.Id == id, t => t.Vm);
+
+            if (userId != null && task.Vm.UserId != userId)
+            {
+                throw new SecurityException(string.Format("Access for Update task with id = {0} because the VM doesnt belong to user", task.Id));
+            }
+
+            return task;
         }
     }
 }

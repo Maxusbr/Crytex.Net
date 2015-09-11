@@ -13,6 +13,9 @@ namespace Crytex.Service.IService
         void UpdateVmOption(UpdateVmOption updateVmOption);
 
         IPagedList<CreateVmTask> GetCreateVmTasksForUser(int pageNumber, int pageSize,string userId, DateTime? from, DateTime? to);
+
+        IPagedList<UpdateVmTask> GetUpdateVmTasksForUser(int pageNumber, int pageSize, string userId);
+
         IEnumerable<CreateVmTask> GetPendingCreateTasks();
 
         IEnumerable<UpdateVmTask> GetPendingUpdateTasks();
@@ -24,5 +27,10 @@ namespace Crytex.Service.IService
         CreateVmTask GetCreateVmTaskById(int id);
 
         void DeleteCreateVmTaskById(int id);
+
+        UpdateVmTask CreateUpdateVmTask(UpdateVmTask task, string userId = null);
+
+        UpdateVmTask GetUpdateTaskById(int id, string userId = null);
+
     }
 }
