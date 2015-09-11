@@ -14,11 +14,16 @@ namespace Crytex.Service.Service
     public class SystemCenterVirtualManagerService : ISystemCenterVirtualManagerService
     {
         private ISystemCenterVirtualManagerRepository _systemCenterVirtualManagerRepo;
+        private IHyperVHostRepository _hyperVHostRepo;
+        private IHyperVHostResourceRepository _hyperVHostResourceRepo;
         private IUnitOfWork _unitOfWork;
 
-        public SystemCenterVirtualManagerService(IUnitOfWork unitOfWork, ISystemCenterVirtualManagerRepository managerRepo)
+        public SystemCenterVirtualManagerService(IUnitOfWork unitOfWork, ISystemCenterVirtualManagerRepository managerRepo,
+            IHyperVHostRepository hyperVHostRepo, IHyperVHostResourceRepository hyperVHostResourceRepo)
         {
             this._systemCenterVirtualManagerRepo = managerRepo;
+            this._hyperVHostRepo = hyperVHostRepo;
+            this._hyperVHostResourceRepo = hyperVHostResourceRepo;
             this._unitOfWork = unitOfWork;
         }
 
@@ -38,7 +43,8 @@ namespace Crytex.Service.Service
 
             if (manager == null)
             {
-                throw new InvalidIdentifierException(string.Format("SystemCenterVirtualManager with id={0} doesn't exist", id));
+                throw new InvalidIdentifierException(string.Format(@"SystemCenterVirtualManager with id={0}
+                                                                        doesn't exist", id));
             }
 
             return manager;
@@ -54,7 +60,8 @@ namespace Crytex.Service.Service
 
             if (manager == null)
             {
-                throw new InvalidIdentifierException(string.Format("SystemCenterVirtualManager with id={0} doesn't exist", id));
+                throw new InvalidIdentifierException(string.Format(@"SystemCenterVirtualManager with id={0} 
+                                                                            doesn't exist", id));
             }
 
             foreach (var host in manager.HyperVHosts)
@@ -69,6 +76,69 @@ namespace Crytex.Service.Service
 
             this._systemCenterVirtualManagerRepo.Update(manager);
             this._unitOfWork.Commit();
+        }
+
+
+        public IEnumerable<SystemCenterVirtualManager> GetAll()
+        {
+            var managers = this._systemCenterVirtualManagerRepo.GetAll(x => x.HyperVHosts,
+                x => x.HyperVHosts.Select(h => h.Resources));
+            
+            return managers;
+        }
+
+
+        public void UpdateHyperVHost(Guid guid, HyperVHost host)
+        {
+            var hostToUpdate = this._hyperVHostRepo.GetById(guid);
+
+            if (hostToUpdate == null)
+            {
+                throw new InvalidIdentifierException(string.Format(@"HyperVHost with id = {0} doesn't exist", guid.ToString()));
+            }
+
+            hostToUpdate.Host = host.Host;
+            hostToUpdate.UserName = host.UserName;
+            hostToUpdate.Password = host.Password;
+            hostToUpdate.RamSize = host.RamSize;
+            hostToUpdate.Valid = host.Valid;
+
+            this._hyperVHostRepo.Update(hostToUpdate);
+            this._unitOfWork.Commit();
+        }
+
+
+        public HyperVHost AddHyperVHost(HyperVHost remoteHost)
+        {
+            this._hyperVHostRepo.Add(remoteHost);
+            
+            return remoteHost;
+        }
+
+
+        public HyperVHostResource UpdateHyperVHostResource(Guid guid, HyperVHostResource resource)
+        {
+            var resourceToUpdate = this._hyperVHostResourceRepo.GetById(guid);
+            if (resourceToUpdate == null)
+            {
+                throw new InvalidIdentifierException(string.Format("HyperVHostResource with id={0} doesn't exist"));
+            }
+
+            resourceToUpdate.UpdateDate = resource.UpdateDate;
+            resourceToUpdate.Valid = resourceToUpdate.Valid;
+            resourceToUpdate.Value = resourceToUpdate.Value;
+
+            this._hyperVHostResourceRepo.Update(resourceToUpdate);
+            this._unitOfWork.Commit();
+
+            return resourceToUpdate;
+        }
+
+
+        public HyperVHostResource AddHyperVHostResource(HyperVHostResource resource)
+        {
+            this._hyperVHostResourceRepo.Add(resource);
+            return resource;
         }
     }
 }
