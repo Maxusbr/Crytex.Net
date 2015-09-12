@@ -19,7 +19,7 @@ namespace Crytex.Web.Controllers.Api
         IStandartVmTaskService _standartVmTaskService { get; }
 
         // GET api/<controller>
-        public IHttpActionResult Get(int pageSize = 20, int pageIndex = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string userId = null, int? vmId = null)
+        public IHttpActionResult Get(int pageSize = 20, int pageNumber = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string userId = null, int? vmId = null)
         {
             List<StandartVmTask> tasks = new List<StandartVmTask>();
 
@@ -27,13 +27,13 @@ namespace Crytex.Web.Controllers.Api
             List<StandartVmTaskViewModel> model;
             if (vmId.HasValue && (userInfoProvider.IsCurrentUserAdmin() || userInfoProvider.IsCurrentUserSupport() || _standartVmTaskService.IsOwnerVm(vmId.Value, userInfoProvider.GetUserId())))
             {
-                tasks = _standartVmTaskService.GetPageByVmId(pageSize, pageIndex, dateFrom, dateTo, vmId.Value);
+                tasks = _standartVmTaskService.GetPageByVmId(pageSize, pageNumber, dateFrom, dateTo, vmId.Value);
                 model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);
                 return Ok(model);
             }
 
             userId = userId ?? userInfoProvider.GetUserId();
-            tasks = _standartVmTaskService.GetPageByUserId(pageSize, pageIndex, dateFrom, dateTo, userId);
+            tasks = _standartVmTaskService.GetPageByUserId(pageSize, pageNumber, dateFrom, dateTo, userId);
             model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);
             return Ok(model);
         }
