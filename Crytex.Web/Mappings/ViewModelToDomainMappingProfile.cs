@@ -21,6 +21,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<CreateVmTaskAdminViewModel, CreateVmTask>();
             Mapper.CreateMap<UpdateVmTaskViewModel, UpdateVmTask>()
                 .ForMember(x => x.VmId, opt => opt.MapFrom(s => new System.Guid(s.VmId)));
+            Mapper.CreateMap<ApplicationUserViewModel, ApplicationUser>();
         }
     }
 }
