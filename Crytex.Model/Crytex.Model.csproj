@@ -79,10 +79,12 @@
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
+    <Compile Include="Exceptions\SecurityException.cs" />
     <Compile Include="Exceptions\TaskOperationException.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="Models\Notifications\BaseNotify.cs" />
     <Compile Include="Models\BaseTask.cs" />
     <Compile Include="Models\BillingTransaction.cs" />
     <Compile Include="Models\ConfigTask.cs" />

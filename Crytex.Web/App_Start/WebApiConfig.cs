@@ -32,7 +32,7 @@ namespace Crytex.Web
                 new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) }
                 );
 
-            //Finally this allows POST to typeical REST post address http://api/controller/
+            //Finally this allows POST to typical REST post address http://api/controller/
             config.Routes.MapHttpRoute(
                 "API Default 2",
                 "api/{controller}/{action}",

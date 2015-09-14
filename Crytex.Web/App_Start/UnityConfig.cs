@@ -13,7 +13,9 @@ namespace Crytex.Web.App_Start
 
     using Crytex.Web.Service;
     using System.Security.Principal;
-  using Crytex.Notification;    public class UnityConfig: UnityConfigBase
+    using Crytex.Notification;
+    using Crytex.Notification.Senders.SigralRSender;
+    public class UnityConfig : UnityConfigBase
     {
         public static void  Configure()
         {
@@ -35,6 +37,7 @@ namespace Crytex.Web.App_Start
                                      unityContainer.RegisterType<HttpRequest>(new InjectionFactory(o => HttpContext.Current.Request));
                                      unityContainer.RegisterType<IUserInfoProvider, UserInfoProvider>();
                                      unityContainer.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.User.Identity));
+                                     unityContainer.RegisterType<ISignalRSender, AspNetSignalRSender>();
                                  };
         }
     }
