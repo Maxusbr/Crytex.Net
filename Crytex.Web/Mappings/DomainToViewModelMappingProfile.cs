@@ -45,6 +45,9 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<EmailTemplate, EmailTemplateViewModel>();
             Mapper.CreateMap<EmailTemplate, UpdateEmailTemplateViewModel>();
+            Mapper.CreateMap<HyperVHostResource, HyperVHostResourceViewModel>();
+            Mapper.CreateMap<HyperVHost, HyperVHostViewModel>();
+            Mapper.CreateMap<SystemCenterVirtualManager, SystemCenterVirtualManagerViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();

@@ -16,5 +16,7 @@ namespace Crytex.Web.Models.JsonModels
         public string Password { get; set; }
         [Required]
         public string Name { get; set; }
+
+        public IEnumerable<HyperVHostViewModel> HyperVHosts { get; set; }
     }
 }

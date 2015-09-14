@@ -47,8 +47,22 @@ namespace Crytex.Web.Controllers.Api.Admin
         public IHttpActionResult Get(string id)
         {
             var manager = this._managerService.GetById(id);
+            var model = AutoMapper.Mapper.Map<SystemCenterVirtualManagerViewModel>(manager);
 
-            return Ok(manager);
+            return Ok(model);
+        }
+
+        /// <summary>
+        /// Получение всех менеджеров
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult Get()
+        {
+            var managers = this._managerService.GetAll(false);
+            var model = AutoMapper.Mapper.Map<System.Collections.Generic.List<SystemCenterVirtualManagerViewModel>>(managers);
+
+            return Ok(model);
         }
 
         /// <summary>

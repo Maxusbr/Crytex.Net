@@ -15,7 +15,7 @@ namespace Crytex.Service.IService
 
         void Delete(string id);
 
-        IEnumerable<SystemCenterVirtualManager> GetAll();
+        IEnumerable<SystemCenterVirtualManager> GetAll(bool includeHosts = true);
 
         void UpdateHyperVHost(Guid guid, HyperVHost host);
 

@@ -39,7 +39,9 @@ namespace Crytex.Service.Service
         public SystemCenterVirtualManager GetById(string id)
         {
             var guid = new Guid(id);
-            var manager = this._systemCenterVirtualManagerRepo.GetById(guid);
+            var manager = this._systemCenterVirtualManagerRepo.Get(m => m.Id == guid,
+                x => x.HyperVHosts,
+                x => x.HyperVHosts.Select(h => h.Resources));
 
             if (manager == null)
             {
@@ -79,10 +81,18 @@ namespace Crytex.Service.Service
         }
 
 
-        public IEnumerable<SystemCenterVirtualManager> GetAll()
+        public IEnumerable<SystemCenterVirtualManager> GetAll(bool includeHosts = true)
         {
-            var managers = this._systemCenterVirtualManagerRepo.GetAll(x => x.HyperVHosts,
+            IEnumerable<SystemCenterVirtualManager> managers;
+            if (includeHosts)
+            {
+                managers = this._systemCenterVirtualManagerRepo.GetAll(x => x.HyperVHosts,
                 x => x.HyperVHosts.Select(h => h.Resources));
+            }
+            else
+            {
+                managers = this._systemCenterVirtualManagerRepo.GetAll();
+            }
             
             return managers;
         }

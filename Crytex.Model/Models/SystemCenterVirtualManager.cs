@@ -21,6 +21,6 @@ namespace Crytex.Model.Models
         public bool Deleted { get; set; }
 
         [InverseProperty("VirtualManager")]
-        public virtual ICollection<HyperVHost> HyperVHosts { get; set; }
+        public ICollection<HyperVHost> HyperVHosts { get; set; }
     }
 }

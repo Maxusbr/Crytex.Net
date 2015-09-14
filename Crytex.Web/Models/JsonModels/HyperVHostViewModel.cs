@@ -1,17 +1,13 @@
-﻿using System;
+﻿using Crytex.Model.Models;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Crytex.Model.Models
+namespace Crytex.Web.Models.JsonModels
 {
-    public class HyperVHost
+    public class HyperVHostViewModel
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public string Host { get; set; }
         public int CoreNumber { get; set; }
@@ -23,9 +19,6 @@ namespace Crytex.Model.Models
         public Guid SystemCenterVirtualManagerId { get; set; }
         public bool Deleted { get; set; }
 
-        [ForeignKey("SystemCenterVirtualManagerId")]
-        public virtual SystemCenterVirtualManager VirtualManager { get; set; }
-        [InverseProperty("HyperVHost")]
-        public virtual ICollection<HyperVHostResource> Resources { get; set; }
+        public ICollection<HyperVHostResourceViewModel> Resources { get; set; }
     }
 }

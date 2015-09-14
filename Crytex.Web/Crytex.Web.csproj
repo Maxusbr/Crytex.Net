@@ -286,6 +286,8 @@
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskViewModel.cs" />
+    <Compile Include="Models\JsonModels\HyperVHostResourceViewModel.cs" />
+    <Compile Include="Models\JsonModels\HyperVHostViewModel.cs" />
     <Compile Include="Models\JsonModels\StandartVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\SystemCenterVirtualManagerViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateEmailTemplateViewModel.cs" />
