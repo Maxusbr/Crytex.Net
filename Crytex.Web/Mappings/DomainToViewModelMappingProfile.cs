@@ -45,6 +45,9 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<EmailTemplate, EmailTemplateViewModel>();
             Mapper.CreateMap<EmailTemplate, UpdateEmailTemplateViewModel>();
+            Mapper.CreateMap<HyperVHostResource, HyperVHostResourceViewModel>();
+            Mapper.CreateMap<HyperVHost, HyperVHostViewModel>();
+            Mapper.CreateMap<SystemCenterVirtualManager, SystemCenterVirtualManagerViewModel>();
             Mapper.CreateMap<UpdateVmTask, UpdateVmTaskViewModel>()
                 .ForMember(x => x.VmId, opt => opt.MapFrom(source => source.VmId.ToString()));
 

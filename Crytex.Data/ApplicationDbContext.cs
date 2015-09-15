@@ -41,5 +41,8 @@ namespace Crytex.Data
         public DbSet<LogEntry> LogEntries { get; set; }
         public DbSet<EmailInfo> EmailInfos { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
+        public DbSet<SystemCenterVirtualManager> SystemCenterVirtualManagers { get; set; }
+        public DbSet<HyperVHost> HyperVHosts { get; set; }
+        public DbSet<HyperVHostResource> HyperVHostResources { get; set; }
     }
 }

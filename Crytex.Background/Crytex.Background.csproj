@@ -84,6 +84,7 @@
     <Compile Include="Scheduler\SchedulerJobs.cs" />
     <Compile Include="Tasks\BillingJob.cs" />
     <Compile Include="Tasks\EmailSendJob.cs" />
+    <Compile Include="Tasks\HyperVSynchronizationJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />
@@ -105,6 +106,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
+      <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
+      <Name>Crytex.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Notification\Crytex.Notification.csproj">
       <Project>{B7071332-988E-4A1E-82BE-8078A8243460}</Project>
       <Name>Crytex.Notification</Name>
@@ -120,6 +125,10 @@
     <ProjectReference Include="..\Crytex.Service\Crytex.Service.csproj">
       <Project>{FC3571DB-2D14-4280-8F07-31599F2A7D5B}</Project>
       <Name>Crytex.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crytext.HyperVVirtualization\Crytext.HyperVVirtualization.csproj">
+      <Project>{c5872f6d-676a-4420-b694-d4a7f5f6490b}</Project>
+      <Name>Crytext.HyperVVirtualization</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

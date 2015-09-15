@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Web", "Crytex.Web\Crytex.Web.csproj", "{18B19F4A-6FEE-4C6D-A819-8308049853EF}"
 EndProject
@@ -30,6 +30,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskExecutorConsoleTest", "TaskExecutorConsoleTest\TaskExecutorConsoleTest.csproj", "{9EBC1D31-E1F8-4C3E-B910-2B554EFCAEF1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Notification", "Crytex.Notification\Crytex.Notification.csproj", "{B7071332-988E-4A1E-82BE-8078A8243460}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytext.HyperVVirtualization", "Crytext.HyperVVirtualization\Crytext.HyperVVirtualization.csproj", "{C5872F6D-676A-4420-B694-D4A7F5F6490B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperVRemote", "..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj", "{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -179,6 +183,26 @@ Global
 		{B7071332-988E-4A1E-82BE-8078A8243460}.Release|ARM.ActiveCfg = Release|Any CPU
 		{B7071332-988E-4A1E-82BE-8078A8243460}.Release|x64.ActiveCfg = Release|Any CPU
 		{B7071332-988E-4A1E-82BE-8078A8243460}.Release|x86.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|ARM.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|x64.ActiveCfg = Release|Any CPU
+		{C5872F6D-676A-4420-B694-D4A7F5F6490B}.Release|x86.ActiveCfg = Release|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Release|ARM.ActiveCfg = Release|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Release|x64.ActiveCfg = Release|Any CPU
+		{B955B2C6-0C37-4B95-965D-A1AC5E0CA284}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
