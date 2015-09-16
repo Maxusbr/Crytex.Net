@@ -1,4 +1,5 @@
-﻿using Crytex.Model.Models;
+﻿using Crytex.Model.Exceptions;
+using Crytex.Model.Models;
 using HyperVRemote;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,28 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             this._hyperVProvider.ModifyMachine(machine, machineSettings);
 
             return machineGuid;
+        }
+
+
+        public void UpdateVm(UpdateVmTask updateVmTask)
+        {
+            this._hyperVProvider.Connect();
+            if (this._hyperVProvider.IsVmExist(updateVmTask.VmId.ToString()))
+            {
+                var machine = this._hyperVProvider.GetMachineByName(updateVmTask.VmId.ToString());
+                var machineSettings = new List<IMachineSetting>()
+                {
+                    new MemoryMachineSetting(machine) { MinRam = (ulong)updateVmTask.Ram },
+                    new ProcessorMachineSetting(machine) { NumberOfVirtualProcessors = (ulong)updateVmTask.Cpu}
+
+                };
+                this._hyperVProvider.ModifyMachine(machine, machineSettings);
+            }
+            else
+            {
+                throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
+                    updateVmTask.VmId));
+            }
         }
     }
 }

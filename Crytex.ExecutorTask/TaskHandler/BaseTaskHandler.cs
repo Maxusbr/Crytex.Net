@@ -23,6 +23,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             this.ProcessingStarted.Invoke(this, this.TaskEntity);
             var taskResult = this.ExecuteLogic();
+            taskResult.TaskEntity = this.TaskEntity;
             this.ProcessingFinished(this, taskResult);
 
             return taskResult;

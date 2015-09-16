@@ -11,7 +11,18 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         protected override TaskExecutionResult ExecuteLogic()
         {
             Console.WriteLine("Update task");
-            return new TaskExecutionResult();
+            var taskExecutionResult = new TaskExecutionResult();
+            try
+            {
+                this._hyperVControl.UpdateVm(this.TaskEntity as UpdateVmTask);
+                taskExecutionResult.Success = true;
+            }
+            catch
+            {
+                taskExecutionResult.Success = false;
+            }
+
+            return taskExecutionResult;
         }
     }
 }

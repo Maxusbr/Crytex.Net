@@ -11,10 +11,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         protected override TaskExecutionResult ExecuteLogic()
         {
             Console.WriteLine("Create task");
-            var taskExecutionResult = new TaskExecutionResult()
-            {
-                TaskEntity = this.TaskEntity
-            };
+            var taskExecutionResult = new TaskExecutionResult();
             try
             {
                 var machineGuid = this._hyperVControl.CreateVm(this.TaskEntity as CreateVmTask);
