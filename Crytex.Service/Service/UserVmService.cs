@@ -37,5 +37,12 @@ namespace Crytex.Service.Service
             var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.Id);
             return list;
         }
+
+
+        public void CreateVm(UserVm userVm)
+        {
+            this._userVmRepo.Add(userVm);
+            this._unitOfWork.Commit();
+        }
     }
 }

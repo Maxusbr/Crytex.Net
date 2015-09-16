@@ -9,12 +9,14 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         private ITaskVmService _taskService;
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
-        private IDictionary<Type, Action<int, StatusTask>> _updateActionDict;
+        private IDictionary<Type, Action<int, StatusTask>> _updateStatusActionDict;
+        private IUserVmService _userVmService;
 
-        public TaskHandlerManager(ITaskVmService taskService)
+        public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService)
         {
             this._taskService = taskService;
-            this._updateActionDict = new Dictionary<Type, Action<int, StatusTask>>
+            this._userVmService = userVmService;
+            this._updateStatusActionDict = new Dictionary<Type, Action<int, StatusTask>>
             {
                 {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate},
                 {typeof(UpdateVmTask), this.UpdateUpdateTaskkStatusDelegate},
@@ -87,12 +89,31 @@ namespace Crytex.ExecutorTask.TaskHandler
         private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult e)
         {
             var taskEntity = ((ITaskHandler)sender).TaskEntity;
-            this._updateActionDict[taskEntity.GetType()].Invoke(taskEntity.Id, StatusTask.End);
+            var taskType = taskEntity.GetType();
+            this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End);
+
+            if (taskType == typeof(CreateVmTask))
+            {
+                var task = (CreateVmTask)taskEntity;
+                var newVm = new UserVm
+                {
+                    Id = e.MachineGuid,
+                    CoreCount = task.Cpu,
+                    HardDriveSize = task.Hdd,
+                    Name = task.Name,
+                    RamCount = task.Ram,
+                    ServerTemplateId = task.ServerTemplateId,
+                    Status = StatusVM.Enable,
+                    UserId = task.UserId
+                };
+
+                this._userVmService.CreateVm(newVm);
+            }
         }
 
         private void ProcessingStartedEventHandler(object sender, BaseTask task)
         {
-            this._updateActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing);
+            this._updateStatusActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing);
         }
 
         private void UpdateCreateTaskStatusDelegate(int id, StatusTask status)

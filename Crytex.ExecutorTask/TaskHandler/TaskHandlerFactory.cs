@@ -22,6 +22,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             };
         }
 
+
         public ITaskHandler GetHyperVHandler(BaseTask task, HyperVHost hyperVHost)
         {
             var type = task.GetType();
@@ -30,18 +31,18 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        public ITaskHandler GetVmWareHandler(BaseTask task, VmWareHost host)
-        {
-            throw new NotImplementedException();
-        }
-
         private ITaskHandler GetCreateVmTaskHandler(BaseTask task, HyperVHost host)
         {
             ITaskHandler handler = null;
             var createTask = (CreateVmTask)task;
             handler = new HyperVCreateVmTaskHandler(createTask, this.CreateHyperVControl(task, host), host.Host);
-            
+
             return handler;
+        }
+
+        public ITaskHandler GetVmWareHandler(BaseTask task, VmWareHost host)
+        {
+            throw new NotImplementedException();
         }
 
         private ITaskHandler GetCreateVmTaskHandler(BaseTask task, VmWareHost host)

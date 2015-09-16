@@ -1,5 +1,7 @@
 ﻿using Crytex.Model.Models;
 using HyperVRemote;
+using System;
+using System.Collections.Generic;
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public class HyperVControl : IHyperVControl
@@ -11,10 +13,20 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             this._hyperVProvider = hyperVProvider;
         }
 
-        public void CreateVm(CreateVmTask task)
+        public Guid CreateVm(CreateVmTask task)
         {
             this._hyperVProvider.Connect();
-            this._hyperVProvider.CreateMachine(task.Name);
+            var machineGuid = Guid.NewGuid();
+            var machine = this._hyperVProvider.CreateMachine(machineGuid.ToString());
+            var machineSettings = new List<IMachineSetting>()
+            {
+                new MemoryMachineSetting(machine) { MinRam = (ulong)task.Ram },
+                new ProcessorMachineSetting(machine) { NumberOfVirtualProcessors = (ulong)task.Cpu}
+
+            };
+            this._hyperVProvider.ModifyMachine(machine, machineSettings);
+
+            return machineGuid;
         }
     }
 }

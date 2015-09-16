@@ -126,6 +126,10 @@
     <Compile Include="Migrations\201509071127595_UpdateVmTaskIdMigration.Designer.cs">
       <DependentUpon>201509071127595_UpdateVmTaskIdMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509160859095_StandartTasVmIdMigration.cs" />
+    <Compile Include="Migrations\201509160859095_StandartTasVmIdMigration.Designer.cs">
+      <DependentUpon>201509160859095_StandartTasVmIdMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
@@ -205,6 +209,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509071127595_UpdateVmTaskIdMigration.resx">
       <DependentUpon>201509071127595_UpdateVmTaskIdMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509160859095_StandartTasVmIdMigration.resx">
+      <DependentUpon>201509160859095_StandartTasVmIdMigration.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

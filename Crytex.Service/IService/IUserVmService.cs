@@ -9,5 +9,7 @@ namespace Crytex.Service.IService
         UserVm GetVmById(Guid id);
 
         IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId);
+
+        void CreateVm(UserVm userVm);
     }
 }

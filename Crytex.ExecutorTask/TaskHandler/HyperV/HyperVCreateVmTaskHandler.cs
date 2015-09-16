@@ -17,8 +17,9 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             };
             try
             {
-                this._hyperVControl.CreateVm(this.TaskEntity as CreateVmTask);
+                var machineGuid = this._hyperVControl.CreateVm(this.TaskEntity as CreateVmTask);
                 taskExecutionResult.Success = true;
+                taskExecutionResult.MachineGuid = machineGuid;
             }
             catch
             {
