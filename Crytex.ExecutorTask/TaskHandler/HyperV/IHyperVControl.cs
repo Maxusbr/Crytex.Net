@@ -7,5 +7,11 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         Guid CreateVm(CreateVmTask task);
 
         void UpdateVm(UpdateVmTask updateVmTask);
+
+        void StartVm(string machineName);
+
+        void StopVm(string machineName);
+
+        void RemoveVm(string machineName);
     }
 }
