@@ -106,6 +106,7 @@
     <Compile Include="Models\UpdateVmTask.cs" />
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserVm.cs" />
+    <Compile Include="Models\VmWareHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

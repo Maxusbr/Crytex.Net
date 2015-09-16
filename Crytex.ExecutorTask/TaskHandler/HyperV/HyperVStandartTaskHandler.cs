@@ -5,7 +5,8 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public class HyperVStandartTaskHandler : BaseHyperVTaskHandler, ITaskHandler
     {
-        public HyperVStandartTaskHandler(StandartVmTask task, IHyperVControl hyperVControl) : base(task, hyperVControl) { }
+        public HyperVStandartTaskHandler(StandartVmTask task, IHyperVControl hyperVControl, string hostName)
+            : base(task, hyperVControl, hostName) { }
 
         protected override TaskExecutionResult ExecuteLogic()
         {

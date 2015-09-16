@@ -5,7 +5,8 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public class HyperVUpdateVmTaskHandler : BaseHyperVTaskHandler, ITaskHandler
     {
-        public HyperVUpdateVmTaskHandler(UpdateVmTask task, IHyperVControl hyperVControl) : base(task, hyperVControl) { }
+        public HyperVUpdateVmTaskHandler(UpdateVmTask task, IHyperVControl hyperVControl, string hostName)
+            : base(task, hyperVControl, hostName) { }
 
         protected override TaskExecutionResult ExecuteLogic()
         {

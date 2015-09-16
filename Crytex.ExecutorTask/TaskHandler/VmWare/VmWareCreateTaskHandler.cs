@@ -5,7 +5,8 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
     public class VmWareCreateTaskHandler : BaseVmWareTaskHandler, ITaskHandler
     {
-        public VmWareCreateTaskHandler(CreateVmTask task, IVmWareControl vmWareControl) :base(task, vmWareControl){ }
+        public VmWareCreateTaskHandler(CreateVmTask task, IVmWareControl vmWareControl, string hostName)
+            :base(task, vmWareControl, hostName){ }
 
         protected override TaskExecutionResult ExecuteLogic()
         {

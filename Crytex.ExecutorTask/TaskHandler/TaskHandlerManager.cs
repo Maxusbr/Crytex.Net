@@ -46,8 +46,20 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             foreach (var task in tasks)
             {
-                
-                var handler = this._handlerFactory.GetHandler(task);
+                ITaskHandler handler = null;
+                switch (task.Virtualization)
+                {
+                    case TypeVirtualization.HyperV:
+                        var hyperVHost = this.GetHyperVHostForTask(task);
+                        handler = this._handlerFactory.GetHyperVHandler(task, hyperVHost);
+                        break;
+                    case TypeVirtualization.WmWare:
+                        var vmWareHost = this.GetVmWareHostForTask(task);
+                        handler = this._handlerFactory.GetVmWareHandler(task, vmWareHost);
+                        break;
+                    default:
+                        throw new ApplicationException(string.Format("Unknown virtualization type {0}", task.Virtualization));
+                }
                 handler.ProcessingStarted += this.ProcessingStartedEventHandler;
                 handler.ProcessingFinished += this.ProcessingFinishedEventHandler;
                 switch (task.Virtualization)
@@ -60,6 +72,16 @@ namespace Crytex.ExecutorTask.TaskHandler
                         break;
                 }
             }
+        }
+
+        private VmWareHost GetVmWareHostForTask(BaseTask task)
+        {
+            return new VmWareHost();
+        }
+
+        private HyperVHost GetHyperVHostForTask(BaseTask task)
+        {
+            return new HyperVHost();
         }
 
         private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult e)
@@ -77,10 +99,12 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             this._taskService.UpdateTaskStatus<CreateVmTask>(id, status);
         }
+        
         private void UpdateUpdateTaskkStatusDelegate(int id, StatusTask status)
         {
             this._taskService.UpdateTaskStatus<UpdateVmTask>(id, status);
         }
+        
         private void UpdateStandartTaskStatusDelegate(int id, StatusTask status)
         {
             this._taskService.UpdateTaskStatus<StandartVmTask>(id, status);
