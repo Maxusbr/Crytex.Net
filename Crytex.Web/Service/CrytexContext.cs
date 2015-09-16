@@ -1,4 +1,6 @@
-﻿namespace Crytex.Web.Service
+﻿using Crytex.Core.Service;
+
+namespace Crytex.Web.Service
 {
     public class CrytexContext : ICrytexContext
     {

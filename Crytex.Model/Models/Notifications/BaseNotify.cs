@@ -7,6 +7,8 @@ namespace Crytex.Model.Models.Notifications
 {
     public class BaseNotify
     {
+        public string UserId { get; set; }
         public string Test { get; set; }
+
     }
 }

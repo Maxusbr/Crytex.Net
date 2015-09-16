@@ -1,3 +1,5 @@
+
+
 namespace Crytex.Web.App_Start
 {
     using System.Data.Entity;
@@ -10,7 +12,7 @@ namespace Crytex.Web.App_Start
     using Model.Models;
     using Hubs;
     using Core;
-
+    using Crytex.Core.Service;
     using Crytex.Web.Service;
     using System.Security.Principal;
     using Crytex.Notification;

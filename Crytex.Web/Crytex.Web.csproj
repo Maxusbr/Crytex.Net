@@ -311,10 +311,6 @@
     <Compile Include="Service\UserInfoProvider.cs" />
     <Compile Include="Service\CrytexContext.cs" />
     <Compile Include="Service\Http.cs" />
-    <Compile Include="Service\IUserInfoProvider.cs" />
-    <Compile Include="Service\ICrytexContext.cs" />
-    <Compile Include="Service\IHttp.cs" />
-    <Compile Include="Service\IServerConfig.cs" />
     <Compile Include="Service\ServerConfig.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -390,13 +386,13 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
+      <Project>{0b23b88c-b5fc-42f6-ac62-27725f34487b}</Project>
+      <Name>Crytex.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Notification\Crytex.Notification.csproj">
       <Project>{B7071332-988E-4A1E-82BE-8078A8243460}</Project>
       <Name>Crytex.Notification</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
-      <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
-      <Name>Crytex.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Crytex.Data\Crytex.Data.csproj">
       <Project>{4CAB19D5-AA00-43E1-9450-15F3B8D72AB2}</Project>
@@ -432,7 +428,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3053</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3054/</IISUrl>
+          <IISUrl>http://localhost:3055/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

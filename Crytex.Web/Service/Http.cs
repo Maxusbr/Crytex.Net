@@ -1,4 +1,5 @@
 ﻿using System.Web;
+using Crytex.Core.Service;
 
 namespace Crytex.Web.Service
 {
