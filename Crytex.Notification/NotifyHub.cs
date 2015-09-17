@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Crytex.Notification.Service;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.SignalR.Hubs;
 
 
 namespace Crytex.Notification
@@ -31,12 +32,19 @@ namespace Crytex.Notification
             return base.OnConnected();
         }
 
-        public void SendToUser(string userId, Object message)
+        public void SendToUser(string userId, Object message, string nameMethod)
         {
             foreach (var userConnection in Connections.GetUserConnections(userId))
             {
-                Clients.Client(userConnection.ConnectionId).receiverMessage(message);
+                IClientProxy proxy = Clients.Client(userConnection.ConnectionId);
+                proxy.Invoke(nameMethod, message);
             }
+        }
+
+        public void SendToUserNotification(Object message)
+        {
+            string userId = CrytexContext.UserInfoProvider.GetUserId();
+            SendToUser(userId, message, "newNotification");
         }
 
         public override Task OnDisconnected(bool stopCalled)

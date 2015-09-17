@@ -10,7 +10,5 @@ namespace Crytex.Notification.Service
     {
         [Dependency]
         public ICrytexContext CrytexContext { get; set; }
-        //[Dependency]
-        //public ApplicationUserManager UserManager { get; set; }
     }
 }
