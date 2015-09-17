@@ -18,8 +18,7 @@ namespace Crytex.Web.Service
 
         public string GetUserId()
         {
-            //var userId = this._identity.GetUserId();
-            var userId = "93692f8f-3f85-4523-a07f-090af0b4c7eb";
+            var userId = this._identity.GetUserId();
             return userId ;
         }
 
