@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using Crytex.Notification.Service;
 using Microsoft.AspNet.Identity;
@@ -13,44 +14,52 @@ namespace Crytex.Notification
 {
     public class NotifyHub : CrytexHub, INotifyHub
     {
-        private readonly Dictionary<string, string> _connections = new Dictionary<string, string>();
+        private readonly static ConnectionMapping<string> Connections =
+            new ConnectionMapping<string>();
+
         public void Notify(BaseNotify message)
         {
             this.Clients.All.notify(message);
         }
 
-        public override System.Threading.Tasks.Task OnConnected()
+        public override Task OnConnected()
         {
-            var connectionId = Context.ConnectionId;
-            if (!_connections.ContainsKey(connectionId))
-            {
-                string userId = CrytexContext.UserInfoProvider.GetUserId();
+            string userId = CrytexContext.UserInfoProvider.GetUserId();
 
-                _connections.Add(connectionId, userId);
-            }
+            Connections.Add(userId, Context.ConnectionId);
 
-            //return Clients.All.connected(Context.ConnectionId, DateTime.Now.ToString());
             return base.OnConnected();
         }
 
         public void SendToUser(string userId, Object message)
         {
-            var userConnections = _connections.Where(c=>c.Value.Contains(userId));
-            foreach (var userConnection in userConnections)
+            foreach (var userConnection in Connections.GetUserConnections(userId))
             {
-                Clients.Client(userConnection.Key).receiverMessage(message);
+                Clients.Client(userConnection.ConnectionId).receiverMessage(message);
             }
         }
 
-        public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
+        public override Task OnDisconnected(bool stopCalled)
         {
-            var connectionId = Context.ConnectionId;
-            if (_connections.ContainsKey(connectionId))
-            {
-                _connections.Remove(connectionId);
-            }
-            //return Clients.All.disconnected(Context.ConnectionId, DateTime.Now.ToString());
+            string userId = CrytexContext.UserInfoProvider.GetUserId();
+
+            Connections.Remove(userId, Context.ConnectionId);
+
             return base.OnDisconnected(stopCalled);
         }
+
+        public override Task OnReconnected()
+        {
+            string userId = CrytexContext.UserInfoProvider.GetUserId();
+            var searchConnection = Connections.GetUserConnections(userId).FirstOrDefault(c=>c.ConnectionId == Context.ConnectionId);
+            if (searchConnection == null)
+            {
+                Connections.Add(userId, Context.ConnectionId);
+            }
+
+            return base.OnReconnected();
+        }
     }
+
+
 }
