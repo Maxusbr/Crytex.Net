@@ -18,62 +18,59 @@ namespace Crytex.Web.Controllers.Api
             this._serverTemplateService = serverTemplateService;
         }
 
+        // GET: api/ServerTemplate/5
+        public IHttpActionResult Get(int id)
+        {
+            var os = this._serverTemplateService.GeById(id);
+            var model = AutoMapper.Mapper.Map<ServerTemplateViewModel>(os);
+
+            return Ok(model);
+        }
+
         // GET: api/ServerTemplate
-        [HttpGet]
-        public IEnumerable<ServerTemplateViewModel> GetAllForUser()
+        public IHttpActionResult Get()
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             var servers = this._serverTemplateService.GeAllForUser(userId).ToList();
             var model = AutoMapper.Mapper.Map<List<ServerTemplate>, List<ServerTemplateViewModel>>(servers);
 
-            return model;
-        }
-
-        // GET: api/ServerTemplate/5
-        public ServerTemplateViewModel GetById(int id)
-        {
-            var os = this._serverTemplateService.GeById(id);
-            var model = AutoMapper.Mapper.Map<ServerTemplateViewModel>(os);
-
-            return model;
+            return Ok(model);
         }
 
         // POST: api/ServerTemplate
-        [HttpPost]
-        public HttpResponseMessage Create(ServerTemplateEditViewModel model)
+        public IHttpActionResult Post([FromBody]ServerTemplateEditViewModel model)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                var newTemplate = AutoMapper.Mapper.Map<ServerTemplate>(model);
-                newTemplate = this._serverTemplateService.CreateTemplate(newTemplate);
-
-                return Request.CreateResponse(HttpStatusCode.Created, new { id = newTemplate.Id });
+                return BadRequest(ModelState);
             }
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, this.ModelState);
+            var newTemplate = AutoMapper.Mapper.Map<ServerTemplate>(model);
+            newTemplate = this._serverTemplateService.CreateTemplate(newTemplate);
+
+            return Ok(new { id = newTemplate.Id });
         }
 
         // PUT: api/ServerTemplate/5
-        [HttpPut]
-        public HttpResponseMessage Update(int id, ServerTemplateEditViewModel model)
+        public IHttpActionResult Put(int id, [FromBody]ServerTemplateEditViewModel model)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                var updatedTemplate = AutoMapper.Mapper.Map<ServerTemplate>(model);
-                this._serverTemplateService.Update(id, updatedTemplate);
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                return BadRequest(ModelState);
             }
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, this.ModelState);
+            var updatedTemplate = AutoMapper.Mapper.Map<ServerTemplate>(model);
+            this._serverTemplateService.Update(id, updatedTemplate);
+
+            return Ok();
         }
 
         // DELETE: api/ServerTemplate/5
         [HttpDelete]
-        public HttpResponseMessage Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             this._serverTemplateService.DeleteById(id);
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Ok();
         }
     }
 }

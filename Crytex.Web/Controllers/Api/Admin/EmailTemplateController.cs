@@ -20,15 +20,6 @@ namespace Crytex.Web.Controllers.Api.Admin
             _emailTemplateService = emailTemplateService;
         }
 
-
-        // GET api/EmailTemplate
-        public IHttpActionResult Get()
-        {
-            var emailTemplates = _emailTemplateService.GetAllTemplates();
-            var model = AutoMapper.Mapper.Map<List<EmailTemplate>, List<EmailTemplateViewModel>>(emailTemplates);
-            return Ok(model);
-        }
-
         // GET api/EmailTemplate/5
         public IHttpActionResult Get(int id)
         {
@@ -40,13 +31,13 @@ namespace Crytex.Web.Controllers.Api.Admin
             return Ok(model);
         }
 
-        [HttpPost]
-        public IHttpActionResult GetTypes()
+        // GET api/EmailTemplate
+        public IHttpActionResult Get()
         {
-            var model = Enum.GetValues(typeof(EmailTemplateType)).Cast<EmailTemplateType>().Select(x => new KeyValuePair<string, int>(x.ToString(), (int)x)).ToList();
+            var emailTemplates = _emailTemplateService.GetAllTemplates();
+            var model = AutoMapper.Mapper.Map<List<EmailTemplate>, List<EmailTemplateViewModel>>(emailTemplates);
             return Ok(model);
         }
-
 
         // POST api/EmailTemplate
         public IHttpActionResult Post([FromBody]EmailTemplateViewModel model)
@@ -91,17 +82,26 @@ namespace Crytex.Web.Controllers.Api.Admin
         }
 
         // DELETE api/EmailTemplate/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             _emailTemplateService.DeleteTemplate(id);
+            return Ok();
         }
 
         // удаляет все шаблоны в БД заданного типа
         // DELETE api/EmailTemplate?type=ChangeProfile
         // DELETE api/EmailTemplate?type=0
-        public void Delete(EmailTemplateType type)
+        public IHttpActionResult Delete(EmailTemplateType type)
         {
             _emailTemplateService.DeleteTemplate(type);
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult GetTypes()
+        {
+            var model = Enum.GetValues(typeof(EmailTemplateType)).Cast<EmailTemplateType>().Select(x => new KeyValuePair<string, int>(x.ToString(), (int)x)).ToList();
+            return Ok(model);
         }
     }
 }

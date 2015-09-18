@@ -19,61 +19,56 @@ namespace Crytex.Web.Controllers.Api
             this._oparaingSystemsService = operatingSystemsService;
         }
 
-        // GET: api/OperatingSystem
-        public IEnumerable<OperatingSystemViewModel> GetAll()
-        {
-            var systems = this._oparaingSystemsService.GetAll().ToList();
-            var model = AutoMapper.Mapper.Map<List<OperatingSystem>, List<OperatingSystemViewModel>>(systems);
-
-            return model;
-        }
-
         // GET: api/OperatingSystem/5
-        [HttpGet]
-        public OperatingSystemViewModel GetById(int id)
+        public IHttpActionResult Get(int id)
         {
             var os = this._oparaingSystemsService.GeById(id);
             var model = AutoMapper.Mapper.Map<OperatingSystemViewModel>(os);
 
-            return model;
+            return Ok(model);
+        }
+
+        // GET: api/OperatingSystem
+        public IHttpActionResult Get()
+        {
+            var systems = this._oparaingSystemsService.GetAll().ToList();
+            var model = AutoMapper.Mapper.Map<List<OperatingSystem>, List<OperatingSystemViewModel>>(systems);
+
+            return Ok(model);
         }
 
         // POST: api/OperatingSystem
-        [HttpPost]
-        public HttpResponseMessage Create(OperatingSystemEditViewModel model)
+        public IHttpActionResult Post([FromBody]OperatingSystemEditViewModel model)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                var newOS = AutoMapper.Mapper.Map<OperatingSystem>(model);
-                newOS = this._oparaingSystemsService.CreateOperatingSystem(newOS);
-
-                return Request.CreateResponse(HttpStatusCode.Created, new { id = newOS.Id });
+                return BadRequest(ModelState);
             }
+            var newOS = AutoMapper.Mapper.Map<OperatingSystem>(model);
+            newOS = this._oparaingSystemsService.CreateOperatingSystem(newOS);
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, this.ModelState);
+            return Ok(new { id = newOS.Id });
+
         }
 
         // PUT: api/OperatingSystem/5
-        [HttpPut]
-        public HttpResponseMessage Update(int id, OperatingSystemEditViewModel model)
+        public IHttpActionResult Put(int id, [FromBody]OperatingSystemEditViewModel model)
         {
-            if (this.ModelState.IsValid)
+            if (!this.ModelState.IsValid)
             {
-                var updatedOs = AutoMapper.Mapper.Map<OperatingSystem>(model);
-                this._oparaingSystemsService.Update(id, updatedOs);
-
-                return new HttpResponseMessage(HttpStatusCode.OK);
+                BadRequest(ModelState);
             }
+            var updatedOs = AutoMapper.Mapper.Map<OperatingSystem>(model);
+            this._oparaingSystemsService.Update(id, updatedOs);
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, this.ModelState);
+            return Ok();
         }
 
         // DELETE: api/OperatingSystem/5
-        [HttpDelete]
-        public HttpResponseMessage Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             this._oparaingSystemsService.DeleteById(id);
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Ok();
         }
     }
 }

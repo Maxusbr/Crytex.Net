@@ -35,6 +35,7 @@ namespace Crytex.Web.Controllers.Api
             userId = userId ?? userInfoProvider.GetUserId();
             tasks = _standartVmTaskService.GetPageByUserId(pageSize, pageNumber, dateFrom, dateTo, userId);
             model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);
+
             return Ok(model);
         }
 
@@ -46,6 +47,7 @@ namespace Crytex.Web.Controllers.Api
                 return NotFound();
 
             var model = AutoMapper.Mapper.Map<StandartVmTask, StandartVmTaskViewModel>(task);
+
             return Ok(model);
         }
 
@@ -57,13 +59,15 @@ namespace Crytex.Web.Controllers.Api
 
             var task = _standartVmTaskService.Create(model.VmId, model.TaskType, model.Virtualization, User.Identity.GetUserId());
             var location = Request.RequestUri + "/" + task.Id;
-            return Created(location, new { id = task.Id });
+
+            return Ok(new { id = task.Id });
         }
 
         // DELETE api/<controller>/5
-        public void Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             _standartVmTaskService.Delete(id);
+            return Ok();
         }
     }
 }

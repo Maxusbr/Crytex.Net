@@ -11,6 +11,7 @@ using Crytex.Model.Exceptions;
 
 namespace Crytex.Web.Controllers.Api
 {
+    [Authorize]
     public class UpdateVmTaskController : CrytexApiController
     {
         private ITaskVmService _taskService;
@@ -20,41 +21,10 @@ namespace Crytex.Web.Controllers.Api
         }
 
         /// <summary>
-        /// Метод создания задачи обновления виртуальной машины
-        /// </summary>
-        /// <param name="model">Параметры создания задачи</param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPost]        
-        public IHttpActionResult Post(UpdateVmTaskViewModel model)
-        {
-            if (this.ModelState.IsValid)
-            {
-                var task = AutoMapper.Mapper.Map<UpdateVmTask>(model);
-                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-                UpdateVmTask createdTask;
-                if(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
-                    this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support"))
-                {
-                    createdTask = this._taskService.CreateUpdateVmTask(task);
-                }
-                else
-                {
-                    createdTask = this._taskService.CreateUpdateVmTask(task, userId);
-                }
-                return Ok(new { id = createdTask.Id });
-            }
-
-            return BadRequest(this.ModelState);
-        }
-
-        /// <summary>
         /// Получение задачи обновления по Id
         /// </summary>
         /// <param name="id">Id задачи</param>
         /// <returns></returns>
-        [Authorize]
-        [HttpGet]
         public IHttpActionResult Get(int id)
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
@@ -69,11 +39,10 @@ namespace Crytex.Web.Controllers.Api
                 task = this._taskService.GetUpdateTaskById(id, userId);
             }
             var model = AutoMapper.Mapper.Map<UpdateVmTaskViewModel>(task);
+
             return Ok(model);
         }
 
-        [Authorize]
-        [HttpGet]
         public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
         {
             if (userId == null)
@@ -87,14 +56,41 @@ namespace Crytex.Web.Controllers.Api
             }
             if (pageNumber <= 0 || pageSize <= 0)
             {
-                this.ModelState.AddModelError("", "PageNumber and PageSize must be grater than 1");
-                return BadRequest(this.ModelState);
+                return BadRequest("PageNumber and PageSize must be grater than 1");
             }
 
             var page = this._taskService.GetUpdateVmTasksForUser(pageNumber, pageSize, userId);
             var viewModel = AutoMapper.Mapper.Map<PageModel<UpdateVmTaskViewModel>>(page);
-            
+
             return Ok(viewModel);
+        }
+
+        /// <summary>
+        /// Метод создания задачи обновления виртуальной машины
+        /// </summary>
+        /// <param name="model">Параметры создания задачи</param>
+        /// <returns></returns>    
+        public IHttpActionResult Post([FromBody]UpdateVmTaskViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest(this.ModelState);
+            }
+
+            var task = AutoMapper.Mapper.Map<UpdateVmTask>(model);
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            UpdateVmTask createdTask;
+            if (this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
+                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support"))
+            {
+                createdTask = this._taskService.CreateUpdateVmTask(task);
+            }
+            else
+            {
+                createdTask = this._taskService.CreateUpdateVmTask(task, userId);
+            }
+
+            return Ok(new { id = createdTask.Id });
         }
     }
 }

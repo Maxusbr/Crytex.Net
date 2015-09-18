@@ -16,68 +16,61 @@ namespace Crytex.Web.Controllers.Api
             this._paymentService = paymentService;
         }
 
-        [HttpGet]
-        public HttpResponseMessage Get(int pageNumber, int pageSize)
-        {
-            if (pageNumber <= 0 || pageSize <= 0)
-            {
-                this.ModelState.AddModelError("", "PageNumber and PageSize must be grater than 1");
-            }
-            else
-            {
-                var page = this._paymentService.GetPage(pageNumber, pageSize);
-                var viewModel = AutoMapper.Mapper.Map<PageModel<CreditPaymentOrderViewModel>>(page);
-                return Request.CreateResponse(HttpStatusCode.OK, viewModel);
-            }
-
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
-        }
-
         // GET: api/CreditPaymentOrder/5
-        [HttpGet]
-        public HttpResponseMessage Get(string id)
+        public IHttpActionResult Get(string id)
         {
             Guid guid;
             if (!Guid.TryParse(id, out guid))
             {
                 this.ModelState.AddModelError("id", "Invalid Guid format");
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
             }
 
             var order = this._paymentService.GetCreditPaymentOrderById(guid);
             var model = AutoMapper.Mapper.Map<CreditPaymentOrderViewModel>(order);
 
-            return this.Request.CreateResponse(HttpStatusCode.OK, model);
+            return Ok(model);
+        }
+
+        // GET: api/CreditPaymentOrder
+        public IHttpActionResult Get(int pageNumber, int pageSize)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be grater than 1");
+            }
+
+            var page = this._paymentService.GetPage(pageNumber, pageSize);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<CreditPaymentOrderViewModel>>(page);
+
+            return Ok(viewModel);
         }
 
         // POST: api/CreditPaymentOrder
-        [HttpPost]
-        public HttpResponseMessage Create(CreditPaymentOrderViewModel model)
+        public IHttpActionResult Post([FromBody]CreditPaymentOrderViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-                var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, model.PaymentSystem.Value);
-
-                return Request.CreateResponse(HttpStatusCode.Created, new { id = newOrder.Guid });
+                BadRequest(ModelState);
             }
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, model.PaymentSystem.Value);
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            return Ok(new { id = newOrder.Guid });
         }
 
         // DELETE: api/CreditPaymentOrder/5
-        [HttpDelete]
-        public HttpResponseMessage Delete(string id)
+        public IHttpActionResult Delete(string id)
         {
             Guid guid;
             if (!Guid.TryParse(id, out guid))
             {
                 this.ModelState.AddModelError("id", "Invalid Guid format");
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+                return BadRequest(ModelState);
             }
-
             this._paymentService.DeleteCreditPaymentOrderById(guid);
-            return new HttpResponseMessage(HttpStatusCode.OK);
+
+            return Ok();
         }
     }
 }
