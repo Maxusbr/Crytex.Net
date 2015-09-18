@@ -26,7 +26,7 @@ namespace Crytex.Web.Controllers.Api
             if (!Guid.TryParse(id, out guid))
             {
                 this.ModelState.AddModelError("id", "Invalid Guid format");
-                BadRequest(ModelState);
+                return BadRequest(ModelState);
             }
             var VM = _userVmService.GetVmById(guid);
             if (!(VM.UserId == CrytexContext.UserInfoProvider.GetUserId() ||
