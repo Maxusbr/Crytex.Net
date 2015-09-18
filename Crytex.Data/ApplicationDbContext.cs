@@ -44,5 +44,7 @@ namespace Crytex.Data
         public DbSet<SystemCenterVirtualManager> SystemCenterVirtualManagers { get; set; }
         public DbSet<HyperVHost> HyperVHosts { get; set; }
         public DbSet<HyperVHostResource> HyperVHostResources { get; set; }
+        public DbSet<SnapshotVm> SnapshotVm { get; set; }
+        
     }
 }
