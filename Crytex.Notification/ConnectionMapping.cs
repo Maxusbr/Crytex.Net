@@ -84,7 +84,7 @@ namespace Crytex.Notification
             public UserConnection(string connectionId)
             {
                 this.ConnectionId = connectionId;
-                this.ConnecTime = new DateTime();
+                this.ConnecTime = DateTime.Now;
             }
         }
 
