@@ -113,6 +113,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionMapping.cs" />
     <Compile Include="INotifyHub.cs" />
     <Compile Include="NotifyHub.cs" />
     <Compile Include="Senders\SigralRSender\AspNetSignalRSender.cs" />
