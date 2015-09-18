@@ -90,7 +90,14 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var taskEntity = ((ITaskHandler)sender).TaskEntity;
             var taskType = taskEntity.GetType();
-            this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End);
+            if (e.Success)
+            {
+                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End);
+            }
+            else
+            {
+                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.EndWithErrors);
+            }
 
             if (taskType == typeof(CreateVmTask))
             {
@@ -108,6 +115,11 @@ namespace Crytex.ExecutorTask.TaskHandler
                 };
 
                 this._userVmService.CreateVm(newVm);
+            }
+            if (taskType == typeof(UpdateVmTask))
+            {
+                var task = (UpdateVmTask)taskEntity;
+                this._userVmService.UpdateVm(task.VmId, task.Cpu, task.Hdd, task.Ram);
             }
         }
 

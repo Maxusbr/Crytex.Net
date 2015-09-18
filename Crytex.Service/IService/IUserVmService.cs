@@ -11,5 +11,7 @@ namespace Crytex.Service.IService
         IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId);
 
         void CreateVm(UserVm userVm);
+
+        void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null);
     }
 }
