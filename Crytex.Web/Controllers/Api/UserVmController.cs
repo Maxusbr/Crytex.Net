@@ -16,20 +16,6 @@ namespace Crytex.Web.Controllers.Api
             this._userVmService = userVmService;
         }
 
-        public IHttpActionResult Get(string id)
-        {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
-            {
-                this.ModelState.AddModelError("id", "Invalid Guid format");
-                BadRequest(ModelState);
-            }
-            var vm = this._userVmService.GetVmById(guid);
-            var model = AutoMapper.Mapper.Map<UserVmViewModel>(vm);
-
-            return Ok(model);
-        }
-
         [Authorize]
         public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
         {
@@ -44,7 +30,20 @@ namespace Crytex.Web.Controllers.Api
             }
             return this.GetPageInner(pageNumber, pageSize, userId);
         }
-        
+
+        public IHttpActionResult Get(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                this.ModelState.AddModelError("id", "Invalid Guid format");
+                BadRequest(ModelState);
+            }
+            var vm = this._userVmService.GetVmById(guid);
+            var model = AutoMapper.Mapper.Map<UserVmViewModel>(vm);
+
+            return Ok(model);
+        }
         private IHttpActionResult GetPageInner(int pageNumber, int pageSize, string userId)
         {
             if (pageNumber <= 0 || pageSize <= 0)

@@ -20,6 +20,14 @@ namespace Crytex.Web.Controllers.Api.Admin
             _emailTemplateService = emailTemplateService;
         }
 
+        // GET api/EmailTemplate
+        public IHttpActionResult Get()
+        {
+            var emailTemplates = _emailTemplateService.GetAllTemplates();
+            var model = AutoMapper.Mapper.Map<List<EmailTemplate>, List<EmailTemplateViewModel>>(emailTemplates);
+            return Ok(model);
+        }
+
         // GET api/EmailTemplate/5
         public IHttpActionResult Get(int id)
         {
@@ -28,14 +36,6 @@ namespace Crytex.Web.Controllers.Api.Admin
                 return NotFound();
 
             var model = AutoMapper.Mapper.Map<EmailTemplate, EmailTemplateViewModel>(emailTemplate);
-            return Ok(model);
-        }
-
-        // GET api/EmailTemplate
-        public IHttpActionResult Get()
-        {
-            var emailTemplates = _emailTemplateService.GetAllTemplates();
-            var model = AutoMapper.Mapper.Map<List<EmailTemplate>, List<EmailTemplateViewModel>>(emailTemplates);
             return Ok(model);
         }
 

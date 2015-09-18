@@ -16,14 +16,6 @@ namespace Crytex.Web.Controllers.Api
             _logService = logService;
         }
 
-        // GET api/<controller>/5
-        public IHttpActionResult Get(int id)
-        {
-            var logEntry = _logService.GetLogEntry(id);
-            var model = AutoMapper.Mapper.Map<LogEntry, LogEntryViewModel>(logEntry);
-            return Ok(model);
-        }
-
         // GET api/<controller>
         public IHttpActionResult Get(int pageSize = 20, int pageNumber = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string sourceLog = null)
         {
@@ -34,6 +26,14 @@ namespace Crytex.Web.Controllers.Api
             var logEntries = _logService.GetLogEntries(pageSize, pageNumber, dateFrom, dateTo, sourceLog);
             var model = AutoMapper.Mapper.Map<List<LogEntry>, List<LogEntryViewModel>>(logEntries);
 
+            return Ok(model);
+        }
+
+        // GET api/<controller>/5
+        public IHttpActionResult Get(int id)
+        {
+            var logEntry = _logService.GetLogEntry(id);
+            var model = AutoMapper.Mapper.Map<LogEntry, LogEntryViewModel>(logEntry);
             return Ok(model);
         }
 

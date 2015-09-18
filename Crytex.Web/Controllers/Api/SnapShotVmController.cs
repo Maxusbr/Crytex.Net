@@ -20,22 +20,25 @@ namespace Crytex.Web.Controllers.Api
             this._userVmService = userVmService;
         }
         // GET: api/SnapShotVm
-        public IHttpActionResult Get(Guid VmID)
+        public IHttpActionResult Get(string id)
         {
-            if (VmID == Guid.Empty)
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
             {
-                return BadRequest("Incorrect VmID");
+                this.ModelState.AddModelError("id", "Invalid Guid format");
+                BadRequest(ModelState);
             }
-            var VM = _userVmService.GetVmById(VmID);
-            if (VM.UserId == CrytexContext.UserInfoProvider.GetUserId() ||
+            var VM = _userVmService.GetVmById(guid);
+            if (!(VM.UserId == CrytexContext.UserInfoProvider.GetUserId() ||
                 CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
-                CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support"))
+                CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
             {
-                var snapshots = _snapshotVmService.GetAllByVmId(VmID);
-                var snapshotsView = AutoMapper.Mapper.Map<IEnumerable<SnapshotVmViewModel>>(snapshots);
-                return Ok(snapshotsView);
+                return BadRequest("Are not allowed for this action");
             }
-            return BadRequest("Are not allowed for this action");
+            var snapshots = _snapshotVmService.GetAllByVmId(guid);
+            var snapshotsView = AutoMapper.Mapper.Map<IEnumerable<SnapshotVmViewModel>>(snapshots);
+
+            return Ok(snapshotsView);
         }
 
     }

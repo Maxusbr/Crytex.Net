@@ -20,6 +20,28 @@ namespace Crytex.Web.Controllers.Api
             this._taskService = taskService;
         }
 
+        public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
+        {
+            if (userId == null)
+            {
+                userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            }
+            else if (!(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
+                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
+            {
+                throw new SecurityException("Only Admin and Support user can acces other user UpdateVmTask info");
+            }
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be grater than 1");
+            }
+
+            var page = this._taskService.GetUpdateVmTasksForUser(pageNumber, pageSize, userId);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<UpdateVmTaskViewModel>>(page);
+
+            return Ok(viewModel);
+        }
+
         /// <summary>
         /// Получение задачи обновления по Id
         /// </summary>
@@ -41,28 +63,6 @@ namespace Crytex.Web.Controllers.Api
             var model = AutoMapper.Mapper.Map<UpdateVmTaskViewModel>(task);
 
             return Ok(model);
-        }
-
-        public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
-        {
-            if (userId == null)
-            {
-                userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            }
-            else if (!(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
-                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
-            {
-                throw new SecurityException("Only Admin and Support user can acces other user UpdateVmTask info");
-            }
-            if (pageNumber <= 0 || pageSize <= 0)
-            {
-                return BadRequest("PageNumber and PageSize must be grater than 1");
-            }
-
-            var page = this._taskService.GetUpdateVmTasksForUser(pageNumber, pageSize, userId);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<UpdateVmTaskViewModel>>(page);
-
-            return Ok(viewModel);
         }
 
         /// <summary>

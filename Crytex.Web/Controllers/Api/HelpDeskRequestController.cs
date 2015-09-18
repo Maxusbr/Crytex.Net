@@ -14,15 +14,6 @@ namespace Crytex.Web.Controllers.Api
             this._helpDeskRequestService = helpDeskRequestService;
         }
 
-        // GET: api/HelpDeskRequest/5
-        public IHttpActionResult Get(int id)
-        {
-            var request = this._helpDeskRequestService.GeById(id);
-            var model = AutoMapper.Mapper.Map<HelpDeskRequestViewModel>(request);
-
-            return Ok(model);
-        }
-
         public IHttpActionResult Get(int pageNumber, int pageSize)
         {
             if (pageNumber <= 0 || pageSize <= 0)
@@ -32,6 +23,15 @@ namespace Crytex.Web.Controllers.Api
             var viewModel = AutoMapper.Mapper.Map<PageModel<HelpDeskRequestViewModel>>(page);
 
             return Ok(viewModel);
+        }
+
+        // GET: api/HelpDeskRequest/5
+        public IHttpActionResult Get(int id)
+        {
+            var request = this._helpDeskRequestService.GeById(id);
+            var model = AutoMapper.Mapper.Map<HelpDeskRequestViewModel>(request);
+
+            return Ok(model);
         }
 
 

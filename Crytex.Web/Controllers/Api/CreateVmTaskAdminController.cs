@@ -17,15 +17,6 @@ namespace Crytex.Web.Controllers.Api
             this._taskVmService = taskVmService;
         }
 
-        // GET: api/CreateVmTask/5
-        public  IHttpActionResult Get(int id)
-        {
-            var task = this._taskVmService.GetCreateVmTaskById(id);
-            var model = AutoMapper.Mapper.Map<CreateVmTaskAdminViewModel>(task);
-
-            return Ok(model);
-        }
-
         // GET: api/CreateVmTaskAdmin
         public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null, DateTime? from = null, DateTime? to = null)
         {
@@ -38,6 +29,15 @@ namespace Crytex.Web.Controllers.Api
             var viewModel = AutoMapper.Mapper.Map<PageModel<CreateVmTaskAdminViewModel>>(page);
             return Ok(viewModel);
 
+        }
+
+        // GET: api/CreateVmTask/5
+        public IHttpActionResult Get(int id)
+        {
+            var task = this._taskVmService.GetCreateVmTaskById(id);
+            var model = AutoMapper.Mapper.Map<CreateVmTaskAdminViewModel>(task);
+
+            return Ok(model);
         }
 
         // POST: api/CreateVmTaskAdmin

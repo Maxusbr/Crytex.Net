@@ -18,21 +18,21 @@ namespace Crytex.Web.Controllers.Api
             this._serverTemplateService = serverTemplateService;
         }
 
-        // GET: api/ServerTemplate/5
-        public IHttpActionResult Get(int id)
-        {
-            var os = this._serverTemplateService.GeById(id);
-            var model = AutoMapper.Mapper.Map<ServerTemplateViewModel>(os);
-
-            return Ok(model);
-        }
-
         // GET: api/ServerTemplate
         public IHttpActionResult Get()
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             var servers = this._serverTemplateService.GeAllForUser(userId).ToList();
             var model = AutoMapper.Mapper.Map<List<ServerTemplate>, List<ServerTemplateViewModel>>(servers);
+
+            return Ok(model);
+        }
+
+        // GET: api/ServerTemplate/5
+        public IHttpActionResult Get(int id)
+        {
+            var os = this._serverTemplateService.GeById(id);
+            var model = AutoMapper.Mapper.Map<ServerTemplateViewModel>(os);
 
             return Ok(model);
         }

@@ -16,6 +16,20 @@ namespace Crytex.Web.Controllers.Api
             this._paymentService = paymentService;
         }
 
+        // GET: api/CreditPaymentOrder
+        public IHttpActionResult Get(int pageNumber, int pageSize)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be grater than 1");
+            }
+
+            var page = this._paymentService.GetPage(pageNumber, pageSize);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<CreditPaymentOrderViewModel>>(page);
+
+            return Ok(viewModel);
+        }
+
         // GET: api/CreditPaymentOrder/5
         public IHttpActionResult Get(string id)
         {
@@ -30,20 +44,6 @@ namespace Crytex.Web.Controllers.Api
             var model = AutoMapper.Mapper.Map<CreditPaymentOrderViewModel>(order);
 
             return Ok(model);
-        }
-
-        // GET: api/CreditPaymentOrder
-        public IHttpActionResult Get(int pageNumber, int pageSize)
-        {
-            if (pageNumber <= 0 || pageSize <= 0)
-            {
-                return BadRequest("PageNumber and PageSize must be grater than 1");
-            }
-
-            var page = this._paymentService.GetPage(pageNumber, pageSize);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<CreditPaymentOrderViewModel>>(page);
-
-            return Ok(viewModel);
         }
 
         // POST: api/CreditPaymentOrder

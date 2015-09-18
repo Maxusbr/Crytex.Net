@@ -19,20 +19,20 @@ namespace Crytex.Web.Controllers.Api
             this._oparaingSystemsService = operatingSystemsService;
         }
 
-        // GET: api/OperatingSystem/5
-        public IHttpActionResult Get(int id)
-        {
-            var os = this._oparaingSystemsService.GeById(id);
-            var model = AutoMapper.Mapper.Map<OperatingSystemViewModel>(os);
-
-            return Ok(model);
-        }
-
         // GET: api/OperatingSystem
         public IHttpActionResult Get()
         {
             var systems = this._oparaingSystemsService.GetAll().ToList();
             var model = AutoMapper.Mapper.Map<List<OperatingSystem>, List<OperatingSystemViewModel>>(systems);
+
+            return Ok(model);
+        }
+
+        // GET: api/OperatingSystem/5
+        public IHttpActionResult Get(int id)
+        {
+            var os = this._oparaingSystemsService.GeById(id);
+            var model = AutoMapper.Mapper.Map<OperatingSystemViewModel>(os);
 
             return Ok(model);
         }
