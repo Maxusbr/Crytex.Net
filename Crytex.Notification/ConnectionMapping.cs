@@ -23,7 +23,7 @@ namespace Crytex.Notification
                 List<UserConnection> userConnections;
                 if (!_connections.TryGetValue(key, out userConnections))
                 {
-                    userConnections = new List<UserConnection> {new UserConnection(connectionId)};
+                    userConnections = new List<UserConnection>();
 
                     _connections.Add(key, userConnections);
                 }

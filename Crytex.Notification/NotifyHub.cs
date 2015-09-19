@@ -25,7 +25,7 @@ namespace Crytex.Notification
 
         public override Task OnConnected()
         {
-            string userId = CrytexContext.UserInfoProvider.GetUserId();
+            string userId = this.GetUserId();
 
             Connections.Add(userId, Context.ConnectionId);
 
@@ -43,13 +43,13 @@ namespace Crytex.Notification
 
         public void SendToUserNotification(Object message)
         {
-            string userId = CrytexContext.UserInfoProvider.GetUserId();
+            string userId = this.GetUserId();
             SendToUser(userId, message, "newNotification");
         }
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            string userId = CrytexContext.UserInfoProvider.GetUserId();
+            string userId = this.GetUserId();
 
             Connections.Remove(userId, Context.ConnectionId);
 
@@ -58,7 +58,7 @@ namespace Crytex.Notification
 
         public override Task OnReconnected()
         {
-            string userId = CrytexContext.UserInfoProvider.GetUserId();
+            string userId = this.GetUserId();
             var searchConnection = Connections.GetUserConnections(userId).FirstOrDefault(c=>c.ConnectionId == Context.ConnectionId);
             if (searchConnection == null)
             {
