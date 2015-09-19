@@ -57,7 +57,7 @@
     <Compile Include="Config\IExecutorTaskConfig.cs" />
     <Compile Include="TaskHandler\BaseTaskHandler.cs" />
     <Compile Include="TaskHandler\HyperV\BaseHyperVTaskHandler.cs" />
-    <Compile Include="TaskHandler\HyperV\FakeHypeVControl.cs" />
+    <Compile Include="TaskHandler\HyperV\HyperVControl.cs" />
     <Compile Include="TaskHandler\HyperV\HyperVCreateVmTaskHandler.cs" />
     <Compile Include="TaskHandler\HyperV\HyperVStandartTaskHandler.cs" />
     <Compile Include="TaskHandler\HyperV\HyperVUpdateVmTaskHandler.cs" />
@@ -81,6 +81,10 @@
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
+      <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
+      <Name>HyperVRemote</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
       <Name>Crytex.Model</Name>

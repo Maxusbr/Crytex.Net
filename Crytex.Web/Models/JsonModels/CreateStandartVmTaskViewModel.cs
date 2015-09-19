@@ -6,7 +6,7 @@ namespace Crytex.Web.Models.JsonModels
     public class CreateStandartVmTaskViewModel
     {
         [Required]
-        public int VmId { get; set; }
+        public string VmId { get; set; }
 
         [Required]
         public TypeStandartVmTask TaskType { get; set; }
