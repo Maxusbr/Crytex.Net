@@ -113,6 +113,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SnapShotVmControllerTests.cs" />
     <Compile Include="Controllers\HelpDeskRequestControllerTests.cs" />
     <Compile Include="FakeImplementations\FakeFileDescriptorRepo.cs" />
     <Compile Include="FakeImplementations\FakeSystemCenterRemoteVirtualManagerService.cs" />

@@ -50,6 +50,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<SystemCenterVirtualManager, SystemCenterVirtualManagerViewModel>();
             Mapper.CreateMap<UpdateVmTask, UpdateVmTaskViewModel>()
                 .ForMember(x => x.VmId, opt => opt.MapFrom(source => source.VmId.ToString()));
+            Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
+
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();

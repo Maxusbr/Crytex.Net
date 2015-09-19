@@ -29,6 +29,7 @@ namespace Crytex.Service
             container.RegisterType<IUserVmRepository, UserVmRepository>();
             container.RegisterType<IHyperVHostRepository, HyperVHostRepository>();
             container.RegisterType<IHyperVHostResourceRepository, HyperVHostResourceRepository>();
+            container.RegisterType<ISnapshotVmRepository, SnapshotVmRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -40,7 +41,7 @@ namespace Crytex.Service
             container.RegisterType<IPaymentService, PaymentService>();
             container.RegisterType<ITaskVmService,TaskVmService>();
             container.RegisterType<IUserVmService, UserVmService>();
-            
+            container.RegisterType<ISnapshotVmService, SnapshotVmService>();
             container.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();
             container.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
             container.RegisterType<IEmailInfoService, EmailInfoService>();
@@ -53,6 +54,8 @@ namespace Crytex.Service
 
             container.RegisterType<ISystemCenterVirtualManagerRepository, SystemCenterVirtualManagerRepository>();
             container.RegisterType<ISystemCenterVirtualManagerService, SystemCenterVirtualManagerService>();
+
+
         }
     }
 }
