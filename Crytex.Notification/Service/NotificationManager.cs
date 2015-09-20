@@ -16,12 +16,15 @@ namespace Crytex.Notification
     {
         private IEmailSender _emailSender { get; }
         private IEmailInfoService _emailInfoService { get; }
+        private ISignalRSender _signalRSender { get; }
+        
 
         public NotificationManager(IEmailSender emailSender,
-            IEmailInfoService emailInfoService)
+            IEmailInfoService emailInfoService, ISignalRSender signalRSender)
         {
             _emailSender = emailSender;
             _emailInfoService = emailInfoService;
+            _signalRSender = signalRSender;
 
         }
 

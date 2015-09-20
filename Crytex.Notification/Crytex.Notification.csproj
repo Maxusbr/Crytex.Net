@@ -119,6 +119,7 @@
   <ItemGroup>
     <Compile Include="ConnectionMapping.cs" />
     <Compile Include="INotifyHub.cs" />
+    <Compile Include="MonitorHub.cs" />
     <Compile Include="NotifyHub.cs" />
     <Compile Include="Senders\SigralRSender\AspNetSignalRSender.cs" />
     <Compile Include="Senders\SigralRSender\NetSignalRSender.cs" />
