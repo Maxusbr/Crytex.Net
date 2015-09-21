@@ -264,6 +264,7 @@
     <Compile Include="Controllers\Api\LogController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />
     <Compile Include="Controllers\Api\OperatingSystemController.cs" />
+    <Compile Include="Controllers\Api\RegionControlle.cs" />
     <Compile Include="Controllers\Api\ServerTemplateController.cs" />
     <Compile Include="Controllers\Api\SnapShotVmController.cs" />
     <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
@@ -286,6 +287,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\JsonModels\CreateStandartVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
+    <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
@@ -434,7 +436,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>3053</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:3054/</IISUrl>
+          <IISUrl>http://localhost:3055/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

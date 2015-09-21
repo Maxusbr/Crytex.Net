@@ -7,16 +7,31 @@ namespace Crytex.Data.Migrations
     {
         public override void Up()
         {
-            AlterColumn("dbo.StandartVmTasks", "VmId", c => c.Guid(nullable: false));
-            CreateIndex("dbo.StandartVmTasks", "VmId");
-            AddForeignKey("dbo.StandartVmTasks", "VmId", "dbo.UserVms", "Id", cascadeDelete: true);
+            DropForeignKey("dbo.StandartVmTasks", "VmId", "dbo.UserVms");
+            DropIndex("dbo.StandartVmTasks", new[] { "VmId" });
+            DropTable("dbo.StandartVmTasks");
+            CreateTable(
+                "dbo.StandartVmTasks",
+                c => new
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    VmId = c.Guid(nullable: false),
+                    TaskType = c.Int(nullable: false),
+                    CreatedDate = c.DateTime(nullable: false),
+                    StatusTask = c.Int(nullable: false),
+                    UserId = c.String(),
+                    Virtualization = c.Int(nullable: false),
+                })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.UserVms", t => t.VmId, cascadeDelete: true)
+                .Index(t => t.VmId);
         }
         
         public override void Down()
         {
             DropForeignKey("dbo.StandartVmTasks", "VmId", "dbo.UserVms");
             DropIndex("dbo.StandartVmTasks", new[] { "VmId" });
-            AlterColumn("dbo.StandartVmTasks", "VmId", c => c.Int(nullable: false));
+            DropTable("dbo.StandartVmTasks");
         }
     }
 }
