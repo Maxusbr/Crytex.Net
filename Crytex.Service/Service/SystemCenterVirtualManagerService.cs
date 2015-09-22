@@ -48,7 +48,7 @@ namespace Crytex.Service.Service
             manager.Host = updateManager.Host;
             manager.Name = updateManager.Name;
             manager.UserName = updateManager.UserName;
-            manager.Password = manager.Password;
+            manager.Password = updateManager.Password;
     
             this._systemCenterVirtualManagerRepo.Update(manager);
             this._unitOfWork.Commit();
