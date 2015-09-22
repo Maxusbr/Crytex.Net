@@ -265,6 +265,7 @@
     <Compile Include="Controllers\Api\MessageController.cs" />
     <Compile Include="Controllers\Api\OperatingSystemController.cs" />
     <Compile Include="Controllers\Api\ServerTemplateController.cs" />
+    <Compile Include="Controllers\Api\SnapShotVmController.cs" />
     <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
     <Compile Include="Controllers\Api\UserVmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -285,6 +286,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\JsonModels\CreateStandartVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
+    <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskViewModel.cs" />

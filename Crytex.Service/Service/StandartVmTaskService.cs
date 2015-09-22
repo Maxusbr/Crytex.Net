@@ -19,7 +19,7 @@ namespace Crytex.Service.Service
         IStandartVmTaskRepository _standartVmTaskRepository { get; }
         IUnitOfWork _unitOfWork { get; set; }
 
-        public List<StandartVmTask> GetPageByVmId(int pageSize, int pageIndex, DateTime? dateFrom, DateTime? dateTo, int vmId)
+        public List<StandartVmTask> GetPageByVmId(int pageSize, int pageIndex, DateTime? dateFrom, DateTime? dateTo, Guid vmId)
         {
             var tasks = _standartVmTaskRepository.GetPage(new Page(pageIndex, pageSize),
                 x => (x.VmId == vmId) &&
@@ -42,7 +42,7 @@ namespace Crytex.Service.Service
             return _standartVmTaskRepository.GetById(id);
         }
 
-        public StandartVmTask Create(int vmId, TypeStandartVmTask taskType, TypeVirtualization virtualization, string userId)
+        public StandartVmTask Create(Guid vmId, TypeStandartVmTask taskType, TypeVirtualization virtualization, string userId)
         {
             var task = new StandartVmTask()
             {
@@ -64,7 +64,7 @@ namespace Crytex.Service.Service
             _unitOfWork.Commit();
         }
 
-        public bool IsOwnerVm(int vmId, string userId)
+        public bool IsOwnerVm(Guid vmId, string userId)
         {
             var vm = _standartVmTaskRepository.GetById(vmId);
             return vm != null && vm.UserId == userId;

@@ -20,6 +20,7 @@ namespace Crytex.Model.Models
         Start = 0,
         Pending = 1,
         Processing = 2,
-        End = 3
+        End = 3,
+        EndWithErrors = 4
     }
 }

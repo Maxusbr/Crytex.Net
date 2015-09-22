@@ -18,5 +18,20 @@ namespace Crytex.Notification.Senders.SigralRSender
 
             context.Clients.All.notify(message);
         }
+
+        public void Sybscribe(string vmId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendVmMessage(Guid vmId, MonitorHub.StateMachine stateMachine)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Guid> GetVMs()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

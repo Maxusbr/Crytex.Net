@@ -5,6 +5,8 @@ using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity.Core;
 
 namespace Crytex.Service.Service
 {
@@ -30,12 +32,48 @@ namespace Crytex.Service.Service
             return vm;
         }
 
+        public IEnumerable<UserVm> GetVmByListId(List<Guid> listId)
+        {
+            
+            var vms = this._userVmRepo.GetMany(v => listId.Contains(v.Id));
+            if (vms == null)
+            {
+                throw new ObjectNotFoundException();
+            }
+
+            return vms;
+        }
 
         public IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId)
         {
             var page = new Page(pageNumber, pageSize);
             var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.Id);
             return list;
+        }
+
+
+        public void CreateVm(UserVm userVm)
+        {
+            this._userVmRepo.Add(userVm);
+            this._unitOfWork.Commit();
+        }
+
+
+        public void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null)
+        {
+            var userVm = this._userVmRepo.GetById(vmId);
+            
+            if (userVm == null)
+            {
+                throw new InvalidIdentifierException(string.Format("UserVm with Id = {0} doesnt exist.",vmId));
+            }
+
+            userVm.CoreCount = cpu ?? userVm.CoreCount;
+            userVm.RamCount = ram ?? userVm.RamCount;
+            userVm.HardDriveSize = hdd ?? userVm.HardDriveSize;
+
+            this._userVmRepo.Update(userVm);
+            this._unitOfWork.Commit();
         }
     }
 }

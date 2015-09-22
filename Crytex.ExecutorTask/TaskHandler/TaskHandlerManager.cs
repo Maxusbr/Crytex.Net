@@ -9,12 +9,14 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         private ITaskVmService _taskService;
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
-        private IDictionary<Type, Action<int, StatusTask>> _updateActionDict;
+        private IDictionary<Type, Action<int, StatusTask>> _updateStatusActionDict;
+        private IUserVmService _userVmService;
 
-        public TaskHandlerManager(ITaskVmService taskService)
+        public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService)
         {
             this._taskService = taskService;
-            this._updateActionDict = new Dictionary<Type, Action<int, StatusTask>>
+            this._userVmService = userVmService;
+            this._updateStatusActionDict = new Dictionary<Type, Action<int, StatusTask>>
             {
                 {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate},
                 {typeof(UpdateVmTask), this.UpdateUpdateTaskkStatusDelegate},
@@ -46,8 +48,20 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             foreach (var task in tasks)
             {
-                
-                var handler = this._handlerFactory.GetHandler(task);
+                ITaskHandler handler = null;
+                switch (task.Virtualization)
+                {
+                    case TypeVirtualization.HyperV:
+                        var hyperVHost = this.GetHyperVHostForTask(task);
+                        handler = this._handlerFactory.GetHyperVHandler(task, hyperVHost);
+                        break;
+                    case TypeVirtualization.WmWare:
+                        var vmWareHost = this.GetVmWareHostForTask(task);
+                        handler = this._handlerFactory.GetVmWareHandler(task, vmWareHost);
+                        break;
+                    default:
+                        throw new ApplicationException(string.Format("Unknown virtualization type {0}", task.Virtualization));
+                }
                 handler.ProcessingStarted += this.ProcessingStartedEventHandler;
                 handler.ProcessingFinished += this.ProcessingFinishedEventHandler;
                 switch (task.Virtualization)
@@ -62,25 +76,68 @@ namespace Crytex.ExecutorTask.TaskHandler
             }
         }
 
+        private VmWareHost GetVmWareHostForTask(BaseTask task)
+        {
+            return new VmWareHost();
+        }
+
+        private HyperVHost GetHyperVHostForTask(BaseTask task)
+        {
+            return new HyperVHost();
+        }
+
         private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult e)
         {
             var taskEntity = ((ITaskHandler)sender).TaskEntity;
-            this._updateActionDict[taskEntity.GetType()].Invoke(taskEntity.Id, StatusTask.End);
+            var taskType = taskEntity.GetType();
+            if (e.Success)
+            {
+                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End);
+            }
+            else
+            {
+                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.EndWithErrors);
+            }
+
+            if (taskType == typeof(CreateVmTask))
+            {
+                var task = (CreateVmTask)taskEntity;
+                var newVm = new UserVm
+                {
+                    Id = e.MachineGuid,
+                    CoreCount = task.Cpu,
+                    HardDriveSize = task.Hdd,
+                    Name = task.Name,
+                    RamCount = task.Ram,
+                    ServerTemplateId = task.ServerTemplateId,
+                    Status = StatusVM.Enable,
+                    UserId = task.UserId
+                };
+
+                this._userVmService.CreateVm(newVm);
+            }
+            if (taskType == typeof(UpdateVmTask))
+            {
+                var task = (UpdateVmTask)taskEntity;
+                this._userVmService.UpdateVm(task.VmId, task.Cpu, task.Hdd, task.Ram);
+            }
         }
 
         private void ProcessingStartedEventHandler(object sender, BaseTask task)
         {
-            this._updateActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing);
+            this._updateStatusActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing);
         }
 
         private void UpdateCreateTaskStatusDelegate(int id, StatusTask status)
         {
             this._taskService.UpdateTaskStatus<CreateVmTask>(id, status);
         }
+        
         private void UpdateUpdateTaskkStatusDelegate(int id, StatusTask status)
         {
             this._taskService.UpdateTaskStatus<UpdateVmTask>(id, status);
         }
+        
         private void UpdateStandartTaskStatusDelegate(int id, StatusTask status)
         {
             this._taskService.UpdateTaskStatus<StandartVmTask>(id, status);

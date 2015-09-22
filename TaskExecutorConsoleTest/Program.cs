@@ -20,7 +20,8 @@ namespace TaskExecutorConsoleTest
             var fileDescriptorRepo = new FileDescriptorRepository(dbFactory);
             var unitOfWork = new UnitOfWork(dbFactory);
             var service = new TaskVmService(unitOfWork, createRepo, upRepo, standartRepo, userVmRepository, serverTempalateRepo, fileDescriptorRepo);
-            var handlerManager = new TaskHandlerManager(service);
+            var userVmService = new UserVmService(userVmRepository, unitOfWork);
+            var handlerManager = new TaskHandlerManager(service, userVmService);
             var taskManager = new TaskManager(handlerManager);
 
             taskManager.Run();

@@ -5,9 +5,12 @@ namespace Crytex.Model.Models
 {
     public class StandartVmTask : BaseTask
     {
-        public Int32 VmId { get; set; }
+        public Guid VmId { get; set; }
         public TypeStandartVmTask TaskType { get;set; }
         public DateTime CreatedDate { get; set; }
+
+        [ForeignKey("VmId")]
+        public UserVm UserVm { get; set; }
     }
 
 

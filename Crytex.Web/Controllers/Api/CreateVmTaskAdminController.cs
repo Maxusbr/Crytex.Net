@@ -18,6 +18,15 @@ namespace Crytex.Web.Controllers.Api
         }
 
         // GET: api/CreateVmTaskAdmin
+        /// <summary>
+        /// Получение страницы задач создания
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="userId"></param>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         [HttpGet]
         public HttpResponseMessage GetPage(int pageNumber, int pageSize, string userId = null, DateTime? from = null, DateTime? to = null)
         {

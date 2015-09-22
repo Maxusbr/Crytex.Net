@@ -7,7 +7,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         protected IHyperVControl _hyperVControl;
 
         
-        protected BaseHyperVTaskHandler(BaseTask task, IHyperVControl hyperVControl) : base(task)
+        protected BaseHyperVTaskHandler(BaseTask task, IHyperVControl hyperVControl, string hostName) : base(task, hostName)
         {
             this._hyperVControl = hyperVControl;
         }
