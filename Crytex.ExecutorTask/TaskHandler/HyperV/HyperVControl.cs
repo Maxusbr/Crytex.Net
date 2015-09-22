@@ -18,9 +18,16 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         {
             this._hyperVProvider.Connect();
             var machineGuid = Guid.NewGuid();
-            var machine = this._hyperVProvider.CreateVm(machineGuid.ToString(), (uint)task.Ram * 1024);
+            var createMachineRes = this._hyperVProvider.CreateVm(machineGuid.ToString(), (uint)task.Ram * 1024);
 
-            this._hyperVProvider.ModifyProcessorVm(machine.Vm, (uint)task.Cpu);
+            if (createMachineRes.IsSuccess)
+            {
+                this._hyperVProvider.ModifyProcessorVm(createMachineRes.Vm, (uint)task.Cpu);
+            }
+            else
+            {
+                throw new CreateVmException(createMachineRes.MessageError);
+            }
 
             return machineGuid;
         }
