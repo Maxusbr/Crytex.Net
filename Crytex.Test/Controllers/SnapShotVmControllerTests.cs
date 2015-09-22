@@ -58,11 +58,11 @@ namespace Crytex.Test.Controllers
         [Test]
         public void GetResponseBadRequestWhenCallGetWithInvalidParams()
         {
-            Guid VmIdNull = Guid.Empty; //this true and for incorrect value
-            var actionResult = _snapShotVmController.Get(VmIdNull) as BadRequestErrorMessageResult;
-
-            IsNotNull(actionResult);
-            AreEqual(actionResult.Message, "Incorrect VmID");
+            string VmIdIncorrect = "ahskdjghasdkjg"; //this true and for incorrect value
+            var actionResultIncorrectId = _snapShotVmController.Get(VmIdIncorrect) as InvalidModelStateResult;
+            IsNotNull(actionResultIncorrectId);
+            AreEqual(actionResultIncorrectId.ModelState.Keys.FirstOrDefault(), "id");
+            AreEqual(actionResultIncorrectId.ModelState.Values.First().Errors.First().ErrorMessage, "Invalid Guid format");
 
 
             Guid VmID = Guid.NewGuid();
@@ -75,9 +75,9 @@ namespace Crytex.Test.Controllers
             _userInfoProvider.IsCurrentUserInRole("Support").Returns(false);
             _userVmService.GetVmById(VmID).Returns(VM);
 
-            actionResult = _snapShotVmController.Get(VmID) as BadRequestErrorMessageResult;
-            IsNotNull(actionResult);
-            AreEqual(actionResult.Message, "Are not allowed for this action");
+            var actionResultIncorrectUser = _snapShotVmController.Get(VmID.ToString()) as BadRequestErrorMessageResult;
+            IsNotNull(actionResultIncorrectUser);
+            AreEqual(actionResultIncorrectUser.Message, "Are not allowed for this action");
 
         }
 
@@ -108,7 +108,7 @@ namespace Crytex.Test.Controllers
             _snapshotVmService.GetAllByVmId(VmID).Returns(snapShotVmRequests);
 
             var actionResult =
-                _snapShotVmController.Get(VmID) as OkNegotiatedContentResult<IEnumerable<SnapshotVmViewModel>>;
+                _snapShotVmController.Get(VmID.ToString()) as OkNegotiatedContentResult<IEnumerable<SnapshotVmViewModel>>;
 
             IsNotNull(actionResult);
             var model = actionResult.Content;
@@ -127,7 +127,7 @@ namespace Crytex.Test.Controllers
             _snapshotVmService.GetAllByVmId(VmID).Returns(snapShotVmRequests);
 
             actionResult =
-                _snapShotVmController.Get(VmID) as OkNegotiatedContentResult<IEnumerable<SnapshotVmViewModel>>;
+                _snapShotVmController.Get(VmID.ToString()) as OkNegotiatedContentResult<IEnumerable<SnapshotVmViewModel>>;
 
             IsNotNull(actionResult);
             model = actionResult.Content;
@@ -136,9 +136,12 @@ namespace Crytex.Test.Controllers
 
             _snapshotVmService.Received(1).GetAllByVmId(VmID);
             _snapshotVmService.ClearReceivedCalls();
+            _userInfoProvider.IsCurrentUserInRole("Admin").Returns(false);
+
 
             ///////////////////////////////////////////////
-            _userInfoProvider.IsCurrentUserInRole("Support").Returns(false); // Support User
+            _userInfoProvider.IsCurrentUserInRole("Support").Returns(true); // Support User
+            
             VM.UserId = "AnySupportId";
 
             _userVmService.GetVmById(VmID).Returns(VM);
@@ -146,7 +149,7 @@ namespace Crytex.Test.Controllers
             _snapshotVmService.GetAllByVmId(VmID).Returns(snapShotVmRequests);
 
             actionResult =
-                _snapShotVmController.Get(VmID) as OkNegotiatedContentResult<IEnumerable<SnapshotVmViewModel>>;
+                _snapShotVmController.Get(VmID.ToString()) as OkNegotiatedContentResult<IEnumerable<SnapshotVmViewModel>>;
 
             IsNotNull(actionResult);
             model = actionResult.Content;
