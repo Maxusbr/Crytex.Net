@@ -32,12 +32,14 @@ namespace Crytex.Test.FakeImplementations
             throw new NotImplementedException();
         }
 
+
         public IEnumerable<SystemCenterVirtualManager> GetAll(bool includeHosts = true)
         {
-            throw new NotImplementedException();
+            return this.StoredManagers;
         }
 
         public IEnumerable<Model.Models.SystemCenterVirtualManager> GetAll()
+
         {
             return this.StoredManagers;
         }

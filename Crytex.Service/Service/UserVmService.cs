@@ -37,5 +37,30 @@ namespace Crytex.Service.Service
             var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.Id);
             return list;
         }
+
+
+        public void CreateVm(UserVm userVm)
+        {
+            this._userVmRepo.Add(userVm);
+            this._unitOfWork.Commit();
+        }
+
+
+        public void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null)
+        {
+            var userVm = this._userVmRepo.GetById(vmId);
+            
+            if (userVm == null)
+            {
+                throw new InvalidIdentifierException(string.Format("UserVm with Id = {0} doesnt exist.",vmId));
+            }
+
+            userVm.CoreCount = cpu ?? userVm.CoreCount;
+            userVm.RamCount = ram ?? userVm.RamCount;
+            userVm.HardDriveSize = hdd ?? userVm.HardDriveSize;
+
+            this._userVmRepo.Update(userVm);
+            this._unitOfWork.Commit();
+        }
     }
 }

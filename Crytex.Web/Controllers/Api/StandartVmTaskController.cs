@@ -19,15 +19,16 @@ namespace Crytex.Web.Controllers.Api
         IStandartVmTaskService _standartVmTaskService { get; }
 
         // GET api/<controller>
-        public IHttpActionResult Get(int pageSize = 20, int pageNumber = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string userId = null, int? vmId = null)
+        public IHttpActionResult Get(int pageSize = 20, int pageNumber = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string userId = null, string vmId = null)
         {
             List<StandartVmTask> tasks = new List<StandartVmTask>();
 
             var userInfoProvider = CrytexContext.UserInfoProvider;
             List<StandartVmTaskViewModel> model;
-            if (vmId.HasValue && (userInfoProvider.IsCurrentUserAdmin() || userInfoProvider.IsCurrentUserSupport() || _standartVmTaskService.IsOwnerVm(vmId.Value, userInfoProvider.GetUserId())))
+            Guid vmGuidId = new Guid(vmId);
+            if (userInfoProvider.IsCurrentUserAdmin() || userInfoProvider.IsCurrentUserSupport() || _standartVmTaskService.IsOwnerVm(vmGuidId, userInfoProvider.GetUserId()))
             {
-                tasks = _standartVmTaskService.GetPageByVmId(pageSize, pageNumber, dateFrom, dateTo, vmId.Value);
+                tasks = _standartVmTaskService.GetPageByVmId(pageSize, pageNumber, dateFrom, dateTo, vmGuidId);
                 model = AutoMapper.Mapper.Map<List<StandartVmTask>, List<StandartVmTaskViewModel>>(tasks);
                 return Ok(model);
             }
@@ -57,7 +58,7 @@ namespace Crytex.Web.Controllers.Api
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var task = _standartVmTaskService.Create(model.VmId, model.TaskType, model.Virtualization, User.Identity.GetUserId());
+            var task = _standartVmTaskService.Create(new Guid(model.VmId), model.TaskType, model.Virtualization, User.Identity.GetUserId());
             var location = Request.RequestUri + "/" + task.Id;
 
             return Ok(new { id = task.Id });
