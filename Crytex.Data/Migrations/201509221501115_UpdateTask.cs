@@ -2,8 +2,7 @@ namespace Crytex.Data.Migrations
 {
     using System;
     using System.Data.Entity.Migrations;
-    
-    public partial class StandartTasVmIdMigration : DbMigration
+
     public partial class UpdateTask : DbMigration
     {
         public override void Up()
@@ -15,20 +14,8 @@ namespace Crytex.Data.Migrations
             CreateIndex("dbo.StandartVmTasks", "VmId");
             AddForeignKey("dbo.StandartVmTasks", "VmId", "dbo.UserVms", "Id", cascadeDelete: true);
 
-
-
-
-
-
-
-
-
-
-
-
-
         }
-        
+
 
         public override void Down()
         {

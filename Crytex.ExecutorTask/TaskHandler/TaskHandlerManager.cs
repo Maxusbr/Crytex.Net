@@ -9,14 +9,14 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         private ITaskVmService _taskService;
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
-        private IDictionary<Type, Action<int, StatusTask>> _updateStatusActionDict;
+        private IDictionary<Type, Action<int, StatusTask, string>> _updateStatusActionDict;
         private IUserVmService _userVmService;
 
         public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService)
         {
             this._taskService = taskService;
             this._userVmService = userVmService;
-            this._updateStatusActionDict = new Dictionary<Type, Action<int, StatusTask>>
+            this._updateStatusActionDict = new Dictionary<Type, Action<int, StatusTask, string>>
             {
                 {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate},
                 {typeof(UpdateVmTask), this.UpdateUpdateTaskkStatusDelegate},
@@ -92,11 +92,11 @@ namespace Crytex.ExecutorTask.TaskHandler
             var taskType = taskEntity.GetType();
             if (e.Success)
             {
-                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End);
+                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End, null);
             }
             else
             {
-                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.EndWithErrors);
+                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.EndWithErrors, e.ErrorMessage);
             }
 
             if (taskType == typeof(CreateVmTask))
@@ -111,7 +111,8 @@ namespace Crytex.ExecutorTask.TaskHandler
                     RamCount = task.Ram,
                     ServerTemplateId = task.ServerTemplateId,
                     Status = StatusVM.Enable,
-                    UserId = task.UserId
+                    UserId = task.UserId,
+                    VurtualizationType = task.Virtualization
                 };
 
                 this._userVmService.CreateVm(newVm);
@@ -125,22 +126,22 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private void ProcessingStartedEventHandler(object sender, BaseTask task)
         {
-            this._updateStatusActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing);
+            this._updateStatusActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing, null);
         }
 
-        private void UpdateCreateTaskStatusDelegate(int id, StatusTask status)
+        private void UpdateCreateTaskStatusDelegate(int id, StatusTask status, string message)
         {
-            this._taskService.UpdateTaskStatus<CreateVmTask>(id, status);
+            this._taskService.UpdateTaskStatus<CreateVmTask>(id, status, message);
         }
-        
-        private void UpdateUpdateTaskkStatusDelegate(int id, StatusTask status)
+
+        private void UpdateUpdateTaskkStatusDelegate(int id, StatusTask status, string message)
         {
-            this._taskService.UpdateTaskStatus<UpdateVmTask>(id, status);
+            this._taskService.UpdateTaskStatus<UpdateVmTask>(id, status, message);
         }
-        
-        private void UpdateStandartTaskStatusDelegate(int id, StatusTask status)
+
+        private void UpdateStandartTaskStatusDelegate(int id, StatusTask status, string message)
         {
-            this._taskService.UpdateTaskStatus<StandartVmTask>(id, status);
+            this._taskService.UpdateTaskStatus<StandartVmTask>(id, status, message);
         }
     }
 }

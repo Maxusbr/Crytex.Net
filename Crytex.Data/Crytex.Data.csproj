@@ -120,25 +120,25 @@
     <Compile Include="Migrations\201508300857423_ChangedStandartVmTaskMigration.Designer.cs">
       <DependentUpon>201508300857423_ChangedStandartVmTaskMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.cs" />
-    <Compile Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.Designer.cs">
-      <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201509071127595_UpdateVmTaskIdMigration.cs" />
     <Compile Include="Migrations\201509071127595_UpdateVmTaskIdMigration.Designer.cs">
       <DependentUpon>201509071127595_UpdateVmTaskIdMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.cs" />
+    <Compile Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.Designer.cs">
+      <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201509161251421_SnapshotVm.cs" />
     <Compile Include="Migrations\201509161251421_SnapshotVm.Designer.cs">
       <DependentUpon>201509161251421_SnapshotVm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509211022173_Region.cs" />
-    <Compile Include="Migrations\201509211022173_Region.Designer.cs">
-      <DependentUpon>201509211022173_Region.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201509221501115_UpdateTask.cs" />
     <Compile Include="Migrations\201509221501115_UpdateTask.Designer.cs">
       <DependentUpon>201509221501115_UpdateTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509221805127_Regin_Snapshot_Fix.cs" />
+    <Compile Include="Migrations\201509221805127_Regin_Snapshot_Fix.Designer.cs">
+      <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -216,20 +216,20 @@
     <EmbeddedResource Include="Migrations\201508300857423_ChangedStandartVmTaskMigration.resx">
       <DependentUpon>201508300857423_ChangedStandartVmTaskMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.resx">
-      <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509071127595_UpdateVmTaskIdMigration.resx">
       <DependentUpon>201509071127595_UpdateVmTaskIdMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.resx">
+      <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509161251421_SnapshotVm.resx">
       <DependentUpon>201509161251421_SnapshotVm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509211022173_Region.resx">
-      <DependentUpon>201509211022173_Region.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509221501115_UpdateTask.resx">
       <DependentUpon>201509221501115_UpdateTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509221805127_Regin_Snapshot_Fix.resx">
+      <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

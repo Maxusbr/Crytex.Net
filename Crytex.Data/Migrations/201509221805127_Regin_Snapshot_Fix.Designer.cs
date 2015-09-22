@@ -7,18 +7,18 @@ namespace Crytex.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class Region : IMigrationMetadata
+    public sealed partial class Regin_Snapshot_Fix : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Region));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Regin_Snapshot_Fix));
         
         string IMigrationMetadata.Id
         {
-            get { return "201509211022173_Region"; }
+            get { return "201509221805127_Regin_Snapshot_Fix"; }
         }
         
         string IMigrationMetadata.Source
         {
-            get { return Resources.GetString("Source"); }
+            get { return null; }
         }
         
         string IMigrationMetadata.Target

@@ -10,5 +10,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         public bool Success { get; set; }
 
         public Guid MachineGuid { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 }

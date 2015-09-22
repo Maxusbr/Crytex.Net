@@ -7,6 +7,7 @@ namespace Crytex.Model.Models
         public StatusTask StatusTask { get; set; }
         public String UserId { get; set; }
         public TypeVirtualization Virtualization { get; set; }
+        public String ErrorMessage { get; set; }
     }
 
     public enum TypeVirtualization
