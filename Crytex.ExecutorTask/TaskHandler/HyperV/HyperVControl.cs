@@ -1,7 +1,6 @@
 ﻿using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using HyperVRemote;
-using HyperVRemote.Source.Interface;
 using System;
 using System.Collections.Generic;
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
@@ -19,14 +18,9 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         {
             this._hyperVProvider.Connect();
             var machineGuid = Guid.NewGuid();
-            var machine = this._hyperVProvider.CreateMachine(machineGuid.ToString());
-            var machineSettings = new List<IMachineSetting>()
-            {
-                new MemoryMachineSetting(machine) { MinRam = (ulong)task.Ram },
-                new ProcessorMachineSetting(machine) { NumberOfVirtualProcessors = (ulong)task.Cpu}
+            var machine = this._hyperVProvider.CreateVm(machineGuid.ToString(), (uint)task.Ram * 1024);
 
-            };
-            this._hyperVProvider.ModifyMachine(machine, machineSettings);
+            this._hyperVProvider.ModifyProcessorVm(machine.Vm, (uint)task.Cpu);
 
             return machineGuid;
         }
@@ -37,14 +31,10 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             this._hyperVProvider.Connect();
             if (this._hyperVProvider.IsVmExist(updateVmTask.VmId.ToString()))
             {
-                var machine = this._hyperVProvider.GetMachineByName(updateVmTask.VmId.ToString());
-                var machineSettings = new List<IMachineSetting>()
-                {
-                    new MemoryMachineSetting(machine) { MinRam = (ulong)updateVmTask.Ram },
-                    new ProcessorMachineSetting(machine) { NumberOfVirtualProcessors = (ulong)updateVmTask.Cpu}
-
-                };
-                this._hyperVProvider.ModifyMachine(machine, machineSettings);
+                var machine = this._hyperVProvider.GetVmByName(updateVmTask.VmId.ToString());
+                var ramMb = (uint)updateVmTask.Ram * 1024;
+                this._hyperVProvider.ModifyMemoryVm(machine, false, ramMb, ramMb, ramMb);
+                this._hyperVProvider.ModifyProcessorVm(machine, (uint)updateVmTask.Cpu);
             }
             else
             {
@@ -56,26 +46,37 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 
         public void StartVm(string machineName)
         {
-            this.StandartOperationInner(machineName, this._hyperVProvider.Start);
+            this.StandartOperationInner(machineName, TypeStandartVmTask.Start);
         }
 
         public void StopVm(string machineName)
         {
-            this.StandartOperationInner(machineName, this._hyperVProvider.Stop);
+            this.StandartOperationInner(machineName, TypeStandartVmTask.Stop);
         }
 
         public void RemoveVm(string machineName)
         {
-            this.StandartOperationInner(machineName, this._hyperVProvider.DeleteMachine);
+            this.StandartOperationInner(machineName, TypeStandartVmTask.Remove);
         }
 
-        private void StandartOperationInner(string machineName, Action<IHyperVMachine> action)
+        private void StandartOperationInner(string machineName, TypeStandartVmTask type)
         {
             this._hyperVProvider.Connect();
             if (this._hyperVProvider.IsVmExist(machineName))
             {
-                var machine = this._hyperVProvider.GetMachineByName(machineName);
-                action.Invoke(machine);
+                var machine = this._hyperVProvider.GetVmByName(machineName);
+                switch (type)
+                {
+                    case TypeStandartVmTask.Start:
+                        this._hyperVProvider.Start(machine);
+                        break;
+                    case TypeStandartVmTask.Stop:
+                        this._hyperVProvider.Stop(machine);
+                        break;
+                    case TypeStandartVmTask.Remove:
+                        this._hyperVProvider.RemoveVm(machine);
+                        break;
+                }
             }
             else
             {
