@@ -7,13 +7,13 @@ namespace Crytex.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class UserVmVirtualizationTypeMigration : IMigrationMetadata
+    public sealed partial class Regin_Snapshot_Fix : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UserVmVirtualizationTypeMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Regin_Snapshot_Fix));
         
         string IMigrationMetadata.Id
         {
-            get { return "201509221237163_UserVmVirtualizationTypeMigration"; }
+            get { return "201509221805127_Regin_Snapshot_Fix"; }
         }
         
         string IMigrationMetadata.Source
