@@ -7,13 +7,13 @@ namespace Crytex.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class StandartTasVmIdMigration : IMigrationMetadata
+    public sealed partial class UpdateTask : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(StandartTasVmIdMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdateTask));
         
         string IMigrationMetadata.Id
         {
-            get { return "201509160859095_StandartTasVmIdMigration"; }
+            get { return "201509221501115_UpdateTask"; }
         }
         
         string IMigrationMetadata.Source
