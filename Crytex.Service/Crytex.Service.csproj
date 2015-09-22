@@ -90,6 +90,7 @@
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
+    <Compile Include="IService\IRegionService.cs" />
     <Compile Include="IService\ISnapshotVmService.cs" />
     <Compile Include="IService\IMessageService.cs" />
     <Compile Include="IService\IEmailInfoService.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Service\FileService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\LogService.cs" />
+    <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\SnapshotVmService.cs" />
     <Compile Include="Service\MessageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

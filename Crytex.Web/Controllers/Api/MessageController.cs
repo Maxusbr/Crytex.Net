@@ -17,15 +17,16 @@ namespace Crytex.Web.Controllers.Api
         }
 
         // GET: api/Message
-        public IEnumerable<MessageViewModel> Get()
+        public IHttpActionResult Get()
         {
-            return Mapper.Map<IEnumerable<Message>, IEnumerable<MessageViewModel>>(_messageService.GetAll()); 
+            var viewModel = Mapper.Map<IEnumerable<Message>, IEnumerable<MessageViewModel>>(_messageService.GetAll());
+            return Ok(viewModel);
         }
 
         // GET: api/Message/5
-        public string Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return "value";
+            return Ok("value");
         }
 
         // POST: api/Message

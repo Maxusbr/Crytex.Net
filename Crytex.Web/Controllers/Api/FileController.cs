@@ -21,8 +21,7 @@ namespace Crytex.Web.Controllers.Api
             this._fileService = fileService;
         }
 
-        [HttpPost]
-        public async Task<HttpResponseMessage> Upload()
+        public async Task<IHttpActionResult> Post()
         {
             // Check if the request contains multipart/form-data.
             if (!Request.Content.IsMimeMultipartContent())
@@ -36,7 +35,7 @@ namespace Crytex.Web.Controllers.Api
             await Request.Content.ReadAsMultipartAsync(provider);
             if (provider.FormData.Get("fileType") == null)
             {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "FileType is required");
+                return BadRequest("FileType is required");
             }
 
             FileType fileType = (FileType)Enum.Parse(typeof(FileType), provider.FormData.Get("fileType"));
@@ -62,12 +61,12 @@ namespace Crytex.Web.Controllers.Api
                 }
 
                 File.Delete(file.LocalFileName);
-                return Request.CreateResponse(HttpStatusCode.OK, new { id = descriptor.Id });
+
+                return Ok(new { id = descriptor.Id });
             }
-            else
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "No files to upload");
-            }
+
+            return BadRequest("No files to upload");
+
         }
 
         private string GetSavePath(FileType fType)

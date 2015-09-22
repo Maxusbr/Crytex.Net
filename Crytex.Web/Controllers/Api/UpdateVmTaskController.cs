@@ -11,6 +11,7 @@ using Crytex.Model.Exceptions;
 
 namespace Crytex.Web.Controllers.Api
 {
+    [Authorize]
     public class UpdateVmTaskController : CrytexApiController
     {
         private ITaskVmService _taskService;
@@ -19,33 +20,26 @@ namespace Crytex.Web.Controllers.Api
             this._taskService = taskService;
         }
 
-        /// <summary>
-        /// Метод создания задачи обновления виртуальной машины
-        /// </summary>
-        /// <param name="model">Параметры создания задачи</param>
-        /// <returns></returns>
-        [Authorize]
-        [HttpPost]        
-        public IHttpActionResult Post(UpdateVmTaskViewModel model)
+        public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
         {
-            if (this.ModelState.IsValid)
+            if (userId == null)
             {
-                var task = AutoMapper.Mapper.Map<UpdateVmTask>(model);
-                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-                UpdateVmTask createdTask;
-                if(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
-                    this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support"))
-                {
-                    createdTask = this._taskService.CreateUpdateVmTask(task);
-                }
-                else
-                {
-                    createdTask = this._taskService.CreateUpdateVmTask(task, userId);
-                }
-                return Ok(new { id = createdTask.Id });
+                userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            }
+            else if (!(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
+                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
+            {
+                throw new SecurityException("Only Admin and Support user can acces other user UpdateVmTask info");
+            }
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                return BadRequest("PageNumber and PageSize must be grater than 1");
             }
 
-            return BadRequest(this.ModelState);
+            var page = this._taskService.GetUpdateVmTasksForUser(pageNumber, pageSize, userId);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<UpdateVmTaskViewModel>>(page);
+
+            return Ok(viewModel);
         }
 
         /// <summary>
@@ -53,8 +47,6 @@ namespace Crytex.Web.Controllers.Api
         /// </summary>
         /// <param name="id">Id задачи</param>
         /// <returns></returns>
-        [Authorize]
-        [HttpGet]
         public IHttpActionResult Get(int id)
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
@@ -69,32 +61,36 @@ namespace Crytex.Web.Controllers.Api
                 task = this._taskService.GetUpdateTaskById(id, userId);
             }
             var model = AutoMapper.Mapper.Map<UpdateVmTaskViewModel>(task);
+
             return Ok(model);
         }
 
-        [Authorize]
-        [HttpGet]
-        public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
+        /// <summary>
+        /// Метод создания задачи обновления виртуальной машины
+        /// </summary>
+        /// <param name="model">Параметры создания задачи</param>
+        /// <returns></returns>    
+        public IHttpActionResult Post([FromBody]UpdateVmTaskViewModel model)
         {
-            if (userId == null)
+            if (!this.ModelState.IsValid)
             {
-                userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            }
-            else if (!(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
-                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
-            {
-                throw new SecurityException("Only Admin and Support user can acces other user UpdateVmTask info");
-            }
-            if (pageNumber <= 0 || pageSize <= 0)
-            {
-                this.ModelState.AddModelError("", "PageNumber and PageSize must be grater than 1");
                 return BadRequest(this.ModelState);
             }
 
-            var page = this._taskService.GetUpdateVmTasksForUser(pageNumber, pageSize, userId);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<UpdateVmTaskViewModel>>(page);
-            
-            return Ok(viewModel);
+            var task = AutoMapper.Mapper.Map<UpdateVmTask>(model);
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            UpdateVmTask createdTask;
+            if (this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
+                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support"))
+            {
+                createdTask = this._taskService.CreateUpdateVmTask(task);
+            }
+            else
+            {
+                createdTask = this._taskService.CreateUpdateVmTask(task, userId);
+            }
+
+            return Ok(new { id = createdTask.Id });
         }
     }
 }

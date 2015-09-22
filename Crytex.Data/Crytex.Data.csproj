@@ -66,6 +66,7 @@
     <Compile Include="IRepository\IUpdateVmTaskRepository.cs" />
     <Compile Include="IRepository\IStandartVmTaskRepository.cs" />
     <Compile Include="IRepository\IUserInfoRepository.cs" />
+    <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="Migrations\201505211152138_Init.cs" />
     <Compile Include="Migrations\201505211152138_Init.Designer.cs">
@@ -127,13 +128,13 @@
     <Compile Include="Migrations\201509071127595_UpdateVmTaskIdMigration.Designer.cs">
       <DependentUpon>201509071127595_UpdateVmTaskIdMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509160859095_StandartTasVmIdMigration.cs" />
-    <Compile Include="Migrations\201509160859095_StandartTasVmIdMigration.Designer.cs">
-      <DependentUpon>201509160859095_StandartTasVmIdMigration.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201509161251421_SnapshotVm.cs" />
     <Compile Include="Migrations\201509161251421_SnapshotVm.Designer.cs">
       <DependentUpon>201509161251421_SnapshotVm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509211022173_Region.cs" />
+    <Compile Include="Migrations\201509211022173_Region.Designer.cs">
+      <DependentUpon>201509211022173_Region.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201509221237163_UserVmVirtualizationTypeMigration.cs" />
     <Compile Include="Migrations\201509221237163_UserVmVirtualizationTypeMigration.Designer.cs">
@@ -142,6 +143,10 @@
     <Compile Include="Migrations\201509221317002_BaseTaskErrorMessageMigration.cs" />
     <Compile Include="Migrations\201509221317002_BaseTaskErrorMessageMigration.Designer.cs">
       <DependentUpon>201509221317002_BaseTaskErrorMessageMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201509221501115_UpdateTask.cs" />
+    <Compile Include="Migrations\201509221501115_UpdateTask.Designer.cs">
+      <DependentUpon>201509221501115_UpdateTask.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -163,6 +168,7 @@
     <Compile Include="Repository\StandartVmTaskRepository.cs" />
     <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />
     <Compile Include="Repository\UpdateTaskVmRepository.cs" />
+    <Compile Include="Repository\RegionRepository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
@@ -224,17 +230,20 @@
     <EmbeddedResource Include="Migrations\201509071127595_UpdateVmTaskIdMigration.resx">
       <DependentUpon>201509071127595_UpdateVmTaskIdMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509160859095_StandartTasVmIdMigration.resx">
-      <DependentUpon>201509160859095_StandartTasVmIdMigration.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509161251421_SnapshotVm.resx">
       <DependentUpon>201509161251421_SnapshotVm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509211022173_Region.resx">
+      <DependentUpon>201509211022173_Region.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509221237163_UserVmVirtualizationTypeMigration.resx">
       <DependentUpon>201509221237163_UserVmVirtualizationTypeMigration.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509221317002_BaseTaskErrorMessageMigration.resx">
       <DependentUpon>201509221317002_BaseTaskErrorMessageMigration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509221501115_UpdateTask.resx">
+      <DependentUpon>201509221501115_UpdateTask.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
