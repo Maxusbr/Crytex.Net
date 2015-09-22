@@ -28,7 +28,7 @@ namespace Crytex.Web.Controllers.Api
         /// <param name="to"></param>
         /// <returns></returns>
         [HttpGet]
-        public HttpResponseMessage GetPage(int pageNumber, int pageSize, string userId = null, DateTime? from = null, DateTime? to = null)
+        public IHttpActionResult GetPage(int pageNumber, int pageSize, string userId = null, DateTime? from = null, DateTime? to = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {

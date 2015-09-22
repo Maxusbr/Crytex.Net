@@ -8,6 +8,7 @@ namespace Crytex.Web.Models.JsonModels
 {
     public class SystemCenterVirtualManagerViewModel
     {
+
         [Required]
         public string Host { get; set; }
         [Required]

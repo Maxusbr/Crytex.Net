@@ -35,6 +35,25 @@ namespace Crytex.Service.Service
             return manager;
         }
 
+        public void Update(String id,SystemCenterVirtualManager updateManager)
+        {
+            var guid = new Guid(id);
+            var manager = this._systemCenterVirtualManagerRepo.GetById(guid);
+
+            if (manager == null)
+            {
+                throw new InvalidIdentifierException(string.Format("UpdateManager width Id={0} doesn't exists", guid));
+            }
+
+            manager.Host = updateManager.Host;
+            manager.Name = updateManager.Name;
+            manager.UserName = updateManager.UserName;
+            manager.Password = updateManager.Password;
+    
+            this._systemCenterVirtualManagerRepo.Update(manager);
+            this._unitOfWork.Commit();
+        }
+
 
         public SystemCenterVirtualManager GetById(string id)
         {
@@ -97,9 +116,12 @@ namespace Crytex.Service.Service
             return managers;
         }
 
+ 
+
 
         public void UpdateHyperVHost(Guid guid, HyperVHost host)
         {
+
             var hostToUpdate = this._hyperVHostRepo.GetById(guid);
 
             if (hostToUpdate == null)
