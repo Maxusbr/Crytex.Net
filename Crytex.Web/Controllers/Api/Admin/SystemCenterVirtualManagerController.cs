@@ -61,6 +61,25 @@ namespace Crytex.Web.Controllers.Api.Admin
             return Created(Url.Link("DefaultApi", new { controller = "SystemCenterVirtualManager", id = newManager.Id.ToString() }), new { id = newManager.Id.ToString() });
 
             
+
+        }
+
+        /// <summary>
+        /// Обновление менеджера
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IHttpActionResult Put(string id, [FromBody]SystemCenterVirtualManagerViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var updatedTemplate = AutoMapper.Mapper.Map<SystemCenterVirtualManager>(model);
+            this._managerService.Update(id, updatedTemplate);
+
+            return Ok();
         }
 
         /// <summary>
