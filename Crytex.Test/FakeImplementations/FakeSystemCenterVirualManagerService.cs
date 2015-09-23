@@ -88,5 +88,11 @@ namespace Crytex.Test.FakeImplementations
             
             return resource;
         }
+
+
+        public void Update(string id, SystemCenterVirtualManager updateManager)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
