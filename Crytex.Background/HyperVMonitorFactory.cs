@@ -11,7 +11,7 @@ namespace Crytex.Background
 {
     class HyperVMonitorFactory : IHyperVMonitorFactory
     {
-        public IHyperVProvider CreateHyperVProvider(BaseTask task, HyperVHost host)
+        public IHyperVProvider CreateHyperVProvider(HyperVHost host)
         {
             var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host, "testNameSpace");
             var hyperVProvider = new HyperVProvider(configuration);

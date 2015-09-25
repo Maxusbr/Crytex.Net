@@ -29,6 +29,11 @@ namespace Crytex.Notification
             _signalRSender = signalRSender;
         }
 
+        public void SendToUserNotification(string userId, Object message)
+        {
+            _signalRSender.SendToUserNotification(userId, message);
+        }
+
         public void Sybscribe(string vmId)
         {
             _signalRSender.Sybscribe(vmId);

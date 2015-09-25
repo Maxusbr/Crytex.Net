@@ -10,6 +10,6 @@ namespace Crytex.Background
 {
     public interface IHyperVMonitorFactory
     {
-        IHyperVProvider CreateHyperVProvider(BaseTask task, HyperVHost host);
+        IHyperVProvider CreateHyperVProvider(HyperVHost host);
     }
 }

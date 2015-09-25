@@ -34,7 +34,7 @@ namespace Crytex.Service.Service
 
         public IEnumerable<UserVm> GetAllVmsHyperV()
         {
-            return _userVmRepo.GetAll();
+            return _userVmRepo.GetAll(x=>x.HyperVHost);
         }
 
         public IEnumerable<UserVm> GetVmByListId(List<Guid> listId)

@@ -47,6 +47,11 @@ namespace Crytex.Notification
             SendToUser(userId, message, "newNotification");
         }
 
+        public void SendToUserNotification(string userId, Object message)
+        {
+            SendToUser(userId, message, "newNotification");
+        }
+
         public override Task OnDisconnected(bool stopCalled)
         {
             string userId = this.GetUserId();

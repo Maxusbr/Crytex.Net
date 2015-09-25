@@ -5,6 +5,7 @@ using Microsoft.Practices.Unity;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Data.Repository;
+using Crytex.Notification.Senders.SigralRSender;
 using Crytex.Service.IService;
 using Crytex.Service.Service;
 
@@ -29,7 +30,7 @@ namespace Crytex.Background
                 unityContainer.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
                 unityContainer.RegisterType<IEmailInfoService, EmailInfoService>();
                 unityContainer.RegisterType<IEmailTemplateService, EmailTemplateService>();
-
+                unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
             };
         }
 

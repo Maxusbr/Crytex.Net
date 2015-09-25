@@ -11,5 +11,7 @@ namespace Crytex.Notification
         void Sybscribe(string vmId);
         void SendVmMessage(Guid vmId, StateMachine stateMachine);
         List<Guid> GetVMs();
+        void SendToUserNotification(Object message);
+        void SendToUserNotification(string userId, Object message);
     }
 }

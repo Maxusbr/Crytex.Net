@@ -69,5 +69,19 @@ namespace Crytex.Notification.Senders.SigralRSender
         {
             throw new NotImplementedException();
         }
+
+        public void SendToUserNotification(object message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendToUserNotification(string userId, object message)
+        {
+            Lazy<IHubProxy> hubProxy;
+            if (_hubProxy.TryGetValue(HubNames.NotifyHub, out hubProxy))
+            {
+                hubProxy.Value.Invoke("SendToUserNotification", userId, message);
+            }
+        }
     }
 }

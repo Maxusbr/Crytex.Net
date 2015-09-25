@@ -2,6 +2,7 @@
 using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
+using Crytex.Notification;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -11,11 +12,13 @@ namespace Crytex.ExecutorTask.TaskHandler
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
         private IDictionary<Type, Action<int, StatusTask, string>> _updateStatusActionDict;
         private IUserVmService _userVmService;
+        private INotificationManager _notificationManager;
 
-        public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService)
+        public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService, INotificationManager notificationManager)
         {
             this._taskService = taskService;
             this._userVmService = userVmService;
+            this._notificationManager = notificationManager;
             this._updateStatusActionDict = new Dictionary<Type, Action<int, StatusTask, string>>
             {
                 {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate},
@@ -93,10 +96,12 @@ namespace Crytex.ExecutorTask.TaskHandler
             if (e.Success)
             {
                 this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End, null);
+                this._notificationManager.SendToUserNotification(e.TaskEntity.UserId, e.TaskEntity);
             }
             else
             {
                 this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.EndWithErrors, e.ErrorMessage);
+                this._notificationManager.SendToUserNotification(e.TaskEntity.UserId, e.TaskEntity);
             }
 
             if (taskType == typeof(CreateVmTask))

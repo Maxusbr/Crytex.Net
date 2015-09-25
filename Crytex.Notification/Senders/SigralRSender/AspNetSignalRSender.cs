@@ -34,5 +34,15 @@ namespace Crytex.Notification.Senders.SigralRSender
         {
             throw new NotImplementedException();
         }
+
+        public void SendToUserNotification(object message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SendToUserNotification(string userId, object message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
