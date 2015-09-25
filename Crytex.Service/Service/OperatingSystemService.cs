@@ -84,7 +84,7 @@ namespace Crytex.Service.Service
             }
 
             os.ImageFileId = updatedOs.ImageFileId;
-            os.LoaderFileId = updatedOs.LoaderFileId;
+            os.ServerTemplateName = updatedOs.ServerTemplateName;
             os.Name = updatedOs.Name;
             os.Description = updatedOs.Description;
 

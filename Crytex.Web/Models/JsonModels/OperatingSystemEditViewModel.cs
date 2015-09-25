@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -8,7 +9,7 @@ namespace Crytex.Web.Models.JsonModels
         public string Name { get; set; }
         public string Description { get; set; }
         [Required]
-        public int? LoaderFileId { get; set; }
+        public String ServerTemplateName { get; set; }
         [Required]
         public int? ImageFileId { get; set; }
 
