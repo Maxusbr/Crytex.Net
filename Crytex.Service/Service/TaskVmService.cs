@@ -121,11 +121,12 @@ namespace Crytex.Service.Service
             throw new Exception("This task type isn't mapped on any repo");
         }
 
-        public void UpdateTaskStatus<T>(int id, StatusTask newStatus) where T : BaseTask
+        public void UpdateTaskStatus<T>(int id, StatusTask newStatus, string message) where T : BaseTask
         {
             var repo = this.GerRepoByTaskType<T>();
             var taskToUpdate = repo.GetById(id);
             taskToUpdate.StatusTask = newStatus;
+            taskToUpdate.ErrorMessage = message;
             repo.Update(taskToUpdate);
             this._unitOfWork.Commit();
         }

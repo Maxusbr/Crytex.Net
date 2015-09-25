@@ -19,48 +19,43 @@ namespace Crytex.Web.Controllers.Api
         }
 
         // GET: api/HelpDeskRequestComment/5
-        [HttpGet]
-        public IEnumerable<HelpDeskRequestCommentViewModel> GetAllByRequestId(int id)
+        public IHttpActionResult Get(int id)
         {
             var comments = this._helpDeskRequestService.GetCommentsByRequestId(id).ToList();
             var model = AutoMapper.Mapper.Map<List<HelpDeskRequestComment>, List<HelpDeskRequestCommentViewModel>>(comments);
 
-            return model;
+            return Ok(model);
         }
 
         // POST: api/HelpDeskRequestComment/id
-        [HttpPost]
-        public HttpResponseMessage Create(int id, HelpDeskRequestCommentViewModel model)
+        public IHttpActionResult Post(int id, [FromBody]HelpDeskRequestCommentViewModel model)
         {
-            if(this.ModelState.IsValid)
+            if(!this.ModelState.IsValid)
             {
-                var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-                var newComment = this._helpDeskRequestService.CreateComment(id, model.Comment, userId);
-                return Request.CreateResponse(HttpStatusCode.Created, new { id = newComment.Id});
+                BadRequest(ModelState);
             }
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            var newComment = this._helpDeskRequestService.CreateComment(id, model.Comment, userId);
 
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            return Ok(new { id = newComment.Id });
         }
 
         // PUT: api/HelpDeskRequestComment/id
-        [HttpPut]
-        public HttpResponseMessage Update(int id, HelpDeskRequestCommentViewModel model)
+        public IHttpActionResult Put(int id, [FromBody]HelpDeskRequestCommentViewModel model)
         {
-            if(this.ModelState.IsValid)
+            if(!this.ModelState.IsValid)
             {
-                this._helpDeskRequestService.UpdateComment(id, model.Comment);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                BadRequest(ModelState);
             }
-
-            return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            this._helpDeskRequestService.UpdateComment(id, model.Comment);
+            return Ok();
         }
 
         // DELETE: api/HelpDeskRequestComment/5
-        [HttpDelete]
-        public HttpResponseMessage Delete(int id)
+        public IHttpActionResult Delete(int id)
         {
             this._helpDeskRequestService.DeleteCommentById(id);
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Ok();
         }
     }
 }

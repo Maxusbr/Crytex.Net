@@ -23,7 +23,7 @@ namespace Crytex.Web.Controllers.Api.Admin
             if (pageIndex <= 0 || pageSize <= 0)
                 return BadRequest("PageSize and PageIndex must be positive.");
 
-            var  users = _applicationUserService.GetPage(pageSize, pageIndex, userName,email);
+            var users = _applicationUserService.GetPage(pageSize, pageIndex, userName, email);
             var model = AutoMapper.Mapper.Map<List<ApplicationUser>, List<ApplicationUserViewModel>>(users);
             return Ok(model);
         }
@@ -44,26 +44,23 @@ namespace Crytex.Web.Controllers.Api.Admin
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        [HttpPost]
-        public IHttpActionResult Post(ApplicationUserViewModel model)
+        public IHttpActionResult Post([FromBody]ApplicationUserViewModel model)
         {
             if (model.ValidateForCreationScenario() && this.ModelState.IsValid)
             {
-                var newUser = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-
-                var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
-                if (creationResult.Succeeded)
-                {
-                    return Created(Url.Link("DefaultApi", new { controller = "User", id = newUser.Id }), new { id = newUser.Id });
-                }
-                else
-                {
-                    AddErrors(creationResult);
-                    return BadRequest(this.ModelState);
-                }
+                return BadRequest("Some params are empty. UserName, Password and Email are required");
             }
 
-            return BadRequest("Some params are empty. UserName, Password and Email are required");
+            var newUser = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+
+            var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
+            if (!creationResult.Succeeded)
+            {
+                AddErrors(creationResult);
+                return BadRequest(this.ModelState);
+            }
+
+            return Created(Url.Link("DefaultApi", new { controller = "User", id = newUser.Id }), new { id = newUser.Id });
         }
 
         /// <summary>
@@ -73,54 +70,45 @@ namespace Crytex.Web.Controllers.Api.Admin
         [HttpPut]
         public IHttpActionResult Put(string id,ApplicationUserViewModel model)
         {
-            if (model.ValidateForEditingScenario() && this.ModelState.IsValid)
+            if (!(model.ValidateForEditingScenario() && this.ModelState.IsValid))
             {
-                // If password is set - update password using UserManager
-                if (!string.IsNullOrEmpty(model.Password))
-                {
-                    this.UserManager.RemovePassword(id);
-                    var editResult = this.UserManager.AddPassword(id, model.Password);
-                    
-                    if(!editResult.Succeeded)
-                    {
-                        AddErrors(editResult);
-                        return BadRequest(this.ModelState);
-                    }
-                }
+                return BadRequest("Some params are empty. UserName or Password or Email are required");
+            }
+            // If password is set - update password using UserManager
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                this.UserManager.RemovePassword(id);
+                var editResult = this.UserManager.AddPassword(id, model.Password);
 
-                // If UserName or Email are set - update them via UserService
-                if (!(string.IsNullOrEmpty(model.UserName) && string.IsNullOrEmpty(model.Email)))
+                if (!editResult.Succeeded)
                 {
-                    var user = this.UserManager.FindById(id);
-                    if (!string.IsNullOrEmpty(model.UserName))
-                    {
-                        user.UserName = model.UserName;
-                    }
-                    if (!string.IsNullOrEmpty(model.Email))
-                    {
-                        user.Email = model.Email;
-                    }
-                    var updateResult = this.UserManager.Update(user);
-                    
-                    if (!updateResult.Succeeded)
-                    {
-                        AddErrors(updateResult);
-                        return BadRequest(this.ModelState);
-                    }
+                    AddErrors(editResult);
+                    return BadRequest(this.ModelState);
                 }
-
-                return Ok();
             }
 
-            return BadRequest("Some params are empty. UserName or Password or Email are required");
-        }
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
+            // If UserName or Email are set - update them via UserService
+            if (!(string.IsNullOrEmpty(model.UserName) && string.IsNullOrEmpty(model.Email)))
             {
-                ModelState.AddModelError("", error);
+                var user = this.UserManager.FindById(id);
+                if (!string.IsNullOrEmpty(model.UserName))
+                {
+                    user.UserName = model.UserName;
+                }
+                if (!string.IsNullOrEmpty(model.Email))
+                {
+                    user.Email = model.Email;
+                }
+                var updateResult = this.UserManager.Update(user);
+
+                if (!updateResult.Succeeded)
+                {
+                    AddErrors(updateResult);
+                    return BadRequest(this.ModelState);
+                }
             }
+
+            return Ok();
         }
 
         /// <summary>
@@ -128,18 +116,23 @@ namespace Crytex.Web.Controllers.Api.Admin
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
         public IHttpActionResult Delete(string id)
         {
             var user = this.UserManager.FindById(id);
-            if(user != null)
-            {
-                this.UserManager.Delete(user);
-                return Ok();
-            }
-            else
+            if(user == null)
             {
                 return NotFound();
+            }
+            this.UserManager.Delete(user);
+
+            return Ok();
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error);
             }
         }
     }

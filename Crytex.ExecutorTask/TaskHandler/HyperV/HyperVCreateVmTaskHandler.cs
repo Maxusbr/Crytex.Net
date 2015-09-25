@@ -1,4 +1,5 @@
-﻿using Crytex.Model.Models;
+﻿using Crytex.Model.Exceptions;
+using Crytex.Model.Models;
 using System;
 
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
@@ -18,9 +19,10 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
                 taskExecutionResult.Success = true;
                 taskExecutionResult.MachineGuid = machineGuid;
             }
-            catch
+            catch(CreateVmException ex)
             {
                 taskExecutionResult.Success = false;
+                taskExecutionResult.ErrorMessage = ex.Message;
             }
 
             return taskExecutionResult;

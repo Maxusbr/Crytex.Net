@@ -11,6 +11,7 @@ namespace Crytex.Service.IService
     {
         SystemCenterVirtualManager Create(SystemCenterVirtualManager manager);
 
+        void Update(String id, SystemCenterVirtualManager updateManager);
         SystemCenterVirtualManager GetById(string id);
 
         void Delete(string id);

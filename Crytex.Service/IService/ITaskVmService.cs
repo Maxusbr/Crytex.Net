@@ -22,7 +22,7 @@ namespace Crytex.Service.IService
 
         IEnumerable<StandartVmTask> GetPendingStandartTasks();
 
-        void UpdateTaskStatus<T>(int id, StatusTask newStatus) where T : BaseTask;
+        void UpdateTaskStatus<T>(int id, StatusTask newStatu, string message) where T : BaseTask;
 
         CreateVmTask GetCreateVmTaskById(int id);
 
