@@ -3,6 +3,7 @@ using System.Linq;
 using Crytex.Notification;
 using System.Threading.Tasks;
 using Crytex.Model.Models;
+using Crytex.Service.IService;
 using HyperVRemote;
 
 namespace Crytex.Background.Tasks
@@ -14,53 +15,66 @@ namespace Crytex.Background.Tasks
     {
         private INotificationManager _notificationManager { get; set; }
         private IHyperVMonitorFactory _hyperVMonitorFactory { get; set; }
+        private IStateMachineService _stateMachine { get; set; }
+        private IUserVmService _userVm { get; set; }
+        private ISystemCenterVirtualManagerService _systemCenter { get; set; }
 
-        public MonitoringJob(INotificationManager notificationManager,IHyperVMonitorFactory hyperVMonitorFactory)
+        public MonitoringJob(INotificationManager notificationManager,
+            IHyperVMonitorFactory hyperVMonitorFactory,
+            IStateMachineService stateMachine, 
+            IUserVmService userVm,
+            ISystemCenterVirtualManagerService systemCenter)
         {
             this._hyperVMonitorFactory = hyperVMonitorFactory;
             this._notificationManager = notificationManager;
+            this._stateMachine = stateMachine;
+            this._userVm = userVm;
+            this._systemCenter = systemCenter;
         }
 
         public void Execute(IJobExecutionContext context)
         {
             Console.WriteLine("It's monitoring job!");
-            var VMList =_notificationManager.GetVMs();
-            List<Task> tasks = new List<Task>(VMList.Count());
-            foreach (UserVm VM in VMList)
+            List<Guid> vmActiveList =_notificationManager.GetVMs();
+            List<UserVm> allVMs = _userVm.GetAllVmsHyperV().ToList();
+            var hosts = _systemCenter.GetAllHyperVHosts().ToList();
+            List<Task> tasks = new List<Task>(hosts.Count());
+
+            foreach (var host in hosts)
             {
-                Task task = Task.Factory.StartNew(() => GetVmInfo(VM));
+                Task task = Task.Factory.StartNew(()=>GetVmInfo(host, allVMs, vmActiveList));
                 tasks.Add(task);
             }
             Task.WaitAll(tasks.ToArray());
         }
 
-        private void GetVmInfo(UserVm vm)
+        private void GetVmInfo(HyperVHost host, List<UserVm> allVMs, List<Guid> vmActiveList)
         {
             BaseTask task = new BaseTask
             {
                 StatusTask = StatusTask.Start,
                 Virtualization = TypeVirtualization.HyperV,
-                UserId = vm.UserId
+                UserId = "User"
             };
-            HyperVHost host = new HyperVHost
+            var hyperVProvider = _hyperVMonitorFactory.CreateHyperVProvider(task, host);
+            var hostVms = allVMs;
+
+            foreach (var vm in hostVms)
             {
-                Id = Guid.NewGuid(),
-                Host = "Test_Host",
-                Valid = true,
-                UserName = "AdminUser",
-                Password = "ADUe48j+601YsRBoFODIbUp5zruU5LCs3ESnMDAp2b8rnI2ABD3uwid8ApWP96prmg==",
-                DateAdded = DateTime.Now,
-                SystemCenterVirtualManagerId = Guid.NewGuid(),
-                Deleted = false
-            };
-            var machine = _hyperVMonitorFactory.CreateHyperVProvider(task, host).GetVmByName(vm.Name);
-            StateMachine vmData = new StateMachine
-            {
-                CpuLoad = machine.CPUUsage,
-                RamLoad = machine.MemoryAssigned,
-                Date = DateTime.Now
-            };
-            _notificationManager.SendVmMessage(vm.Id, vmData);
+                var stateData = hyperVProvider.GetVmByName(vm.Name);
+                StateMachine vmState = new StateMachine
+                {
+                    CpuLoad = stateData.CPUUsage,
+                    RamLoad = stateData.MemoryAssigned,
+                    Date = DateTime.Now,
+                    VmId = vm.Id
+                };
+                var newState = _stateMachine.CreateState(vmState);
+                if (vmActiveList.Contains(vm.Id))
+                {
+                    _notificationManager.SendVmMessage(vm.Id, newState);
+                }
+            }
         }
     }
 }

@@ -35,6 +35,11 @@ namespace Crytex.Service.Service
             return manager;
         }
 
+        public IEnumerable<HyperVHost> GetAllHyperVHosts()
+        {
+            return _hyperVHostRepo.GetMany(h=>!h.Deleted);
+        }
+
 
         public SystemCenterVirtualManager GetById(string id)
         {

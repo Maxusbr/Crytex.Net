@@ -78,6 +78,9 @@
   <ItemGroup>
     <Compile Include="Config\BackgroundConfig.cs" />
     <Compile Include="Config\IBackgroundConfig.cs" />
+    <Compile Include="HyperVMonitorFactory.cs" />
+    <Compile Include="Tasks\IHyperVMonitor.cs" />
+    <Compile Include="IHyperVMonitorFactory.cs" />
     <Compile Include="Scheduler\ISchedulerJobs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,6 +109,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
+      <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
+      <Name>HyperVRemote</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
       <Name>Crytex.Model</Name>

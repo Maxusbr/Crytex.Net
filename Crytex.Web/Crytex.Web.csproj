@@ -267,6 +267,7 @@
     <Compile Include="Controllers\Api\ServerTemplateController.cs" />
     <Compile Include="Controllers\Api\SnapShotVmController.cs" />
     <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
+    <Compile Include="Controllers\Api\StateMachineController.cs" />
     <Compile Include="Controllers\Api\UserVmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />

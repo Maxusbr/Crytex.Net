@@ -43,11 +43,10 @@ namespace Crytex.Notification
             AddVmConnection(VM.Id, Context.ConnectionId);
         }
 
-        public IEnumerable<UserVm> GetVMs()
+        public List<Guid> GetVMs()
         {
             List<Guid> VmList = VmDictionary.Keys.ToList();
-            var Vms = _userVmService.GetVmByListId(VmList);
-            return Vms;
+            return VmList;
         }
 
         public void SendVmMessage(Guid VmId,StateMachine stateMachine)

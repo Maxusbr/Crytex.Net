@@ -103,6 +103,7 @@
     <Compile Include="Models\SnapshotVm.cs" />
     <Compile Include="Models\StandartVmTask.cs" />
     <Compile Include="Models\HelpDeskRequest.cs" />
+    <Compile Include="Models\StateMachine.cs" />
     <Compile Include="Models\SystemCenterVirtualManager.cs" />
     <Compile Include="Models\UpdateVmTask.cs" />
     <Compile Include="Models\UserInfo.cs" />

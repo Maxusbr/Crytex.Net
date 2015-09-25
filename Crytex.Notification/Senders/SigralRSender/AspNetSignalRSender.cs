@@ -24,7 +24,7 @@ namespace Crytex.Notification.Senders.SigralRSender
             throw new NotImplementedException();
         }
 
-        public void SendVmMessage(Guid vmId, MonitorHub.StateMachine stateMachine)
+        public void SendVmMessage(Guid vmId, StateMachine stateMachine)
         {
             throw new NotImplementedException();
         }

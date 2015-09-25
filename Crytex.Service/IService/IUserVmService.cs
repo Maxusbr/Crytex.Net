@@ -16,5 +16,7 @@ namespace Crytex.Service.IService
         void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null);
 
         IEnumerable<UserVm> GetVmByListId(List<Guid> listId);
+
+        IEnumerable<UserVm> GetAllVmsHyperV();
     }
 }

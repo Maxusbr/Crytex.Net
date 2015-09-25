@@ -39,9 +39,9 @@ namespace Crytex.Notification
             _signalRSender.SendVmMessage(vmId, stateMachine);
         }
 
-        public IEnumerable<UserVm> GetVMs()
+        public List<Guid> GetVMs()
         {
-           return  _signalRSender.GetVMs();
+           return _signalRSender.GetVMs();
         }
 
         public void SetEmailInQueue(string @from, string to, EmailTemplateType emailTemplateType, List<KeyValuePair<string, string>> subjectParams = null, List<KeyValuePair<string, string>> bodyParams = null, DateTime? dateSending = null)

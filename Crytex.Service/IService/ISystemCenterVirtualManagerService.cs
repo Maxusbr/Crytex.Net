@@ -24,5 +24,7 @@ namespace Crytex.Service.IService
         HyperVHostResource UpdateHyperVHostResource(Guid guid, HyperVHostResource resource);
 
         HyperVHostResource AddHyperVHostResource(HyperVHostResource resource);
+
+        IEnumerable<HyperVHost> GetAllHyperVHosts();
     }
 }
