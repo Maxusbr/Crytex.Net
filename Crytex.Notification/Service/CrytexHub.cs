@@ -10,59 +10,53 @@ using Microsoft.AspNet.Identity;
 
 namespace Crytex.Notification.Service
 {
-    public abstract class CrytexHub : Hub
+    public abstract class CrytexHub : Hub, IUserInfoProvider
     {
         [Dependency]
         public IServerConfig ServerConfig { get; }
         [Dependency]
-        public UserManager<ApplicationUser> UserManager { get; set; }
-
+        public INotifyProvider NotifyProvider { get; set; }
         public string GetUserId()
         {
-            
-            var userId = Context.User.Identity.GetUserId();
-            return userId;
+            return NotifyProvider.GetUserId(Context);
         }
 
         public bool IsAuth()
         {
-            return Context.User.Identity.IsAuthenticated;
+            return NotifyProvider.IsAuth(Context);
         }
 
 
         public ApplicationUser GetCurrentUser()
         {
-            var user = this.UserManager.FindById(GetUserId());
-            return user;
+            return NotifyProvider.GetCurrentUser(Context);
         }
 
 
         public IEnumerable<string> GetRolesForCurrentUser()
         {
-            var roles = this.UserManager.GetRoles(this.GetUserId());
-            return roles;
+            return NotifyProvider.GetRolesForCurrentUser(Context);
         }
 
 
         public bool IsCurrentUserInRole(string roleName)
         {
-            bool isIn = this.UserManager.IsInRole(this.GetUserId(), roleName);
-            return isIn;
+            return NotifyProvider.IsCurrentUserInRole(Context, roleName);
         }
 
         public bool IsCurrentUserInAnyRole(List<string> roleName)
         {
-            return roleName.Any(IsCurrentUserInRole);
+            return NotifyProvider.IsCurrentUserInAnyRole(Context, roleName);
         }
 
         public bool IsCurrentUserAdmin()
         {
-            return IsCurrentUserInRole("Admin");
+            return NotifyProvider.IsCurrentUserAdmin(Context);
         }
 
         public bool IsCurrentUserSupport()
         {
-            return IsCurrentUserInRole("Support");
+            return NotifyProvider.IsCurrentUserSupport(Context);
         }
     }
 }

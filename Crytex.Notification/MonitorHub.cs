@@ -49,7 +49,7 @@ namespace Crytex.Notification
             return VmList;
         }
 
-        public void SendVmMessage(Guid VmId,StateMachine stateMachine)
+        public void SendVmMessage(Guid VmId, StateMachine stateMachine)
         {
             foreach (string VmConnectionId in GetVMConnections(VmId)) 
             {
@@ -76,7 +76,7 @@ namespace Crytex.Notification
             }
         }
 
-        public void RemoveVmConnection(Guid key, string connectionId)
+        private void RemoveVmConnection(Guid key, string connectionId)
         {
             lock (VmDictionary)
             {
@@ -105,7 +105,7 @@ namespace Crytex.Notification
             }
         }
 
-        public List<string> GetVMConnections(Guid key)
+        private List<string> GetVMConnections(Guid key)
         {
             List<string> VmConnections;
             if (VmDictionary.TryGetValue(key, out VmConnections))

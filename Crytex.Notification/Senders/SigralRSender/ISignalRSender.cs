@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Notifications;
+using Crytex.Notification.Models;
 
 namespace Crytex.Notification
 {

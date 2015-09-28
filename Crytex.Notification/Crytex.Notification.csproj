@@ -119,6 +119,8 @@
   <ItemGroup>
     <Compile Include="ConnectionMapping.cs" />
     <Compile Include="INotifyHub.cs" />
+    <Compile Include="Models\BaseNotify.cs" />
+    <Compile Include="Models\TaskEndNotify.cs" />
     <Compile Include="MonitorHub.cs" />
     <Compile Include="NotifyHub.cs" />
     <Compile Include="Senders\SigralRSender\AspNetSignalRSender.cs" />
@@ -128,8 +130,10 @@
     <Compile Include="Senders\EmailSender\EmailMandrillSender.cs" />
     <Compile Include="Senders\EmailSender\IEmailSender.cs" />
     <Compile Include="Senders\SigralRSender\ISignalRSender.cs" />
+    <Compile Include="Service\INotifyProvider.cs" />
     <Compile Include="Service\NotificationManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\NotifyProvider.cs" />
     <Compile Include="Utils\MandrillUtil.cs" />
   </ItemGroup>
   <ItemGroup>

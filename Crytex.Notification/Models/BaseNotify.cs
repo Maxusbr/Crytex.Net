@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Crytex.Model.Models.Notifications
+namespace Crytex.Notification.Models
 {
     public class BaseNotify
     {

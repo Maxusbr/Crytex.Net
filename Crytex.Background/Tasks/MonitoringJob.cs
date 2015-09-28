@@ -35,7 +35,7 @@ namespace Crytex.Background.Tasks
         public void Execute(IJobExecutionContext context)
         {
             Console.WriteLine("It's monitoring job!");
-            List<Guid> vmActiveList =_notificationManager.GetVMs();
+            List<Guid> vmActiveList = _notificationManager.GetVMs();
             List<UserVm> allVMs = _userVm.GetAllVmsHyperV().ToList();
             var hosts = _systemCenter.GetAllHyperVHosts().ToList();
             List<Task> tasks = new List<Task>(hosts.Count());
@@ -48,7 +48,7 @@ namespace Crytex.Background.Tasks
             Task.WaitAll(tasks.ToArray());
         }
 
-        private void GetVmInfo(HyperVHost host, List<UserVm> allVMs, List<Guid> vmActiveList)
+        public void GetVmInfo(HyperVHost host, List<UserVm> allVMs, List<Guid> vmActiveList)
         {
             var hyperVProvider = _hyperVMonitorFactory.CreateHyperVProvider(host);
             var hostVms = allVMs.Where(v=>v.VurtualizationType == TypeVirtualization.HyperV && v.HyperVHostId == host.Id);

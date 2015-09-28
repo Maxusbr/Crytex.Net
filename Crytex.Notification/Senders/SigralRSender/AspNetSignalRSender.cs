@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Crytex.Model.Models;
+using Crytex.Notification.Models;
 
 namespace Crytex.Notification.Senders.SigralRSender
 {
