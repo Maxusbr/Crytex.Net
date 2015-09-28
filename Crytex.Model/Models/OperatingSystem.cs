@@ -8,11 +8,10 @@ namespace Crytex.Model.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public Int32 ImageFileId { get; set; }
-        public Int32 LoaderFileId { get; set; }
+        public String ServerTemplateName { get; set; }
 
         [ForeignKey("ImageFileId")]
         public FileDescriptor ImageFileDescriptor { get; set; }
-        [ForeignKey("LoaderFileId")]
-        public FileDescriptor LoaderFileDescriptor { get; set; }
+    
     }
 }
