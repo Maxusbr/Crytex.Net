@@ -1,5 +1,9 @@
 
 
+using Crytex.Notification.Service;
+using Crytex.Service.IService;
+using Crytex.Service.Service;
+
 namespace Crytex.Web.App_Start
 {
     using System.Data.Entity;
@@ -30,11 +34,14 @@ namespace Crytex.Web.App_Start
                                      unityContainer.RegisterType<DbContext, ApplicationDbContext>();
                                      unityContainer.RegisterType<ApplicationUserManager>();
                                      unityContainer.RegisterType<SampleHub, SampleHub>(new TransientLifetimeManager());
+                                     unityContainer.RegisterType<NotifyHub, NotifyHub>(new TransientLifetimeManager());
+                                     unityContainer.RegisterType<MonitorHub, MonitorHub>(new HierarchicalLifetimeManager());
                                      unityContainer.RegisterType<IAuthenticationManager>(new InjectionFactory(o => HttpContext.Current.GetOwinContext().Authentication));
                                      unityContainer.RegisterType<IEmailSender, EmailMandrillSender>();
                                      unityContainer.RegisterType<INotificationManager, NotificationManager>();
                                      unityContainer.RegisterType<ICrytexContext, CrytexContext>();
                                      unityContainer.RegisterType<IServerConfig, ServerConfig>();
+                                     unityContainer.RegisterType<INotifyProvider, NotifyProvider>();
                                      unityContainer.RegisterType<IHttp, Http>();
                                      unityContainer.RegisterType<HttpRequest>(new InjectionFactory(o => HttpContext.Current.Request));
                                      unityContainer.RegisterType<IUserInfoProvider, UserInfoProvider>();

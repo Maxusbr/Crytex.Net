@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crytex.Core.AppConfig;
 using Crytex.Model.Models;
 using Crytex.Notification.Models;
 using Flurl.Util;
@@ -14,7 +15,7 @@ namespace Crytex.Notification.Senders.SigralRSender
     public class NetSignalRSender : ISignalRSender
     {
         private Dictionary<HubNames, Lazy<IHubProxy>> _hubProxy = new Dictionary<HubNames, Lazy<IHubProxy>>();
-        private string _hubUrl;
+        private IAppConfig _appConfig;
 
         public enum HubNames
         {
@@ -22,9 +23,9 @@ namespace Crytex.Notification.Senders.SigralRSender
             MonitorHub
         }
 
-        public NetSignalRSender(string hubUrl)
+        public NetSignalRSender(IAppConfig appConfig)
         {
-            this._hubUrl = hubUrl;
+            this._appConfig = appConfig;
            
             _hubProxy.Add(HubNames.NotifyHub, new Lazy<IHubProxy>(()=>InitProxy("NotifyHub")));
             _hubProxy.Add(HubNames.MonitorHub, new Lazy<IHubProxy>(() => InitProxy("MonitorHub")));
@@ -32,7 +33,7 @@ namespace Crytex.Notification.Senders.SigralRSender
 
         private IHubProxy InitProxy(string nameProxy)
         {
-            var hubConnection = new HubConnection(this._hubUrl);
+            var hubConnection = new HubConnection(_appConfig.GetValue("HUB_URL"));
             var proxy = hubConnection.CreateHubProxy(nameProxy);
             hubConnection.Start().Wait();
 
@@ -68,7 +69,12 @@ namespace Crytex.Notification.Senders.SigralRSender
 
         public List<Guid> GetVMs()
         {
-            throw new NotImplementedException();
+            Lazy<IHubProxy> hubProxy;
+            if (_hubProxy.TryGetValue(HubNames.MonitorHub, out hubProxy))
+            {
+                return hubProxy.Value.Invoke<List<Guid>>("GetVMs").Result;
+            }
+            return new List<Guid>();
         }
 
         public void SendToUserNotification(object message)

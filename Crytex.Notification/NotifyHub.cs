@@ -6,7 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using Crytex.Notification.Models;
 using Crytex.Notification.Service;
+using Crytex.Service.IService;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
 
@@ -64,7 +66,7 @@ namespace Crytex.Notification
         public override Task OnReconnected()
         {
             string userId = this.GetUserId();
-            var searchConnection = Connections.GetUserConnections(userId).FirstOrDefault(c=>c.ConnectionId == Context.ConnectionId);
+            var searchConnection = Connections.GetUserConnections(userId).FirstOrDefault(c => c.ConnectionId == Context.ConnectionId);
             if (searchConnection == null)
             {
                 Connections.Add(userId, Context.ConnectionId);

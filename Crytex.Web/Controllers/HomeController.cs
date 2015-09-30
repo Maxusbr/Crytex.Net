@@ -38,6 +38,11 @@ namespace Crytex.Web.Controllers
             return View();
         }
 
+        public ActionResult SignaRMonitorTest()
+        {
+            return View();
+        }
+
         public void SendSignalR(BaseNotify message)
         {
             this._signalRSender.Send(message);

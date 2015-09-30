@@ -51,7 +51,7 @@ namespace Crytex.Notification
 
         public void SendVmMessage(Guid VmId, StateMachine stateMachine)
         {
-            foreach (string VmConnectionId in GetVMConnections(VmId)) 
+            foreach (string VmConnectionId in GetVMConnections(VmId))
             {
                 Clients.Client(VmConnectionId).RecieveVmMessage(stateMachine);
             }
@@ -76,7 +76,7 @@ namespace Crytex.Notification
             }
         }
 
-        private void RemoveVmConnection(Guid key, string connectionId)
+        private void RemoveVmOneConnection(Guid key, string connectionId)
         {
             lock (VmDictionary)
             {
@@ -90,7 +90,7 @@ namespace Crytex.Notification
                 {
                     try
                     {
-                        var indexConnectionInList = VmConnections.FindIndex(c=>c.Contains(connectionId));
+                        var indexConnectionInList = VmConnections.FindIndex(c => c.Contains(connectionId));
                         VmConnections.RemoveAt(indexConnectionInList);
                     }
                     catch (ArgumentNullException)
@@ -105,6 +105,28 @@ namespace Crytex.Notification
             }
         }
 
+        private void RemoveVmAllConnection(string connectionId)
+        {
+            lock (VmDictionary)
+            {
+                var listConntections = VmDictionary.Where(d => d.Value.Contains(connectionId)).ToList();
+                if (!listConntections.Any())
+                {
+                    return;
+                }
+                foreach (var vmConnection in listConntections)
+                {
+                    List<string> valueConntections;
+                    VmDictionary.TryGetValue(vmConnection.Key, out valueConntections);
+                    valueConntections.Remove(connectionId);
+                    if (!valueConntections.Any())
+                    {
+                        VmDictionary.Remove(vmConnection.Key);
+                    }
+                }
+            }
+        }
+
         private List<string> GetVMConnections(Guid key)
         {
             List<string> VmConnections;
@@ -114,6 +136,12 @@ namespace Crytex.Notification
             }
 
             return new List<string>();
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            this.RemoveVmAllConnection(Context.ConnectionId);
+            return base.OnDisconnected(stopCalled);
         }
     }
 
