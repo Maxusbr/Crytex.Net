@@ -24,6 +24,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.VmId, opt => opt.MapFrom(s => new System.Guid(s.VmId)));
             Mapper.CreateMap<ApplicationUserViewModel, ApplicationUser>();
             Mapper.CreateMap<RegionViewModel, Region>();
+            Mapper.CreateMap<TaskV2ViewModel, TaskV2>();
         }
     }
 }

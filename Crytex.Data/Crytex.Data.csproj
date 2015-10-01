@@ -67,6 +67,7 @@
     <Compile Include="IRepository\IStandartVmTaskRepository.cs" />
     <Compile Include="IRepository\IUserInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
+    <Compile Include="IRepository\ITaskV2Repository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="Migrations\201505211152138_Init.cs" />
     <Compile Include="Migrations\201505211152138_Init.Designer.cs">
@@ -140,6 +141,10 @@
     <Compile Include="Migrations\201509221805127_Regin_Snapshot_Fix.Designer.cs">
       <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201509301555528_TaskV2.cs" />
+    <Compile Include="Migrations\201509301555528_TaskV2.Designer.cs">
+      <DependentUpon>201509301555528_TaskV2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
@@ -161,6 +166,7 @@
     <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />
     <Compile Include="Repository\UpdateTaskVmRepository.cs" />
     <Compile Include="Repository\RegionRepository.cs" />
+    <Compile Include="Repository\TaskV2Repository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
@@ -230,6 +236,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509221805127_Regin_Snapshot_Fix.resx">
       <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201509301555528_TaskV2.resx">
+      <DependentUpon>201509301555528_TaskV2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

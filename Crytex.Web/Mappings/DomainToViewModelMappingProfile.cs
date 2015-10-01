@@ -52,6 +52,8 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.VmId, opt => opt.MapFrom(source => source.VmId.ToString()));
             Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
             Mapper.CreateMap<Region, RegionViewModel>();
+            Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
+            
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
@@ -59,6 +61,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<CreateVmTask, CreateVmTaskAdminViewModel>();
             this.MapPagedList<UserVm, UserVmViewModel>();
             this.MapPagedList<UpdateVmTask, UpdateVmTaskViewModel>();
+            this.MapPagedList<TaskV2, TaskV2ViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

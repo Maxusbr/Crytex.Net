@@ -22,6 +22,11 @@ namespace Crytex.Test.FakeImplementations
             throw new NotImplementedException();
         }
 
+        public void Update(string id, SystemCenterVirtualManager updateManager)
+        {
+            throw new NotImplementedException();
+        }
+
         public Model.Models.SystemCenterVirtualManager GetById(string id)
         {
             throw new NotImplementedException();
