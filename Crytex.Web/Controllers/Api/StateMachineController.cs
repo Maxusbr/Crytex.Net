@@ -18,15 +18,15 @@ namespace Crytex.Web.Controllers.Api
         }
 
         // GET: api/StateMachine
-        public IEnumerable<StateMachine> Get()
+        public IHttpActionResult Get()
         {
-            return _stateMachineService.GetStateAll();
+            return Ok(_stateMachineService.GetStateAll());
         }
 
         // GET: api/StateMachine/5
-        public StateMachine Get(int id)
+        public IHttpActionResult Get(int id)
         {
-            return _stateMachineService.GetStateById(id);
+            return Ok(_stateMachineService.GetStateById(id));
         }
     }
 }

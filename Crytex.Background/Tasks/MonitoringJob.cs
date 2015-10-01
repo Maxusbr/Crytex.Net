@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Management.Automation;
 using Crytex.Notification;
 using System.Threading.Tasks;
 using Crytex.Model.Models;
@@ -55,7 +56,18 @@ namespace Crytex.Background.Tasks
 
             foreach (var vm in hostVms)
             {
-                var stateData = hyperVProvider.GetVmByName(vm.Name);
+                //var stateData = hyperVProvider.GetVmByName(vm.Name);
+                //this code is a realization fake object
+                PSObject name = new PSObject();
+                name.Properties.Add(new PSNoteProperty("CPUUsage", 1));
+                name.Properties.Add(new PSNoteProperty("MemoryAssigned", Convert.ToInt64(2)));
+                name.Properties.Add(new PSNoteProperty("Name", "nameString"));
+                name.Properties.Add(new PSNoteProperty("State", "State"));
+                name.Properties.Add(new PSNoteProperty("Status", "Status"));
+                name.Properties.Add(new PSNoteProperty("Uptime", TimeSpan.MinValue));
+
+                HyperVMachine stateData = new HyperVMachine(name);
+                //
                 StateMachine vmState = new StateMachine
                 {
                     CpuLoad = stateData.CPUUsage,

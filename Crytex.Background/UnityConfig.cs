@@ -1,6 +1,7 @@
 using Crytex.Background.Scheduler;
 using Crytex.Notification;
 using Crytex.Core;
+using Crytex.Core.AppConfig;
 using Microsoft.Practices.Unity;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
@@ -19,6 +20,7 @@ namespace Crytex.Background
         {
             UnityConfigureFunc = unityContainer =>
             {
+                Crytex.Service.UnityConfig.Register<PerRequestLifetimeManager>(unityContainer);
                 unityContainer.RegisterType<IUnitOfWork, UnitOfWork>( new ContainerControlledLifetimeManager());
                 unityContainer.RegisterType<IDatabaseFactory, DatabaseFactory>( new ContainerControlledLifetimeManager());
 
@@ -30,6 +32,8 @@ namespace Crytex.Background
                 unityContainer.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
                 unityContainer.RegisterType<IEmailInfoService, EmailInfoService>();
                 unityContainer.RegisterType<IEmailTemplateService, EmailTemplateService>();
+                unityContainer.RegisterType<IAppConfig, AppConfig>();
+                unityContainer.RegisterType<IHyperVMonitorFactory, HyperVMonitorFactory>();
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
             };
         }
