@@ -1,6 +1,6 @@
 ﻿using Crytex.Core.AppConfig;
 
-namespace Crytex.Web.Service
+namespace Crytex.Core.Service
 {
     public interface IServerConfig : IAppConfig
     {

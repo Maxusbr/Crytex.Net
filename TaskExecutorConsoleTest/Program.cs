@@ -4,6 +4,8 @@ using Crytex.Data.Infrastructure;
 using Crytex.Data.Repository;
 using Crytex.Service.Service;
 using System;
+using Crytex.Notification;
+using Crytex.Notification.Senders.SigralRSender;
 
 namespace TaskExecutorConsoleTest
 {
@@ -21,12 +23,16 @@ namespace TaskExecutorConsoleTest
             var unitOfWork = new UnitOfWork(dbFactory);
             var service = new TaskVmService(unitOfWork, createRepo, upRepo, standartRepo, userVmRepository, serverTempalateRepo, fileDescriptorRepo);
             var userVmService = new UserVmService(userVmRepository, unitOfWork);
-            var handlerManager = new TaskHandlerManager(service, userVmService);
-            var taskManager = new TaskManager(handlerManager);
+            //var emailSender = new EmailMandrillSender();
+            //var emailInfoService = new EmailInfoService()
+            //var signalRsender = new NetSignalRSender("hubUrl");
+           // var notificationManager = new NotificationManager(emailSender, emailInfoService, signalRsender);
+            //var handlerManager = new TaskHandlerManager(service, userVmService, notificationManager);
+            //var taskManager = new TaskManager(handlerManager);
 
-            taskManager.Run();
+            //taskManager.Run();
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
     }
 }

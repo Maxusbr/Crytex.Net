@@ -94,10 +94,9 @@ namespace Crytex.Test.FakeImplementations
             return resource;
         }
 
-
-        public void Update(string id, SystemCenterVirtualManager updateManager)
+        public IEnumerable<HyperVHost> GetAllHyperVHosts()
         {
             throw new NotImplementedException();
         }
     }
-}
+
