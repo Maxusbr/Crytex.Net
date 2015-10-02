@@ -52,18 +52,16 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.VmId, opt => opt.MapFrom(source => source.VmId.ToString()));
             Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
             Mapper.CreateMap<Region, RegionViewModel>();
-
+            Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
+            
             Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>();
-
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskAdminViewModel>();
             this.MapPagedList<UserVm, UserVmViewModel>();
             this.MapPagedList<UpdateVmTask, UpdateVmTaskViewModel>();
-
-
-
+            this.MapPagedList<TaskV2, TaskV2ViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

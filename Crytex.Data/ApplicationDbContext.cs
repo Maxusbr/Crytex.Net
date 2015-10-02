@@ -29,6 +29,8 @@ namespace Crytex.Data
         public DbSet<HelpDeskRequest> HelpDeskRequests { get; set; }
         public DbSet<StateMachine> StateMachines { get; set; }
         
+        public DbSet<TaskV2> TaskV2 { get; set; }
+
         public DbSet<CreateVmTask> CreateVmTasks { get; set; }
         public DbSet<StandartVmTask> StandartVmTasks { get; set; }
         public DbSet<UpdateVmTask> UpdateVmTasks { get; set; }
