@@ -31,6 +31,8 @@ namespace Crytex.Service
             container.RegisterType<IHyperVHostResourceRepository, HyperVHostResourceRepository>();
             container.RegisterType<ISnapshotVmRepository, SnapshotVmRepository>();
             container.RegisterType<IRegionRepository, RegionRepository>();
+            container.RegisterType<IStateMachineRepository, StateMachineRepository>();
+
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -56,7 +58,7 @@ namespace Crytex.Service
 
             container.RegisterType<ISystemCenterVirtualManagerRepository, SystemCenterVirtualManagerRepository>();
             container.RegisterType<ISystemCenterVirtualManagerService, SystemCenterVirtualManagerService>();
-
+            container.RegisterType<IStateMachineService, StateMachineService>();
 
         }
     }

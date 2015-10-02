@@ -1,4 +1,6 @@
-﻿namespace Crytex.Notification
+﻿using Crytex.Model.Models;
+
+namespace Crytex.Notification
 {
     using System;
     using System.Collections.Generic;
@@ -11,5 +13,10 @@
         Task SendEmailImmediately(string @from, string to, EmailTemplateType emailTemplateType, List<KeyValuePair<string, string>> subjectParams = null, List<KeyValuePair<string, string>> bodyParams = null, DateTime? dateSending = null);
 
         Task HandleQueueInDB();
+
+        void Sybscribe(string vmId);
+        void SendVmMessage(Guid vmId, StateMachine stateMachine);
+        List<Guid> GetVMs();
+        void SendToUserNotification(string userId, Object message);
     }
 }

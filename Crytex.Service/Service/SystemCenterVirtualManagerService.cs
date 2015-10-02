@@ -54,7 +54,10 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-
+        public IEnumerable<HyperVHost> GetAllHyperVHosts()
+        {
+            return _hyperVHostRepo.GetMany(h=>!h.Deleted);
+        }
         public SystemCenterVirtualManager GetById(string id)
         {
             var guid = new Guid(id);
@@ -116,7 +119,7 @@ namespace Crytex.Service.Service
             return managers;
         }
 
- 
+
 
 
         public void UpdateHyperVHost(Guid guid, HyperVHost host)

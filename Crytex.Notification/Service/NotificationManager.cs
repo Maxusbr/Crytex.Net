@@ -1,12 +1,14 @@
 ﻿using System;
 using Crytex.Service.IService;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using Crytex.Model.Enums;
 using System.Threading.Tasks;
 using Mandrill.Models;
 using Crytex.Core;
+using Crytex.Model.Models;
 using Crytex.Model.Models.Notifications;
 using EmailResultStatus = Crytex.Model.Enums.EmailResultStatus;
 
@@ -16,13 +18,35 @@ namespace Crytex.Notification
     {
         private IEmailSender _emailSender { get; }
         private IEmailInfoService _emailInfoService { get; }
+        private ISignalRSender _signalRSender { get; }
+        
 
         public NotificationManager(IEmailSender emailSender,
-            IEmailInfoService emailInfoService)
+            IEmailInfoService emailInfoService, ISignalRSender signalRSender)
         {
             _emailSender = emailSender;
             _emailInfoService = emailInfoService;
+            _signalRSender = signalRSender;
+        }
 
+        public void SendToUserNotification(string userId, Object message)
+        {
+            _signalRSender.SendToUserNotification(userId, message);
+        }
+
+        public void Sybscribe(string vmId)
+        {
+            _signalRSender.Sybscribe(vmId);
+        }
+
+        public void SendVmMessage(Guid vmId, StateMachine stateMachine)
+        {
+            _signalRSender.SendVmMessage(vmId, stateMachine);
+        }
+
+        public List<Guid> GetVMs()
+        {
+           return _signalRSender.GetVMs();
         }
 
         public void SetEmailInQueue(string @from, string to, EmailTemplateType emailTemplateType, List<KeyValuePair<string, string>> subjectParams = null, List<KeyValuePair<string, string>> bodyParams = null, DateTime? dateSending = null)

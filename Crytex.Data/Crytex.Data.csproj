@@ -65,6 +65,7 @@
     <Compile Include="IRepository\ISystemCenterVirtualManagerRepository.cs" />
     <Compile Include="IRepository\IUpdateVmTaskRepository.cs" />
     <Compile Include="IRepository\IStandartVmTaskRepository.cs" />
+    <Compile Include="IRepository\IStateMachineRepository.cs" />
     <Compile Include="IRepository\IUserInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
@@ -128,14 +129,6 @@
     <Compile Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.Designer.cs">
       <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201509161251421_SnapshotVm.cs" />
-    <Compile Include="Migrations\201509161251421_SnapshotVm.Designer.cs">
-      <DependentUpon>201509161251421_SnapshotVm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201509221501115_UpdateTask.cs" />
-    <Compile Include="Migrations\201509221501115_UpdateTask.Designer.cs">
-      <DependentUpon>201509221501115_UpdateTask.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\201509221805127_Regin_Snapshot_Fix.cs" />
     <Compile Include="Migrations\201509221805127_Regin_Snapshot_Fix.Designer.cs">
       <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
@@ -161,6 +154,7 @@
     <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />
     <Compile Include="Repository\UpdateTaskVmRepository.cs" />
     <Compile Include="Repository\RegionRepository.cs" />
+    <Compile Include="Repository\StateMachineRepository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
@@ -221,12 +215,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509101144112_SystemCenterVirtualManagerMigration.resx">
       <DependentUpon>201509101144112_SystemCenterVirtualManagerMigration.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509161251421_SnapshotVm.resx">
-      <DependentUpon>201509161251421_SnapshotVm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201509221501115_UpdateTask.resx">
-      <DependentUpon>201509221501115_UpdateTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509221805127_Regin_Snapshot_Fix.resx">
       <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
