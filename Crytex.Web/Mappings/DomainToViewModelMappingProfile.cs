@@ -5,12 +5,17 @@ using Crytex.Web.Models.JsonModels;
 using PagedList;
 using Crytex.Web.Models.ViewModels;
 using Crytex.Model.Models.Notifications;
+using Crytex.Web.Service;
+using Microsoft.Practices.Unity;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.Web.Mappings
 {
     public class DomainToViewModelMappingProfile : Profile
     {
+        [Dependency]
+        public IServerConfig _serverConfig { get; set; }
+
         public override string ProfileName
         {
             get { return "DomainToViewModelMappings"; }
@@ -22,7 +27,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>();
             Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
-                .ForMember(dest => dest.ImageFilePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path));
+                .ForMember(dest => dest.ImageFilePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
+                .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
             Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
             Mapper.CreateMap<CreateVmTask, CreateVmTaskViewModel>()
@@ -52,8 +58,11 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.VmId, opt => opt.MapFrom(source => source.VmId.ToString()));
             Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
             Mapper.CreateMap<Region, RegionViewModel>();
+            Mapper.CreateMap<FileDescriptor, FileDescriptorViewModel>()
+                .ForMember(x => x.Path, opt => opt.MapFrom(source => "small_" + source.Path));
 
-            Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>();
+            Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>()
+                .ForMember(x=>x.ImageSrc, opt=>opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();

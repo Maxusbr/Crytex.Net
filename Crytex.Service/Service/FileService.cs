@@ -11,6 +11,7 @@ using Crytex.Data.IRepository;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System.Drawing;
+using Crytex.Model.Exceptions;
 
 namespace Crytex.Service.Service
 {
@@ -38,6 +39,22 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
 
             return newDescriptor;
+        }
+
+        public IEnumerable<FileDescriptor> GetAll()
+        {
+            return _descriptorRepo.GetAll();
+        }
+
+        public FileDescriptor GetById(int id)
+        {
+            var file = _descriptorRepo.GetById(id);
+            if (file == null)
+            {
+                throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
+            }
+
+            return file;
         }
 
         public FileDescriptor SaveImageFile(Stream inputStream, string fileName, string directoryPath,
@@ -99,6 +116,25 @@ namespace Crytex.Service.Service
 
             var fileDescriptor = this.CreateFileDescriptor(Path.GetFileNameWithoutExtension(fileName), fileType, fsFileName);
             return fileDescriptor;
+        }
+
+        public void RemoveFile(FileDescriptor file, string directoryPath)
+        {
+            _descriptorRepo.Delete(file);
+
+            if (file.Type == FileType.Image)
+            {
+                var fsFileNameBig = "big_" + file.Path;
+                var fsFileNameSmall = "small_" + file.Path;
+                File.Delete(directoryPath + "\\" + fsFileNameBig);
+                File.Delete(directoryPath + "\\" + fsFileNameSmall);
+            }
+            else
+            {
+                File.Delete(directoryPath + "\\" + file.Path);
+            }
+
+            _unitOfWork.Commit();
         }
 
         private void SaveFile(Stream inputStream, string fileName, string directoryPath)

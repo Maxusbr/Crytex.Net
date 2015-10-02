@@ -1,7 +1,12 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using AutoMapper;
+using AutoMapper.Mappers;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.Practices.Unity;
 using Microsoft.Practices.Unity.Mvc;
 
 [assembly: WebActivatorEx.PreApplicationStartMethod(typeof(Crytex.Web.App_Start.UnityWebActivator), "Start")]
@@ -29,6 +34,9 @@ namespace Crytex.Web.App_Start
 
             GlobalHost.DependencyResolver.Register(typeof(IHubActivator),() => new UnityHubActivator(container));
 
+            AutoMapperActivator autoMapper = new AutoMapperActivator(container);
+            autoMapper.RegisterAutoMapperType();
+
 
             // TODO: Uncomment if you want to use PerRequestLifetimeManager
             // Microsoft.Web.Infrastructure.DynamicModuleHelper.DynamicModuleUtility.RegisterModule(typeof(UnityPerRequestHttpModule));
@@ -39,5 +47,6 @@ namespace Crytex.Web.App_Start
         {
             UnityConfig.Dispose();
         }
+
     }
 }

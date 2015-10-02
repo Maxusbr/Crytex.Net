@@ -4,6 +4,7 @@ using System.IO;
 using Crytex.Model.Models;
 using Crytex.Web.Models.JsonModels;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -19,6 +20,13 @@ namespace Crytex.Web.Controllers.Api
         public FileController(IFileService fileService)
         {
             this._fileService = fileService;
+        }
+
+        public IHttpActionResult Get()
+        {
+            var files = _fileService.GetAll();
+            var viewFiles = AutoMapper.Mapper.Map<List<FileDescriptorViewModel>>(files);
+            return Ok(viewFiles);
         }
 
         public async Task<IHttpActionResult> Post()
@@ -47,7 +55,7 @@ namespace Crytex.Web.Controllers.Api
                 using (var stream = File.OpenRead(file.LocalFileName))
                 {
                     var fileName = file.Headers.ContentDisposition.FileName.Trim('\"');
-                    var savePath = HttpContext.Current.Server.MapPath(this.GetSavePath(fileType));
+                    var savePath = HttpContext.Current.Server.MapPath(this.GetPath(fileType));
                     if (fileType == FileType.Image)
                     {
                         int smallSize = this.CrytexContext.ServerConfig.GetSmallImageSize();
@@ -69,7 +77,15 @@ namespace Crytex.Web.Controllers.Api
 
         }
 
-        private string GetSavePath(FileType fType)
+        public IHttpActionResult Delete(int id)
+        {
+            var file =_fileService.GetById(id);
+            var deletePath = HttpContext.Current.Server.MapPath(this.GetPath(file.Type));
+            _fileService.RemoveFile(file, deletePath);
+            return Ok();
+        }
+
+        private string GetPath(FileType fType)
         {
             string path = null;
 
