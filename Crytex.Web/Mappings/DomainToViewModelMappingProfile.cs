@@ -54,7 +54,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Region, RegionViewModel>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
             
-
+            Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>();
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();

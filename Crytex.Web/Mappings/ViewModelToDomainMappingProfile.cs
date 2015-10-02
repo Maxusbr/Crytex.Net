@@ -25,6 +25,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<ApplicationUserViewModel, ApplicationUser>();
             Mapper.CreateMap<RegionViewModel, Region>();
             Mapper.CreateMap<TaskV2ViewModel, TaskV2>();
+            Mapper.CreateMap<ServerTemplateEditViewModel,ServerTemplate>();
         }
     }
 }
