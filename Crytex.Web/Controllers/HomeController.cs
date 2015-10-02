@@ -1,6 +1,7 @@
 ﻿using Crytex.Model.Models.Notifications;
 using Crytex.Notification;
 using System.Web.Mvc;
+using Crytex.Notification.Models;
 
 namespace Crytex.Web.Controllers
 {
@@ -33,6 +34,11 @@ namespace Crytex.Web.Controllers
         }
 
         public ActionResult SignalRTest()
+        {
+            return View();
+        }
+
+        public ActionResult SignaRMonitorTest()
         {
             return View();
         }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Security.Principal;
 using Microsoft.AspNet.Identity;
 using Crytex.Model.Models;
+using Crytex.Core.Service;
 
 namespace Crytex.Web.Service
 {

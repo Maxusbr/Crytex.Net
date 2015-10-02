@@ -1,7 +1,7 @@
 ﻿using Crytex.Model.Models;
 using System.Collections.Generic;
 
-namespace Crytex.Web.Service
+namespace Crytex.Core.Service
 {
     public interface IUserInfoProvider
     {

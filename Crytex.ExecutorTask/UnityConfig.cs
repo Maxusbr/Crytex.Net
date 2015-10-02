@@ -1,5 +1,7 @@
 ﻿using Microsoft.Practices.Unity;
 using Crytex.Core;
+using Crytex.Notification;
+using Crytex.Notification.Senders.SigralRSender;
 
 namespace Crytex.ExecutorTask
 {
@@ -11,6 +13,8 @@ namespace Crytex.ExecutorTask
             UnityConfigureFunc = unityContainer =>
             {
                 Crytex.Service.UnityConfig.Register<ContainerControlledLifetimeManager>(unityContainer);
+                unityContainer.RegisterType<INotificationManager, NotificationManager>();
+                unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
             };
         }
     }

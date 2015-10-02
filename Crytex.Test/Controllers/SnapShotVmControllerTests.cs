@@ -8,6 +8,7 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Hosting;
 using System.Web.Http.Results;
 using System.Web.Http.Routing;
+using Crytex.Core.Service;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web;
