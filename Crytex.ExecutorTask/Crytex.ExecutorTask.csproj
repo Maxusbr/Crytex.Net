@@ -72,6 +72,7 @@
     <Compile Include="TaskHandler\VmWare\BaseVmWareTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\FakeVmWareControl.cs" />
     <Compile Include="TaskHandler\VmWare\IVmWareControl.cs" />
+    <Compile Include="TaskHandler\VmWare\VmWareControl.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareCreateTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareStandartVmWareTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareUpdateTaskHandler.cs" />
@@ -84,6 +85,10 @@
     <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
       <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
       <Name>HyperVRemote</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\vmware-virtualization\VmWareRemote\VmWareRemote\VmWareRemote.csproj">
+      <Project>{f2a280df-098c-474a-9476-253996729571}</Project>
+      <Name>VmWareRemote</Name>
     </ProjectReference>
     <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
