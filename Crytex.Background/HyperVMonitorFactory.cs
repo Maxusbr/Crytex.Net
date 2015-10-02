@@ -14,7 +14,8 @@ namespace Crytex.Background
         public IHyperVProvider CreateHyperVProvider(HyperVHost host)
         {
             var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host, "testNameSpace");
-            var hyperVProvider = new HyperVProvider(configuration);
+            //var hyperVProvider = new HyperVProvider(configuration);
+            var hyperVProvider = new FakeHyperVProvider(configuration); // fake realization provider
 
             return hyperVProvider;
         }

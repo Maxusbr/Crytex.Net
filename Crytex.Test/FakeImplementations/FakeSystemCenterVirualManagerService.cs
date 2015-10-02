@@ -99,4 +99,4 @@ namespace Crytex.Test.FakeImplementations
             throw new NotImplementedException();
         }
     }
-}
+

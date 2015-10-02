@@ -56,23 +56,13 @@ namespace Crytex.Background.Tasks
 
             foreach (var vm in hostVms)
             {
-                //var stateData = hyperVProvider.GetVmByName(vm.Name);
-                //this code is a realization fake object
-                PSObject name = new PSObject();
-                name.Properties.Add(new PSNoteProperty("CPUUsage", 1));
-                name.Properties.Add(new PSNoteProperty("MemoryAssigned", Convert.ToInt64(2)));
-                name.Properties.Add(new PSNoteProperty("Name", "nameString"));
-                name.Properties.Add(new PSNoteProperty("State", "State"));
-                name.Properties.Add(new PSNoteProperty("Status", "Status"));
-                name.Properties.Add(new PSNoteProperty("Uptime", TimeSpan.MinValue));
+                var stateData = hyperVProvider.GetVmByName(vm.Name);
 
-                HyperVMachine stateData = new HyperVMachine(name);
-                //
                 StateMachine vmState = new StateMachine
                 {
                     CpuLoad = stateData.CPUUsage,
                     RamLoad = stateData.MemoryAssigned,
-                    Date = DateTime.Now,
+                    Date = DateTime.UtcNow,
                     VmId = vm.Id
                 };
                 var newState = _stateMachine.CreateState(vmState);
