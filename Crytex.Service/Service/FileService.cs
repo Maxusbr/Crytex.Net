@@ -18,12 +18,16 @@ namespace Crytex.Service.Service
     public class FileService : IFileService
     {
         private readonly IFileDescriptorRepository _descriptorRepo;
+        private readonly IServerTemplateRepository _serverTemplateRepo;
+        private readonly IOperatingSystemRepository _operatingSystemRepo;
         private readonly IUnitOfWork _unitOfWork;
 
-        public FileService(IUnitOfWork unitOfWork, IFileDescriptorRepository descriptorRepo)
+        public FileService(IUnitOfWork unitOfWork, IFileDescriptorRepository descriptorRepo, IServerTemplateRepository serverTemplateRepo, IOperatingSystemRepository operatingSystemRepo)
         {
             this._unitOfWork = unitOfWork;
             this._descriptorRepo = descriptorRepo;
+            this._serverTemplateRepo = serverTemplateRepo;
+            this._operatingSystemRepo = operatingSystemRepo;
         }
 
         public FileDescriptor CreateFileDescriptor(string name, FileType type, string path)
@@ -51,7 +55,7 @@ namespace Crytex.Service.Service
             var file = _descriptorRepo.GetById(id);
             if (file == null)
             {
-                throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
+                throw new InvalidIdentifierException(string.Format("FileDescriptor width Id={0} doesn't exists", id));
             }
 
             return file;
@@ -120,6 +124,13 @@ namespace Crytex.Service.Service
 
         public void RemoveFile(FileDescriptor file, string directoryPath)
         {
+            var operatingReference = _operatingSystemRepo.GetMany(o => o.ImageFileId == file.Id).Count();
+            var serverTemplateReference = _serverTemplateRepo.GetMany(s=>s.ImageFileId == file.Id).Count();
+            if (operatingReference > 0 || serverTemplateReference > 0)
+            {
+                throw new InvalidIdentifierException("FileDescriptor can not be deleted because it have some referance with OperatingSystem or ServerTemplate");
+            }
+
             _descriptorRepo.Delete(file);
 
             if (file.Type == FileType.Image)

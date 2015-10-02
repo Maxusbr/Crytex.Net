@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using Crytex.Core.Service;
 using Crytex.Model.Models;
 using Crytex.Web.Models.JsonModels;
 using PagedList;
