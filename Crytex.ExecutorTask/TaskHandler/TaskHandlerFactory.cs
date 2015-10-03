@@ -78,7 +78,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private IHyperVControl CreateHyperVControl(BaseTask task, HyperVHost host)
         {
-            var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host, "testNameSpace");
+            var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host);
             var hyperVProvider = new HyperVProvider(configuration);
             var control = new HyperVControl(hyperVProvider);
 

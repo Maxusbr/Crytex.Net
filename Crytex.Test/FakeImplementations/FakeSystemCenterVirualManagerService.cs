@@ -75,7 +75,10 @@ namespace Crytex.Test.FakeImplementations
 
         public HyperVHostResource UpdateHyperVHostResource(Guid guid, HyperVHostResource resource)
         {
-            var resourceToUpdate = this.StoredManagers.SelectMany(m => m.HyperVHosts).SelectMany(h => h.Resources).Single(res => res.Id == guid);
+            var resourceToUpdate =
+                this.StoredManagers.SelectMany(m => m.HyperVHosts)
+                    .SelectMany(h => h.Resources)
+                    .Single(res => res.Id == guid);
 
             resourceToUpdate.UpdateDate = resource.UpdateDate;
             resourceToUpdate.Valid = resourceToUpdate.Valid;
@@ -87,10 +90,11 @@ namespace Crytex.Test.FakeImplementations
 
         public HyperVHostResource AddHyperVHostResource(HyperVHostResource resource)
         {
-            var host = this.StoredManagers.Single(m => m.HyperVHosts.SingleOrDefault(h => h.Id == resource.HyperVHostId) != null)
+            var host = this.StoredManagers.Single(
+                m => m.HyperVHosts.SingleOrDefault(h => h.Id == resource.HyperVHostId) != null)
                 .HyperVHosts.SingleOrDefault(h => h.Id == resource.HyperVHostId);
             host.Resources.Add(resource);
-            
+
             return resource;
         }
 
@@ -99,4 +103,4 @@ namespace Crytex.Test.FakeImplementations
             throw new NotImplementedException();
         }
     }
-
+}

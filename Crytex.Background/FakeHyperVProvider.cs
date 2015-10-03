@@ -22,6 +22,11 @@ namespace Crytex.Background
             throw new NotImplementedException();
         }
 
+        public ResultInfoConnectVm ConnectToVm(OsType osType, string ipAddress, string login, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public IVhdService GetVhdService()
         {
             throw new NotImplementedException();
@@ -106,6 +111,11 @@ namespace Crytex.Background
         }
 
         public void Disconnect()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
         {
             throw new NotImplementedException();
         }
