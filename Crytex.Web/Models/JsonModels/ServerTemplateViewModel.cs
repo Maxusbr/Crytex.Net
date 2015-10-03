@@ -19,5 +19,7 @@ namespace Crytex.Web.Models.JsonModels
      
         public int OperatingSystemId { get; set; }
 
+        public string ImageSrc { get; set; }
+
     }
 }

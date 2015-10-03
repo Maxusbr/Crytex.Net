@@ -11,7 +11,6 @@ namespace Crytex.Web
         {
             ConfigureAuth(app);
             app.MapSignalR();
-            AutoMapperConfiguration.Configure();
         }
     }
 }

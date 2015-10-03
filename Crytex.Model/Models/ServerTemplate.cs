@@ -16,7 +16,7 @@ namespace Crytex.Model.Models
 
 
         [ForeignKey("ImageFileId")]
-        public FileDescriptor ImageFileDescriptor { get; set; }
+        public virtual FileDescriptor ImageFileDescriptor { get; set; }
         [ForeignKey("OperatingSystemId")]
         public OperatingSystem OperatingSystem { get; set; }
         [ForeignKey("UserId")]

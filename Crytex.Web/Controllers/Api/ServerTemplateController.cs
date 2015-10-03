@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
+using Crytex.Web.Service;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Controllers.Api
 {
