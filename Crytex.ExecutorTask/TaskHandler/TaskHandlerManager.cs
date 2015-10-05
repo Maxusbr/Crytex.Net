@@ -2,6 +2,9 @@
 using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
+using Crytex.Model.Models.Notifications;
+using Crytex.Notification;
+using Crytex.Notification.Models;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -11,11 +14,13 @@ namespace Crytex.ExecutorTask.TaskHandler
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
         private IDictionary<Type, Action<int, StatusTask, string>> _updateStatusActionDict;
         private IUserVmService _userVmService;
+        private INotificationManager _notificationManager;
 
-        public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService)
+        public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService, INotificationManager notificationManager)
         {
             this._taskService = taskService;
             this._userVmService = userVmService;
+            this._notificationManager = notificationManager;
             this._updateStatusActionDict = new Dictionary<Type, Action<int, StatusTask, string>>
             {
                 {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate},
@@ -90,13 +95,24 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var taskEntity = ((ITaskHandler)sender).TaskEntity;
             var taskType = taskEntity.GetType();
+            TaskEndNotify taskEndNotify = new TaskEndNotify
+            {
+                UserId = e.TaskEntity.UserId,
+                TaskId = e.TaskEntity.Id,
+                TypeError = TypeError.Unknown,
+                TypeNotify = TypeNotify.EndTask,
+                Success = e.Success,
+                Error = e.ErrorMessage
+            };
             if (e.Success)
             {
                 this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End, null);
+                this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
             else
             {
                 this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.EndWithErrors, e.ErrorMessage);
+                this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
 
             if (taskType == typeof(CreateVmTask))

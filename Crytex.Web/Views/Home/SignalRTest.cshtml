@@ -43,6 +43,16 @@
                 $('#discussion').append('<li><strong>' + encodedName
                     + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
             };
+
+            chat.client.newNotification = function(message) {
+                // Html encode display name and message.
+                console.log(message);
+                var encodedName = $('<div />').text("server").html();
+                var encodedMsg = $('<div />').text(message).html();
+                // Add the message to the page.
+                $('#discussion').append('<li><strong>' + encodedName
+                    + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
+            }
             // Get the user name and store it to prepend to messages.
             $('#displayname').val("browserClient");
             // Set initial focus to message input box.
@@ -51,7 +61,8 @@
             $.connection.hub.start().done(function () {
                 $('#sendmessage').click(function () {
                     // Call the Send method on the hub.
-                    chat.server.notify({test:"test"});
+                    chat.server.notify({ test: "test" });
+                    chat.server.sendToUserNotification("Message UrA");
                     // Clear text box and reset focus for next comment.
                     $('#message').val('').focus();
                 });

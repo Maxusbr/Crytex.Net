@@ -1,4 +1,7 @@
-﻿using Crytex.Data.Infrastructure;
+﻿using System;
+using System.Linq;
+using System.Linq.Expressions;
+using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models;
 
@@ -9,5 +12,5 @@ namespace Crytex.Data.Repository
         public FileDescriptorRepository(IDatabaseFactory databaseFactory) : base(databaseFactory)
         {
         }
-    }
+}
 }

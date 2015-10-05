@@ -102,6 +102,10 @@
       <Project>{4CAB19D5-AA00-43E1-9450-15F3B8D72AB2}</Project>
       <Name>Crytex.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Crytex.Notification\Crytex.Notification.csproj">
+      <Project>{b7071332-988e-4a1e-82be-8078a8243460}</Project>
+      <Name>Crytex.Notification</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Service\Crytex.Service.csproj">
       <Project>{fc3571db-2d14-4280-8f07-31599f2a7d5b}</Project>
       <Name>Crytex.Service</Name>

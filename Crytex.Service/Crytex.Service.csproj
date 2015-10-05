@@ -99,7 +99,9 @@
     <Compile Include="IService\IServerTemplateService.cs" />
     <Compile Include="IService\IStandartVmTaskService.cs" />
     <Compile Include="IService\ISystemCenterVirtualManagerService.cs" />
+    <Compile Include="IService\ITaskV2Service.cs" />
     <Compile Include="IService\ITaskVmService.cs" />
+    <Compile Include="IService\IStateMachineService.cs" />
     <Compile Include="IService\IUserVmService.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
@@ -110,7 +112,9 @@
     <Compile Include="Service\FileService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\LogService.cs" />
+
     <Compile Include="Service\RegionService.cs" />
+    <Compile Include="Service\StateMachineService.cs" />
     <Compile Include="Service\SnapshotVmService.cs" />
     <Compile Include="Service\MessageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -120,6 +124,7 @@
     <Compile Include="Service\StandartVmTaskService.cs" />
     <Compile Include="Service\SystemCenterVirtualManagerService.cs" />
     <Compile Include="Service\TaskVmService.cs" />
+    <Compile Include="Service\TaskV2Service.cs" />
     <Compile Include="Service\UserVmService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>

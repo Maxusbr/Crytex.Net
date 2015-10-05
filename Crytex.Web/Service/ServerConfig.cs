@@ -1,4 +1,5 @@
 ﻿using Crytex.Core.AppConfig;
+using Crytex.Core.Service;
 using Crytex.Model.Exceptions;
 
 namespace Crytex.Web.Service

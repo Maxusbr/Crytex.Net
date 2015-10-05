@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -239,6 +239,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\AutoMapperActivator.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -268,6 +269,9 @@
     <Compile Include="Controllers\Api\ServerTemplateController.cs" />
     <Compile Include="Controllers\Api\SnapShotVmController.cs" />
     <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
+
+    <Compile Include="Controllers\Api\StateMachineController.cs" />
+    <Compile Include="Controllers\Api\TaskV2Controller.cs" />
     <Compile Include="Controllers\Api\UserVmController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -289,6 +293,7 @@
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\TaskV2ViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskViewModel.cs" />
@@ -315,10 +320,6 @@
     <Compile Include="Service\UserInfoProvider.cs" />
     <Compile Include="Service\CrytexContext.cs" />
     <Compile Include="Service\Http.cs" />
-    <Compile Include="Service\IUserInfoProvider.cs" />
-    <Compile Include="Service\ICrytexContext.cs" />
-    <Compile Include="Service\IHttp.cs" />
-    <Compile Include="Service\IServerConfig.cs" />
     <Compile Include="Service\ServerConfig.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -385,22 +386,23 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\SignalRTest.cshtml" />
+    <Content Include="Views\Home\SignaRMonitorTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
+    <Folder Include="App_Data\Files\Images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
+      <Project>{0b23b88c-b5fc-42f6-ac62-27725f34487b}</Project>
+      <Name>Crytex.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Notification\Crytex.Notification.csproj">
       <Project>{B7071332-988E-4A1E-82BE-8078A8243460}</Project>
       <Name>Crytex.Notification</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
-      <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
-      <Name>Crytex.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\Crytex.Data\Crytex.Data.csproj">
       <Project>{4CAB19D5-AA00-43E1-9450-15F3B8D72AB2}</Project>

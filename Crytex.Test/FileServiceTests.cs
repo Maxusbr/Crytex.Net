@@ -24,7 +24,7 @@ namespace Crytex.Test
             var unitOfWork = new FakeUnitOfWork();
             var fileDescRepo = new FakeFileDescriptorRepo();
             this._descriptorRepo = fileDescRepo;
-            this._fileService = new FileService(unitOfWork, fileDescRepo);
+            this._fileService = new FileService(unitOfWork, fileDescRepo,null,null);
 
             var dirPath = Path.Combine(Directory.GetCurrentDirectory(), "fileServiceTestTmp");
             Directory.CreateDirectory(dirPath);

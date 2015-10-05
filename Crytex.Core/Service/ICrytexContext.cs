@@ -1,4 +1,4 @@
-﻿namespace Crytex.Web.Service
+﻿namespace Crytex.Core.Service
 {
     public interface ICrytexContext
     {

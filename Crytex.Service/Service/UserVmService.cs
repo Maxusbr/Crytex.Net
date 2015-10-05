@@ -5,6 +5,8 @@ using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
+using System.Collections.Generic;
+using System.Data.Entity.Core;
 
 namespace Crytex.Service.Service
 {
@@ -30,6 +32,22 @@ namespace Crytex.Service.Service
             return vm;
         }
 
+        public IEnumerable<UserVm> GetAllVmsHyperV()
+        {
+            return _userVmRepo.GetAll(x=>x.HyperVHost);
+        }
+
+        public IEnumerable<UserVm> GetVmByListId(List<Guid> listId)
+        {
+            
+            var vms = this._userVmRepo.GetMany(v => listId.Contains(v.Id));
+            if (vms == null)
+            {
+                throw new ObjectNotFoundException();
+            }
+
+            return vms;
+        }
 
         public IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId)
         {
