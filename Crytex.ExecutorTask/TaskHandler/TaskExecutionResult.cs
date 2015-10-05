@@ -5,7 +5,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 {
     public class TaskExecutionResult
     {
-        public BaseTask TaskEntity { get; set; }
+        public TaskV2 TaskEntity { get; set; }
 
         public bool Success { get; set; }
 

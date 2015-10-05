@@ -14,15 +14,16 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             this._hyperVProvider = hyperVProvider;
         }
 
-        public Guid CreateVm(CreateVmTask task)
+        public Guid CreateVm(TaskV2 task)
         {
             this._hyperVProvider.Connect();
             var machineGuid = Guid.NewGuid();
-            var createMachineRes = this._hyperVProvider.CreateVm(machineGuid.ToString(), (uint)task.Ram * 1024);
+            var taskOptions = task.GetOptions<CreateVmOptions>();
+            var createMachineRes = this._hyperVProvider.CreateVm(machineGuid.ToString(), (uint)taskOptions.Ram * 1024);
 
             if (createMachineRes.IsSuccess)
             {
-                this._hyperVProvider.ModifyProcessorVm(createMachineRes.Vm, (uint)task.Cpu);
+                this._hyperVProvider.ModifyProcessorVm(createMachineRes.Vm, (uint)taskOptions.Cpu);
             }
             else
             {
@@ -33,20 +34,21 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         }
 
 
-        public void UpdateVm(UpdateVmTask updateVmTask)
+        public void UpdateVm(TaskV2 updateVmTask)
         {
             this._hyperVProvider.Connect();
-            if (this._hyperVProvider.IsVmExist(updateVmTask.VmId.ToString()))
+            var taskOptions = updateVmTask.GetOptions<UpdateVmOptions>();
+            if (this._hyperVProvider.IsVmExist(taskOptions.VmId.ToString()))
             {
-                var machine = this._hyperVProvider.GetVmByName(updateVmTask.VmId.ToString());
-                var ramMb = (uint)updateVmTask.Ram * 1024;
+                var machine = this._hyperVProvider.GetVmByName(taskOptions.VmId.ToString());
+                var ramMb = (uint)taskOptions.Ram * 1024;
                 this._hyperVProvider.ModifyMemoryVm(machine, false, ramMb, ramMb, ramMb);
-                this._hyperVProvider.ModifyProcessorVm(machine, (uint)updateVmTask.Cpu);
+                this._hyperVProvider.ModifyProcessorVm(machine, (uint)taskOptions.Cpu);
             }
             else
             {
                 throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
-                    updateVmTask.VmId));
+                    taskOptions.VmId));
             }
         }
 

@@ -5,10 +5,10 @@ namespace Crytex.ExecutorTask.TaskHandler
 {
     public interface ITaskHandler
     {
-        BaseTask TaskEntity { get; }
+        TaskV2 TaskEntity { get; }
         TaskExecutionResult Execute();
 
-        event EventHandler<BaseTask> ProcessingStarted;
+        event EventHandler<TaskV2> ProcessingStarted;
         event EventHandler<TaskExecutionResult> ProcessingFinished;
     }
 }
