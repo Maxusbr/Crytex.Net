@@ -6,17 +6,18 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
+using Crytex.Web.Areas.Admin.Controllers;
 using Crytex.Web.Models.JsonModels;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 
 namespace Crytex.Web.Controllers.Api
 {
-    public class TaskV2Controller : CrytexApiController
+    public class AdminTaskV2Controller : AdminCrytexController
     {
         private readonly ITaskV2Service _taskService;
 
-        public TaskV2Controller(ITaskV2Service taskService)
+        public AdminTaskV2Controller(ITaskV2Service taskService)
         {
             this._taskService = taskService;
         }

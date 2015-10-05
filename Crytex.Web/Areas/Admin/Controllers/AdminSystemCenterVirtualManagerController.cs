@@ -7,14 +7,15 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
+using Crytex.Web.Areas.Admin.Controllers;
 
 namespace Crytex.Web.Controllers.Api.Admin
 {
-    public class SystemCenterVirtualManagerController : CrytexApiController
+    public class AdminSystemCenterVirtualManagerController : AdminCrytexController
     {
         private ISystemCenterVirtualManagerService _managerService;
 
-        public SystemCenterVirtualManagerController(ISystemCenterVirtualManagerService managerService)
+        public AdminSystemCenterVirtualManagerController(ISystemCenterVirtualManagerService managerService)
         {
             this._managerService = managerService;
         }

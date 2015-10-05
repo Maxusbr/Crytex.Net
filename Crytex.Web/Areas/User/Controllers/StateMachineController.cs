@@ -6,10 +6,11 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
+using Crytex.Web.Areas.User.Controllers;
 
 namespace Crytex.Web.Controllers.Api
 {
-    public class StateMachineController : ApiController
+    public class StateMachineController : UserCrytexController
     {
         private IStateMachineService _stateMachineService ;
         public StateMachineController(IStateMachineService stateMachineService)
