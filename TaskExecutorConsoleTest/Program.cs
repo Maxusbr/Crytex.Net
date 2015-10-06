@@ -6,6 +6,9 @@ using Crytex.Service.Service;
 using System;
 using Crytex.Notification;
 using Crytex.Notification.Senders.SigralRSender;
+using Crytex.ExecutorTask.TaskHandler.VmWare;
+using VmWareRemote.Implementations;
+using Crytex.Model.Models;
 
 namespace TaskExecutorConsoleTest
 {
@@ -13,26 +16,28 @@ namespace TaskExecutorConsoleTest
     {
         static void Main(string[] args)
         {
-            var dbFactory = new DatabaseFactory();
-            var upRepo = new UpdateTaskVmRepository(dbFactory);
-            var createRepo = new CreateVmTaskRepository(dbFactory);
-            var standartRepo = new StandartVmTaskRepository(dbFactory);
-            var userVmRepository = new UserVmRepository(dbFactory);
-            var serverTempalateRepo = new ServerTemplateRepository(dbFactory);
-            var fileDescriptorRepo = new FileDescriptorRepository(dbFactory);
-            var unitOfWork = new UnitOfWork(dbFactory);
-            var service = new TaskVmService(unitOfWork, createRepo, upRepo, standartRepo, userVmRepository, serverTempalateRepo, fileDescriptorRepo);
-            var userVmService = new UserVmService(userVmRepository, unitOfWork);
-            //var emailSender = new EmailMandrillSender();
-            //var emailInfoService = new EmailInfoService()
-            //var signalRsender = new NetSignalRSender("hubUrl");
-           // var notificationManager = new NotificationManager(emailSender, emailInfoService, signalRsender);
-            //var handlerManager = new TaskHandlerManager(service, userVmService, notificationManager);
-            //var taskManager = new TaskManager(handlerManager);
+            var userName = "";
+            var password = "";
+            var server = "51.254.55.136";
+            var vmWareProvider = new VmWareProvider(userName, password, server);
+            var vmWareControl = new VmWareControl(vmWareProvider);
 
-            //taskManager.Run();
+            //var createTask = new CreateVmTask
+            //{
+            //    Cpu = 2,
+            //    Ram = 1
+            //};
+            
+            //var name = vmWareControl.CreateVm(createTask);
 
-            //Console.ReadLine();
+            var updateTask = new UpdateVmTask
+            {
+                Ram = 2,
+                Cpu = 2,
+                VmId = new Guid("9619d6f3-5306-4ef6-bcb0-9bbe8af53b85")
+            };
+
+            vmWareControl.UpdateVm(updateTask);
         }
     }
 }
