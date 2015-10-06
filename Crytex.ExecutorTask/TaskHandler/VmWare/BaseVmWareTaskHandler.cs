@@ -6,7 +6,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
     {
         protected IVmWareControl _vmWareControl;
 
-        protected BaseVmWareTaskHandler(BaseTask task, IVmWareControl vmWareControl, string hostName): base(task, hostName)
+        protected BaseVmWareTaskHandler(TaskV2 task, IVmWareControl vmWareControl, string hostName): base(task, hostName)
         {
             this._vmWareControl = vmWareControl;
         }

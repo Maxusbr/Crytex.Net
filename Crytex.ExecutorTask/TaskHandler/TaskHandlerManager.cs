@@ -10,36 +10,25 @@ namespace Crytex.ExecutorTask.TaskHandler
 {
     public class TaskHandlerManager : ITaskHandlerManager
     {
-        private ITaskVmService _taskService;
+        private ITaskV2Service _taskService;
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
-        private IDictionary<Type, Action<int, StatusTask, string>> _updateStatusActionDict;
         private IUserVmService _userVmService;
         private INotificationManager _notificationManager;
 
-        public TaskHandlerManager(ITaskVmService taskService, IUserVmService userVmService, INotificationManager notificationManager)
+        public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService, INotificationManager notificationManager)
         {
             this._taskService = taskService;
             this._userVmService = userVmService;
             this._notificationManager = notificationManager;
-            this._updateStatusActionDict = new Dictionary<Type, Action<int, StatusTask, string>>
-            {
-                {typeof(CreateVmTask), this.UpdateCreateTaskStatusDelegate},
-                {typeof(UpdateVmTask), this.UpdateUpdateTaskkStatusDelegate},
-                {typeof(StandartVmTask), this.UpdateStandartTaskStatusDelegate}
-            };
         }
 
         public PendingTaskHandlerBox GetTaskHandlers()
         {
-            var createTasks = this._taskService.GetPendingCreateTasks();
-            var updateTasks = this._taskService.GetPendingUpdateTasks();
-            var standartTasks = this._taskService.GetPendingStandartTasks();
+            var tasks = this._taskService.GetPendingTasks();
 
             var wmWareTaskHandlers = new List<ITaskHandler>();
             var hyperVTaskHandlers = new List<ITaskHandler>();
-            this.PopulateTaskLists(createTasks, wmWareTaskHandlers, hyperVTaskHandlers);
-            this.PopulateTaskLists(updateTasks, wmWareTaskHandlers, hyperVTaskHandlers);
-            this.PopulateTaskLists(standartTasks, wmWareTaskHandlers, hyperVTaskHandlers);
+            this.PopulateTaskLists(tasks, wmWareTaskHandlers, hyperVTaskHandlers);
 
             return new PendingTaskHandlerBox
             {
@@ -48,8 +37,8 @@ namespace Crytex.ExecutorTask.TaskHandler
             };
         }
 
-        private void PopulateTaskLists<T>(IEnumerable<T> tasks, IList<ITaskHandler> wmWareTaskHandlers,
-            IList<ITaskHandler> hyperVTaskHandlers) where T : BaseTask
+        private void PopulateTaskLists(IEnumerable<TaskV2> tasks, IList<ITaskHandler> wmWareTaskHandlers,
+            IList<ITaskHandler> hyperVTaskHandlers)
         {
             foreach (var task in tasks)
             {
@@ -81,12 +70,12 @@ namespace Crytex.ExecutorTask.TaskHandler
             }
         }
 
-        private VmWareHost GetVmWareHostForTask(BaseTask task)
+        private VmWareHost GetVmWareHostForTask(TaskV2 task)
         {
             return new VmWareHost();
         }
 
-        private HyperVHost GetHyperVHostForTask(BaseTask task)
+        private HyperVHost GetHyperVHostForTask(TaskV2 task)
         {
             return new HyperVHost();
         }
@@ -104,60 +93,53 @@ namespace Crytex.ExecutorTask.TaskHandler
                 Success = e.Success,
                 Error = e.ErrorMessage
             };
+
+            var finishDate = DateTime.UtcNow;
             if (e.Success)
             {
-                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.End, null);
+                this.UpdateTaskStatus(taskEntity.Id, StatusTask.End, finishDate, null);
                 this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
             else
             {
-                this._updateStatusActionDict[taskType].Invoke(taskEntity.Id, StatusTask.EndWithErrors, e.ErrorMessage);
+                this.UpdateTaskStatus(taskEntity.Id, StatusTask.EndWithErrors, finishDate, e.ErrorMessage);
                 this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
 
             if (taskType == typeof(CreateVmTask))
             {
-                var task = (CreateVmTask)taskEntity;
+                var taskOptions = e.TaskEntity.GetOptions<CreateVmOptions>();
                 var newVm = new UserVm
                 {
                     Id = e.MachineGuid,
-                    CoreCount = task.Cpu,
-                    HardDriveSize = task.Hdd,
-                    Name = task.Name,
-                    RamCount = task.Ram,
-                    ServerTemplateId = task.ServerTemplateId,
+                    CoreCount = taskOptions.Cpu,
+                    HardDriveSize = taskOptions.Hdd,
+                    Name = taskOptions.Name,
+                    RamCount = taskOptions.Ram,
+                    ServerTemplateId = taskOptions.ServerTemplateId,
                     Status = StatusVM.Enable,
-                    UserId = task.UserId,
-                    VurtualizationType = task.Virtualization
+                    UserId = e.TaskEntity.UserId,
+                    VurtualizationType = e.TaskEntity.Virtualization
                 };
 
                 this._userVmService.CreateVm(newVm);
             }
             if (taskType == typeof(UpdateVmTask))
             {
-                var task = (UpdateVmTask)taskEntity;
-                this._userVmService.UpdateVm(task.VmId, task.Cpu, task.Hdd, task.Ram);
+                var taskOptions = e.TaskEntity.GetOptions<UpdateVmOptions>();
+                this._userVmService.UpdateVm(taskOptions.VmId, taskOptions.Cpu, taskOptions.Hdd, taskOptions.Ram);
             }
         }
 
-        private void ProcessingStartedEventHandler(object sender, BaseTask task)
+        private void ProcessingStartedEventHandler(object sender, TaskV2 task)
         {
-            this._updateStatusActionDict[task.GetType()].Invoke(task.Id, StatusTask.Processing, null);
+            var startTime = DateTime.UtcNow;
+            this.UpdateTaskStatus(task.Id, StatusTask.Processing, startTime, null);
         }
 
-        private void UpdateCreateTaskStatusDelegate(int id, StatusTask status, string message)
+        private void UpdateTaskStatus(Guid id, StatusTask status, DateTime date, string message)
         {
-            this._taskService.UpdateTaskStatus<CreateVmTask>(id, status, message);
-        }
-
-        private void UpdateUpdateTaskkStatusDelegate(int id, StatusTask status, string message)
-        {
-            this._taskService.UpdateTaskStatus<UpdateVmTask>(id, status, message);
-        }
-
-        private void UpdateStandartTaskStatusDelegate(int id, StatusTask status, string message)
-        {
-            this._taskService.UpdateTaskStatus<StandartVmTask>(id, status, message);
+            this._taskService.UpdateTaskStatus(id, status, date, message);
         }
     }
 }

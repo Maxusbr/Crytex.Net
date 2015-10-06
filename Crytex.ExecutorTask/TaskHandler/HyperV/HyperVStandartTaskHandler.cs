@@ -5,7 +5,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public class HyperVStandartTaskHandler : BaseHyperVTaskHandler, ITaskHandler
     {
-        public HyperVStandartTaskHandler(StandartVmTask task, IHyperVControl hyperVControl, string hostName)
+        public HyperVStandartTaskHandler(TaskV2 task, IHyperVControl hyperVControl, string hostName)
             : base(task, hyperVControl, hostName) { }
 
         protected override TaskExecutionResult ExecuteLogic()
@@ -14,18 +14,16 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             var taskExecutionResult = new TaskExecutionResult();
             try
             {
-                var task = (StandartVmTask)this.TaskEntity;
-                var vmName = task.VmId.ToString();
-                switch (task.TaskType)
+                var task = this.TaskEntity;
+                var taskOptions = task.GetOptions<ChangeStatusOptions>();
+                var vmName = taskOptions.VmId.ToString();
+                switch (taskOptions.TypeChangeStatus)
                 {
-                    case TypeStandartVmTask.Start:
+                    case TypeChangeStatus.Start:
                         this._hyperVControl.StartVm(vmName);
                         break;
-                    case TypeStandartVmTask.Stop:
+                    case TypeChangeStatus.Stop:
                         this._hyperVControl.StopVm(vmName);
-                        break;
-                    case TypeStandartVmTask.Remove:
-                        this._hyperVControl.RemoveVm(vmName);
                         break;
                 }
                 

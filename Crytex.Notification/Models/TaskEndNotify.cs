@@ -9,7 +9,7 @@ namespace Crytex.Notification.Models
 {
     public class TaskEndNotify: BaseNotify
     {
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
         public bool Success { get; set; }
         public TypeError TypeError { get; set; }
         public string Error { get; set; }
