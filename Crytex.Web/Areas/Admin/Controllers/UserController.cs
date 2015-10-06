@@ -4,14 +4,13 @@ using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
-using Crytex.Web.Areas.Admin.Controllers;
 using Microsoft.AspNet.Identity;
 
-namespace Crytex.Web.Controllers.Api.Admin
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminUserController : AdminCrytexController
+    public class UserController : AdminCrytexController
     {
-        public AdminUserController(IApplicationUserService applicationUserService)
+        public UserController(IApplicationUserService applicationUserService)
         {
             _applicationUserService = applicationUserService;
         }

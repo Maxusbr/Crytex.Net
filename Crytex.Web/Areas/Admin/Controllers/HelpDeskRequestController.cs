@@ -2,15 +2,15 @@
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
-using Crytex.Web.Areas.Admin.Controllers;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminHelpDeskRequestController : AdminCrytexController
+    public class HelpDeskRequestController : AdminCrytexController
     {
         private IHelpDeskRequestService _helpDeskRequestService { get; }
 
-        public AdminHelpDeskRequestController(IHelpDeskRequestService helpDeskRequestService)
+        public HelpDeskRequestController(IHelpDeskRequestService helpDeskRequestService)
         {
             this._helpDeskRequestService = helpDeskRequestService;
         }

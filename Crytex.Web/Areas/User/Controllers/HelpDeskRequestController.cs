@@ -2,9 +2,9 @@
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
-using Crytex.Web.Areas.User.Controllers;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.User
 {
     public class HelpDeskRequestController : UserCrytexController
     {

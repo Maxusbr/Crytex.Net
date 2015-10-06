@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.Admin.Controllers;
 using Crytex.Web.Models.ViewModels;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminLogController : AdminCrytexController
+    public class LogController : AdminCrytexController
     {
         private ILogService _logService { get; }
 
-        public AdminLogController(ILogService logService)
+        public LogController(ILogService logService)
         {
             _logService = logService;
         }

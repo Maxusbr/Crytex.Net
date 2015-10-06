@@ -6,15 +6,15 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
-using Crytex.Web.Areas.Admin.Controllers;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminHelpDeskRequestCommentController : AdminCrytexController
+    public class HelpDeskRequestCommentController : AdminCrytexController
     {
         private readonly IHelpDeskRequestService _helpDeskRequestService;
 
-        public AdminHelpDeskRequestCommentController(IHelpDeskRequestService helpDeskRequstService)
+        public HelpDeskRequestCommentController(IHelpDeskRequestService helpDeskRequstService)
         {
             this._helpDeskRequestService = helpDeskRequstService;
         }

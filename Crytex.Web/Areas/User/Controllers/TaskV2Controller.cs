@@ -6,12 +6,13 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.User.Controllers;
+using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
+using PagedList;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.User
 {
     public class TaskV2Controller : UserCrytexController
     {
@@ -23,13 +24,27 @@ namespace Crytex.Web.Controllers.Api
         }
 
         // GET: api/TaskV2
-        public IHttpActionResult Get(int pageNumber, int pageSize, TypeTask typeTask)
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]TaskV2SearchParamsViewModel searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be grater than 1");
-            if(!Enum.IsDefined(typeof(TypeTask), typeTask))
-                return BadRequest("TypeTask type not valid");
-            var tasks = _taskService.GetPageTasks(pageNumber, pageSize, typeTask);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            IPagedList<TaskV2> tasks = new PagedList<TaskV2>(new List<TaskV2>(), pageNumber, pageSize);
+
+            if (searchParams != null)
+            {
+                var taskV2Params = AutoMapper.Mapper.Map<TaskV2SearchParams>(searchParams);
+                tasks = _taskService.GetPageTasks(pageNumber, pageSize, taskV2Params);
+            }
+            else
+            {
+                tasks = _taskService.GetPageTasks(pageNumber, pageSize);
+            }
+
             var viewTasks = AutoMapper.Mapper.Map<PageModel<TaskV2ViewModel>>(tasks);
             return Ok(viewTasks);
         }

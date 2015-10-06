@@ -5,18 +5,17 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Crytex.Web.Areas.Admin.Controllers;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminTemplateController : AdminCrytexController
+    public class TemplateController : AdminCrytexController
     {
         private readonly IServerTemplateService _serverTemplateService;
 
-        public AdminTemplateController(IServerTemplateService serverTemplateService)
+        public TemplateController(IServerTemplateService serverTemplateService)
         {
             this._serverTemplateService = serverTemplateService;
         }

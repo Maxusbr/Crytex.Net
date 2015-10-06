@@ -7,16 +7,16 @@ using System.Web.Http;
 using Crytex.Model.Enums;
 using Crytex.Model.Models.Notifications;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.Admin.Controllers;
+using Crytex.Web.Areas.Admin;
 using Crytex.Web.Models.JsonModels;
 
-namespace Crytex.Web.Controllers.Api.Admin
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminEmailTemplateController : AdminCrytexController
+    public class EmailTemplateController : AdminCrytexController
     {
         private IEmailTemplateService _emailTemplateService { get; set; }
 
-        public AdminEmailTemplateController(IEmailTemplateService emailTemplateService)
+        public EmailTemplateController(IEmailTemplateService emailTemplateService)
         {
             _emailTemplateService = emailTemplateService;
         }

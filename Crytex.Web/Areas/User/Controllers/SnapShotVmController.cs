@@ -5,10 +5,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.User.Controllers;
 using Crytex.Web.Models.JsonModels;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.User
 {
     [Authorize]
     public class SnapShotVmController : UserCrytexController

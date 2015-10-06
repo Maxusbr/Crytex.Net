@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.AccessControl;
 using System.Web;
 using Crytex.Model.Models;
 
@@ -21,5 +20,15 @@ namespace Crytex.Web.Models.JsonModels
         public StatusTask? StatusTask { get; set; }
         public ResourceType ResourceType { get; set; }
         public string Options { get; set; }
+        public string UserId { get; set; }
+        public string ErrorMessage { get; set; }
+        public TypeVirtualization Virtualization { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime StartedAt { get; set; }
+        public DateTime CompletedAt { get; set; }
     }
+
+
+ 
+
 }

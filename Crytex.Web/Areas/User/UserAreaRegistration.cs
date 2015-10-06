@@ -1,5 +1,8 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
+using Crytex.Web.App_Start;
+using Microsoft.Practices.Unity.WebApi;
+using UsefulBits.Web.Http.Areas;
 
 namespace Crytex.Web.Areas.User
 {
@@ -17,9 +20,10 @@ namespace Crytex.Web.Areas.User
         {
             context.Routes.MapHttpRoute(
                 AreaName + "_default",
-                AreaName + "/api/{controller}/{action}/{id}",
-                new { id = RouteParameter.Optional }
+                AreaName + "/api/{controller}/{id}",
+                defaults: new {id = RouteParameter.Optional }
             );
+
         }
     }
 }

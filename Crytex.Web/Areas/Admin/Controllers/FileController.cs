@@ -10,15 +10,14 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web;
-using Crytex.Web.Areas.Admin.Controllers;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminFileController : AdminCrytexController
+    public class FileController : AdminCrytexController
     {
         private readonly IFileService _fileService;
 
-        public AdminFileController(IFileService fileService)
+        public FileController(IFileService fileService)
         {
             this._fileService = fileService;
         }

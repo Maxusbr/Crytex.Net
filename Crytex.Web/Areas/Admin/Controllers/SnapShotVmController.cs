@@ -5,17 +5,16 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.Admin.Controllers;
 using Crytex.Web.Models.JsonModels;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
     [Authorize]
-    public class AdminSnapShotVmController : AdminCrytexController
+    public class SnapShotVmController : AdminCrytexController
     {
         private ISnapshotVmService _snapshotVmService;
         private IUserVmService _userVmService;
-        public AdminSnapShotVmController(ISnapshotVmService snapshotVmService, IUserVmService userVmService)
+        public SnapShotVmController(ISnapshotVmService snapshotVmService, IUserVmService userVmService)
         {
             this._snapshotVmService = snapshotVmService;
             this._userVmService = userVmService;

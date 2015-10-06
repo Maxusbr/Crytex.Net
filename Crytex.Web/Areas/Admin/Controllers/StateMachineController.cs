@@ -6,14 +6,14 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.Admin.Controllers;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminStateMachineController : AdminCrytexController
+    public class StateMachineController : AdminCrytexController
     {
         private IStateMachineService _stateMachineService ;
-        public AdminStateMachineController(IStateMachineService stateMachineService)
+        public StateMachineController(IStateMachineService stateMachineService)
         {
             this._stateMachineService = stateMachineService;
         }

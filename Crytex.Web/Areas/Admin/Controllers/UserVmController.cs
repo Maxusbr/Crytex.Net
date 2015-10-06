@@ -4,15 +4,16 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.Admin.Controllers;
+using Crytex.Web.Areas.Admin;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.Admin
 {
-    public class AdminUserVmController : AdminCrytexController
+    public class UserVmController : AdminCrytexController
     {
         private readonly IUserVmService _userVmService;
 
-        public AdminUserVmController(IUserVmService userVmService)
+        public UserVmController(IUserVmService userVmService)
         {
             this._userVmService = userVmService;
         }

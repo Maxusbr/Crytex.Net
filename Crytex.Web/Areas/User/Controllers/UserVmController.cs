@@ -4,9 +4,8 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.User.Controllers;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.User
 {
     public class UserVmController : UserCrytexController
     {

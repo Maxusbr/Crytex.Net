@@ -17,7 +17,7 @@ namespace Crytex.Web.Areas.Admin
         {
             context.Routes.MapHttpRoute(
                 AreaName + "_default",
-                AreaName + "/api/{controller}/{action}/{id}",
+                AreaName + "/api/{controller}/{id}",
                 new { id = RouteParameter.Optional }
             );
         }

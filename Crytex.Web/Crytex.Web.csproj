@@ -224,6 +224,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UsefulBits.Web.Http.Areas, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UsefulBits.Web.Http.Areas.1.2.0.0\lib\net45\UsefulBits.Web.Http.Areas.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebActivatorEx">
       <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
@@ -243,6 +247,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NamespaceHttpControllerSelector.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -252,20 +257,20 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminCrytexController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminEmailTemplateController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminFileController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestCommentController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminLogController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminOperatingSystemController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminRegionControlle.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminServerTemplateController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminStateMachineController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminSystemCenterVirtualManagerController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminTaskV2Controller.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
+    <Compile Include="Areas\Admin\Controllers\EmailTemplateController.cs" />
+    <Compile Include="Areas\Admin\Controllers\FileController.cs" />
+    <Compile Include="Areas\Admin\Controllers\HelpDeskRequestCommentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\HelpDeskRequestController.cs" />
+    <Compile Include="Areas\Admin\Controllers\LogController.cs" />
+    <Compile Include="Areas\Admin\Controllers\OperatingSystemController.cs" />
+    <Compile Include="Areas\Admin\Controllers\RegionControlle.cs" />
+    <Compile Include="Areas\Admin\Controllers\ServerTemplateController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SnapShotVmController.cs" />
+    <Compile Include="Areas\Admin\Controllers\StateMachineController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SystemCenterVirtualManagerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\TaskV2Controller.cs" />
+    <Compile Include="Areas\Admin\Controllers\UserController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UserVmController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
@@ -297,6 +302,7 @@
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\TaskV2SearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2ViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
