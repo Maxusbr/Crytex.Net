@@ -26,6 +26,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<RegionViewModel, Region>();
             Mapper.CreateMap<TaskV2ViewModel, TaskV2>();
             Mapper.CreateMap<ServerTemplateEditViewModel,ServerTemplate>();
+            Mapper.CreateMap<VmWareVCenterViewModel, VmWareVCenter>();
         }
     }
 }
