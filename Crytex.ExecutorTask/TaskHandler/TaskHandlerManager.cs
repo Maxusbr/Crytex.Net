@@ -94,7 +94,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 Error = e.ErrorMessage
             };
 
-            var finishDate = DateTime.Now;
+            var finishDate = DateTime.UtcNow;
             if (e.Success)
             {
                 this.UpdateTaskStatus(taskEntity.Id, StatusTask.End, finishDate, null);
@@ -133,7 +133,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private void ProcessingStartedEventHandler(object sender, TaskV2 task)
         {
-            var startTime = DateTime.Now;
+            var startTime = DateTime.UtcNow;
             this.UpdateTaskStatus(task.Id, StatusTask.Processing, startTime, null);
         }
 

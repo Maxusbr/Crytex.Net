@@ -11,7 +11,7 @@ namespace Crytex.Model.Models
     public class TaskV2
     {
         public Guid Id { get; set; }
-        public Guid ResourceId { get; set; }
+        public Guid? ResourceId { get; set; }
         public TypeTask TypeTask { get; set; }
         public StatusTask StatusTask { get; set; }
         public ResourceType ResourceType { get; set; }
