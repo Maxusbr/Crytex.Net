@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Crytex.Model.Models.Notifications;
 using Crytex.Notification;
 using Crytex.Notification.Models;
+using System.Linq;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -14,12 +15,14 @@ namespace Crytex.ExecutorTask.TaskHandler
         private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
         private IUserVmService _userVmService;
         private INotificationManager _notificationManager;
+        private IVmWareVCenterService _vmWareVCenterService;
 
-        public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService, INotificationManager notificationManager)
+        public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService, INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService)
         {
             this._taskService = taskService;
             this._userVmService = userVmService;
             this._notificationManager = notificationManager;
+            this._vmWareVCenterService = vmWareVCenterService;
         }
 
         public PendingTaskHandlerBox GetTaskHandlers()
@@ -50,8 +53,8 @@ namespace Crytex.ExecutorTask.TaskHandler
                         handler = this._handlerFactory.GetHyperVHandler(task, hyperVHost);
                         break;
                     case TypeVirtualization.WmWare:
-                        var vmWareHost = this.GetVmWareHostForTask(task);
-                        handler = this._handlerFactory.GetVmWareHandler(task, vmWareHost);
+                        var vmWareVCenter = this.GetVmWareVCenterForTask(task);
+                        handler = this._handlerFactory.GetVmWareHandler(task, vmWareVCenter);
                         break;
                     default:
                         throw new ApplicationException(string.Format("Unknown virtualization type {0}", task.Virtualization));
@@ -70,9 +73,11 @@ namespace Crytex.ExecutorTask.TaskHandler
             }
         }
 
-        private VmWareHost GetVmWareHostForTask(TaskV2 task)
+        private VmWareVCenter GetVmWareVCenterForTask(TaskV2 task)
         {
-            return new VmWareHost();
+            var vCenter = this._vmWareVCenterService.GetAllVCenters().First();
+
+            return vCenter;
         }
 
         private HyperVHost GetHyperVHostForTask(TaskV2 task)
