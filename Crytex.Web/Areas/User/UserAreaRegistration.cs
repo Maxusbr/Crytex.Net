@@ -18,9 +18,9 @@ namespace Crytex.Web.Areas.User
 
         public override void RegisterArea(AreaRegistrationContext context)
         {
-            context.Routes.MapHttpRoute(
+            context.MapHttpRoute(
                 AreaName + "_default",
-                AreaName + "/api/{controller}/{id}",
+                "api/"+ AreaName +"/{controller}/{id}",
                 defaults: new {id = RouteParameter.Optional }
             );
 

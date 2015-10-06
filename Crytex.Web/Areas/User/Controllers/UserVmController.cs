@@ -16,6 +16,12 @@ namespace Crytex.Web.Areas.User
             this._userVmService = userVmService;
         }
 
+        public IHttpActionResult Get(int pageNumber, int pageSize)
+        {
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            return this.GetPageInner(pageNumber, pageSize, userId);
+        }
+
         public IHttpActionResult Get(string id)
         {
             Guid guid;

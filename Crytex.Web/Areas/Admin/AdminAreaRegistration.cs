@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using System.Web.Mvc;
+using UsefulBits.Web.Http.Areas;
 
 namespace Crytex.Web.Areas.Admin
 {
@@ -15,9 +16,9 @@ namespace Crytex.Web.Areas.Admin
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
-            context.Routes.MapHttpRoute(
+            context.MapHttpRoute(
                 AreaName + "_default",
-                AreaName + "/api/{controller}/{id}",
+                "api/" + AreaName + "/{controller}/{id}",
                 new { id = RouteParameter.Optional }
             );
         }

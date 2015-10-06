@@ -2,8 +2,11 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http;
+using System.Web.Http.Controllers;
+using System.Web.Http.Dispatcher;
 using System.Web.Http.Routing;
 using Crytex.Web.Filters;
+using UsefulBits.Web.Http.Areas.Routing;
 
 namespace Crytex.Web
 {
@@ -13,7 +16,7 @@ namespace Crytex.Web
         public static void Register(HttpConfiguration config)
         {
             // Конфигурация и службы веб-API
-
+            config.Services.Replace(typeof(IHttpControllerSelector), new AreaHttpControllerSelector(config));
             // Маршруты веб-API
             config.MapHttpAttributeRoutes();
 

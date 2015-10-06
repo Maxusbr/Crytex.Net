@@ -19,6 +19,26 @@ namespace Crytex.Web.Areas.User
             this._snapshotVmService = snapshotVmService;
             this._userVmService = userVmService;
         }
+
         // GET: api/SnapShotVm
+        public IHttpActionResult Get(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                this.ModelState.AddModelError("id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
+            var VM = _userVmService.GetVmById(guid);
+            if (VM.UserId != CrytexContext.UserInfoProvider.GetUserId())
+            {
+                return BadRequest("Are not allowed for this action");
+            }
+
+            var snapshots = _snapshotVmService.GetAllByVmId(guid);
+            var snapshotsView = AutoMapper.Mapper.Map<IEnumerable<SnapshotVmViewModel>>(snapshots);
+
+            return Ok(snapshotsView);
+        }
     }
 }
