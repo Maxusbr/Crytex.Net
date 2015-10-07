@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using Crytex.Web.App_Start;
 using Microsoft.Practices.Unity.WebApi;
-using UsefulBits.Web.Http.Areas;
 using System.Web.Http.Routing;
 using System.Net.Http;
 
