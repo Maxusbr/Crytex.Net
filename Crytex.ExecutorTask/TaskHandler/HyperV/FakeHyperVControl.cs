@@ -1,43 +1,42 @@
-﻿using System;
+﻿using Crytex.Model.Exceptions;
+using Crytex.Model.Models;
+using HyperVRemote;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Threading;
-using Crytex.Model.Exceptions;
-using Crytex.Model.Models;
-using VmWareRemote.Exceptions;
-using VmWareRemote.Interface;
 
-namespace Crytex.ExecutorTask.TaskHandler.VmWare
+namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
-    public class FakeVmWareControl : IVmWareControl
+    public class FakeHyperVControl : IHyperVControl
     {
-        private IVmWareProvider _vmWareProvider;
+        private IHyperVProvider _hyperVProvider;
 
-        public FakeVmWareControl(IVmWareProvider vmWareProvider)
+        public FakeHyperVControl(IHyperVProvider hyperVProvider)
         {
-            this._vmWareProvider = vmWareProvider;
+            this._hyperVProvider = hyperVProvider;
         }
 
-        public Guid CreateVm(CreateVmTask task)
+        public Guid CreateVm(TaskV2 task)
         {
             Thread.Sleep(10000);
-
-            if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
-            {
+           
+            if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError") {
+                
                 throw new CreateVmException("Don't create VM");
             }
             return Guid.NewGuid();
         }
 
 
-        public void UpdateVm(UpdateVmTask updateVmTask)
+        public void UpdateVm(TaskV2 updateVmTask)
         {
             Thread.Sleep(10000);
             if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
             {
                 throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
-                  "Name"));
+                  updateVmTask.GetOptions<UpdateVmOptions>().VmId));
             }
-
         }
 
         public void StartVm(string machineName)
@@ -55,9 +54,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this.StandartOperationInner(machineName, TypeStandartVmTask.Remove);
         }
 
-        #region Private methods
-
-        private void StandartOperationInner(string machineName, TypeStandartVmTask typeStandartVmTask)
+        private void StandartOperationInner(string machineName, TypeStandartVmTask type)
         {
             Thread.Sleep(10000);
             if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
@@ -67,7 +64,5 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                         machineName));
             }
         }
-
-        #endregion // Private methods
     }
 }
