@@ -11,7 +11,8 @@ using Crytex.Core.Service;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web;
-using Crytex.Web.Controllers.Api;
+using Crytex.Web.Areas.Admin;
+
 using Crytex.Web.Mappings;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Service;

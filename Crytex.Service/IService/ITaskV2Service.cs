@@ -8,7 +8,7 @@ namespace Crytex.Service.IService
 {
     public interface ITaskV2Service
     {
-        IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TypeTask typeTask);
+        IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TaskV2SearchParams searchParams = null);
         TaskV2 GetTaskById(Guid id);
         TaskV2 CreateTask(TaskV2 createTask, string option);
         TaskV2 CreateTask<T>(TaskV2 createTask, T options) where T: BaseOptions;

@@ -9,21 +9,25 @@ using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class ServerTemplateController : CrytexApiController
+    public class AdminTemplateController : AdminCrytexController
     {
         private readonly IServerTemplateService _serverTemplateService;
 
-        public ServerTemplateController(IServerTemplateService serverTemplateService)
+        public AdminTemplateController(IServerTemplateService serverTemplateService)
         {
             this._serverTemplateService = serverTemplateService;
         }
 
         // GET: api/ServerTemplate
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(string userId = null)
         {
-            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                userId = CrytexContext.UserInfoProvider.GetUserId();
+            }
+
             var servers = this._serverTemplateService.GeAllForUser(userId).ToList();
             var model = AutoMapper.Mapper.Map<List<ServerTemplate>, List<ServerTemplateViewModel>>(servers);
 
