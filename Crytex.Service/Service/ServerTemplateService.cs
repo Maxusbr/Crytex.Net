@@ -64,6 +64,7 @@ namespace Crytex.Service.Service
             template.MinRamCount = updatedTemplate.MinRamCount;
             template.MinHardDriveSize = updatedTemplate.MinHardDriveSize;
             template.MinCoreCount = updatedTemplate.MinCoreCount;
+            template.Name = updatedTemplate.Name;
 
             this._serverTemplateRepo.Update(template);
             this._unitOfWork.Commit();
