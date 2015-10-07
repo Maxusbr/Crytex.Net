@@ -10,11 +10,11 @@ using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Areas.Admin
 {
-    public class RegionController : AdminCrytexController
+    public class AdminRegionController : AdminCrytexController
     {
         private readonly IRegionService _regionService;
 
-        public RegionController(IRegionService regionService)
+        public AdminRegionController(IRegionService regionService)
         {
             this._regionService = regionService;
         }

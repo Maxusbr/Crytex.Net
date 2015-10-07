@@ -2,32 +2,33 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Service.IService;
+using Crytex.Web.Areas.Admin;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.Admin
 {
-    public class UserVmController : CrytexApiController
+    public class AdminUserVmController : AdminCrytexController
     {
         private readonly IUserVmService _userVmService;
 
-        public UserVmController(IUserVmService userVmService)
+        public AdminUserVmController(IUserVmService userVmService)
         {
             this._userVmService = userVmService;
         }
 
+
+        [ResponseType(typeof(UserVmViewModel))]
         [Authorize]
         public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
         {
-            if (userId == null)
+            if (string.IsNullOrEmpty(userId))
             {
-                userId = this.CrytexContext.UserInfoProvider.GetUserId();
+                userId = CrytexContext.UserInfoProvider.GetUserId();
             }
-            else if (!(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
-                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
-            {
-                return BadRequest("Only Admin and Support user can acces other user Vm info");
-            }
+
             return this.GetPageInner(pageNumber, pageSize, userId);
         }
 
@@ -44,11 +45,16 @@ namespace Crytex.Web.Controllers.Api
 
             return Ok(model);
         }
-        private IHttpActionResult GetPageInner(int pageNumber, int pageSize, string userId)
+        private IHttpActionResult GetPageInner(int pageNumber, int pageSize, string userId = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
                 return BadRequest("PageNumber and PageSize must be grater than 1");
+            }
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                userId = CrytexContext.UserInfoProvider.GetUserId();
             }
             var page = this._userVmService.GetPage(pageNumber, pageSize, userId);
             var viewModel = AutoMapper.Mapper.Map<PageModel<UserVmViewModel>>(page);

@@ -8,9 +8,9 @@ using Microsoft.AspNet.Identity;
 
 namespace Crytex.Web.Areas.Admin
 {
-    public class UserController : AdminCrytexController
+    public class AdminUserController : AdminCrytexController
     {
-        public UserController(IApplicationUserService applicationUserService)
+        public AdminUserController(IApplicationUserService applicationUserService)
         {
             _applicationUserService = applicationUserService;
         }
@@ -60,7 +60,7 @@ namespace Crytex.Web.Areas.Admin
                 return BadRequest(this.ModelState);
             }
 
-            return Created(Url.Link("DefaultApi", new { controller = "User", id = newUser.Id }), new { id = newUser.Id });
+            return Created(Url.Link("DefaultApi", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
         }
 
         /// <summary>

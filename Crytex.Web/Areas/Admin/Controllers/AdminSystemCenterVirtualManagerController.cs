@@ -11,11 +11,11 @@ using Crytex.Model.Models;
 
 namespace Crytex.Web.Areas.Admin
 {
-    public class SystemCenterVirtualManagerController : AdminCrytexController
+    public class AdminSystemCenterVirtualManagerController : AdminCrytexController
     {
         private ISystemCenterVirtualManagerService _managerService;
 
-        public SystemCenterVirtualManagerController(ISystemCenterVirtualManagerService managerService)
+        public AdminSystemCenterVirtualManagerController(ISystemCenterVirtualManagerService managerService)
         {
             this._managerService = managerService;
         }
@@ -59,7 +59,7 @@ namespace Crytex.Web.Areas.Admin
             var newManager = AutoMapper.Mapper.Map<SystemCenterVirtualManager>(model);
             newManager = this._managerService.Create(newManager);
 
-            return Created(Url.Link("DefaultApi", new { controller = "SystemCenterVirtualManager", id = newManager.Id.ToString() }), new { id = newManager.Id.ToString() });
+            return Created(Url.Link("DefaultApi", new { controller = "AdminSystemCenterVirtualManager", id = newManager.Id.ToString() }), new { id = newManager.Id.ToString() });
 
             
 

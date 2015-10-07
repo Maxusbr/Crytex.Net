@@ -10,10 +10,10 @@ using Crytex.Service.IService;
 
 namespace Crytex.Web.Areas.Admin
 {
-    public class StateMachineController : AdminCrytexController
+    public class AdminStateMachineController : AdminCrytexController
     {
         private IStateMachineService _stateMachineService ;
-        public StateMachineController(IStateMachineService stateMachineService)
+        public AdminStateMachineController(IStateMachineService stateMachineService)
         {
             this._stateMachineService = stateMachineService;
         }

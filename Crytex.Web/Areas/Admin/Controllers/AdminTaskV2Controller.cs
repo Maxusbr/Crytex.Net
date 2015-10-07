@@ -14,11 +14,11 @@ using PagedList;
 
 namespace Crytex.Web.Areas.Admin
 {
-    public class TaskV2Controller : AdminCrytexController
+    public class AdminTaskV2Controller : AdminCrytexController
     {
         private readonly ITaskV2Service _taskService;
 
-        public TaskV2Controller(ITaskV2Service taskService)
+        public AdminTaskV2Controller(ITaskV2Service taskService)
         {
             this._taskService = taskService;
         }

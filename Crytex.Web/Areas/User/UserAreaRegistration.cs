@@ -3,10 +3,12 @@ using System.Web.Mvc;
 using Crytex.Web.App_Start;
 using Microsoft.Practices.Unity.WebApi;
 using UsefulBits.Web.Http.Areas;
+using System.Web.Http.Routing;
+using System.Net.Http;
 
 namespace Crytex.Web.Areas.User
 {
-    public class UserAreaRegistration : AreaRegistration 
+    public class UserAreaRegistration : AreaRegistrationWithRoute
     {
         public override string AreaName 
         {
@@ -15,15 +17,6 @@ namespace Crytex.Web.Areas.User
                 return "User";
             }
         }
-
-        public override void RegisterArea(AreaRegistrationContext context)
-        {
-            context.MapHttpRoute(
-                AreaName + "_default",
-                "api/"+ AreaName +"/{controller}/{id}",
-                defaults: new {id = RouteParameter.Optional }
-            );
-
-        }
+     
     }
 }

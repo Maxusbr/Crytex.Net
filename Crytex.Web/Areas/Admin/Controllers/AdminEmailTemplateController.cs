@@ -12,11 +12,11 @@ using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Areas.Admin
 {
-    public class EmailTemplateController : AdminCrytexController
+    public class AdminEmailTemplateController : AdminCrytexController
     {
         private IEmailTemplateService _emailTemplateService { get; set; }
 
-        public EmailTemplateController(IEmailTemplateService emailTemplateService)
+        public AdminEmailTemplateController(IEmailTemplateService emailTemplateService)
         {
             _emailTemplateService = emailTemplateService;
         }

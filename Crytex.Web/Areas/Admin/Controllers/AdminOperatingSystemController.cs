@@ -7,14 +7,14 @@ using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class OperatingSystemController : CrytexApiController
+    public class AdminOperatingSystemController : AdminCrytexController
     {
         private readonly IOperatingSystemsService _oparaingSystemsService;
         private readonly ApplicationUserManager _userManager;
 
-        public OperatingSystemController(IOperatingSystemsService operatingSystemsService)
+        public AdminOperatingSystemController(IOperatingSystemsService operatingSystemsService)
         {
             this._oparaingSystemsService = operatingSystemsService;
         }

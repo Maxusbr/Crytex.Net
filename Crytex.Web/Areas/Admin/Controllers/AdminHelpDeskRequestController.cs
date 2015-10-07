@@ -3,13 +3,14 @@ using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.Admin
 {
-    public class HelpDeskRequestController : CrytexApiController
+    public class AdminHelpDeskRequestController : AdminCrytexController
     {
         private IHelpDeskRequestService _helpDeskRequestService { get; }
 
-        public HelpDeskRequestController(IHelpDeskRequestService helpDeskRequestService)
+        public AdminHelpDeskRequestController(IHelpDeskRequestService helpDeskRequestService)
         {
             this._helpDeskRequestService = helpDeskRequestService;
         }
@@ -36,12 +37,16 @@ namespace Crytex.Web.Controllers.Api
 
 
         // POST: api/HelpDeskRequest
-        public IHttpActionResult Post([FromBody]HelpDeskRequestViewModel model)
+        public IHttpActionResult Post([FromBody]HelpDeskRequestViewModel model, string userId = null)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userId = CrytexContext.UserInfoProvider.GetUserId();
+            if (string.IsNullOrEmpty(userId))
+            {
+                userId = CrytexContext.UserInfoProvider.GetUserId();
+            }
+            
             var newRequest = _helpDeskRequestService.CreateNew(model.Summary, model.Details, userId);
 
             return Ok(new { id = newRequest.Id });
