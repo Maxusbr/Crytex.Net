@@ -17,7 +17,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             var taskExecutionResult = new TaskExecutionResult();
             try
             {
-                var machineName = this.TaskEntity.GetOptions<RemoveVmOptions>().VmId.ToString();
+                var machineName = this.TaskEntity.ResourceId.ToString();
                 this._vmWareControl.RemoveVm(machineName);
                 taskExecutionResult.Success = true;
             }

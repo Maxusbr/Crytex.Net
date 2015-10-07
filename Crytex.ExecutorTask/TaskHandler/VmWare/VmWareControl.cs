@@ -55,7 +55,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 var updateOptions = updateVmTask.GetOptions<UpdateVmOptions>();
 
                 // Get server machine-name from machine Id
-                var machineName = updateOptions.VmId.ToString();
+                var machineName = updateVmTask.ResourceId.ToString();
 
                 // Calculate Ram size in megabytes
                 var ramMB = updateOptions.Ram * 1024;

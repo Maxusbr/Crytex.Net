@@ -38,9 +38,9 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         {
             this._hyperVProvider.Connect();
             var taskOptions = updateVmTask.GetOptions<UpdateVmOptions>();
-            if (this._hyperVProvider.IsVmExist(taskOptions.VmId.ToString()))
+            if (this._hyperVProvider.IsVmExist(updateVmTask.ResourceId.ToString()))
             {
-                var machine = this._hyperVProvider.GetVmByName(taskOptions.VmId.ToString());
+                var machine = this._hyperVProvider.GetVmByName(updateVmTask.ResourceId.ToString());
                 var ramMb = (uint)taskOptions.Ram * 1024;
                 this._hyperVProvider.ModifyMemoryVm(machine, false, ramMb, ramMb, ramMb);
                 this._hyperVProvider.ModifyProcessorVm(machine, (uint)taskOptions.Cpu);
@@ -48,7 +48,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             else
             {
                 throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
-                    taskOptions.VmId));
+                    updateVmTask.ResourceId.ToString()));
             }
         }
 

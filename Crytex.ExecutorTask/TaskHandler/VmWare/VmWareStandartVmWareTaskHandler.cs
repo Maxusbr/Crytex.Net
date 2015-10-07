@@ -10,13 +10,12 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
         protected override TaskExecutionResult ExecuteLogic()
         {
-            Console.WriteLine("Standart task");
             var taskExecutionResult = new TaskExecutionResult();
             try
             {
                 var task = this.TaskEntity;
                 var taskOptions = task.GetOptions<ChangeStatusOptions>();
-                var vmName = taskOptions.VmId.ToString();
+                var vmName = task.ResourceId.ToString();
                 switch (taskOptions.TypeChangeStatus)
                 {
                     case TypeChangeStatus.Start:

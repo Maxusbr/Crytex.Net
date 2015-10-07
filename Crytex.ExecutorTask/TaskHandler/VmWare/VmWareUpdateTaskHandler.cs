@@ -10,7 +10,6 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         
         protected override TaskExecutionResult ExecuteLogic()
         {
-            Console.WriteLine("Update task");
             var taskExecutionResult = new TaskExecutionResult();
             try
             {
