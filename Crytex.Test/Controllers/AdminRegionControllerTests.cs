@@ -24,7 +24,7 @@ using static NUnit.Framework.Assert;
 namespace Crytex.Test.Controllers
 {
     [TestFixture]
-    public class RegionControllerTests
+    public class AdminRegionControllerTests
     {
         UserInfo _userInfo { get; set; }
 
@@ -32,14 +32,14 @@ namespace Crytex.Test.Controllers
 
         IRegionService _regionService { get; set; }
 
-        RegionController _regionController { get; set; }
+        AdminRegionController _regionController { get; set; }
 
         [SetUp]
         public void Init()
         {
             AutoMapperConfiguration.Configure();
             _regionService = Substitute.For<IRegionService>();
-            _regionController = new RegionController(_regionService);
+            _regionController = new AdminRegionController(_regionService);
             _regionController.CrytexContext = Substitute.For<ICrytexContext>();
 
             _userInfo = new UserInfo() { UserId = "userId" };
