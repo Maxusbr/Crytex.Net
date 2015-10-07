@@ -63,6 +63,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\vmware-virtualization\VmWareRemote\VmWareRemote\VmWareRemote.csproj">
+      <Project>{f2a280df-098c-474a-9476-253996729571}</Project>
+      <Name>VmWareRemote</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.ExecutorTask\Crytex.ExecutorTask.csproj">
       <Project>{80d3fd00-5ade-4bb0-ada8-6450346bfc05}</Project>
       <Name>Crytex.ExecutorTask</Name>

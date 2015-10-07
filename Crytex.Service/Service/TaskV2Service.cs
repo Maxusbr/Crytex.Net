@@ -8,6 +8,7 @@ using System;
 using Crytex.Service.Extension;
 using System.Linq.Expressions;
 using Crytex.Service.Model;
+using System.Collections.Generic;
 
 namespace Crytex.Service.Service
 {
@@ -143,6 +144,40 @@ namespace Crytex.Service.Service
             }
 
             this._taskV2Repo.Delete(task);
+            this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<TaskV2> GetPendingTasks()
+        {
+            var tasks = this._taskV2Repo.GetMany(t => t.StatusTask == StatusTask.Pending);
+
+            return tasks;
+        }
+
+        public void UpdateTaskStatus(Guid id, StatusTask status, DateTime? date = null, string errorMessage = null)
+        {
+            var task = this._taskV2Repo.GetById(id);
+
+            if (task == null)
+            {
+                throw new InvalidIdentifierException(string.Format("Task with Id={0} doesn't exists", id.ToString()));
+            }
+
+            task.StatusTask = status;
+            if (errorMessage != null)
+            {
+                task.ErrorMessage = errorMessage;
+            }
+            if (status == StatusTask.Start && date != null)
+            {
+                task.StartedAt = date.Value;
+            }
+            if((status == StatusTask.End || status == StatusTask.EndWithErrors) && date != null)
+            {
+                task.CompletedAt = date.Value;
+            }
+
+            this._taskV2Repo.Update(task);
             this._unitOfWork.Commit();
         }
     }
