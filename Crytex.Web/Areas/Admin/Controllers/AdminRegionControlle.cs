@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Areas.Admin
@@ -20,6 +21,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/Region
+        [ResponseType(typeof(IEnumerable<RegionViewModel>))]
         public IHttpActionResult Get()
         {
             var regions = this._regionService.GetAllRegions();
@@ -29,6 +31,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/Region/5
+        [ResponseType(typeof(RegionViewModel))]
         public IHttpActionResult Get(int id)
         {
             var region = this._regionService.GetRegionById(id);

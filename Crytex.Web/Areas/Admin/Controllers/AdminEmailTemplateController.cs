@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Model.Enums;
 using Crytex.Model.Models.Notifications;
 using Crytex.Service.IService;
@@ -22,6 +23,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET api/EmailTemplate
+        [ResponseType(typeof(List<EmailTemplateViewModel>))]
         public IHttpActionResult Get()
         {
             var emailTemplates = _emailTemplateService.GetAllTemplates();
@@ -30,6 +32,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET api/EmailTemplate/5
+        [ResponseType(typeof(EmailTemplateViewModel))]
         public IHttpActionResult Get(int id)
         {
             var emailTemplate = _emailTemplateService.GetTemplateById(id);

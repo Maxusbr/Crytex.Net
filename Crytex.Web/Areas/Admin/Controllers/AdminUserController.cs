@@ -4,6 +4,7 @@ using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
+using System.Web.Http.Description;
 using Microsoft.AspNet.Identity;
 
 namespace Crytex.Web.Areas.Admin
@@ -18,6 +19,7 @@ namespace Crytex.Web.Areas.Admin
         IApplicationUserService _applicationUserService { get; }
 
         // GET api/<controller>
+        [ResponseType(typeof(List<ApplicationUserViewModel>))]
         public IHttpActionResult Get(int pageSize = 20, int pageIndex = 1, string userName = null, string email = null)
         {
             if (pageIndex <= 0 || pageSize <= 0)
@@ -29,6 +31,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET api/<controller>/5
+        [ResponseType(typeof(ApplicationUserViewModel))]
         public IHttpActionResult Get(string id)
         {
             if (string.IsNullOrEmpty(id))

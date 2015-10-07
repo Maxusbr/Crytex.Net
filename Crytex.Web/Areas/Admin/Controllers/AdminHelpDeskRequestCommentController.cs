@@ -4,7 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Crytex.Web.Models.JsonModels;
+ using System.Web.Http.Description;
+ using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
 
 
@@ -20,6 +21,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/HelpDeskRequestComment/5
+        [ResponseType(typeof(List<HelpDeskRequestCommentViewModel>))]
         public IHttpActionResult Get(int id)
         {
             var comments = this._helpDeskRequestService.GetCommentsByRequestId(id).ToList();

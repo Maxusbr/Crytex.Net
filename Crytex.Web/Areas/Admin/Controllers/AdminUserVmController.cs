@@ -20,7 +20,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
 
-        [ResponseType(typeof(UserVmViewModel))]
+        [ResponseType(typeof(PageModel<UserVmViewModel>))]
         [Authorize]
         public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
         {
@@ -32,6 +32,7 @@ namespace Crytex.Web.Areas.Admin
             return this.GetPageInner(pageNumber, pageSize, userId);
         }
 
+        [ResponseType(typeof(UserVmViewModel))]
         public IHttpActionResult Get(string id)
         {
             Guid guid;

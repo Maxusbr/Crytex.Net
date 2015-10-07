@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web;
+using System.Web.Http.Description;
 
 namespace Crytex.Web.Areas.Admin
 {
@@ -22,6 +23,7 @@ namespace Crytex.Web.Areas.Admin
             this._fileService = fileService;
         }
 
+        [ResponseType(typeof(FileDescriptorViewModel))]
         public IHttpActionResult Get()
         {
             var files = _fileService.GetAll();

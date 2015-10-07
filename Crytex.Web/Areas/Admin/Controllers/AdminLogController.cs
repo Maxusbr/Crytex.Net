@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
+using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Models.ViewModels;
 
 namespace Crytex.Web.Areas.Admin
@@ -17,6 +19,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET api/<controller>
+        [ResponseType(typeof(List<LogEntryViewModel>))]
         public IHttpActionResult Get(int pageSize = 20, int pageNumber = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string sourceLog = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
@@ -30,6 +33,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET api/<controller>/5
+        [ResponseType(typeof(LogEntryViewModel))]
         public IHttpActionResult Get(int id)
         {
             var logEntry = _logService.GetLogEntry(id);

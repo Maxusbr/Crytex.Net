@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
@@ -21,6 +22,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/ServerTemplate
+        [ResponseType(typeof(List<ServerTemplateViewModel>))]
         public IHttpActionResult Get(string userId = null)
         {
             if (string.IsNullOrEmpty(userId))
@@ -35,6 +37,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/ServerTemplate/5
+        [ResponseType(typeof(ServerTemplateViewModel))]
         public IHttpActionResult Get(int id)
         {
             var os = this._serverTemplateService.GeById(id);

@@ -2,6 +2,8 @@
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
+using System.Web.Http.Description;
+using Crytex.Web.Models.ViewModels;
 
 
 namespace Crytex.Web.Areas.Admin
@@ -15,6 +17,7 @@ namespace Crytex.Web.Areas.Admin
             this._helpDeskRequestService = helpDeskRequestService;
         }
 
+        [ResponseType(typeof(PageModel<HelpDeskRequestViewModel>))]
         public IHttpActionResult Get(int pageNumber, int pageSize)
         {
             if (pageNumber <= 0 || pageSize <= 0)
@@ -27,6 +30,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/HelpDeskRequest/5
+        [ResponseType(typeof(HelpDeskRequestViewModel))]
         public IHttpActionResult Get(int id)
         {
             var request = this._helpDeskRequestService.GeById(id);

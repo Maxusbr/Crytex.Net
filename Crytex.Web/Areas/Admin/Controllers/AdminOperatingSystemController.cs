@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
@@ -20,6 +21,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/OperatingSystem
+        [ResponseType(typeof(List<OperatingSystemViewModel>))]
         public IHttpActionResult Get()
         {
             var systems = this._oparaingSystemsService.GetAll().ToList();
@@ -29,6 +31,7 @@ namespace Crytex.Web.Areas.Admin
         }
 
         // GET: api/OperatingSystem/5
+        [ResponseType(typeof(OperatingSystemViewModel))]
         public IHttpActionResult Get(int id)
         {
             var os = this._oparaingSystemsService.GeById(id);

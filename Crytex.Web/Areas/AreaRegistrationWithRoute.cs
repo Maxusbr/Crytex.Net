@@ -16,11 +16,11 @@ namespace Crytex.Web.Areas
         public override void RegisterArea(AreaRegistrationContext context)
         {
             context.Routes.MapHttpRoute(
-         "DefaultApi" + AreaName,
-         "api/" + AreaName + "/{controller}/{id}",
-         new { id = RouteParameter.Optional },
-         new { httpMethod = new HttpMethodConstraint(HttpMethod.Get, HttpMethod.Put, HttpMethod.Delete) }
-     );
+                 "DefaultApi" + AreaName,
+                 "api/" + AreaName + "/{controller}/{id}",
+                 new { id = RouteParameter.Optional },
+                 new { httpMethod = new HttpMethodConstraint(HttpMethod.Get, HttpMethod.Put, HttpMethod.Delete) }
+             );
 
             //This allows POSTs to the RPC Style methods http://api/controller/action
             context.Routes.MapHttpRoute(
@@ -28,7 +28,7 @@ namespace Crytex.Web.Areas
                 "api/" + AreaName + "/{controller}/{action}/{id}",
                 new { id = RouteParameter.Optional },
                 new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) }
-                );
+            );
 
             //Finally this allows POST to typical REST post address http://api/controller/
             context.Routes.MapHttpRoute(
@@ -36,7 +36,7 @@ namespace Crytex.Web.Areas
                 "api/" + AreaName + "/{controller}/{action}",
                 new { action = "Post" },
                 new { httpMethod = new HttpMethodConstraint(HttpMethod.Post) }
-                );
+            );
 
 
         }

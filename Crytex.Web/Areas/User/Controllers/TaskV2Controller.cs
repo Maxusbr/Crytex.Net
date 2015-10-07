@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
@@ -24,6 +25,7 @@ namespace Crytex.Web.Areas.User
         }
 
         // GET: api/TaskV2
+        [ResponseType(typeof(PageModel<TaskV2ViewModel>))]
         public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]TaskV2SearchParamsViewModel searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
@@ -50,6 +52,7 @@ namespace Crytex.Web.Areas.User
         }
 
         // GET: api/TaskV2/5
+        [ResponseType(typeof(TaskV2ViewModel))]
         public IHttpActionResult Get(string id)
         {
             Guid guid;
