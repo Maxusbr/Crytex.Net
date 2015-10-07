@@ -20,6 +20,10 @@ namespace Crytex.Web.Areas.Admin
             this._oparaingSystemsService = operatingSystemsService;
         }
 
+        /// <summary>
+        /// Получение всех операций системы
+        /// </summary>
+        /// <returns></returns>
         // GET: api/OperatingSystem
         [ResponseType(typeof(List<OperatingSystemViewModel>))]
         public IHttpActionResult Get()
@@ -30,6 +34,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(model);
         }
 
+        /// <summary>
+        /// Получение операции системы по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/OperatingSystem/5
         [ResponseType(typeof(OperatingSystemViewModel))]
         public IHttpActionResult Get(int id)
@@ -40,6 +49,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(model);
         }
 
+        /// <summary>
+        /// Создание операции 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // POST: api/OperatingSystem
         public IHttpActionResult Post([FromBody]OperatingSystemEditViewModel model)
         {
@@ -54,6 +68,12 @@ namespace Crytex.Web.Areas.Admin
 
         }
 
+        /// <summary>
+        /// Обновление операции
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // PUT: api/OperatingSystem/5
         public IHttpActionResult Put(int id, [FromBody]OperatingSystemEditViewModel model)
         {
@@ -67,6 +87,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok();
         }
 
+        /// <summary>
+        /// Удаление операции по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/OperatingSystem/5
         public IHttpActionResult Delete(int id)
         {

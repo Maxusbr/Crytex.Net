@@ -25,6 +25,13 @@ namespace Crytex.Web.Areas.Admin
         }
 
 
+        /// <summary>
+        /// Получение списка TaskV2
+        /// </summary>
+        /// <param name="searchParams"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         // GET: api/TaskV2
         [ResponseType(typeof(PageModel<TaskV2ViewModel>))]
         public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]AdminTaskV2SearchParamsViewModel searchParams = null)
@@ -52,6 +59,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(viewTasks);
         }
 
+        /// <summary>
+        /// Получение TaskV2 по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/TaskV2/5
         [ResponseType(typeof(TaskV2ViewModel))]
         public IHttpActionResult Get(string id)
@@ -64,6 +76,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(viewTask);
         }
 
+        /// <summary>
+        /// Создание нового TaskV2
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
         // POST: api/TaskV2
         public IHttpActionResult Post([FromBody]TaskV2ViewModel task)
         {
@@ -92,12 +109,23 @@ namespace Crytex.Web.Areas.Admin
             return Ok(newTask);
         }
 
+        /// <summary>
+        /// Обновление TaskV2
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         // PUT: api/TaskV2/5
         public IHttpActionResult Put(int id, [FromBody]string value)
         {
             return Ok();
         }
 
+        /// <summary>
+        /// Удаление TaskV2 по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/TaskV2/5
         public IHttpActionResult Delete(Guid id)
         {

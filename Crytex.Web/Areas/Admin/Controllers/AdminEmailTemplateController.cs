@@ -22,6 +22,10 @@ namespace Crytex.Web.Areas.Admin
             _emailTemplateService = emailTemplateService;
         }
 
+        /// <summary>
+        /// Получение списка EmailTemplate
+        /// </summary>
+        /// <returns></returns>
         // GET api/EmailTemplate
         [ResponseType(typeof(List<EmailTemplateViewModel>))]
         public IHttpActionResult Get()
@@ -31,6 +35,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(model);
         }
 
+        /// <summary>
+        /// Получение EmailTemplate по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET api/EmailTemplate/5
         [ResponseType(typeof(EmailTemplateViewModel))]
         public IHttpActionResult Get(int id)
@@ -43,6 +52,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(model);
         }
 
+        /// <summary>
+        /// Создание нового EmailTemplate
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // POST api/EmailTemplate
         public IHttpActionResult Post([FromBody]EmailTemplateViewModel model)
         {
@@ -66,6 +80,12 @@ namespace Crytex.Web.Areas.Admin
             return Ok(new { id = emailTemplate.Id });
         }
 
+        /// <summary>
+        /// Обновление EmailTemplate
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // PUT api/EmailTemplate/5
         public IHttpActionResult Put(int id, [FromBody]UpdateEmailTemplateViewModel model)
         {
@@ -85,6 +105,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok();
         }
 
+        /// <summary>
+        /// Удаление EmailTemplate по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE api/EmailTemplate/5
         public IHttpActionResult Delete(int id)
         {
@@ -92,7 +117,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok();
         }
 
-        // удаляет все шаблоны в БД заданного типа
+        /// <summary>
+        /// Удаление всех шаблонов в БД заданного типа ?type=ChangeProfile, ?type=0
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         // DELETE api/EmailTemplate?type=ChangeProfile
         // DELETE api/EmailTemplate?type=0
         public IHttpActionResult Delete(EmailTemplateType type)

@@ -20,6 +20,10 @@ namespace Crytex.Web.Areas.Admin
             this._regionService = regionService;
         }
 
+        /// <summary>
+        /// Получение всех Регионов
+        /// </summary>
+        /// <returns></returns>
         // GET: api/Region
         [ResponseType(typeof(IEnumerable<RegionViewModel>))]
         public IHttpActionResult Get()
@@ -30,6 +34,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(viewModel);
         }
 
+        /// <summary>
+        /// Получение всех Регионов по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/Region/5
         [ResponseType(typeof(RegionViewModel))]
         public IHttpActionResult Get(int id)
@@ -40,6 +49,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(viewModel);
         }
 
+        /// <summary>
+        /// Создание нового Региона
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // POST: api/Region
         public IHttpActionResult Post([FromBody]RegionViewModel model)
         {
@@ -53,6 +67,12 @@ namespace Crytex.Web.Areas.Admin
             return Ok(newRegion);
         }
 
+        /// <summary>
+        /// Обновление Региона
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // PUT: api/Region/5
         public IHttpActionResult Put(int id,[FromBody]RegionViewModel model)
         {
@@ -68,6 +88,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok();
         }
 
+        /// <summary>
+        /// Удаление Региона по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/Region/5
         public IHttpActionResult Delete(int id)
         {

@@ -20,6 +20,10 @@ namespace Crytex.Web.Areas.Admin
             this._stateMachineService = stateMachineService;
         }
 
+        /// <summary>
+        /// Получение списка состояний машин
+        /// </summary>
+        /// <returns></returns>
         // GET: api/StateMachine
         [ResponseType(typeof(IEnumerable<StateMachine>))]
         public IHttpActionResult Get()
@@ -27,6 +31,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(_stateMachineService.GetStateAll());
         }
 
+        /// <summary>
+        /// Получение состояние машины по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/StateMachine/5
         [ResponseType(typeof(StateMachine))]
         public IHttpActionResult Get(int id)

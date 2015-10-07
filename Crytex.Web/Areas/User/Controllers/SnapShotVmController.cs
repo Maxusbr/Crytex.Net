@@ -22,6 +22,11 @@ namespace Crytex.Web.Areas.User
             this._userVmService = userVmService;
         }
 
+        /// <summary>
+        /// Получение снимка машины пользователя по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/SnapShotVm
         [ResponseType(typeof(SnapshotVmViewModel))]
         public IHttpActionResult Get(string id)

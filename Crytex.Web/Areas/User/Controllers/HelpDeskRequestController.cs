@@ -16,6 +16,12 @@ namespace Crytex.Web.Areas.User
             this._helpDeskRequestService = helpDeskRequestService;
         }
 
+        /// <summary>
+        /// Получение списка HelpDeskRequest
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [ResponseType(typeof(PageModel<HelpDeskRequestViewModel>))]
         public IHttpActionResult Get(int pageNumber, int pageSize)
         {
@@ -28,6 +34,11 @@ namespace Crytex.Web.Areas.User
             return Ok(viewModel);
         }
 
+        /// <summary>
+        /// Получение HelpDeskRequest по Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/HelpDeskRequest/5
         [ResponseType(typeof(HelpDeskRequestViewModel))]
         public IHttpActionResult Get(int id)
@@ -38,7 +49,11 @@ namespace Crytex.Web.Areas.User
             return Ok(model);
         }
 
-
+        /// <summary>
+        /// Создание нового HelpDeskRequest для пользователя
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // POST: api/HelpDeskRequest
         public IHttpActionResult Post([FromBody]HelpDeskRequestViewModel model)
         {
@@ -51,6 +66,12 @@ namespace Crytex.Web.Areas.User
             return Ok(new { id = newRequest.Id });
         }
 
+        /// <summary>
+        /// Обновление HelpDeskRequest по Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut]
         public IHttpActionResult Put(int id, [FromBody]HelpDeskRequestViewModel model)
         {
@@ -64,8 +85,11 @@ namespace Crytex.Web.Areas.User
             return Ok();
         }
 
-
-
+        /// <summary>
+        /// Удаление HelpDeskRequest по Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         // DELETE: api/HelpDeskRequest/5
         public IHttpActionResult Delete(int id)

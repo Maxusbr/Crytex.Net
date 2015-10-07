@@ -17,6 +17,12 @@ namespace Crytex.Web.Areas.Admin
             this._helpDeskRequestService = helpDeskRequestService;
         }
 
+        /// <summary>
+        /// Получение списка HelpDeskRequest
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [ResponseType(typeof(PageModel<HelpDeskRequestViewModel>))]
         public IHttpActionResult Get(int pageNumber, int pageSize)
         {
@@ -29,6 +35,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(viewModel);
         }
 
+        /// <summary>
+        /// Получение HelpDeskRequest по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/HelpDeskRequest/5
         [ResponseType(typeof(HelpDeskRequestViewModel))]
         public IHttpActionResult Get(int id)
@@ -39,7 +50,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(model);
         }
 
-
+        /// <summary>
+        /// Создание нового HelpDeskRequest
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // POST: api/HelpDeskRequest
         public IHttpActionResult Post([FromBody]HelpDeskRequestViewModel model, string userId = null)
         {
@@ -56,6 +71,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(new { id = newRequest.Id });
         }
 
+        /// <summary>
+        /// Обновление HelpDeskRequest
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPut]
         public IHttpActionResult Put(int id, [FromBody]HelpDeskRequestViewModel model)
         {
@@ -70,7 +90,11 @@ namespace Crytex.Web.Areas.Admin
         }
 
 
-
+        /// <summary>
+        /// Удаление HelpDeskRequest по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         // DELETE: api/HelpDeskRequest/5
         public IHttpActionResult Delete(int id)
