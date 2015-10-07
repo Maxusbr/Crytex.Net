@@ -8,13 +8,13 @@ using System.Net.Http;
 using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class RegionController : CrytexApiController
+    public class AdminRegionController : AdminCrytexController
     {
         private readonly IRegionService _regionService;
 
-        public RegionController(IRegionService regionService)
+        public AdminRegionController(IRegionService regionService)
         {
             this._regionService = regionService;
         }

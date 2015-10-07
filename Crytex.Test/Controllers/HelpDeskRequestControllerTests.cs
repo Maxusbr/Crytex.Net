@@ -11,7 +11,8 @@ using Crytex.Core.Service;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web;
-using Crytex.Web.Controllers.Api;
+
+
 using Crytex.Web.Mappings;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Service;
@@ -19,6 +20,7 @@ using NSubstitute;
 using NUnit.Framework;
 using PagedList;
 using static NUnit.Framework.Assert;
+using Crytex.Web.Areas.Admin;
 
 namespace Crytex.Test.Controllers
 {

@@ -2,6 +2,10 @@ using System.Web.Http;
 using WebActivatorEx;
 using Crytex.Web;
 using Swashbuckle.Application;
+using System.Web.Http.Description;
+using System.Web.Http.Routing.Constraints;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
@@ -23,7 +27,7 @@ namespace Crytex.Web
                         c.IgnoreObsoleteProperties();
 
                         c.UseFullTypeNameInSchemaIds();
-
+                      
                         c.DescribeAllEnumsAsStrings();
                         // By default, the service root url is inferred from the request used to access the docs.
                         // However, there may be situations (e.g. proxy and load-balanced environments) where this does not
@@ -43,6 +47,17 @@ namespace Crytex.Web
                         //
                         c.SingleApiVersion("v1", "Crytex.Web");
 
+
+                          //    c.OperationFilter()
+                              c.MultipleApiVersions(
+                            VersionHelper.ResolveVersionSupportByControllerDescriptor,
+                        vc =>
+                        {
+                            vc.Version("Admin", "Admin API "); //add this line when v2 is released
+
+                            // ReSharper disable once ConvertToLambdaExpression
+                            vc.Version("User", "User API");
+                        });
                         // If your API has multiple versions, use "MultipleApiVersions" instead of "SingleApiVersion".
                         // In this case, you must provide a lambda that tells Swashbuckle which actions should be
                         // included in the docs for a given API version. Like "SingleApiVersion", each call to "Version"
@@ -225,9 +240,33 @@ namespace Crytex.Web
                     });
         }
 
+       
+
         static string GetXmlCommentsPath()
         {
             return $@"{System.AppDomain.CurrentDomain.BaseDirectory}\bin\Crytex.Web.XML";
+        }
+
+        public static class VersionHelper
+        {
+            private const string VersionRegex = @"v([\d]+)";
+
+            public static bool ResolveVersionSupportByControllerDescriptor(ApiDescription apiDesc, string targetApiVersion)
+            {
+                // remove any Version text from the tags
+                apiDesc.ActionDescriptor.ControllerDescriptor.ControllerName = Regex.Replace(apiDesc.ActionDescriptor.ControllerDescriptor.ControllerName, VersionRegex, string.Empty, RegexOptions.IgnoreCase);
+
+                // now filter out any controllers that aren't the target version
+                var controllerNamespace = apiDesc.ActionDescriptor.ControllerDescriptor.ControllerType.FullName;
+                var controllerInNameSpace= CultureInfo.InvariantCulture.CompareInfo.IndexOf(controllerNamespace, string.Format(".{0}.", targetApiVersion), CompareOptions.IgnoreCase) >= 0;
+
+
+                var path = apiDesc.RelativePath.Split('/');
+                var pathVersion = path[1];
+
+                var actionInVersion= CultureInfo.InvariantCulture.CompareInfo.IndexOf(pathVersion, targetApiVersion, CompareOptions.IgnoreCase) >= 0;
+                return controllerInNameSpace && actionInVersion;
+            }
         }
     }
 }

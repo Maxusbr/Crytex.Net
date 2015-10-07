@@ -5,13 +5,13 @@ using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.ViewModels;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class LogController : ApiController
+    public class AdminLogController : AdminCrytexController
     {
         private ILogService _logService { get; }
 
-        public LogController(ILogService logService)
+        public AdminLogController(ILogService logService)
         {
             _logService = logService;
         }

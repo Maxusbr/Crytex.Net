@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
+using Crytex.Service.Model;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.Web.Mappings
@@ -26,6 +27,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<RegionViewModel, Region>();
             Mapper.CreateMap<TaskV2ViewModel, TaskV2>();
             Mapper.CreateMap<ServerTemplateEditViewModel,ServerTemplate>();
+            Mapper.CreateMap<AdminTaskV2SearchParamsViewModel, TaskV2SearchParams>();
+            Mapper.CreateMap<TaskV2SearchParamsViewModel, TaskV2SearchParams>();
         }
     }
 }
