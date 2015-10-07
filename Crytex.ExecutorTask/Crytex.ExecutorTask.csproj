@@ -70,10 +70,10 @@
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />
     <Compile Include="TaskHandler\TaskHandlerFactory.cs" />
     <Compile Include="TaskHandler\VmWare\BaseVmWareTaskHandler.cs" />
-    <Compile Include="TaskHandler\VmWare\FakeVmWareControl.cs" />
     <Compile Include="TaskHandler\VmWare\IVmWareControl.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareControl.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareCreateTaskHandler.cs" />
+    <Compile Include="TaskHandler\VmWare\VmWareRemoveVmTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareStandartVmWareTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareUpdateTaskHandler.cs" />
     <Compile Include="TaskManager.cs" />

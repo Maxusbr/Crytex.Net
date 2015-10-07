@@ -1,25 +1,27 @@
-﻿using Crytex.Model.Exceptions;
-using Crytex.Model.Models;
+﻿using Crytex.Model.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
-    public class VmWareCreateTaskHandler : BaseVmWareTaskHandler, ITaskHandler
+    class VmWareRemoveVmTaskHandler : BaseVmWareTaskHandler, ITaskHandler
     {
-        public VmWareCreateTaskHandler(TaskV2 task, IVmWareControl vmWareControl, string hostName)
+        public VmWareRemoveVmTaskHandler(TaskV2 task, IVmWareControl vmWareControl, string hostName)
             :base(task, vmWareControl, hostName){ }
 
         protected override TaskExecutionResult ExecuteLogic()
         {
-            Console.WriteLine("Create task");
             var taskExecutionResult = new TaskExecutionResult();
             try
             {
-                var machineGuid = this._vmWareControl.CreateVm(this.TaskEntity);
+                var machineName = this.TaskEntity.GetOptions<RemoveVmOptions>().VmId.ToString();
+                this._vmWareControl.RemoveVm(machineName);
                 taskExecutionResult.Success = true;
-                taskExecutionResult.MachineGuid = machineGuid;
             }
-            catch (CreateVmException ex)
+            catch (ApplicationException ex)
             {
                 taskExecutionResult.Success = false;
                 taskExecutionResult.ErrorMessage = ex.Message;

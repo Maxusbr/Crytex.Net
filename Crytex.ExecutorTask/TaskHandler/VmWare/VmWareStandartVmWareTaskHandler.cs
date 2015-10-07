@@ -10,8 +10,31 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
         protected override TaskExecutionResult ExecuteLogic()
         {
-            Console.WriteLine("Standart task vmware");
-            return new TaskExecutionResult();
+            Console.WriteLine("Standart task");
+            var taskExecutionResult = new TaskExecutionResult();
+            try
+            {
+                var task = this.TaskEntity;
+                var taskOptions = task.GetOptions<ChangeStatusOptions>();
+                var vmName = taskOptions.VmId.ToString();
+                switch (taskOptions.TypeChangeStatus)
+                {
+                    case TypeChangeStatus.Start:
+                        this._vmWareControl.StartVm(vmName);
+                        break;
+                    case TypeChangeStatus.Stop:
+                        this._vmWareControl.StopVm(vmName);
+                        break;
+                }
+
+                taskExecutionResult.Success = true;
+            }
+            catch
+            {
+                taskExecutionResult.Success = false;
+            }
+
+            return taskExecutionResult;
         }
     }
 }

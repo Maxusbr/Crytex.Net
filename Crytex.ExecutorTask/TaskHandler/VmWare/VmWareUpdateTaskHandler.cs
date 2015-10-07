@@ -10,8 +10,19 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         
         protected override TaskExecutionResult ExecuteLogic()
         {
-            Console.WriteLine("Update task vmware");
-            return new TaskExecutionResult();
+            Console.WriteLine("Update task");
+            var taskExecutionResult = new TaskExecutionResult();
+            try
+            {
+                this._vmWareControl.UpdateVm(this.TaskEntity);
+                taskExecutionResult.Success = true;
+            }
+            catch
+            {
+                taskExecutionResult.Success = false;
+            }
+
+            return taskExecutionResult;
         }
     }
 }

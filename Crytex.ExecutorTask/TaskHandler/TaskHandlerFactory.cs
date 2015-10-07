@@ -106,7 +106,10 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetRemoveVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            throw new NotImplementedException();
+            ITaskHandler handler = null;
+            handler = new VmWareRemoveVmTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+
+            return handler;
         }
 
         private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)

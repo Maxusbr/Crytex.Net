@@ -20,7 +20,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public Guid CreateVm(CreateVmTask task)
+        public Guid CreateVm(TaskV2 task)
         {
             // Connect to server
             ConnectIfNotConnected();
@@ -29,28 +29,39 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             var machineGuid = Guid.NewGuid();
 
             // Create new vm
-            var ramMB = task.Ram * 1024;
-            this._vmWareProvider.CreateVm(machineGuid.ToString(), task.Cpu, ramMB);
+            var createOptions = task.GetOptions<CreateVmOptions>();
+            var ramMB = createOptions.Ram * 1024;
+            try
+            {
+                this._vmWareProvider.CreateVm(machineGuid.ToString(), createOptions.Cpu, ramMB);
+            }
+            catch (ApplicationException ex)
+            {
+                throw new CreateVmException(ex.Message, ex);
+            }
 
             return machineGuid;
         }
 
 
-        public void UpdateVm(UpdateVmTask updateVmTask)
+        public void UpdateVm(TaskV2 updateVmTask)
         {
             // Connect to server
             ConnectIfNotConnected();
 
             try
             {
+                // Get update options
+                var updateOptions = updateVmTask.GetOptions<UpdateVmOptions>();
+
                 // Get server machine-name from machine Id
-                var machineName = updateVmTask.VmId.ToString();
+                var machineName = updateOptions.VmId.ToString();
 
                 // Calculate Ram size in megabytes
-                var ramMB = updateVmTask.Ram * 1024;
+                var ramMB = updateOptions.Ram * 1024;
 
                 // Update vm conf by calling provider's ModifyMachine
-                this._vmWareProvider.ModifyMachine(machineName, updateVmTask.Cpu, ramMB);
+                this._vmWareProvider.ModifyMachine(machineName, updateOptions.Cpu, ramMB);
             }
             // Handle invalid name exceptions
             catch (InvalidNameException e)
