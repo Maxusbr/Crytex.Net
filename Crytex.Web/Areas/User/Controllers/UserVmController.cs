@@ -5,9 +5,9 @@ using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Service.IService;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.User
 {
-    public class UserVmController : CrytexApiController
+    public class UserVmController : UserCrytexController
     {
         private readonly IUserVmService _userVmService;
 
@@ -16,18 +16,9 @@ namespace Crytex.Web.Controllers.Api
             this._userVmService = userVmService;
         }
 
-        [Authorize]
-        public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize)
         {
-            if (userId == null)
-            {
-                userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            }
-            else if (!(this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Admin") ||
-                this.CrytexContext.UserInfoProvider.IsCurrentUserInRole("Support")))
-            {
-                return BadRequest("Only Admin and Support user can acces other user Vm info");
-            }
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             return this.GetPageInner(pageNumber, pageSize, userId);
         }
 

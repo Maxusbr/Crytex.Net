@@ -243,6 +243,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\NamespaceHttpControllerSelector.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -250,32 +251,46 @@
     <Compile Include="App_Start\UnityHubActivator.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminCrytexController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminEmailTemplateController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminFileController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestCommentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminLogController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminOperatingSystemController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminRegionControlle.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminServerTemplateController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminStateMachineController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminSystemCenterVirtualManagerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminTaskV2Controller.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
+    <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
+    <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
+    <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
+    <Compile Include="Areas\User\UserAreaRegistration.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Api\Admin\SystemCenterVirtualManagerController.cs" />
-    <Compile Include="Controllers\Api\Admin\UserController.cs" />
     <Compile Include="Controllers\Api\CreateVmTaskAdminController.cs" />
     <Compile Include="Controllers\Api\CreateVmTaskController.cs" />
-    <Compile Include="Controllers\Api\Admin\EmailTemplateController.cs" />
     <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
-    <Compile Include="Controllers\Api\FileController.cs" />
-    <Compile Include="Controllers\Api\HelpDeskRequestCommentController.cs" />
-    <Compile Include="Controllers\Api\HelpDeskRequestController.cs" />
-    <Compile Include="Controllers\Api\LogController.cs" />
+    <Compile Include="Areas\User\Controllers\HelpDeskRequestController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />
-    <Compile Include="Controllers\Api\OperatingSystemController.cs" />
-    <Compile Include="Controllers\Api\RegionControlle.cs" />
-    <Compile Include="Controllers\Api\ServerTemplateController.cs" />
-    <Compile Include="Controllers\Api\SnapShotVmController.cs" />
+    <Compile Include="Areas\User\Controllers\SnapShotVmController.cs" />
+    <Compile Include="Areas\User\Controllers\StateMachineController.cs" />
+    <Compile Include="Areas\User\Controllers\TaskV2Controller.cs" />
+    <Compile Include="Areas\User\Controllers\UserVmController.cs" />
     <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
+ <Compile Include="Controllers\Api\UpdateVmTaskController.cs" />
     <Compile Include="Controllers\Api\StateMachineController.cs" />
     <Compile Include="Controllers\Api\TaskV2Controller.cs" />
     <Compile Include="Controllers\Api\UserVmController.cs" />
     <Compile Include="Controllers\Api\VmWareVCenterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\Api\UpdateVmTaskController.cs" />
     <Compile Include="Filters\ExceptionHandlingWebFilter .cs" />
     <Compile Include="Filters\ExceptionHandlingApiFilter.cs" />
     <Compile Include="Filters\SetLogPropertyWebFilter.cs" />
@@ -293,6 +308,7 @@
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\TaskV2SearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2ViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\CreateVmTaskAdminViewModel.cs" />
@@ -337,6 +353,8 @@
       <Link>connectionStrings.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\User\Views\web.config" />
+    <Content Include="Areas\Admin\Views\web.config" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-2.1.4.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.4.js" />
@@ -391,6 +409,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\Files\Images\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\Shared\" />
+    <Folder Include="Areas\User\Models\" />
+    <Folder Include="Areas\User\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,4 +1,4 @@
-﻿using Crytex.Service.IService;
+﻿ using Crytex.Service.IService;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -7,13 +7,14 @@ using System.Web.Http;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.Admin
 {
-    public class HelpDeskRequestCommentController : CrytexApiController
+    public class AdminHelpDeskRequestCommentController : AdminCrytexController
     {
         private readonly IHelpDeskRequestService _helpDeskRequestService;
 
-        public HelpDeskRequestCommentController(IHelpDeskRequestService helpDeskRequstService)
+        public AdminHelpDeskRequestCommentController(IHelpDeskRequestService helpDeskRequstService)
         {
             this._helpDeskRequestService = helpDeskRequstService;
         }
@@ -28,13 +29,18 @@ namespace Crytex.Web.Controllers.Api
         }
 
         // POST: api/HelpDeskRequestComment/id
-        public IHttpActionResult Post(int id, [FromBody]HelpDeskRequestCommentViewModel model)
+        public IHttpActionResult Post(int id, [FromBody]HelpDeskRequestCommentViewModel model, string userId = null)
         {
             if(!this.ModelState.IsValid)
             {
                 BadRequest(ModelState);
             }
-            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+
+            if(string.IsNullOrEmpty(userId))
+            {
+                userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            }
+
             var newComment = this._helpDeskRequestService.CreateComment(id, model.Comment, userId);
 
             return Ok(new { id = newComment.Id });

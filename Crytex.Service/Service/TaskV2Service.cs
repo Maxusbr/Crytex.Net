@@ -5,7 +5,9 @@ using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
-using System.CodeDom;
+using Crytex.Service.Extension;
+using System.Linq.Expressions;
+using Crytex.Service.Model;
 using System.Collections.Generic;
 
 namespace Crytex.Service.Service
@@ -57,10 +59,49 @@ namespace Crytex.Service.Service
         }
 
 
-        public IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TypeTask typeTask)
+        public IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TaskV2SearchParams searchParams = null)
         {
             var page = new Page(pageNumber, pageSize);
-            var list = this._taskV2Repo.GetPage(page, x => x.TypeTask == typeTask, x => x.Id);
+
+            Expression<Func<TaskV2, bool>> where = x => true;
+            
+            if (searchParams != null)
+            {
+                if (searchParams.Virtualization != null)
+                {
+                    where = where.And(x => x.Virtualization == searchParams.Virtualization);
+                }
+
+                if (searchParams.ResourceId != null)
+                {
+                    where = where.And(x => x.ResourceId == searchParams.ResourceId);
+                }
+
+                if (searchParams.StatusTask != null)
+                {
+                    where = where.And(x => x.StatusTask == searchParams.StatusTask);
+                }
+
+                if (searchParams.UserId != null)
+                {
+                    where = where.And(x => x.UserId == searchParams.UserId);
+                }
+
+                if (searchParams.TypeDate != null)
+                {
+ 
+                    if (searchParams.TypeDate == TypeDate.StartedAt)
+                    {
+                        where = where.And(x => x.StartedAt >= searchParams.StartDate && x.StartedAt <= searchParams.EndDate);
+                    }
+                    if (searchParams.TypeDate == TypeDate.CompletedAt)
+                    {
+                        where = where.And(x => x.CompletedAt >= searchParams.StartDate && x.StartedAt <= searchParams.EndDate);
+                    }
+                }
+            }
+
+            var list = this._taskV2Repo.GetPage(page, where, x => x.Id);
             return list;
         }
 
@@ -141,3 +182,5 @@ namespace Crytex.Service.Service
         }
     }
 }
+
+

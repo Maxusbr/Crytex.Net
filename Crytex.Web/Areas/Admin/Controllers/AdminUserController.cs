@@ -6,11 +6,11 @@ using Crytex.Web.Models.JsonModels;
 using System;
 using Microsoft.AspNet.Identity;
 
-namespace Crytex.Web.Controllers.Api.Admin
+namespace Crytex.Web.Areas.Admin
 {
-    public class UserController : CrytexApiController
+    public class AdminUserController : AdminCrytexController
     {
-        public UserController(IApplicationUserService applicationUserService)
+        public AdminUserController(IApplicationUserService applicationUserService)
         {
             _applicationUserService = applicationUserService;
         }
@@ -60,7 +60,7 @@ namespace Crytex.Web.Controllers.Api.Admin
                 return BadRequest(this.ModelState);
             }
 
-            return Created(Url.Link("DefaultApi", new { controller = "User", id = newUser.Id }), new { id = newUser.Id });
+            return Created(Url.Link("DefaultApi", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
         }
 
         /// <summary>
