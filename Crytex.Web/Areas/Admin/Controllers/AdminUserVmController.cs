@@ -19,8 +19,14 @@ namespace Crytex.Web.Areas.Admin
             this._userVmService = userVmService;
         }
 
-
-        [ResponseType(typeof(UserVmViewModel))]
+        /// <summary>
+        /// Получения списка машин
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [ResponseType(typeof(PageModel<UserVmViewModel>))]
         [Authorize]
         public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
         {
@@ -32,6 +38,12 @@ namespace Crytex.Web.Areas.Admin
             return this.GetPageInner(pageNumber, pageSize, userId);
         }
 
+        /// <summary>
+        /// Получение машины по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ResponseType(typeof(UserVmViewModel))]
         public IHttpActionResult Get(string id)
         {
             Guid guid;
@@ -45,6 +57,7 @@ namespace Crytex.Web.Areas.Admin
 
             return Ok(model);
         }
+
         private IHttpActionResult GetPageInner(int pageNumber, int pageSize, string userId = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)

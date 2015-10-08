@@ -28,7 +28,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>();
             Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
-                .ForMember(dest => dest.ImageFilePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
+                .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
             Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));

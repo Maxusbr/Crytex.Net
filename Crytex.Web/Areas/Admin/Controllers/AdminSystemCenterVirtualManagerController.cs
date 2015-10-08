@@ -5,8 +5,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
+using PagedList;
 
 
 namespace Crytex.Web.Areas.Admin
@@ -24,6 +26,7 @@ namespace Crytex.Web.Areas.Admin
         /// Получение всех менеджеров
         /// </summary>
         /// <returns></returns>
+        [ResponseType(typeof(List<SystemCenterVirtualManagerViewModel>))]
         public IHttpActionResult Get()
         {
             var managers = this._managerService.GetAll(false);
@@ -37,6 +40,7 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
+       [ResponseType(typeof(SystemCenterVirtualManagerViewModel))]
         public IHttpActionResult Get(string id)
         {
             var manager = this._managerService.GetById(id);

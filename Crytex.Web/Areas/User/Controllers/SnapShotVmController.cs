@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
+using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 
@@ -20,7 +22,13 @@ namespace Crytex.Web.Areas.User
             this._userVmService = userVmService;
         }
 
+        /// <summary>
+        /// Получение снимка машины пользователя по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/SnapShotVm
+        [ResponseType(typeof(SnapshotVmViewModel))]
         public IHttpActionResult Get(string id)
         {
             Guid guid;

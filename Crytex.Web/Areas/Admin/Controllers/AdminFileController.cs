@@ -10,6 +10,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web;
+using System.Web.Http.Description;
 
 namespace Crytex.Web.Areas.Admin
 {
@@ -22,6 +23,11 @@ namespace Crytex.Web.Areas.Admin
             this._fileService = fileService;
         }
 
+        /// <summary>
+        /// Получение списка файлов
+        /// </summary>
+        /// <returns></returns>
+        [ResponseType(typeof(FileDescriptorViewModel))]
         public IHttpActionResult Get()
         {
             var files = _fileService.GetAll();
@@ -29,6 +35,10 @@ namespace Crytex.Web.Areas.Admin
             return Ok(viewFiles);
         }
 
+        /// <summary>
+        /// Создание нового файла
+        /// </summary>
+        /// <returns></returns>
         public async Task<IHttpActionResult> Post()
         {
             // Check if the request contains multipart/form-data.
@@ -77,6 +87,11 @@ namespace Crytex.Web.Areas.Admin
 
         }
 
+        /// <summary>
+        /// Удаление файла по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IHttpActionResult Delete(int id)
         {
             var file =_fileService.GetById(id);

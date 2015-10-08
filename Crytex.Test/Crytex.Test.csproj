@@ -148,8 +148,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\RegionControllerTests.cs" />
+    <Compile Include="Controllers\AdminRegionControllerTests.cs" />
     <Compile Include="Controllers\SnapShotVmControllerTests.cs" />
+    <Compile Include="Controllers\AdminSnapShotVmControllerTests.cs" />
     <Compile Include="Controllers\HelpDeskRequestControllerTests.cs" />
     <Compile Include="FakeImplementations\FakeFileDescriptorRepo.cs" />
     <Compile Include="FakeImplementations\FakeSystemCenterRemoteVirtualManagerService.cs" />
