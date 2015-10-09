@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using VmWareRemote.Implementations;
 using VmWareRemote.Interface;
+using VmWareRemote.Model;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -78,13 +79,14 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private IVmWareControl CreateVmWareControl(TaskV2 task, VmWareHost host)
         {
-            var hyperVProvider = new VmWareProvider("username", "password", host.Host);
+            var configuration = new VmWareConfiguration("username", "password", host.Host);
+            var hyperVProvider = new VmWareProvider(configuration);
             return new FakeVmWareControl(hyperVProvider); //test
         }
 
         private IHyperVControl CreateHyperVControl(TaskV2 task, HyperVHost host)
         {
-            var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host,"servername");
+            var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host);
             var hyperVProvider = new HyperVProvider(configuration);
             var control = new FakeHyperVControl(hyperVProvider);
 

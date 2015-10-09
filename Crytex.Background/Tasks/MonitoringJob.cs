@@ -3,6 +3,7 @@ using System.Linq;
 using System.Management.Automation;
 using Crytex.Notification;
 using System.Threading.Tasks;
+using Crytex.Background.Monitor;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using HyperVRemote;
@@ -15,13 +16,13 @@ namespace Crytex.Background.Tasks
     public class MonitoringJob: IJob
     {
         private INotificationManager _notificationManager { get; set; }
-        private IHyperVMonitorFactory _hyperVMonitorFactory { get; set; }
+        private IMonitorFactory _hyperVMonitorFactory { get; set; }
         private IStateMachineService _stateMachine { get; set; }
         private IUserVmService _userVm { get; set; }
         private ISystemCenterVirtualManagerService _systemCenter { get; set; }
 
         public MonitoringJob(INotificationManager notificationManager,
-            IHyperVMonitorFactory hyperVMonitorFactory,
+            IMonitorFactory hyperVMonitorFactory,
             IStateMachineService stateMachine, 
             IUserVmService userVm,
             ISystemCenterVirtualManagerService systemCenter)
@@ -51,12 +52,12 @@ namespace Crytex.Background.Tasks
 
         public void GetVmInfo(HyperVHost host, List<UserVm> allVMs, List<Guid> vmActiveList)
         {
-            var hyperVProvider = _hyperVMonitorFactory.CreateHyperVProvider(host);
+            var hyperVMonitor = _hyperVMonitorFactory.CreateHyperVMonitor(host);
             var hostVms = allVMs.Where(v=>v.VurtualizationType == TypeVirtualization.HyperV && v.HyperVHostId == host.Id);
 
             foreach (var vm in hostVms)
             {
-                var stateData = hyperVProvider.GetVmByName(vm.Name);
+                var stateData = hyperVMonitor.GetVmByName(vm.Name);
 
                 StateMachine vmState = new StateMachine
                 {
