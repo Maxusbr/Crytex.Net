@@ -72,6 +72,12 @@ namespace Crytex.Model.Models
     }
 
     [Serializable]
+    public class RemoveVmOptions : ConfigVmOptions
+    {
+        public Guid VmId { get; set; }
+    }
+
+    [Serializable]
     public class ChangeStatusOptions : BaseOptions
     {
         public TypeChangeStatus TypeChangeStatus { get; set; }

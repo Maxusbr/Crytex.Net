@@ -64,6 +64,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Path, opt => opt.MapFrom(source => "small_" + source.Path));
             Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>()
                 .ForMember(x=>x.ImageSrc, opt=>opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
+            Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
