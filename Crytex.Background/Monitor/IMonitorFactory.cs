@@ -7,6 +7,6 @@ namespace Crytex.Background.Monitor
     public interface IMonitorFactory
     {
         IHyperVMonitor CreateHyperVMonitor(HyperVHost host);
-        IVmWareMonitor CreateVmWareVMonitor(VmWareHost host);
+        IVmWareMonitor CreateVmWareVMonitor(VmWareVCenter vCenter);
     }
 }

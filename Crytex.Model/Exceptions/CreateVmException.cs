@@ -9,5 +9,6 @@ namespace Crytex.Model.Exceptions
     public class CreateVmException : ApplicationException
     {
         public CreateVmException(string message) : base(message) { }
+        public CreateVmException(string message, Exception innerException) : base(message, innerException) { }
     }
 }

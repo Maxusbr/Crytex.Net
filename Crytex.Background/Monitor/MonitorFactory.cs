@@ -18,9 +18,9 @@ namespace Crytex.Background.Monitor
             return control;
         }
 
-        public IVmWareMonitor CreateVmWareVMonitor(VmWareHost host)
+        public IVmWareMonitor CreateVmWareVMonitor(VmWareVCenter vCenter)
         {
-            var configuration = new VmWareConfiguration("username", "password", host.Host);
+            var configuration = new VmWareConfiguration(vCenter.UserName, vCenter.Password, vCenter.ServerAddress);
             var vmWareProvider = new VmWareProvider(configuration); // fake realization provider
             var control = new FakeVmWareMonitor(vmWareProvider); // fake realization control
 

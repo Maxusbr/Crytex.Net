@@ -37,6 +37,15 @@ namespace Crytex.Data.Migrations
             var adminUser = manager.FindByName("AdminUser");
             manager.AddToRoles(adminUser.Id, new string[] { "Admin"});
 
+            var defVCenter = new VmWareVCenter
+            {
+                Name = "default",
+                UserName = "administrator@vsphere.local",
+                Password = "QwerT@12",
+                ServerAddress = "51.254.55.136"
+            };
+            context.VmWareVCenters.Add(defVCenter);
+            context.Commit();
         }
     }
 }

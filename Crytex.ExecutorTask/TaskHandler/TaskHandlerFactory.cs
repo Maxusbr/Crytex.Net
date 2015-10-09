@@ -14,10 +14,19 @@ namespace Crytex.ExecutorTask.TaskHandler
     public class TaskHandlerFactory
     {
         private IDictionary<TypeTask, Func<TaskV2, HyperVHost, ITaskHandler>> _hyperVTaskHandlerMappings;
+        private IDictionary<TypeTask, Func<TaskV2, VmWareVCenter, ITaskHandler>> _vmWareTaskHandlerMappings;
 
         public TaskHandlerFactory()
         {
             this._hyperVTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, HyperVHost, ITaskHandler>>
+            {
+                {TypeTask.CreateVm, this.GetCreateVmTaskHandler},
+                {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
+                {TypeTask.ChangeStatus, this.GetChangeVmStatusTaskHandler},
+                {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler}
+            };
+
+            this._vmWareTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, VmWareVCenter, ITaskHandler>>
             {
                 {TypeTask.CreateVm, this.GetCreateVmTaskHandler},
                 {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
@@ -35,9 +44,12 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        public ITaskHandler GetVmWareHandler(TaskV2 task, VmWareHost host)
+        public ITaskHandler GetVmWareHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            throw new NotImplementedException();
+            var typeTask = task.TypeTask;
+            var handler = this._vmWareTaskHandlerMappings[typeTask].Invoke(task, vCenter);
+
+            return handler;
         }
 
         #region Private methods
@@ -49,10 +61,10 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private ITaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareHost host)
+        private ITaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             ITaskHandler handler = null;
-            handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(task, host), host.Host);
+            handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
 
             return handler;
         }
@@ -64,10 +76,27 @@ namespace Crytex.ExecutorTask.TaskHandler
             
             return handler;
         }
+
+        private ITaskHandler GetUpdateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        {
+            ITaskHandler handler = null;
+            handler = new VmWareUpdateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+
+            return handler;
+        }
+
         private ITaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, HyperVHost host)
         {
             ITaskHandler handler = null;
             handler = new HyperVStandartTaskHandler(task, this.CreateHyperVControl(task, host), host.Host);
+
+            return handler;
+        }
+
+        private ITaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        {
+            ITaskHandler handler = null;
+            handler = new VmWareStandartVmWareTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
 
             return handler;
         }
@@ -77,11 +106,21 @@ namespace Crytex.ExecutorTask.TaskHandler
             throw new NotImplementedException();
         }
 
-        private IVmWareControl CreateVmWareControl(TaskV2 task, VmWareHost host)
+        private ITaskHandler GetRemoveVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var configuration = new VmWareConfiguration("username", "password", host.Host);
-            var hyperVProvider = new VmWareProvider(configuration);
-            return new FakeVmWareControl(hyperVProvider); //test
+            ITaskHandler handler = null;
+            handler = new VmWareRemoveVmTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+
+            return handler;
+        }
+
+        private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)
+        {
+            var configuration = new VmWareConfiguration(vCenter.UserName, vCenter.Password, vCenter.ServerAddress);
+            var vmWareProvider = new VmWareProvider(configuration);
+            var control = new VmWareControl(vmWareProvider);
+
+            return control;
         }
 
         private IHyperVControl CreateHyperVControl(TaskV2 task, HyperVHost host)

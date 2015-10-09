@@ -285,6 +285,7 @@
     <Compile Include="Areas\User\Controllers\UserVmController.cs" />
     <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
     <Compile Include="Controllers\Api\UpdateVmTaskController.cs" />
+    <Compile Include="Controllers\Api\VmWareVCenterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Filters\ExceptionHandlingWebFilter .cs" />
@@ -326,6 +327,7 @@
     <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\UserVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\VmWareVCenterViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ViewModels\LogEntryViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

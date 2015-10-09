@@ -16,6 +16,7 @@ using System.Web.Http.Results;
 using System.Web.Http.Routing;
 using Crytex.Background;
 using Crytex.Background.Monitor;
+using Crytex.Background.Monitor.HyperV;
 using Crytex.Background.Tasks;
 using Crytex.Core.Service;
 using Crytex.Data;
@@ -96,7 +97,8 @@ namespace Crytex.Test.Notification.Hub
                 Id = Guid.NewGuid()
             };
             IHyperVProvider provider = Substitute.For<IHyperVProvider>();
-            _hyperVMonitorFactory.CreateHyperVProvider(host).Returns(provider);
+            IHyperVMonitor monitor = Substitute.For<IHyperVMonitor>();
+            _hyperVMonitorFactory.CreateHyperVMonitor(host).Returns(monitor);
 
             List<UserVm> allHostVMs = new List<UserVm>();
             var userVm = new UserVm
@@ -121,7 +123,7 @@ namespace Crytex.Test.Notification.Hub
             name.Properties.Add(new PSNoteProperty("Uptime", TimeSpan.MinValue));
 
             HyperVMachine machine = new HyperVMachine(name);
-            provider.GetVmByName("name").ReturnsForAnyArgs(machine);
+            monitor.GetVmByName("name").ReturnsForAnyArgs(machine);
 
             _stateMachine.CreateState(new StateMachine{Id = 0}).Returns(new StateMachine { Id = 1 });
             List<Guid> vmActiveList = new List<Guid>

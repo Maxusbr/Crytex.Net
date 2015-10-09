@@ -9,14 +9,14 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         /// </summary>
         /// <param name="task">Объект задачи создания</param>
         /// <returns></returns>
-        Guid CreateVm(CreateVmTask task);
+        Guid CreateVm(TaskV2 task);
 
         /// <summary>
         /// Обновляет конфигурацию виртуальной машины
         /// </summary>
         /// <param name="updateVmTask">Объект задачи обновления конфигурации</param>
         /// <exception cref="VmWareRemote.Exceptions.InvalidIdentifierException">Выбрасывается если машина с таким именем не найдена</exception>
-        void UpdateVm(UpdateVmTask updateVmTask);
+        void UpdateVm(TaskV2 updateVmTask);
 
         /// <summary>
         /// Запускает виртуальную машину

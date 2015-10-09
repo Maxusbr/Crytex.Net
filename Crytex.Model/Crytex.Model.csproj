@@ -74,7 +74,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
@@ -111,6 +110,7 @@
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Models\VmWareHost.cs" />
+    <Compile Include="Models\VmWareVCenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

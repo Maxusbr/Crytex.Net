@@ -70,6 +70,7 @@
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
+    <Compile Include="IRepository\IVmWareVCenterRepository.cs" />
     <Compile Include="Migrations\201505211152138_Init.cs" />
     <Compile Include="Migrations\201505211152138_Init.Designer.cs">
       <DependentUpon>201505211152138_Init.cs</DependentUpon>
@@ -160,6 +161,7 @@
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
+    <Compile Include="Repository\VmWareVCenterRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
