@@ -42,7 +42,8 @@ namespace Crytex.Background.Monitor.Vmware
                 Name = "VmWareMachine",
                 CpuUsage = 1,
                 Uptime = 1,
-                RamUsage = 1
+                RamUsage = 1,
+                State = VmPowerState.On
             };
 
             return machine;

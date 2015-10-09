@@ -62,7 +62,7 @@ namespace Crytex.Background.Tasks
                 StateMachine vmState = new StateMachine
                 {
                     CpuLoad = Convert.ToInt32(stateData.CpuUsage),
-                    RamLoad = Convert.ToInt32(stateData.RamUsage),
+                    RamLoad = stateData.RamUsage,
                     Date = DateTime.UtcNow,
                     VmId = vm.Id
                 };
