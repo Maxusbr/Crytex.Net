@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
@@ -23,7 +24,15 @@ namespace Crytex.Web.Areas.User
             this._taskService = taskService;
         }
 
+        /// <summary>
+        /// Получение списка TaskV2
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchParams"></param>
+        /// <returns></returns>
         // GET: api/TaskV2
+        [ResponseType(typeof(PageModel<TaskV2ViewModel>))]
         public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]TaskV2SearchParamsViewModel searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
@@ -49,7 +58,13 @@ namespace Crytex.Web.Areas.User
             return Ok(viewTasks);
         }
 
+        /// <summary>
+        /// Получение TaskV2 по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/TaskV2/5
+        [ResponseType(typeof(TaskV2ViewModel))]
         public IHttpActionResult Get(string id)
         {
             Guid guid;
@@ -60,6 +75,11 @@ namespace Crytex.Web.Areas.User
             return Ok(viewTask);
         }
 
+        /// <summary>
+        /// Создание нового TaskV2
+        /// </summary>
+        /// <param name="task"></param>
+        /// <returns></returns>
         // POST: api/TaskV2
         public IHttpActionResult Post([FromBody]TaskV2ViewModel task)
         {
@@ -88,12 +108,23 @@ namespace Crytex.Web.Areas.User
             return Ok(newTask);
         }
 
+        /// <summary>
+        /// Обновление TaskV2
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         // PUT: api/TaskV2/5
         public IHttpActionResult Put(int id, [FromBody]string value)
         {
             return Ok();
         }
 
+        /// <summary>
+        /// Уланение TaskV2 по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/TaskV2/5
         public IHttpActionResult Delete(Guid id)
         {

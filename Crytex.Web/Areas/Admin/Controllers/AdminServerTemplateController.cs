@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
@@ -20,7 +21,13 @@ namespace Crytex.Web.Areas.Admin
             this._serverTemplateService = serverTemplateService;
         }
 
+        /// <summary>
+        /// Получение всех ServerTemplate для userId
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         // GET: api/ServerTemplate
+        [ResponseType(typeof(List<ServerTemplateViewModel>))]
         public IHttpActionResult Get(string userId = null)
         {
             if (string.IsNullOrEmpty(userId))
@@ -34,7 +41,13 @@ namespace Crytex.Web.Areas.Admin
             return Ok(model);
         }
 
+        /// <summary>
+        /// Получение ServerTemplate по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // GET: api/ServerTemplate/5
+        [ResponseType(typeof(ServerTemplateViewModel))]
         public IHttpActionResult Get(int id)
         {
             var os = this._serverTemplateService.GeById(id);
@@ -43,6 +56,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok(model);
         }
 
+        /// <summary>
+        /// Создание нового ServerTemplate
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // POST: api/ServerTemplate
         public IHttpActionResult Post([FromBody]ServerTemplateEditViewModel model)
         {
@@ -57,6 +75,12 @@ namespace Crytex.Web.Areas.Admin
             return Ok(new { id = newTemplate.Id });
         }
 
+        /// <summary>
+        /// Обновление ServerTemplate
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         // PUT: api/ServerTemplate/5
         public IHttpActionResult Put(int id, [FromBody]ServerTemplateEditViewModel model)
         {
@@ -71,6 +95,11 @@ namespace Crytex.Web.Areas.Admin
             return Ok();
         }
 
+        /// <summary>
+        /// Удаление ServerTemplate по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         // DELETE: api/ServerTemplate/5
         [HttpDelete]
         public IHttpActionResult Delete(int id)

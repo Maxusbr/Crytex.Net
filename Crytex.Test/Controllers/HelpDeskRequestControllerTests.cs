@@ -21,6 +21,7 @@ using NUnit.Framework;
 using PagedList;
 using static NUnit.Framework.Assert;
 using Crytex.Web.Areas.Admin;
+using Crytex.Web.Areas.User;
 
 namespace Crytex.Test.Controllers
 {

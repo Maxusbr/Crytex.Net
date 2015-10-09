@@ -25,7 +25,7 @@ using static NUnit.Framework.Assert;
 namespace Crytex.Test.Controllers
 {
     [TestFixture]
-    public class SnapShotVmControllerTests
+    public class AdminSnapShotVmControllerTests
     {
         private UserInfo _userInfo { get; set; }
 
@@ -35,7 +35,7 @@ namespace Crytex.Test.Controllers
 
         private IUserInfoProvider _userInfoProvider { get; set; }
 
-        private SnapShotVmController _snapShotVmController { get; set; }
+        private AdminSnapShotVmController _snapShotVmController { get; set; }
 
         [SetUp]
         public void Init()
@@ -43,7 +43,7 @@ namespace Crytex.Test.Controllers
             AutoMapperConfiguration.Configure();
             _snapshotVmService = Substitute.For<ISnapshotVmService>();
             _userVmService = Substitute.For<IUserVmService>();
-            _snapShotVmController = new SnapShotVmController(_snapshotVmService, _userVmService);
+            _snapShotVmController = new AdminSnapShotVmController(_snapshotVmService, _userVmService);
             _snapShotVmController.CrytexContext = Substitute.For<ICrytexContext>();
 
             _userInfo = new UserInfo() {UserId = "userId"};
@@ -65,20 +65,6 @@ namespace Crytex.Test.Controllers
             IsNotNull(actionResultIncorrectId);
             AreEqual(actionResultIncorrectId.ModelState.Keys.FirstOrDefault(), "id");
             AreEqual(actionResultIncorrectId.ModelState.Values.First().Errors.First().ErrorMessage, "Invalid Guid format");
-
-
-            Guid VmID = Guid.NewGuid();
-            var VM = new UserVm
-            {
-                Id = VmID,
-                UserId = _userInfo.UserId + "NotAccessUser"
-            };
-
-            _userVmService.GetVmById(VmID).Returns(VM);
-
-            var actionResultIncorrectUser = _snapShotVmController.Get(VmID.ToString()) as BadRequestErrorMessageResult;
-            IsNotNull(actionResultIncorrectUser);
-            AreEqual(actionResultIncorrectUser.Message, "Are not allowed for this action");
         }
 
         [Test]
@@ -97,13 +83,6 @@ namespace Crytex.Test.Controllers
                 new SnapshotVmViewModel() {Id = 2, VmId = VmID},
                 new SnapshotVmViewModel() {Id = 3, VmId = VmID},
             };
-            var VM = new UserVm
-            {
-                Id = VmID,
-                UserId = _userInfo.UserId
-            }; // valid user with access
-
-            _userVmService.GetVmById(VmID).Returns(VM);
 
             _snapshotVmService.GetAllByVmId(VmID).Returns(snapShotVmRequests);
 
@@ -117,7 +96,6 @@ namespace Crytex.Test.Controllers
 
             _snapshotVmService.Received(1).GetAllByVmId(VmID);
             _snapshotVmService.ClearReceivedCalls();
-
         }
 
     }

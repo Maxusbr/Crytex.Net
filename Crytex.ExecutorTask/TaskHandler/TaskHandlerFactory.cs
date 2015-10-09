@@ -6,6 +6,7 @@ using HyperVRemote.Source.Implementation;
 using System;
 using System.Collections.Generic;
 using VmWareRemote.Implementations;
+using VmWareRemote.Interface;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -122,9 +123,9 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private IHyperVControl CreateHyperVControl(TaskV2 task, HyperVHost host)
         {
-            var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host);
+            var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host,"servername");
             var hyperVProvider = new HyperVProvider(configuration);
-            var control = new HyperVControl(hyperVProvider);
+            var control = new FakeHyperVControl(hyperVProvider);
 
             return control;
         }

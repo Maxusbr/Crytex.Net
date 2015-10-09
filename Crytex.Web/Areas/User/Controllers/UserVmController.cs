@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Service.IService;
 
@@ -16,12 +17,25 @@ namespace Crytex.Web.Areas.User
             this._userVmService = userVmService;
         }
 
+        /// <summary>
+        /// Получение списка машин пользователя
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [ResponseType(typeof(PageModel<UserVmViewModel>))]
         public IHttpActionResult Get(int pageNumber, int pageSize)
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             return this.GetPageInner(pageNumber, pageSize, userId);
         }
 
+        /// <summary>
+        /// Получение машины пользователя по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [ResponseType(typeof(UserVmViewModel))]
         public IHttpActionResult Get(string id)
         {
             Guid guid;
