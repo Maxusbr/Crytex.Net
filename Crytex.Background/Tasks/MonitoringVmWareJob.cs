@@ -16,18 +16,18 @@ namespace Crytex.Background.Tasks
     public class MonitoringVmWareJob : IJob
     {
         private INotificationManager _notificationManager { get; set; }
-        private IMonitorFactory _monitorFactory { get; set; }
+        private IVmWareMonitorFactory _vmWareMonitorFactory { get; set; }
         private IStateMachineService _stateMachine { get; set; }
         private IUserVmService _userVm { get; set; }
         private IVmWareVCenterService _vCenter { get; set; }
 
         public MonitoringVmWareJob(INotificationManager notificationManager,
-            IMonitorFactory monitorFactory,
+            IVmWareMonitorFactory vmWareMonitorFactory,
             IStateMachineService stateMachine,
             IUserVmService userVm,
             IVmWareVCenterService vCenter)
         {
-            this._monitorFactory = monitorFactory;
+            this._vmWareMonitorFactory = vmWareMonitorFactory;
             this._notificationManager = notificationManager;
             this._stateMachine = stateMachine;
             this._userVm = userVm;
@@ -52,7 +52,7 @@ namespace Crytex.Background.Tasks
 
         public void GetVmInfo(VmWareVCenter vCenter, List<UserVm> allVMs, List<Guid> vmActiveList)
         {
-            var vmWareMonitor = _monitorFactory.CreateVmWareVMonitor(vCenter);
+            var vmWareMonitor = _vmWareMonitorFactory.CreateVmWareVMonitor(vCenter);
             var hostVms = allVMs.Where(v => v.VurtualizationType == TypeVirtualization.WmWare && v.VmWareCenterId == vCenter.Id);
 
             foreach (var vm in hostVms)

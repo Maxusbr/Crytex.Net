@@ -1,4 +1,7 @@
-﻿using HyperVRemote;
+﻿using System;
+using System.Management.Automation;
+using HyperVRemote;
+using VmWareRemote.Model;
 
 namespace Crytex.Background.Monitor.HyperV
 {
@@ -13,7 +16,19 @@ namespace Crytex.Background.Monitor.HyperV
 
         public HyperVMachine GetVmByName(string vmName)
         {
-            return _hyperVProvider.GetVmByName(vmName);
+            PSObject name = new PSObject();
+            name.Properties.Add(new PSNoteProperty("CPUUsage", 1));
+            name.Properties.Add(new PSNoteProperty("MemoryAssigned", Convert.ToInt64(2)));
+            name.Properties.Add(new PSNoteProperty("Name", vmName));
+            name.Properties.Add(new PSNoteProperty("Status", "Status"));
+            name.Properties.Add(new PSNoteProperty("Uptime", TimeSpan.MinValue));
+
+            Array values = Enum.GetValues(typeof(VmPowerState));
+            Random random = new Random();
+            VmPowerState randomState = (VmPowerState)values.GetValue(random.Next(values.Length));
+            name.Properties.Add(new PSNoteProperty("State", randomState.ToString("G")));
+
+            return new HyperVMachine(name);
         }
     }
 }

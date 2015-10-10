@@ -16,13 +16,13 @@ namespace Crytex.Background.Tasks
     public class MonitoringJob: IJob
     {
         private INotificationManager _notificationManager { get; set; }
-        private IMonitorFactory _hyperVMonitorFactory { get; set; }
+        private IHyperVMonitorFactory _hyperVMonitorFactory { get; set; }
         private IStateMachineService _stateMachine { get; set; }
         private IUserVmService _userVm { get; set; }
         private ISystemCenterVirtualManagerService _systemCenter { get; set; }
 
         public MonitoringJob(INotificationManager notificationManager,
-            IMonitorFactory hyperVMonitorFactory,
+            IHyperVMonitorFactory hyperVMonitorFactory,
             IStateMachineService stateMachine, 
             IUserVmService userVm,
             ISystemCenterVirtualManagerService systemCenter)

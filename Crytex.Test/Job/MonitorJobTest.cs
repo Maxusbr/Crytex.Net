@@ -49,7 +49,7 @@ namespace Crytex.Test.Notification.Hub
     class MonitoringJobTest
     {
         INotificationManager _notificationManager { get; set; }
-        IMonitorFactory _hyperVMonitorFactory { get; set; }
+        IHyperVMonitorFactory _hyperVMonitorFactory { get; set; }
         IStateMachineService _stateMachine { get; set; }
         IUserVmService _userVm { get; set; }
         ISystemCenterVirtualManagerService _systemCenter { get; set; }
@@ -60,7 +60,7 @@ namespace Crytex.Test.Notification.Hub
         public void Init()
         {
             _notificationManager = Substitute.For<INotificationManager>();
-            _hyperVMonitorFactory = Substitute.For<IMonitorFactory>();
+            _hyperVMonitorFactory = Substitute.For<IHyperVMonitorFactory>();
             _stateMachine = Substitute.For<IStateMachineService>();
             _userVm = Substitute.For<IUserVmService>();
             _systemCenter = Substitute.For<ISystemCenterVirtualManagerService>();

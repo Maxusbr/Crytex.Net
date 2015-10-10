@@ -1,4 +1,5 @@
 using Crytex.Background.Monitor;
+using Crytex.Background.Monitor.Vmware;
 using Crytex.Background.Scheduler;
 using Crytex.Notification;
 using Crytex.Core;
@@ -34,7 +35,8 @@ namespace Crytex.Background
                 unityContainer.RegisterType<IEmailInfoService, EmailInfoService>();
                 unityContainer.RegisterType<IEmailTemplateService, EmailTemplateService>();
                 unityContainer.RegisterType<IAppConfig, AppConfig>();
-                unityContainer.RegisterType<IMonitorFactory, MonitorFactory>();
+                unityContainer.RegisterType<IHyperVMonitorFactory, FakeHyperVMonitorFactory>();
+                unityContainer.RegisterType<IVmWareMonitorFactory, FakeVmWareMonitorFactory>();
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
             };
         }
