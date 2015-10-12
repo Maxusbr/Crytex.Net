@@ -87,10 +87,20 @@
   <ItemGroup>
     <Compile Include="Config\BackgroundConfig.cs" />
     <Compile Include="Config\IBackgroundConfig.cs" />
-    <Compile Include="FakeHyperVProvider.cs" />
-    <Compile Include="HyperVMonitorFactory.cs" />
-    <Compile Include="Tasks\IHyperVMonitor.cs" />
-    <Compile Include="IHyperVMonitorFactory.cs" />
+    <Compile Include="Monitor\HyperV\HyperVMonitorFactory.cs" />
+    <Compile Include="Monitor\HyperV\HyperVMonitor.cs" />
+    <Compile Include="Monitor\HyperV\FakeHyperVMonitorFactory.cs" />
+    <Compile Include="Monitor\Vmware\IVmWareMonitorFactory.cs" />
+    <Compile Include="Monitor\Vmware\VmWareMonitor.cs" />
+    <Compile Include="Monitor\Vmware\FakeVmWareProvider.cs" />
+    <Compile Include="Monitor\Vmware\FakeVmWareMonitor.cs" />
+    <Compile Include="Monitor\HyperV\FakeHyperVProvider.cs" />
+    <Compile Include="Monitor\Vmware\FakeVmWareMonitorFactory.cs" />
+    <Compile Include="Monitor\Vmware\VmWareMonitorFactory.cs" />
+    <Compile Include="Monitor\HyperV\FakeHyperVMonitor.cs" />
+    <Compile Include="Monitor\Vmware\IVmWareMonitor.cs" />
+    <Compile Include="Monitor\HyperV\IHyperVMonitor.cs" />
+    <Compile Include="Monitor\HyperV\IHyperVMonitorFactory.cs" />
     <Compile Include="Scheduler\ISchedulerJobs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +108,7 @@
     <Compile Include="Tasks\BillingJob.cs" />
     <Compile Include="Tasks\EmailSendJob.cs" />
     <Compile Include="Tasks\HyperVSynchronizationJob.cs" />
+    <Compile Include="Tasks\MonitoringVmWareJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />
@@ -122,6 +133,10 @@
     <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
       <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
       <Name>HyperVRemote</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\vmware-virtualization\VmWareRemote\VmWareRemote\VmWareRemote.csproj">
+      <Project>{F2A280DF-098C-474A-9476-253996729571}</Project>
+      <Name>VmWareRemote</Name>
     </ProjectReference>
     <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>
@@ -148,6 +163,7 @@
       <Name>Crytext.HyperVVirtualization</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
