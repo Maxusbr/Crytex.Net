@@ -4,6 +4,7 @@ using System.Management.Automation;
 using Crytex.Notification;
 using System.Threading.Tasks;
 using Crytex.Background.Monitor;
+using Crytex.Background.Monitor.HyperV;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using HyperVRemote;
