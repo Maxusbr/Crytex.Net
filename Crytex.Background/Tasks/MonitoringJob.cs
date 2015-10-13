@@ -12,6 +12,7 @@ namespace Crytex.Background.Tasks
 {
     using System;
     using Quartz;
+    using Crytex.Background.Monitor.HyperV;
 
     public class MonitoringJob: IJob
     {

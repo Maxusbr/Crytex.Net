@@ -10,11 +10,16 @@ namespace Crytex.Background.Tasks
 {
     class TaskExecutorUpdateJob : IJob
     {
-        public ITaskManager TaskManager { get; set; }
+        private ITaskManager _taskManager;
+
+        public TaskExecutorUpdateJob(ITaskManager taskManager)
+        {
+            this._taskManager = taskManager;
+        }
 
         public void Execute(IJobExecutionContext context)
         {
-            this.TaskManager.UpdateTaskQueues();
+            this._taskManager.UpdateTaskQueues();
             Console.WriteLine("It's task executor update job!");
         }
     }

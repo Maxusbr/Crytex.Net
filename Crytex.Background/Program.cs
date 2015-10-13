@@ -17,18 +17,16 @@
             LoggerCrytex.SetSource(SourceLog.Background);
             UnityConfig.Configure();
             var scheduler = UnityConfig.Resolve<ISchedulerJobs>();
+            var taskManager = UnityConfig.Resolve<ITaskManager>();
+            taskManager.RunTasks();
 
             scheduler.StartScheduler();
 
             scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
             scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/5 * * * * ?");
-            //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
-            //scheduler.TriggerJob(emai);
-
-            var taskExecutorManager = new FakeTaskManager();
-            var taskExecutorJobData = new List<KeyValuePair<string, object>>() 
-                                        {new KeyValuePair<string, object>("TaskManager", taskExecutorManager) };
-            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "", taskExecutorJobData);
+            var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
+            scheduler.TriggerJob(emai);
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "*/5 * * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }

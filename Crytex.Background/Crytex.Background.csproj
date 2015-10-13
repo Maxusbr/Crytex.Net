@@ -87,7 +87,6 @@
   <ItemGroup>
     <Compile Include="Config\BackgroundConfig.cs" />
     <Compile Include="Config\IBackgroundConfig.cs" />
-    <Compile Include="FakeTaskManager.cs" />
     <Compile Include="Monitor\HyperV\HyperVMonitorFactory.cs" />
     <Compile Include="Monitor\HyperV\HyperVMonitor.cs" />
     <Compile Include="Monitor\HyperV\FakeHyperVMonitorFactory.cs" />
@@ -139,7 +138,7 @@
     <ProjectReference Include="..\Crytex.ExecutorTask\Crytex.ExecutorTask.csproj">
       <Project>{80d3fd00-5ade-4bb0-ada8-6450346bfc05}</Project>
       <Name>Crytex.ExecutorTask</Name>
-	</ProjectReference>
+    </ProjectReference>
     <ProjectReference Include="..\..\vmware-virtualization\VmWareRemote\VmWareRemote\VmWareRemote.csproj">
       <Project>{F2A280DF-098C-474A-9476-253996729571}</Project>
       <Name>VmWareRemote</Name>
