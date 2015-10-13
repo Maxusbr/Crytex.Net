@@ -88,6 +88,7 @@
     <Compile Include="Config\BackgroundConfig.cs" />
     <Compile Include="Config\IBackgroundConfig.cs" />
     <Compile Include="FakeHyperVProvider.cs" />
+    <Compile Include="FakeTaskManager.cs" />
     <Compile Include="HyperVMonitorFactory.cs" />
     <Compile Include="Tasks\IHyperVMonitor.cs" />
     <Compile Include="IHyperVMonitorFactory.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Tasks\EmailSendJob.cs" />
     <Compile Include="Tasks\HyperVSynchronizationJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
+    <Compile Include="Tasks\TaskExecutorUpdateJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />
   </ItemGroup>
@@ -122,6 +124,10 @@
     <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
       <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
       <Name>HyperVRemote</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crytex.ExecutorTask\Crytex.ExecutorTask.csproj">
+      <Project>{80d3fd00-5ade-4bb0-ada8-6450346bfc05}</Project>
+      <Name>Crytex.ExecutorTask</Name>
     </ProjectReference>
     <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{b9447b72-1742-4ad8-8935-b06a3ae26037}</Project>

@@ -16,28 +16,30 @@ namespace TaskExecutorConsoleTest
     {
         static void Main(string[] args)
         {
-            var userName = "";
-            var password = "";
-            var server = "51.254.55.136";
-            var vmWareProvider = new VmWareProvider(userName, password, server);
-            var vmWareControl = new VmWareControl(vmWareProvider);
-
-            //var createTask = new CreateVmTask
+            //var handlerFactory = new TaskHandlerFactory();
+            //var defVCenter = new VmWareVCenter
             //{
-            //    Cpu = 2,
-            //    Ram = 1
+            //    Name = "default",
+            //    UserName = "administrator@vsphere.local",
+            //    Password = "QwerT@12",
+            //    ServerAddress = "51.254.55.136"
             //};
-            
-            //var name = vmWareControl.CreateVm(createTask);
 
-            var updateTask = new UpdateVmTask
-            {
-                Ram = 2,
-                Cpu = 2,
-                VmId = new Guid("9619d6f3-5306-4ef6-bcb0-9bbe8af53b85")
-            };
+            //var updateTask = new TaskV2
+            //{
+            //    TypeTask = TypeTask.RemoveVm,
+            //    Virtualization = TypeVirtualization.WmWare,
+            //    ResourceId = new Guid("9619d6f3-5306-4ef6-bcb0-9bbe8af53b85")
+            //};
 
-            vmWareControl.UpdateVm(updateTask);
+            //var options = new RemoveVmOptions
+            //    {
+                    
+            //    };
+            //updateTask.SaveOptions<RemoveVmOptions>(options);
+
+            //var handler = handlerFactory.GetVmWareHandler(updateTask, defVCenter);
+            //handler.Execute();
         }
     }
 }

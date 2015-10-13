@@ -13,6 +13,7 @@ using Crytex.Service.Service;
 namespace Crytex.Background
 {
     using Quartz.Spi;
+    using Crytex.ExecutorTask.TaskHandler;
 
     public class UnityConfig : UnityConfigBase
     {
@@ -35,6 +36,9 @@ namespace Crytex.Background
                 unityContainer.RegisterType<IAppConfig, AppConfig>();
                 unityContainer.RegisterType<IHyperVMonitorFactory, HyperVMonitorFactory>();
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
+
+                unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>();
+                
             };
         }
 
