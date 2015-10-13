@@ -110,6 +110,7 @@
     <Compile Include="Tasks\HyperVSynchronizationJob.cs" />
     <Compile Include="Tasks\MonitoringVmWareJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
+    <Compile Include="Tasks\TaskExecutorUpdateJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />
   </ItemGroup>
@@ -133,6 +134,10 @@
     <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
       <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
       <Name>HyperVRemote</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crytex.ExecutorTask\Crytex.ExecutorTask.csproj">
+      <Project>{80d3fd00-5ade-4bb0-ada8-6450346bfc05}</Project>
+      <Name>Crytex.ExecutorTask</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\vmware-virtualization\VmWareRemote\VmWareRemote\VmWareRemote.csproj">
       <Project>{F2A280DF-098C-474A-9476-253996729571}</Project>
