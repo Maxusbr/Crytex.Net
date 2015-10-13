@@ -76,12 +76,14 @@
   <ItemGroup>
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
+    <Compile Include="Enums\EnumApplicationType.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
     <Compile Include="Exceptions\CreateVmException.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
     <Compile Include="Exceptions\SecurityException.cs" />
     <Compile Include="Exceptions\TaskOperationException.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
+    <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
     <Compile Include="Models\BaseTask.cs" />
@@ -97,7 +99,9 @@
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Notifications\EmailInfo.cs" />
     <Compile Include="Models\Notifications\EmailTemplate.cs" />
+    <Compile Include="Models\OAuthClientApplication.cs" />
     <Compile Include="Models\OperatingSystem.cs" />
+    <Compile Include="Models\OAuthRefreshToken.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\ServerTemplate.cs" />
     <Compile Include="Models\SnapshotVm.cs" />

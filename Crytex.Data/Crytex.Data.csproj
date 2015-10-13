@@ -58,6 +58,8 @@
     <Compile Include="IRepository\IHyperVHostRepository.cs" />
     <Compile Include="IRepository\IHyperVHostResourceRepository.cs" />
     <Compile Include="IRepository\ILogRepository.cs" />
+    <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
+    <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
     <Compile Include="IRepository\ISnapshotVmRepository.cs" />
     <Compile Include="IRepository\IMessageRepository.cs" />
     <Compile Include="IRepository\IOperatingSystemRepository.cs" />
@@ -135,6 +137,14 @@
     <Compile Include="Migrations\201509221805127_Regin_Snapshot_Fix.Designer.cs">
       <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510111449534_AnotherOne.cs" />
+    <Compile Include="Migrations\201510111449534_AnotherOne.Designer.cs">
+      <DependentUpon>201510111449534_AnotherOne.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201510122151064_OAuthAdditions.cs" />
+    <Compile Include="Migrations\201510122151064_OAuthAdditions.Designer.cs">
+      <DependentUpon>201510122151064_OAuthAdditions.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
@@ -150,6 +160,8 @@
     <Compile Include="Repository\HyperVHostResourceRepository.cs" />
     <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\MessageRepository.cs" />
+    <Compile Include="Repository\OAuthClientApplicationRepository.cs" />
+    <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
     <Compile Include="Repository\ServerTemplateRepository.cs" />
     <Compile Include="Repository\StandartVmTaskRepository.cs" />
@@ -222,6 +234,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201509221805127_Regin_Snapshot_Fix.resx">
       <DependentUpon>201509221805127_Regin_Snapshot_Fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510111449534_AnotherOne.resx">
+      <DependentUpon>201510111449534_AnotherOne.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510122151064_OAuthAdditions.resx">
+      <DependentUpon>201510122151064_OAuthAdditions.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
