@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
+using Crytex.Model.Enums;
 
 namespace Crytex.Data.Migrations
 {
@@ -15,6 +16,20 @@ namespace Crytex.Data.Migrations
 
         protected override void Seed(ApplicationDbContext context)
         {
+            if (!context.OAuthClientApplications.Any())
+            {
+                context.OAuthClientApplications.Add(new OAuthClientApplication
+                {
+                    Id = "CrytexAngularApp",
+                    Secret = Crytex.Model.Helpers.Helper.GetHash("abc@123_ololo"),
+                    Name = "Crytex Front-End Angualar Based SPA",
+                    EnumApplicationType = EnumApplicationType.JavaScript,
+                    Active = true,
+                    RefreshTokenLifeTime = 7200
+                    //AllowedOrigin = "*"
+                });
+            }
+
             var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
 

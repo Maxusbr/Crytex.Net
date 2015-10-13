@@ -13,6 +13,7 @@ namespace Crytex.Background.Tasks
 {
     using System;
     using Quartz;
+    using Crytex.Background.Monitor.Vmware;
 
     public class MonitoringVmWareJob : IJob
     {
@@ -63,7 +64,7 @@ namespace Crytex.Background.Tasks
                 StateMachine vmState = new StateMachine
                 {
                     CpuLoad = Convert.ToInt32(stateData.CpuUsage),
-                    RamLoad = stateData.RamUsage,
+                    RamLoad = Convert.ToInt32(stateData.RamUsage),
                     Date = DateTime.UtcNow,
                     VmId = vm.Id
                 };

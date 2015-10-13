@@ -49,6 +49,7 @@ namespace Crytex.Data
         public DbSet<HyperVHostResource> HyperVHostResources { get; set; }
         public DbSet<SnapshotVm> SnapshotVm { get; set; }
         public DbSet<VmWareVCenter> VmWareVCenters { get; set; }
-        
+        public DbSet<OAuthClientApplication> OAuthClientApplications { get; set; }
+        public DbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }        
     }
 }
