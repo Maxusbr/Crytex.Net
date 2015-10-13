@@ -8,10 +8,8 @@ namespace Crytex.Background.Monitor.Vmware
 {
     class FakeVmWareProvider : IVmWareProvider
     {
-        private VmWareConfiguration Configuration { get; }
-        public FakeVmWareProvider(VmWareConfiguration configuration)
+        public FakeVmWareProvider()
         {
-            Configuration = configuration;
         }
 
         public ConnectionState ConnectionState { get; }
@@ -85,6 +83,12 @@ namespace Crytex.Background.Monitor.Vmware
         }
 
         public void DeleteNetwork(string machineName, string networkName)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void AddExistingHardDisk(string machineName, string path, int? capacity = null)
         {
             throw new NotImplementedException();
         }

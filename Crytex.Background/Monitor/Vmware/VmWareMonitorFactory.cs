@@ -8,8 +8,7 @@ namespace Crytex.Background.Monitor.Vmware
     {
         public IVmWareMonitor CreateVmWareVMonitor(VmWareVCenter vCenter)
         {
-            var configuration = new VmWareConfiguration(vCenter.UserName, vCenter.Password, vCenter.ServerAddress);
-            var vmWareProvider = new VmWareProvider(configuration);
+            var vmWareProvider = new VmWareProvider(vCenter.UserName, vCenter.Password, vCenter.ServerAddress);
             var control = new VmWareMonitor(vmWareProvider);
 
             return control;
