@@ -27,14 +27,14 @@ namespace Crytex.Web.Areas.Admin
         /// <param name="email"></param>
         /// <returns></returns>
         // GET api/<controller>
-        [ResponseType(typeof(List<ApplicationUserViewModel>))]
+        [ResponseType(typeof(PageModel<ApplicationUserViewModel>))]
         public IHttpActionResult Get(int pageSize = 20, int pageIndex = 1, string userName = null, string email = null)
         {
             if (pageIndex <= 0 || pageSize <= 0)
                 return BadRequest("PageSize and PageIndex must be positive.");
 
             var users = _applicationUserService.GetPage(pageSize, pageIndex, userName, email);
-            var model = AutoMapper.Mapper.Map<List<ApplicationUser>, List<ApplicationUserViewModel>>(users);
+            var model = AutoMapper.Mapper.Map<PageModel<ApplicationUserViewModel>>(users);
             return Ok(model);
         }
 
