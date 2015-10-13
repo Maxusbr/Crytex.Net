@@ -5,6 +5,7 @@ using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
+using PagedList;
 
 namespace Crytex.Service.Service
 {
@@ -22,13 +23,13 @@ namespace Crytex.Service.Service
             return _applicationUserRepository.GetAll().ToList();
         }
 
-        public List<ApplicationUser> GetPage(int pageSize, int pageIndex, string userName, string email)
+        public IPagedList<ApplicationUser> GetPage(int pageSize, int pageIndex, string userName, string email)
         {
             return _applicationUserRepository.GetPage(new Page(pageIndex, pageSize),
                     x => (string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(email)) 
                     || (!string.IsNullOrEmpty(userName) && x.UserName.Contains(userName)) 
                     || (!string.IsNullOrEmpty(email) && x.Email.Contains(email)),
-                    x => x.Id).ToList();
+                    x => x.Id);
         }
 
         public ApplicationUser GetUserById(string id)
