@@ -1,3 +1,5 @@
+using Crytex.Background.Monitor;
+using Crytex.Background.Monitor.Vmware;
 using Crytex.Background.Scheduler;
 using Crytex.Notification;
 using Crytex.Core;
@@ -13,6 +15,9 @@ using Crytex.Service.Service;
 namespace Crytex.Background
 {
     using Quartz.Spi;
+    using Crytex.ExecutorTask.TaskHandler;
+    using Crytex.Background.Monitor.HyperV;
+    using Crytex.ExecutorTask;
 
     public class UnityConfig : UnityConfigBase
     {
@@ -33,8 +38,12 @@ namespace Crytex.Background
                 unityContainer.RegisterType<IEmailInfoService, EmailInfoService>();
                 unityContainer.RegisterType<IEmailTemplateService, EmailTemplateService>();
                 unityContainer.RegisterType<IAppConfig, AppConfig>();
-                unityContainer.RegisterType<IHyperVMonitorFactory, HyperVMonitorFactory>();
+                unityContainer.RegisterType<IHyperVMonitorFactory, FakeHyperVMonitorFactory>();
+                unityContainer.RegisterType<IVmWareMonitorFactory, FakeVmWareMonitorFactory>();
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
+
+                unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>();
+                unityContainer.RegisterType<ITaskManager, TaskManager>(new ContainerControlledLifetimeManager());
             };
         }
 

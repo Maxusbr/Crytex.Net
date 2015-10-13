@@ -12,27 +12,27 @@ namespace Crytex.Background.Tasks
 {
     using System;
     using Quartz;
-    using Crytex.Background.Monitor.HyperV;
+    using Crytex.Background.Monitor.Vmware;
 
-    public class MonitoringJob: IJob
+    public class MonitoringVmWareJob : IJob
     {
         private INotificationManager _notificationManager { get; set; }
-        private IHyperVMonitorFactory _hyperVMonitorFactory { get; set; }
+        private IVmWareMonitorFactory _vmWareMonitorFactory { get; set; }
         private IStateMachineService _stateMachine { get; set; }
         private IUserVmService _userVm { get; set; }
-        private ISystemCenterVirtualManagerService _systemCenter { get; set; }
+        private IVmWareVCenterService _vCenter { get; set; }
 
-        public MonitoringJob(INotificationManager notificationManager,
-            IHyperVMonitorFactory hyperVMonitorFactory,
-            IStateMachineService stateMachine, 
+        public MonitoringVmWareJob(INotificationManager notificationManager,
+            IVmWareMonitorFactory vmWareMonitorFactory,
+            IStateMachineService stateMachine,
             IUserVmService userVm,
-            ISystemCenterVirtualManagerService systemCenter)
+            IVmWareVCenterService vCenter)
         {
-            this._hyperVMonitorFactory = hyperVMonitorFactory;
+            this._vmWareMonitorFactory = vmWareMonitorFactory;
             this._notificationManager = notificationManager;
             this._stateMachine = stateMachine;
             this._userVm = userVm;
-            this._systemCenter = systemCenter;
+            this._vCenter = vCenter;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -40,30 +40,30 @@ namespace Crytex.Background.Tasks
             Console.WriteLine("It's monitoring job!");
             List<Guid> vmActiveList = _notificationManager.GetVMs();
             List<UserVm> allVMs = _userVm.GetAllVmsHyperV().ToList();
-            var hosts = _systemCenter.GetAllHyperVHosts().ToList();
-            List<Task> tasks = new List<Task>(hosts.Count());
+            var vCenters = _vCenter.GetAllVCenters().ToList();
+            List<Task> tasks = new List<Task>(vCenters.Count());
 
-            foreach (var host in hosts)
+            foreach (var vCenter in vCenters)
             {
-                Task task = Task.Factory.StartNew(()=>GetVmInfo(host, allVMs, vmActiveList));
+                Task task = Task.Factory.StartNew(() => GetVmInfo(vCenter, allVMs, vmActiveList));
                 tasks.Add(task);
             }
             Task.WaitAll(tasks.ToArray());
         }
 
-        public void GetVmInfo(HyperVHost host, List<UserVm> allVMs, List<Guid> vmActiveList)
+        public void GetVmInfo(VmWareVCenter vCenter, List<UserVm> allVMs, List<Guid> vmActiveList)
         {
-            var hyperVMonitor = _hyperVMonitorFactory.CreateHyperVMonitor(host);
-            var hostVms = allVMs.Where(v=>v.VurtualizationType == TypeVirtualization.HyperV && v.HyperVHostId == host.Id);
+            var vmWareMonitor = _vmWareMonitorFactory.CreateVmWareVMonitor(vCenter);
+            var hostVms = allVMs.Where(v => v.VurtualizationType == TypeVirtualization.WmWare && v.VmWareCenterId == vCenter.Id);
 
             foreach (var vm in hostVms)
             {
-                var stateData = hyperVMonitor.GetVmByName(vm.Name);
+                var stateData = vmWareMonitor.GetVmByName(vm.Name);
 
                 StateMachine vmState = new StateMachine
                 {
-                    CpuLoad = stateData.CPUUsage,
-                    RamLoad = stateData.MemoryAssigned,
+                    CpuLoad = Convert.ToInt32(stateData.CpuUsage),
+                    RamLoad = Convert.ToInt32(stateData.RamUsage),
                     Date = DateTime.UtcNow,
                     VmId = vm.Id
                 };

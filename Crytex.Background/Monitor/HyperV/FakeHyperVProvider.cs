@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
-using System.Text;
-using System.Threading.Tasks;
 using HyperVRemote;
 using HyperVRemote.Source.Implementation;
 
-namespace Crytex.Background
+namespace Crytex.Background.Monitor.HyperV
 {
     class FakeHyperVProvider: IHyperVProvider
     {

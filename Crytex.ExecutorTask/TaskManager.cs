@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace Crytex.ExecutorTask
 {
-    public class TaskManager
+    public class TaskManager : ITaskManager
     {
         private ITaskHandlerManager _taskHandlerManager;
         private TaskQueueManager _vmWareTaskQueueManager = new TaskQueueManager();
@@ -15,26 +15,18 @@ namespace Crytex.ExecutorTask
             this._taskHandlerManager = taskHandlerManager;
         }
 
-        public void Run()
+        public void RunTasks()
         {
-            var thread = new System.Threading.Thread(this.RunInner);
-            thread.Start();
-
             this._hyperVTaskQueueManager.ExecuteAsync();
             this._vmWareTaskQueueManager.ExecuteAsync();
         }
 
-        private void RunInner()
+        public void UpdateTaskQueues()
         {
-            while (true)
-            {
-                var handlers = this._taskHandlerManager.GetTaskHandlers();
+            var handlers = this._taskHandlerManager.GetTaskHandlers();
 
-                this.AddHandlersToQueue(handlers.HyperVHandlers, this._hyperVTaskQueueManager);
-                this.AddHandlersToQueue(handlers.VmWareHandlers, this._vmWareTaskQueueManager);
-
-                Thread.Sleep(EXECUTE_TIMEOUT);
-            }
+            this.AddHandlersToQueue(handlers.HyperVHandlers, this._hyperVTaskQueueManager);
+            this.AddHandlersToQueue(handlers.VmWareHandlers, this._vmWareTaskQueueManager);
         }
 
         private void AddHandlersToQueue(IEnumerable<ITaskHandler> handlers, TaskQueueManager queueManager)
@@ -44,7 +36,5 @@ namespace Crytex.ExecutorTask
                 queueManager.AddToQueue(handler);
             }
         }
-
-        private const int EXECUTE_TIMEOUT = 1000;
     }
 }
