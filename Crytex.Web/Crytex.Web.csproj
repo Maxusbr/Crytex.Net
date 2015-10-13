@@ -284,10 +284,7 @@
     <Compile Include="Areas\User\Controllers\TaskV2Controller.cs" />
     <Compile Include="Areas\User\Controllers\UserVmController.cs" />
     <Compile Include="Controllers\Api\StandartVmTaskController.cs" />
- <Compile Include="Controllers\Api\UpdateVmTaskController.cs" />
-    <Compile Include="Controllers\Api\StateMachineController.cs" />
-    <Compile Include="Controllers\Api\TaskV2Controller.cs" />
-    <Compile Include="Controllers\Api\UserVmController.cs" />
+    <Compile Include="Controllers\Api\UpdateVmTaskController.cs" />
     <Compile Include="Controllers\Api\VmWareVCenterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />

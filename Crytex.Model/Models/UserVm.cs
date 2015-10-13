@@ -18,6 +18,7 @@ namespace Crytex.Model.Models
         public string UserId { get; set; }
         public TypeVirtualization VurtualizationType { get; set; }
         public Guid HyperVHostId { get; set; }
+        public int VmWareCenterId { get; set; }
 
         [ForeignKey("ServerTemplateId")]
         public ServerTemplate ServerTemplate { get; set; }
@@ -25,6 +26,8 @@ namespace Crytex.Model.Models
         public ApplicationUser User { get; set; }
         [ForeignKey("HyperVHostId")]
         public HyperVHost HyperVHost { get; set; }
+        [ForeignKey("VmWareCenterId")]
+        public VmWareVCenter VmWareCenter { get; set; }
     }
 
 
