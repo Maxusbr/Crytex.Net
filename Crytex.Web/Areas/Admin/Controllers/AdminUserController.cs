@@ -62,7 +62,7 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         public IHttpActionResult Post([FromBody]ApplicationUserViewModel model)
         {
-            if (model.ValidateForCreationScenario() && this.ModelState.IsValid)
+            if (!model.ValidateForCreationScenario() || !this.ModelState.IsValid)
             {
                 return BadRequest("Some params are empty. UserName, Password and Email are required");
             }
@@ -76,7 +76,7 @@ namespace Crytex.Web.Areas.Admin
                 return BadRequest(this.ModelState);
             }
 
-            return Created(Url.Link("DefaultApi", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
+            return Created(Url.Link("DefaultApiAdmin", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
         }
 
         /// <summary>
@@ -84,9 +84,9 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult Put(string id,ApplicationUserViewModel model)
+        public IHttpActionResult Put(string id, ApplicationUserViewModel model)
         {
-            if (!(model.ValidateForEditingScenario() && this.ModelState.IsValid))
+            if (!model.ValidateForEditingScenario() || !this.ModelState.IsValid)
             {
                 return BadRequest("Some params are empty. UserName or Password or Email are required");
             }
