@@ -9,7 +9,6 @@ namespace Crytex.Web.Models.JsonModels
 {
     public class TaskV2ViewModel
     {
-        [Required]
         public Guid? Id { get; set; }
         public Guid ResourceId { get; set; }
         [Required]

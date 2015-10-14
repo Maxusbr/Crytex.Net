@@ -19,8 +19,8 @@ namespace Crytex.Model.Models
         public string UserId { get; set; }
         public string ErrorMessage { get; set; }
         public TypeVirtualization Virtualization { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime StartedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? StartedAt { get; set; }
         public DateTime CompletedAt { get; set; }
 
         
