@@ -3,9 +3,12 @@ using System;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
-    public abstract class BaseTaskHandler
+    public abstract class BaseTaskHandler : ITaskHandler
     {
         public TaskV2 TaskEntity { get; protected set; }
+        public TypeVirtualization TypeVirtualization { get; set; }
+        // VmWareVCenterId or HyperVHostId
+        public Guid VirtualizationServerEnitityId { get; set; }
         public string Host { get; set; }
 
         public event EventHandler<TaskV2> ProcessingStarted;
@@ -33,6 +36,9 @@ namespace Crytex.ExecutorTask.TaskHandler
             {
                 this.ProcessingFinished(this, taskResult);
             }
+
+            taskResult.TypeVirtualization = this.TypeVirtualization;
+            taskResult.VirtualizationServerEnitityId = this.VirtualizationServerEnitityId;
 
             return taskResult;
         }
