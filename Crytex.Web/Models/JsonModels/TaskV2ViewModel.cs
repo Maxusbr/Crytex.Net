@@ -9,7 +9,6 @@ namespace Crytex.Web.Models.JsonModels
 {
     public class TaskV2ViewModel
     {
-        [Required]
         public Guid? Id { get; set; }
         public Guid ResourceId { get; set; }
         [Required]
@@ -24,8 +23,8 @@ namespace Crytex.Web.Models.JsonModels
         public string ErrorMessage { get; set; }
         public TypeVirtualization Virtualization { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime StartedAt { get; set; }
-        public DateTime CompletedAt { get; set; }
+        public DateTime? StartedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
     }
 
 
