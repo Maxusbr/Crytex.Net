@@ -57,7 +57,9 @@ namespace Crytex.Web.Areas.Admin
 
             var newComment = this._helpDeskRequestService.CreateComment(id, model.Comment, userId);
 
-            return Ok(new { id = newComment.Id });
+            var modelViewComment = AutoMapper.Mapper.Map<HelpDeskRequestCommentViewModel>(newComment);
+
+            return Ok(modelViewComment);
         }
 
         /// <summary>

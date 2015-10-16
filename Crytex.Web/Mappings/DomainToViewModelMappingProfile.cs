@@ -26,7 +26,8 @@ namespace Crytex.Web.Mappings
         {
             Mapper.CreateMap<Message, MessageViewModel>();
             Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>();
-            Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
+            Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));

@@ -17,5 +17,7 @@ namespace Crytex.Web.Models.JsonModels
         public DateTime CreationDate { get; set; }
 
         public int Id { get; set; }
+
+        public string UserId { get; set; }
     }
 }
