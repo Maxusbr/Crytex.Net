@@ -13,7 +13,7 @@ namespace Crytex.Model.Models
     public enum TypeVirtualization
     {
         HyperV = 0,
-        WmWare = 1
+        VmWare = 1
     }
 
     public enum StatusTask
