@@ -36,10 +36,10 @@ namespace Crytex.Web.Auth
         {
             var clientId = context.Ticket.Properties.Dictionary["client_id"];
 
-            //if (String.IsNullOrEmpty(clientId))
-            //{
-            //    return;
-            //}
+            if (String.IsNullOrEmpty(clientId))
+            {
+                return;
+            }
 
             var refreshTokenId = context.Ticket.Properties.Dictionary["refreshTokenId"];
             if (string.IsNullOrWhiteSpace(refreshTokenId))
