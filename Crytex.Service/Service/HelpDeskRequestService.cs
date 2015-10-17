@@ -101,7 +101,7 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
             }
 
-            var comments = request.Comments;
+            var comments = _requestCommentRepository.GetMany(c=>c.RequestId == id, i=>i.User);
 
             return comments;
         }
