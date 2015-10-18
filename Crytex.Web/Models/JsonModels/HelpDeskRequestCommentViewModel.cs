@@ -9,6 +9,7 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public string Comment { get; set; }
         public string UserId { get; set; }
+        public string UserName{ get; set; }
         public DateTime CreationDate { get; set; }
     }
 }

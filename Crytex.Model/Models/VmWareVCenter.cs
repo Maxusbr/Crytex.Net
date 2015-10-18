@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Crytex.Model.Models
 {
-    public class VmWareVCenter : BaseEntity
+    public class VmWareVCenter : GuidBaseEntity
     {
         public string Name { get; set; }
         public string UserName { get; set; }

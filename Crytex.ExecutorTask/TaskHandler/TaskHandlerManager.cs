@@ -12,13 +12,16 @@ namespace Crytex.ExecutorTask.TaskHandler
     public class TaskHandlerManager : ITaskHandlerManager
     {
         private ITaskV2Service _taskService;
-        private TaskHandlerFactory _handlerFactory = new TaskHandlerFactory();
+        private TaskHandlerFactory _handlerFactory;
         private IUserVmService _userVmService;
         private INotificationManager _notificationManager;
         private IVmWareVCenterService _vmWareVCenterService;
 
-        public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService, INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService)
+        public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
+            INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
+            IServerTemplateService serverTemplateService)
         {
+            this._handlerFactory = new TaskHandlerFactory(serverTemplateService);
             this._taskService = taskService;
             this._userVmService = userVmService;
             this._notificationManager = notificationManager;
@@ -52,7 +55,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                         var hyperVHost = this.GetHyperVHostForTask(task);
                         handler = this._handlerFactory.GetHyperVHandler(task, hyperVHost);
                         break;
-                    case TypeVirtualization.WmWare:
+                    case TypeVirtualization.VmWare:
                         var vmWareVCenter = this.GetVmWareVCenterForTask(task);
                         handler = this._handlerFactory.GetVmWareHandler(task, vmWareVCenter);
                         break;
@@ -66,7 +69,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                     case TypeVirtualization.HyperV:
                         hyperVTaskHandlers.Add(handler);
                         break;
-                    case TypeVirtualization.WmWare:
+                    case TypeVirtualization.VmWare:
                         wmWareTaskHandlers.Add(handler);
                         break;
                 }
@@ -126,6 +129,16 @@ namespace Crytex.ExecutorTask.TaskHandler
                     UserId = e.TaskEntity.UserId,
                     VurtualizationType = e.TaskEntity.Virtualization
                 };
+
+                switch (taskEntity.Virtualization)
+                {
+                    case TypeVirtualization.HyperV:
+                        newVm.VmWareCenterId = e.VirtualizationServerEnitityId;
+                        break;
+                    case TypeVirtualization.VmWare:
+                        newVm.HyperVHostId = e.VirtualizationServerEnitityId;
+                        break;
+                }
 
                 this._userVmService.CreateVm(newVm);
             }

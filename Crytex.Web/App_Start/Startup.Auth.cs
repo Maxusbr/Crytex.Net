@@ -12,6 +12,17 @@ namespace Crytex.Web
 {
     public partial class Startup
     {
+        private static bool IsAjaxRequest(IOwinRequest request)
+        {
+            IReadableStringCollection query = request.Query;
+            if ((query != null) && (query["X-Requested-With"] == "XMLHttpRequest"))
+            {
+                return true;
+            }
+            IHeaderDictionary headers = request.Headers;
+            return ((headers != null) && (headers["X-Requested-With"] == "XMLHttpRequest"));
+        }
+
         // Дополнительные сведения о настройке проверки подлинности см. по адресу: http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
@@ -33,8 +44,16 @@ namespace Crytex.Web
                     // Эта функция безопасности используется, когда вы меняете пароль или добавляете внешнее имя входа в свою учетную запись.  
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ApplicationUser>(
                         validateInterval: TimeSpan.FromMinutes(30),
-                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager))
+                        regenerateIdentity: (manager, user) => user.GenerateUserIdentityAsync(manager)),
+                    OnApplyRedirect = ctx =>
+                    {
+                        if (!IsAjaxRequest(ctx.Request))
+                        {                            
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                    }
                 }
+                
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 

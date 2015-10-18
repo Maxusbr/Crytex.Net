@@ -56,13 +56,11 @@ namespace Crytex.Service.Service
             return list;
         }
 
-
         public void CreateVm(UserVm userVm)
         {
             this._userVmRepo.Add(userVm);
             this._unitOfWork.Commit();
         }
-
 
         public void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null)
         {

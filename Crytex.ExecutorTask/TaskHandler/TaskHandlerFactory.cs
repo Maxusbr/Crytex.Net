@@ -1,6 +1,7 @@
 ﻿using Crytex.ExecutorTask.TaskHandler.HyperV;
 using Crytex.ExecutorTask.TaskHandler.VmWare;
 using Crytex.Model.Models;
+using Crytex.Service.IService;
 using HyperVRemote;
 using HyperVRemote.Source.Implementation;
 using System;
@@ -13,12 +14,14 @@ namespace Crytex.ExecutorTask.TaskHandler
 {
     public class TaskHandlerFactory
     {
-        private IDictionary<TypeTask, Func<TaskV2, HyperVHost, ITaskHandler>> _hyperVTaskHandlerMappings;
-        private IDictionary<TypeTask, Func<TaskV2, VmWareVCenter, ITaskHandler>> _vmWareTaskHandlerMappings;
+        private IDictionary<TypeTask, Func<TaskV2, HyperVHost, BaseTaskHandler>> _hyperVTaskHandlerMappings;
+        private IDictionary<TypeTask, Func<TaskV2, VmWareVCenter, BaseTaskHandler>> _vmWareTaskHandlerMappings;
+        private IServerTemplateService _serverTemplateService;
 
-        public TaskHandlerFactory()
+        public TaskHandlerFactory(IServerTemplateService serverTemplateService)
         {
-            this._hyperVTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, HyperVHost, ITaskHandler>>
+            this._serverTemplateService = serverTemplateService;
+            this._hyperVTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, HyperVHost, BaseTaskHandler>>
             {
                 {TypeTask.CreateVm, this.GetCreateVmTaskHandler},
                 {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
@@ -26,7 +29,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler}
             };
 
-            this._vmWareTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, VmWareVCenter, ITaskHandler>>
+            this._vmWareTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, VmWareVCenter, BaseTaskHandler>>
             {
                 {TypeTask.CreateVm, this.GetCreateVmTaskHandler},
                 {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
@@ -40,7 +43,9 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var typeTask = task.TypeTask;
             var handler = this._hyperVTaskHandlerMappings[typeTask].Invoke(task, hyperVHost);
-
+            handler.TypeVirtualization = TypeVirtualization.HyperV;
+            handler.VirtualizationServerEnitityId = hyperVHost.Id;
+            
             return handler;
         }
 
@@ -48,68 +53,64 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var typeTask = task.TypeTask;
             var handler = this._vmWareTaskHandlerMappings[typeTask].Invoke(task, vCenter);
+            handler.TypeVirtualization = TypeVirtualization.VmWare;
+            handler.VirtualizationServerEnitityId = vCenter.Id;
 
             return handler;
         }
 
         #region Private methods
-        private ITaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            ITaskHandler handler = null;
-            handler = new HyperVCreateVmTaskHandler(task, this.CreateHyperVControl(task, host), host.Host);
+            var handler = new HyperVCreateVmTaskHandler(task, this.CreateHyperVControl(task, host), 
+                this._serverTemplateService, host.Host);
 
             return handler;
         }
 
-        private ITaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            ITaskHandler handler = null;
-            handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+            var handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
 
             return handler;
         }
 
-        private ITaskHandler GetUpdateVmTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetUpdateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            ITaskHandler handler = null;
-            handler = new HyperVUpdateVmTaskHandler(task, this.CreateHyperVControl(task, host), host.Host);
+            var handler = new HyperVUpdateVmTaskHandler(task, this.CreateHyperVControl(task, host), host.Host);
             
             return handler;
         }
 
-        private ITaskHandler GetUpdateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetUpdateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            ITaskHandler handler = null;
-            handler = new VmWareUpdateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+            var handler = new VmWareUpdateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
 
             return handler;
         }
 
-        private ITaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, HyperVHost host)
         {
-            ITaskHandler handler = null;
-            handler = new HyperVStandartTaskHandler(task, this.CreateHyperVControl(task, host), host.Host);
+            var handler = new HyperVStandartTaskHandler(task, this.CreateHyperVControl(task, host), host.Host);
 
             return handler;
         }
 
-        private ITaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            ITaskHandler handler = null;
-            handler = new VmWareStandartVmWareTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+            var handler = new VmWareStandartVmWareTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
 
             return handler;
         }
 
-        private ITaskHandler GetRemoveVmTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetRemoveVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             throw new NotImplementedException();
         }
 
-        private ITaskHandler GetRemoveVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetRemoveVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            ITaskHandler handler = null;
-            handler = new VmWareRemoveVmTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+            var handler = new VmWareRemoveVmTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
 
             return handler;
         }

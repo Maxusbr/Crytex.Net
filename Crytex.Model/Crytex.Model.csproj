@@ -92,6 +92,7 @@
     <Compile Include="Models\CreateVmTask.cs" />
     <Compile Include="Models\CreditPaymentOrder.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
+    <Compile Include="Models\GuidBaseEntity.cs" />
     <Compile Include="Models\HelpDeskRequestComment.cs" />
     <Compile Include="Models\HyperVHost.cs" />
     <Compile Include="Models\HyperVHostResource.cs" />

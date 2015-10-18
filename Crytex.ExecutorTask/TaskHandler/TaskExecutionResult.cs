@@ -12,5 +12,9 @@ namespace Crytex.ExecutorTask.TaskHandler
         public Guid MachineGuid { get; set; }
 
         public string ErrorMessage { get; set; }
+
+        public TypeVirtualization TypeVirtualization { get; set; }
+        // VmWareVCenterId or HyperVHostId
+        public Guid VirtualizationServerEnitityId { get; set; }
     }
 }

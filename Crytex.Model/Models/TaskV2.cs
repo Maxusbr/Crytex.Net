@@ -20,8 +20,8 @@ namespace Crytex.Model.Models
         public string ErrorMessage { get; set; }
         public TypeVirtualization Virtualization { get; set; }
         public DateTime CreatedAt { get; set; }
-        public DateTime StartedAt { get; set; }
-        public DateTime CompletedAt { get; set; }
+        public DateTime? StartedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
 
         
         public void SaveOptions<T>(T value) where T: BaseOptions

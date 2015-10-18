@@ -1,8 +1,10 @@
-﻿using Crytex.Model.Models;
+﻿using System;
+using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Crytex.Service.Model;
 using Crytex.Web.Models.ViewModels;
 
 
@@ -22,14 +24,18 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
+        /// <param name="filter"></param>
         /// <returns></returns>
         [ResponseType(typeof(PageModel<HelpDeskRequestViewModel>))]
-        public IHttpActionResult Get(int pageNumber, int pageSize)
+        public IHttpActionResult Get(int pageNumber, int pageSize, HelpDeskRequestFilter filter = HelpDeskRequestFilter.All)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be grater than 1");
 
-            var page = this._helpDeskRequestService.GetPage(pageNumber, pageSize);
+            if (!Enum.IsDefined(typeof (HelpDeskRequestFilter), filter))
+                return BadRequest("Filter wrong type");
+
+            var page = this._helpDeskRequestService.GetPage(pageNumber, pageSize, filter);
             var viewModel = AutoMapper.Mapper.Map<PageModel<HelpDeskRequestViewModel>>(page);
 
             return Ok(viewModel);

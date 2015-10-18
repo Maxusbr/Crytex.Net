@@ -1,6 +1,7 @@
 ﻿using PagedList;
 using Crytex.Model.Models;
 using System.Collections.Generic;
+using Crytex.Service.Model;
 
 namespace Crytex.Service.IService
 {
@@ -14,11 +15,11 @@ namespace Crytex.Service.IService
 
         void DeleteById(int id);
 
-        IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize);
+        IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize, HelpDeskRequestFilter filter = HelpDeskRequestFilter.All);
 
         IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id);
 
-        HelpDeskRequestComment CreateComment(int requestId, string comment, string userId);
+        HelpDeskRequestComment CreateComment(int requestId, string comment, string userId, bool isRead = false);
 
         void DeleteCommentById(int id);
 
