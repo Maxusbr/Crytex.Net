@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using System.Web.Http.Cors;
 using System.Web.Http.Dispatcher;
 using System.Web.Http.Routing;
 using Crytex.Web.Filters;
@@ -20,8 +19,6 @@ namespace Crytex.Web
             // Маршруты веб-API
             config.MapHttpAttributeRoutes();
 
-            var cors = new EnableCorsAttribute("http://localhost:63342", "*", "*");
-            config.EnableCors(cors);
 
 
             // Конфигурация json-сериализации
