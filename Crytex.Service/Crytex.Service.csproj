@@ -107,6 +107,7 @@
     <Compile Include="IService\IUserVmService.cs" />
     <Compile Include="IService\IVmWareVCenterService.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
+    <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />

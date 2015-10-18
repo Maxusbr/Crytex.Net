@@ -2,9 +2,11 @@
 using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Crytex.Data.IRepository;
 using Crytex.Data.Infrastructure;
 using Crytex.Model.Exceptions;
+using Crytex.Service.Model;
 using PagedList;
 
 namespace Crytex.Service.Service
@@ -31,7 +33,8 @@ namespace Crytex.Service.Service
                 Details = details,
                 UserId = userId,
                 Status = RequestStatus.New,
-                CreationDate = DateTime.UtcNow
+                CreationDate = DateTime.UtcNow,
+                Read = false
             };
 
             this._requestRepository.Add(newRequest);
@@ -53,7 +56,8 @@ namespace Crytex.Service.Service
             requestToUpdate.Details = request.Details;
             requestToUpdate.Summary = request.Summary;
             requestToUpdate.Status = request.Status;
-            
+            requestToUpdate.Read = request.Read;
+
             this._requestRepository.Update(requestToUpdate);
             this._unitOfWork.Commit();
         }
@@ -84,9 +88,20 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize)
+        public IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize, HelpDeskRequestFilter filter = HelpDeskRequestFilter.All)
         {
-            var page = this._requestRepository.GetPage(new Page(pageNumber, pageSize), (x => true), (x => x.CreationDate));
+            IPagedList<HelpDeskRequest> page = new PagedList<HelpDeskRequest>(Enumerable.Empty<HelpDeskRequest>().AsQueryable(), 1, 1);
+            if (filter == HelpDeskRequestFilter.All) { 
+                page = this._requestRepository.GetPage(new Page(pageNumber, pageSize), (x => true), (x => x.Read), (x => x.CreationDate));
+            }
+            else if (filter == HelpDeskRequestFilter.Read)
+            {
+                page = this._requestRepository.GetPage(new Page(pageNumber, pageSize), (x => x.Read), (x => x.CreationDate));
+            }
+            else if (filter == HelpDeskRequestFilter.Unread)
+            {
+                page = this._requestRepository.GetPage(new Page(pageNumber, pageSize), (x => !x.Read), (x => x.CreationDate));
+            }
 
             return page;
         }
@@ -107,7 +122,7 @@ namespace Crytex.Service.Service
         }
 
 
-        public HelpDeskRequestComment CreateComment(int requestId, string comment, string userId)
+        public HelpDeskRequestComment CreateComment(int requestId, string comment, string userId, bool isRead = false)
         {
             var request = this._requestRepository.GetById(requestId);
 
@@ -121,8 +136,11 @@ namespace Crytex.Service.Service
                 Comment = comment,
                 UserId = userId,
                 RequestId = requestId,
-                CreationDate = DateTime.UtcNow
+                CreationDate = DateTime.UtcNow,
             };
+
+            request.Read = isRead;
+
             this._requestCommentRepository.Add(newComment);
             this._unitOfWork.Commit();
 

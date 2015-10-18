@@ -14,6 +14,8 @@ namespace Crytex.Model.Models
 
         public DateTime CreationDate { get; set; }
 
+        public bool Read { get; set; }
+
         public string UserId { get; set; }
 
         [ForeignKey("UserId")]
