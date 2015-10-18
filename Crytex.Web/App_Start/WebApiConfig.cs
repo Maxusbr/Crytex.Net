@@ -19,7 +19,7 @@ namespace Crytex.Web
             // Маршруты веб-API
             config.MapHttpAttributeRoutes();
 
-      
+
 
             // Конфигурация json-сериализации
             var formatters = GlobalConfiguration.Configuration.Formatters;

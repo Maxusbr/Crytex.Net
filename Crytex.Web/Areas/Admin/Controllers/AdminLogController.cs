@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Crytex.Core;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Web.Models.ViewModels;
+using PagedList;
 
 namespace Crytex.Web.Areas.Admin
 {
@@ -28,15 +30,27 @@ namespace Crytex.Web.Areas.Admin
         /// <param name="sourceLog"></param>
         /// <returns></returns>
         // GET api/<controller>
-        [ResponseType(typeof(List<LogEntryViewModel>))]
-        public IHttpActionResult Get(int pageSize = 20, int pageNumber = 1, DateTime? dateFrom = null, DateTime? dateTo = null, string sourceLog = null)
+        [ResponseType(typeof(PageModel<LogEntryViewModel>))]
+        public IHttpActionResult Get(int pageSize = 20, int pageNumber = 1, DateTime? dateFrom = null, DateTime? dateTo = null, SourceLog? sourceLog = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
                 return BadRequest("PageNumber and PageSize must be grater than 1");
             }
-            var logEntries = _logService.GetLogEntries(pageSize, pageNumber, dateFrom, dateTo, sourceLog);
-            var model = AutoMapper.Mapper.Map<List<LogEntry>, List<LogEntryViewModel>>(logEntries);
+
+            IPagedList<LogEntry> logEntries = new PagedList<LogEntry>(new List<LogEntry>(),1,1);
+
+            if (sourceLog != null)
+            {
+                logEntries = _logService.GetLogEntries(pageSize, pageNumber, dateFrom, dateTo,
+                    sourceLog.Value.ToString("G"));
+            }
+            else
+            {
+                logEntries = _logService.GetLogEntries(pageSize, pageNumber, dateFrom, dateTo);
+            }
+
+            var model = AutoMapper.Mapper.Map<PageModel<LogEntryViewModel>>(logEntries);
 
             return Ok(model);
         }
@@ -54,7 +68,5 @@ namespace Crytex.Web.Areas.Admin
             var model = AutoMapper.Mapper.Map<LogEntry, LogEntryViewModel>(logEntry);
             return Ok(model);
         }
-
-
     }
 }

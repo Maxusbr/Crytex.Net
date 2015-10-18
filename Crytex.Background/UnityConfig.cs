@@ -1,4 +1,5 @@
 using Crytex.Background.Monitor;
+using Crytex.Background.Monitor.HyperV;
 using Crytex.Background.Monitor.Vmware;
 using Crytex.Background.Scheduler;
 using Crytex.Notification;
