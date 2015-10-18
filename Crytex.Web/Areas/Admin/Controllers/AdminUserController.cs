@@ -27,14 +27,14 @@ namespace Crytex.Web.Areas.Admin
         /// <param name="email"></param>
         /// <returns></returns>
         // GET api/<controller>
-        [ResponseType(typeof(List<ApplicationUserViewModel>))]
+        [ResponseType(typeof(PageModel<ApplicationUserViewModel>))]
         public IHttpActionResult Get(int pageSize = 20, int pageIndex = 1, string userName = null, string email = null)
         {
             if (pageIndex <= 0 || pageSize <= 0)
                 return BadRequest("PageSize and PageIndex must be positive.");
 
             var users = _applicationUserService.GetPage(pageSize, pageIndex, userName, email);
-            var model = AutoMapper.Mapper.Map<List<ApplicationUser>, List<ApplicationUserViewModel>>(users);
+            var model = AutoMapper.Mapper.Map<PageModel<ApplicationUserViewModel>>(users);
             return Ok(model);
         }
 
@@ -62,7 +62,7 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         public IHttpActionResult Post([FromBody]ApplicationUserViewModel model)
         {
-            if (model.ValidateForCreationScenario() && this.ModelState.IsValid)
+            if (!model.ValidateForCreationScenario() || !this.ModelState.IsValid)
             {
                 return BadRequest("Some params are empty. UserName, Password and Email are required");
             }
@@ -76,7 +76,7 @@ namespace Crytex.Web.Areas.Admin
                 return BadRequest(this.ModelState);
             }
 
-            return Created(Url.Link("DefaultApi", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
+            return Created(Url.Link("DefaultApiAdmin", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
         }
 
         /// <summary>
@@ -84,9 +84,9 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult Put(string id,ApplicationUserViewModel model)
+        public IHttpActionResult Put(string id, ApplicationUserViewModel model)
         {
-            if (!(model.ValidateForEditingScenario() && this.ModelState.IsValid))
+            if (!model.ValidateForEditingScenario() || !this.ModelState.IsValid)
             {
                 return BadRequest("Some params are empty. UserName or Password or Email are required");
             }

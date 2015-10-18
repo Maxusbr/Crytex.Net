@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Crytex.Model.Models;
+using PagedList;
 
 namespace Crytex.Service.IService
 {
@@ -7,8 +8,7 @@ namespace Crytex.Service.IService
     {
         List<ApplicationUser> GetAll();
 
-
-        List<ApplicationUser> GetPage(int pageSize, int pageIndex, string userName, string email);
+        IPagedList<ApplicationUser> GetPage(int pageSize, int pageIndex, string userName, string email);
 
         ApplicationUser GetUserById(string id);
     }
