@@ -38,10 +38,10 @@ namespace Crytex.Model.Models
     }
     public enum TypeTask 
     {
-        CreateVm,
-        UpdateVm,
-        ChangeStatus,
-        RemoveVm
+        CreateVm = 0,
+        UpdateVm = 1,
+        ChangeStatus = 2,
+        RemoveVm = 3
     }
 
     [Serializable]

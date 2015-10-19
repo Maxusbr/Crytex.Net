@@ -69,5 +69,15 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         }
 
         #endregion // Private methods
+
+        public Guid CreateVm(TaskV2 task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateVm(TaskV2 updateVmTask)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace Crytex.Service.Service
 
         public IEnumerable<UserVm> GetAllVmsHyperV()
         {
-            return _userVmRepo.GetAll(x=>x.HyperVHost);
+            return _userVmRepo.GetMany(x=>x.VurtualizationType == TypeVirtualization.HyperV);
         }
 
         public IEnumerable<UserVm> GetVmByListId(List<Guid> listId)
@@ -58,6 +58,15 @@ namespace Crytex.Service.Service
 
         public void CreateVm(UserVm userVm)
         {
+            if (userVm.VurtualizationType == TypeVirtualization.HyperV && userVm.HyperVHostId == null)
+            {
+                throw new ApplicationException("HyperVHostId property value is required for HyperV virtualization type");
+            }
+            if (userVm.VurtualizationType == TypeVirtualization.VmWare && userVm.VmWareCenterId == null)
+            {
+                throw new ApplicationException("VmWareCenterId property value is required for VmWare virtualization type");
+            }
+
             this._userVmRepo.Add(userVm);
             this._unitOfWork.Commit();
         }

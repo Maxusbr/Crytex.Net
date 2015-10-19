@@ -91,7 +91,6 @@ namespace Crytex.ExecutorTask.TaskHandler
         private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult e)
         {
             var taskEntity = ((ITaskHandler)sender).TaskEntity;
-            var taskType = taskEntity.GetType();
             TaskEndNotify taskEndNotify = new TaskEndNotify
             {
                 UserId = e.TaskEntity.UserId,
@@ -114,7 +113,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
 
-            if (taskType == typeof(CreateVmTask))
+            if (taskEntity.TypeTask == TypeTask.CreateVm)
             {
                 var taskOptions = e.TaskEntity.GetOptions<CreateVmOptions>();
                 var newVm = new UserVm
@@ -142,7 +141,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
                 this._userVmService.CreateVm(newVm);
             }
-            if (taskType == typeof(UpdateVmTask))
+            if (taskEntity.TypeTask == TypeTask.UpdateVm)
             {
                 var taskOptions = e.TaskEntity.GetOptions<UpdateVmOptions>();
                 this._userVmService.UpdateVm(taskOptions.VmId, taskOptions.Cpu, taskOptions.Hdd, taskOptions.Ram);
@@ -152,7 +151,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private void ProcessingStartedEventHandler(object sender, TaskV2 task)
         {
             var startTime = DateTime.UtcNow;
-            this.UpdateTaskStatus(task.Id, StatusTask.Processing, startTime, null);
+            this.UpdateTaskStatus(task.Id, StatusTask.Start, startTime, null);
         }
 
         private void UpdateTaskStatus(Guid id, StatusTask status, DateTime date, string message)

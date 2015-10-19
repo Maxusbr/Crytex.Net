@@ -19,8 +19,8 @@ namespace Crytex.Background.Tasks
 
         public void Execute(IJobExecutionContext context)
         {
-            this._taskManager.UpdateTaskQueues();
             Console.WriteLine("It's task executor update job!");
+            this._taskManager.UpdateTaskQueues();
         }
     }
 }
