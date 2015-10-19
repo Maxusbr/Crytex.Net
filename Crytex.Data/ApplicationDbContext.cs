@@ -27,6 +27,7 @@ namespace Crytex.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<HelpDeskRequest> HelpDeskRequests { get; set; }
+        public DbSet<HelpDeskRequestComment> HelpDeskRequestComments { get; set; }
         public DbSet<StateMachine> StateMachines { get; set; }
         
         public DbSet<TaskV2> TaskV2 { get; set; }

@@ -168,6 +168,10 @@
     <Compile Include="Repository\VmWareVCenterRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
+      <Project>{0B23B88C-B5FC-42F6-AC62-27725F34487B}</Project>
+      <Name>Crytex.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.Model\Crytex.Model.csproj">
       <Project>{B9447B72-1742-4AD8-8935-B06A3AE26037}</Project>
       <Name>Crytex.Model</Name>
@@ -252,6 +256,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\PagedList.css" />
