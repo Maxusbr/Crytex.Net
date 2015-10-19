@@ -86,21 +86,30 @@ namespace Crytex.Web.Areas.User
             if (!ModelState.IsValid || task == null)
                 return BadRequest(ModelState);
 
-            if (task.TypeTask == TypeTask.UpdateVm || task.TypeTask == TypeTask.CreateVm)
+            var taskOptionsValid = false;
+            switch (task.TypeTask)
             {
-                if (!IsValidOptions<ConfigVmOptions>(task.Options)) {
-                    ModelState.AddModelError("Options", "Not Valid Options for this type Task");
-                    return BadRequest(ModelState);
-                }
+                case TypeTask.CreateVm:
+                    taskOptionsValid = IsValidOptions<CreateVmOptions>(task.Options);
+                    break;
+                case TypeTask.UpdateVm:
+                    taskOptionsValid = IsValidOptions<UpdateVmOptions>(task.Options);
+                    break;
+                case TypeTask.ChangeStatus:
+                    taskOptionsValid = IsValidOptions<ChangeStatusOptions>(task.Options);
+                    break;
+                case TypeTask.RemoveVm:
+                    taskOptionsValid = IsValidOptions<RemoveVmOptions>(task.Options);
+                    break;
+                default:
+                    throw new ApplicationException(string.Format("Unknown task type: {0}", task.TypeTask.ToString()));
             }
-            else if (task.TypeTask == TypeTask.ChangeStatus)
+            if (!taskOptionsValid) 
             {
-                if (!IsValidOptions<ChangeStatusOptions>(task.Options))
-                {
-                    ModelState.AddModelError("Options", "Not Valid Options for this type Task");
-                    return BadRequest(ModelState);
-                }
+                ModelState.AddModelError("Options", "Not Valid Options for this type Task");
+                return BadRequest(ModelState);
             }
+
             var modelTask = AutoMapper.Mapper.Map<TaskV2>(task);
 
             var newTask = _taskService.CreateTask(modelTask, modelTask.Options);

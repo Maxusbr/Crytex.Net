@@ -29,7 +29,10 @@ namespace Crytex.Notification
         {
             string userId = this.GetUserId();
 
-            Connections.Add(userId, Context.ConnectionId);
+            if (userId != null)
+            {
+                Connections.Add(userId, Context.ConnectionId);
+            }
 
             return base.OnConnected();
         }

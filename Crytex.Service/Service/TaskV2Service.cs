@@ -52,6 +52,8 @@ namespace Crytex.Service.Service
             task.Id = Guid.NewGuid();
             task.Options = option;
 
+            createTask.CreatedAt = DateTime.UtcNow;
+
             this._taskV2Repo.Add(task);
             this._unitOfWork.Commit();
 
@@ -67,6 +69,11 @@ namespace Crytex.Service.Service
             
             if (searchParams != null)
             {
+                if (searchParams.TypeTask != null)
+                {
+                    where = where.And(x => x.TypeTask == searchParams.TypeTask);
+                }
+
                 if (searchParams.Virtualization != null)
                 {
                     where = where.And(x => x.Virtualization == searchParams.Virtualization);

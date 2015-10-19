@@ -22,11 +22,11 @@
 
             scheduler.StartScheduler();
 
-            scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
-            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/5 * * * * ?");
-            var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
-            scheduler.TriggerJob(emai);
-            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "*/5 * * * * ?");
+            //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
+            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+            //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
+            //scheduler.TriggerJob(emai);
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }
