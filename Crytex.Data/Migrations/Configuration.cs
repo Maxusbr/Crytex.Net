@@ -1,9 +1,16 @@
+using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Web;
+using System.Web.Hosting;
+using Crytex.Core;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
 using Crytex.Model.Enums;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Crytex.Data.Migrations
 {
@@ -30,18 +37,8 @@ namespace Crytex.Data.Migrations
                 });
             }
 
-            var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+           var manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-
-            var user = new ApplicationUser()
-            {
-                UserName = "AdminUser",
-                Email = "admin@admin.com",
-                EmailConfirmed = true,
-            };
-
-            manager.Create(user, "wUcheva$3a");
-
             if (!roleManager.Roles.Any())
             {
                 roleManager.Create(new IdentityRole { Name = "Admin" });
@@ -49,8 +46,207 @@ namespace Crytex.Data.Migrations
                 roleManager.Create(new IdentityRole { Name = "User" });
             }
 
-            var adminUser = manager.FindByName("AdminUser");
-            manager.AddToRoles(adminUser.Id, new string[] { "Admin"});
+            var allUsers = context.Users.ToList();
+            for (int i = 1; i < 3; i++)
+            {
+                var admin = new ApplicationUser()
+                {
+                    UserName = "AdminUser" + i,
+                    Email = "admin" + i + "@admin.com",
+                    EmailConfirmed = true,
+                };
+                if (allUsers.All(u => u.UserName != admin.UserName))
+                {
+                    manager.Create(admin, "wUcheva$3a");
+                    manager.AddToRoles(admin.Id, new string[] { "Admin" });
+                }
+            }
+
+            for (int i = 1; i < 4; i++)
+            {
+                var support = new ApplicationUser()
+                {
+                    UserName = "SupportUser" + i,
+                    Email = "support" + i + "@admin.com",
+                    EmailConfirmed = true,
+                };
+                if (allUsers.All(u => u.UserName != support.UserName))
+                {
+                    manager.Create(support, "wUcheva$3a");
+                    manager.AddToRoles(support.Id, new string[] { "Support" });
+                }
+            }
+
+            for (int i = 1; i < 6; i++)
+            {
+                var user = new ApplicationUser()
+                {
+                    UserName = "User" + i,
+                    Email = "user" + i + "@admin.com",
+                    EmailConfirmed = true,
+                };
+                if (allUsers.All(u => u.UserName != user.UserName))
+                {
+                    manager.Create(user, "wUcheva$3a");
+                    manager.AddToRoles(user.Id, new string[] { "User" });
+                }
+            }
+
+            // ///////////////////////////////////
+
+            for (int i = 1; i < 6; i++)
+            {
+                var userRequest = manager.FindByName("User" + i);
+                var adminRequest = manager.FindByName("AdminUser" + 1);
+                var helpDeskRequest = new HelpDeskRequest
+                {
+                    UserId = userRequest.Id,
+                    Summary = "Summary",
+                    Details = "Details",
+                    Status = RequestStatus.New,
+                    CreationDate = RandomDay(),
+                    Read = true,
+                    Id = 100000 + i
+                };
+
+                context.HelpDeskRequests.Add(helpDeskRequest);
+
+                for (int b = 1; b < 3; b++)
+                {
+                    var commentUser = new HelpDeskRequestComment
+                    {
+                        Comment = "CommentUser #" + b,
+                        CreationDate = RandomDay(),
+                        UserId = userRequest.Id,
+                        RequestId = helpDeskRequest.Id,
+                        Id = 100000 + b
+                    };
+
+                    context.HelpDeskRequestComments.Add(commentUser);
+                }
+
+                for (int k = 1; k < 3; k++)
+                {
+                    var commentAdmin = new HelpDeskRequestComment
+                    {
+                        Comment = "CommentAdmin #" + k,
+                        CreationDate = RandomDay(),
+                        UserId = adminRequest.Id,
+                        RequestId = helpDeskRequest.Id,
+                        Id = 100100 + k
+                    };
+
+                    context.HelpDeskRequestComments.Add(commentAdmin);
+                }
+
+            }
+
+            for (int i = 1; i < 6; i++)
+            {
+                var userRequest = manager.FindByName("User" + i);
+                var helpDeskRequest = new HelpDeskRequest
+                {
+                    UserId = userRequest.Id,
+                    Summary = "Summary",
+                    Details = "Details",
+                    Status = RequestStatus.New,
+                    CreationDate = RandomDay(),
+                    Read = false,
+                    Id = 100100 + i
+                };
+
+                context.HelpDeskRequests.Add(helpDeskRequest);
+            }
+
+
+            var userForLog = manager.FindByName("User" + 1);
+
+            for (int i = 0; i < 80; i++)
+            {
+                string source = null;
+                if (i < 20) source = SourceLog.Web.ToString("G");
+                if (i > 20) source = SourceLog.API.ToString("G");
+                if (i > 40) source = SourceLog.Background.ToString("G");
+                if (i > 60) source = SourceLog.ExecutorTask.ToString("G");
+
+                var log = new LogEntry
+                {
+                    UserId = userForLog.Id,
+                    Date = RandomDay(),
+                    Message = "Message " + i,
+                    Source = source
+                };
+                context.LogEntries.Add(log);
+            }
+            ////////////////////////////////////////////////
+            var path = this.CreateImage();
+            FileDescriptor image;
+            //"/imageSavePath"
+            if (context.Files.All(f => f.Path != path))
+            {
+                image = new FileDescriptor
+                {
+                    Name = "ImageTest",
+                    Path = path,
+                    Type = FileType.Image,
+                    Id = 100000
+                };
+                context.Files.Add(image);
+            }
+            else
+            {
+                image = context.Files.First(i=>i.Path == path);
+            }
+
+            var allOperations = context.OperatingSystems.ToList();
+            OperatingSystem[] operations = new OperatingSystem[2];
+            for (int i = 0; i < 2; i++)
+            {
+                operations[i] = new OperatingSystem
+                {
+                    Name = "OperationgSystem" + i,
+                    Description = "Description",
+                    ImageFileId = image.Id,
+                    ServerTemplateName = "ServerTemplateName",
+                };
+                if (allOperations.All(o => o.Name != operations[i].Name))
+                    context.OperatingSystems.Add(operations[i]);
+                else
+                    operations[i] = allOperations.First(o=>o.Name == operations[i].Name);
+            }
+
+
+            for (int i = 0; i < 2; i++)
+            {
+                var serverTemplate = new ServerTemplate
+                {
+                    Name = "Name" + i,
+                    Description = "Description",
+                    MinCoreCount = 20,
+                    MinRamCount = 300,
+                    MinHardDriveSize = 4000,
+                    ImageFileId = image.Id,
+                    OperatingSystemId = operations[0].Id,
+                    UserId = userForLog.Id
+                };
+                context.ServerTemplates.Add(serverTemplate);
+            }
+
+            for (int i = 0; i < 2; i++)
+            {
+                var serverTemplate = new ServerTemplate
+                {
+                    Name = "Name" + i,
+                    Description = "Description",
+                    MinCoreCount = 20,
+                    MinRamCount = 300,
+                    MinHardDriveSize = 4000,
+                    ImageFileId = image.Id,
+                    OperatingSystemId = operations[1].Id,
+                    UserId = userForLog.Id
+                };
+                context.ServerTemplates.Add(serverTemplate);
+            }
 
             var defVCenter = new VmWareVCenter
             {
@@ -59,8 +255,28 @@ namespace Crytex.Data.Migrations
                 Password = "QwerT@12",
                 ServerAddress = "51.254.55.136"
             };
-            context.VmWareVCenters.Add(defVCenter);
+            if (context.VmWareVCenters.All(c => c.Name != defVCenter.Name))
+                context.VmWareVCenters.Add(defVCenter);
+
             context.Commit();
+        }
+
+        private DateTime RandomDay()
+        {
+            DateTime start = new DateTime(1995, 1, 1);
+            Random gen = new Random();
+
+            int range = (DateTime.Today - start).Days;
+            return start.AddDays(gen.Next(range));
+        }
+
+        private string CreateImage()
+        {
+            string physicalPath = HostingEnvironment.ApplicationPhysicalPath + @"Crytex.Web\App_Data\ImageTest.jpg";
+            var bmp = new Bitmap(100, 100);
+            bmp.Save(physicalPath, ImageFormat.Jpeg);
+            bmp.Dispose();
+            return physicalPath;
         }
     }
 }
