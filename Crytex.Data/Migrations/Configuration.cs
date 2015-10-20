@@ -22,7 +22,7 @@ namespace Crytex.Data.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            ÑreateFakeEntries = false;
+            ÑreateFakeEntries = true;
         }
         protected override void Seed(ApplicationDbContext context)
         {
@@ -282,12 +282,17 @@ namespace Crytex.Data.Migrations
 
         private string CreateImage()
         {
-            string physicalPath = HostingEnvironment.ApplicationPhysicalPath + @"Crytex.Web\App_Data\Files\Images";
-            Directory.CreateDirectory(physicalPath);
+            var rootFolder = Directory.GetParent(@"../").FullName;
+            
+            string newFilePath = rootFolder + @"\Crytex.Web\App_Data\Files\Images";
+            Directory.CreateDirectory(newFilePath);
+
             string nameFile = "ImageTest.jpg";
-            var bmp = new Bitmap(100, 100);
-            bmp.Save(physicalPath + @"\small_" + nameFile, ImageFormat.Jpeg);
-            bmp.Dispose();
+            newFilePath += @"\small_" + nameFile;
+            
+            string currentFilePath = rootFolder + @"\" + nameFile;
+            File.Copy(currentFilePath, newFilePath, true);
+
             return nameFile;
         }
     }
