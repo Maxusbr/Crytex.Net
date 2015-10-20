@@ -9,8 +9,6 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
 using Crytex.Model.Enums;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 
 namespace Crytex.Data.Migrations
