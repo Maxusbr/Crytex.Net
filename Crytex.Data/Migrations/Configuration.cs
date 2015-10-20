@@ -15,12 +15,12 @@ namespace Crytex.Data.Migrations
 {
     internal sealed class Configuration : DbMigrationsConfiguration<ApplicationDbContext>
     {
-        private bool ÑreateFakeEntries;
+        readonly private bool CreateFakeEntries;
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            ÑreateFakeEntries = true;
+            CreateFakeEntries = true;
         }
         protected override void Seed(ApplicationDbContext context)
         {
@@ -53,7 +53,7 @@ namespace Crytex.Data.Migrations
                 context.VmWareVCenters.Add(defVCenter);
 
 
-            if (this.ÑreateFakeEntries)
+            if (this.CreateFakeEntries)
             {
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
                 if (!roleManager.Roles.Any())
