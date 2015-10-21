@@ -25,7 +25,8 @@ namespace Crytex.Web.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<Message, MessageViewModel>();
-            Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>();
+			Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
