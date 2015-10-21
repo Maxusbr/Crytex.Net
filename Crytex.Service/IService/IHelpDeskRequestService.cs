@@ -19,6 +19,8 @@ namespace Crytex.Service.IService
 
         IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id);
 
+        IPagedList<HelpDeskRequestComment> GetPageCommentsByRequestId(int id, int pageNumber, int pageSize);
+
         HelpDeskRequestComment CreateComment(int requestId, string comment, string userId, bool isRead = false);
 
         void DeleteCommentById(int id);

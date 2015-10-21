@@ -121,6 +121,20 @@ namespace Crytex.Service.Service
             return comments;
         }
 
+        public IPagedList<HelpDeskRequestComment> GetPageCommentsByRequestId(int id, int pageNumber, int pageSize)
+        {
+            var request = this._requestRepository.GetById(id);
+
+            if (request == null)
+            {
+                throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
+            }
+
+            var comments = _requestCommentRepository.GetPage(new Page(pageNumber, pageSize), (x => x.RequestId == request.Id), (x => x.CreationDate));
+
+            return comments;
+        }
+
 
         public HelpDeskRequestComment CreateComment(int requestId, string comment, string userId, bool isRead = false)
         {

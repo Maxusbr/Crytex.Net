@@ -25,9 +25,9 @@ namespace Crytex.Web.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<Message, MessageViewModel>();
-			Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
-            Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>()
+            Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>();
+				.ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));            
+			Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
@@ -68,6 +68,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x=>x.ImageSrc, opt=>opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
             Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
+            this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
             this.MapPagedList<CreateVmTask, CreateVmTaskAdminViewModel>();
