@@ -70,7 +70,8 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+            var handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), this._serverTemplateService,
+                vCenter.ServerAddress);
 
             return handler;
         }
