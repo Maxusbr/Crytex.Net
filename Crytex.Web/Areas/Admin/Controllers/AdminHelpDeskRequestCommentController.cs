@@ -7,6 +7,7 @@ using System.Web.Http;
  using System.Web.Http.Description;
  using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
+ using PagedList;
 
 
 namespace Crytex.Web.Areas.Admin
@@ -24,13 +25,18 @@ namespace Crytex.Web.Areas.Admin
         /// Получение HelpDeskRequestComment по id
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         // GET: api/HelpDeskRequestComment/5
-        [ResponseType(typeof(List<HelpDeskRequestCommentViewModel>))]
-        public IHttpActionResult Get(int id)
+        [ResponseType(typeof(PageModel<HelpDeskRequestCommentViewModel>))]
+        public IHttpActionResult Get(int id, int pageNumber, int pageSize)
         {
-            var comments = this._helpDeskRequestService.GetCommentsByRequestId(id).ToList();
-            var model = AutoMapper.Mapper.Map<List<HelpDeskRequestComment>, List<HelpDeskRequestCommentViewModel>>(comments);
+            if (pageNumber <= 0 || pageSize <= 0)
+                return BadRequest("PageNumber and PageSize must be grater than 1");
+
+            var comments = this._helpDeskRequestService.GetPageCommentsByRequestId(id, pageNumber, pageSize);
+            var model = AutoMapper.Mapper.Map<PageModel<HelpDeskRequestCommentViewModel>>(comments);
 
             return Ok(model);
         }
