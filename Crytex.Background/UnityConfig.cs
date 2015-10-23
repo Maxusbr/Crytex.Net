@@ -2,6 +2,8 @@ using Crytex.Background.Monitor;
 using Crytex.Background.Monitor.HyperV;
 using Crytex.Background.Monitor.Vmware;
 using Crytex.Background.Scheduler;
+using Crytex.Background.Statistic;
+using Crytex.Background.Tasks;
 using Crytex.Notification;
 using Crytex.Core;
 using Crytex.Core.AppConfig;
@@ -45,6 +47,8 @@ namespace Crytex.Background
 
                 unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>();
                 unityContainer.RegisterType<ITaskManager, TaskManager>(new ContainerControlledLifetimeManager());
+                unityContainer.RegisterType<IStatisticJobFactory, StatisticJobFactory>();
+                
             };
         }
 

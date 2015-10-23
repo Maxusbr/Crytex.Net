@@ -272,6 +272,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminStateMachineController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSystemCenterVirtualManagerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminStatisticController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminTaskV2Controller.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
@@ -315,6 +316,7 @@
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\StatisticViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2SearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2ViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateVmTaskViewModel.cs" />

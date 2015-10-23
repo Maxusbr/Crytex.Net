@@ -28,6 +28,11 @@ namespace Crytex.Background.Monitor.Vmware
             throw new NotImplementedException();
         }
 
+        public void CloneVm(string sourceVmName, string newVmName)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<VmWareVirtualMachine> GetAllVirtualMachines()
         {
             throw new NotImplementedException();

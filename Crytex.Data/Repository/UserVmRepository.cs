@@ -52,5 +52,11 @@ namespace Crytex.Data.Repository
             
             return query;
         }
+
+       public int CountUserVms(Expression<Func<UserVm, bool>> where)
+       {
+           var count = this.DataContext.UserVms.Where(where).Count();
+           return count;
+       }
     }
 }

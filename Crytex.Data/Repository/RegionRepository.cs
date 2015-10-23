@@ -6,6 +6,6 @@ namespace Crytex.Data.Repository
 {
     public class RegionRepository : RepositoryBase<Region>, IRegionRepository
     {
-        public RegionRepository(DatabaseFactory dbFacrory) : base(dbFacrory){ }
+        public RegionRepository(IDatabaseFactory dbFacrory) : base(dbFacrory){ }
     }
 }
