@@ -186,17 +186,13 @@ namespace Crytex.Service.Service
             var timeStart = DateTime.UtcNow.AddMinutes(-(minutes));
             var timeEnd = DateTime.UtcNow;
             var tasks = _taskV2Repository.GetMany(x => x.CompletedAt >= timeStart && x.CompletedAt <= timeEnd).ToList();
-            double totalCount = 0;
-            foreach (var task in tasks)
-            {
-                TimeSpan diff = task.CompletedAt.Value - task.CreatedAt;
-                totalCount += diff.TotalMinutes;
-            }
+            if (!tasks.Any()) return;
+            double totalCount = (from task in tasks where task.CompletedAt.HasValue select task.CompletedAt.Value - task.CreatedAt into diff select diff.TotalMinutes).Sum();
 
             var avarageMinutes = Convert.ToInt32(totalCount / tasks.Count());
             var statisticAverageDelayStartEndTasksInPeriod = new Statistic
             {
-                Type = TypeStatistic.NumberTasksCompletedDuringPeriod,
+                Type = TypeStatistic.AverageDelayStartEndTasksInPeriod,
                 Value = avarageMinutes,
                 Date = DateTime.UtcNow
             };

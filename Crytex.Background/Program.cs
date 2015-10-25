@@ -19,7 +19,7 @@
             var scheduler = UnityConfig.Resolve<ISchedulerJobs>();
             var taskManager = UnityConfig.Resolve<ITaskManager>();
             taskManager.RunTasks();
-
+            
             scheduler.StartScheduler();
             scheduler.ScheduleJob<NumberRunningMachineJob>("NumberRunningMachineJob", "0 */1 * 1/1 * ? *");
             scheduler.ScheduleJob<NumberStoppedMachineJob>("NumberStoppedMachineJob", "0 */1 * 1/1 * ? *");
@@ -28,12 +28,12 @@
             scheduler.ScheduleJob<NumberUsersJob>("NumberUsersJob", "0 0 0 1/1 * ? *");
             scheduler.ScheduleJob<AverageDelayStartEndTasksInPeriodJob>("AverageDelayStartEndTasksInPeriodJob", "0 */10 * 1/1 * ? *");
             scheduler.ScheduleJob<UsersWithLeastOneRunningMachineJob>("UsersWithLeastOneRunningMachineJob", "0 0 0 1/1 * ? *");
-
-            //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
             scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+            //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
+
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
             //scheduler.TriggerJob(emai);
-           // scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
+            // scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }

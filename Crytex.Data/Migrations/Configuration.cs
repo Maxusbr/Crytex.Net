@@ -280,7 +280,7 @@ namespace Crytex.Data.Migrations
 
         private string CreateImage()
         {
-            var rootFolder = Directory.GetParent(@"../").FullName;
+            var rootFolder = Directory.GetParent(@"./").FullName;
             
             string newFilePath = rootFolder + @"\Crytex.Web\App_Data\Files\Images";
             Directory.CreateDirectory(newFilePath);
