@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Crytex.Model.Models;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 using Crytex.Core.Extension;
 using Crytex.Service.Model;
 using PagedList;
@@ -187,10 +188,14 @@ namespace Crytex.Service.Service
             var timeStart = DateTime.UtcNow.AddMinutes(-(minutes)).TrimDate(TimeSpan.TicksPerMinute);
             var timeEnd = DateTime.UtcNow.TrimDate(TimeSpan.TicksPerMinute);
             var tasks = _taskV2Repository.GetMany(x => x.CompletedAt >= timeStart && x.CompletedAt <= timeEnd).ToList();
-            if (!tasks.Any()) return;
-            double totalCount = (from task in tasks where task.CompletedAt.HasValue select task.CompletedAt.Value - task.CreatedAt into diff select diff.TotalMinutes).Sum();
+            int avarageMinutes = 0;
 
-            var avarageMinutes = Convert.ToInt32(totalCount / tasks.Count());
+            if (tasks.Any())
+            {
+                var totalCount = tasks.Where(t=>t.CompletedAt.HasValue).Select(s=> new {diff = s.CompletedAt.Value - s.CreatedAt}).Select(d=>d.diff.TotalMinutes).Sum();
+                avarageMinutes = Convert.ToInt32(totalCount / tasks.Count());
+            }
+
             var statisticAverageDelayStartEndTasksInPeriod = new Statistic
             {
                 Type = TypeStatistic.AverageDelayStartEndTasksInPeriod,
