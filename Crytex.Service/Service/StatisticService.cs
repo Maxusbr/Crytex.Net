@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using Crytex.Model.Models;
 using System.Linq;
 using System.Linq.Expressions;
+using Crytex.Core.Extension;
 using Crytex.Service.Model;
 using PagedList;
 
@@ -183,8 +184,8 @@ namespace Crytex.Service.Service
         }
         private void CalculateAverageDelayStartEndTasksInPeriod(double minutes)
         {
-            var timeStart = DateTime.UtcNow.AddMinutes(-(minutes));
-            var timeEnd = DateTime.UtcNow;
+            var timeStart = DateTime.UtcNow.AddMinutes(-(minutes)).TrimDate(TimeSpan.TicksPerMinute);
+            var timeEnd = DateTime.UtcNow.TrimDate(TimeSpan.TicksPerMinute);
             var tasks = _taskV2Repository.GetMany(x => x.CompletedAt >= timeStart && x.CompletedAt <= timeEnd).ToList();
             if (!tasks.Any()) return;
             double totalCount = (from task in tasks where task.CompletedAt.HasValue select task.CompletedAt.Value - task.CreatedAt into diff select diff.TotalMinutes).Sum();
@@ -194,7 +195,7 @@ namespace Crytex.Service.Service
             {
                 Type = TypeStatistic.AverageDelayStartEndTasksInPeriod,
                 Value = avarageMinutes,
-                Date = DateTime.UtcNow
+                Date = timeEnd
             };
 
             _statisticRepository.Add(statisticAverageDelayStartEndTasksInPeriod);
@@ -202,14 +203,16 @@ namespace Crytex.Service.Service
         }
         private void CalculateNumberTasksCompletedDuringPeriod(double hours)
         {
-            var timeStart = DateTime.UtcNow.AddHours(-(hours));
-            var timeEnd = DateTime.UtcNow;
+            
+            var timeStart = DateTime.UtcNow.AddHours(-(hours)).TrimDate(TimeSpan.TicksPerHour);
+            var timeEnd = DateTime.UtcNow.TrimDate(TimeSpan.TicksPerHour);
+
             int count = _taskV2Repository.CountTaskV2(x=>x.CompletedAt >= timeStart && x.CompletedAt <= timeEnd);
             var statisticNumberTasksCompletedDuringPeriod = new Statistic
             {
                 Type = TypeStatistic.NumberTasksCompletedDuringPeriod,
                 Value = count,
-                Date = DateTime.UtcNow
+                Date = timeEnd
             };
 
             _statisticRepository.Add(statisticNumberTasksCompletedDuringPeriod);
