@@ -47,8 +47,6 @@ namespace Crytex.Background
 
                 unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>();
                 unityContainer.RegisterType<ITaskManager, TaskManager>(new ContainerControlledLifetimeManager());
-                unityContainer.RegisterType<IStatisticJobFactory, StatisticJobFactory>();
-                
             };
         }
 

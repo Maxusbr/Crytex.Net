@@ -1,4 +1,9 @@
-﻿namespace Crytex.Background
+﻿using System;
+using System.Linq;
+using Crytex.Background.Statistic;
+using Crytex.Model.Models;
+
+namespace Crytex.Background
 {
     using Crytex.Core;
     using Crytex.Data.Infrastructure;
@@ -21,14 +26,32 @@
             taskManager.RunTasks();
             
             scheduler.StartScheduler();
-            scheduler.ScheduleJob<NumberRunningMachineJob>("NumberRunningMachineJob", "0 */1 * 1/1 * ? *");
-            scheduler.ScheduleJob<NumberStoppedMachineJob>("NumberStoppedMachineJob", "0 */1 * 1/1 * ? *");
-            scheduler.ScheduleJob<NumberTasksCompletedDuringPeriodJob>("NumberTasksCompletedDuringPeriodJob", "0 0 */1 1/1 * ? *");
-            scheduler.ScheduleJob<NumberTasksJob>("NumberTasksJob", "0 0/5 * 1/1 * ? *");
-            scheduler.ScheduleJob<NumberUsersJob>("NumberUsersJob", "0 0 0 1/1 * ? *");
-            scheduler.ScheduleJob<AverageDelayStartEndTasksInPeriodJob>("AverageDelayStartEndTasksInPeriodJob", "0 */10 * 1/1 * ? *");
-            scheduler.ScheduleJob<UsersWithLeastOneRunningMachineJob>("UsersWithLeastOneRunningMachineJob", "0 0 0 1/1 * ? *");
-            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+
+            var statisticData = new List<KeyValuePair<string, Object>>
+            {
+                new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberRunningMachine)
+            };
+            scheduler.ScheduleJob<StatisticJob>("NumberRunningMachine", "0 */1 * 1/1 * ? *", statisticData);
+
+            statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberStoppedMachine);
+            scheduler.ScheduleJob<StatisticJob>("NumberStoppedMachine", "0 */1 * 1/1 * ? *");
+
+            statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberTasksCompletedDuringPeriod);
+            scheduler.ScheduleJob<StatisticJob>("NumberTasksCompletedDuringPeriod", "0 0 */1 1/1 * ? *");
+
+            statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberTasks);
+            scheduler.ScheduleJob<StatisticJob>("NumberTasksJob", "0 0/5 * 1/1 * ? *");
+
+            statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberUsers);
+            scheduler.ScheduleJob<StatisticJob>("NumberUsersJob", "0 0 0 1/1 * ? *");
+
+            statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.AverageDelayStartEndTasksInPeriod);
+            scheduler.ScheduleJob<StatisticJob>("AverageDelayStartEndTasksInPeriod", "0 */10 * 1/1 * ? *");
+
+            statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.UsersWithLeastOneRunningMachine);
+            scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *");
+            //scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
 
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
