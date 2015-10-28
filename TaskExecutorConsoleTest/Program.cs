@@ -10,6 +10,7 @@ using Crytex.ExecutorTask.TaskHandler.VmWare;
 using VmWareRemote.Implementations;
 using Crytex.Model.Models;
 using VmWareRemote.Model;
+using Crytex.ExecutorTask.Config;
 
 namespace TaskExecutorConsoleTest
 {
@@ -17,9 +18,9 @@ namespace TaskExecutorConsoleTest
     {
         static void Main(string[] args)
         {
-            var userName = "";
-            var password = "";
-            var server = "51.254.55.136";
+            var config = new ExecutorTaskConfig();
+            Console.WriteLine(config.GetHyperVTemplateDriveRoot());
+            Console.WriteLine(config.GetHyperVVmDriveRoot());
         }
     }
 }
