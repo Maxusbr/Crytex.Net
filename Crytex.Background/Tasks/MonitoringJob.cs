@@ -15,6 +15,7 @@ namespace Crytex.Background.Tasks
     using Quartz;
     using Crytex.Background.Monitor.HyperV;
 
+    [DisallowConcurrentExecution]
     public class MonitoringJob: IJob
     {
         private INotificationManager _notificationManager { get; set; }
@@ -39,7 +40,8 @@ namespace Crytex.Background.Tasks
         public void Execute(IJobExecutionContext context)
         {
             Console.WriteLine("It's monitoring job!");
-            List<Guid> vmActiveList = _notificationManager.GetVMs();
+            //List<Guid> vmActiveList = _notificationManager.GetVMs();
+            List<Guid> vmActiveList = new List<Guid>();
             List<UserVm> allVMs = _userVm.GetAllVmsHyperV().ToList();
             var hosts = _systemCenter.GetAllHyperVHosts().ToList();
             List<Task> tasks = new List<Task>(hosts.Count());
@@ -71,7 +73,7 @@ namespace Crytex.Background.Tasks
                 var newState = _stateMachine.CreateState(vmState);
                 if (vmActiveList.Contains(vm.Id))
                 {
-                    _notificationManager.SendVmMessage(vm.Id, newState);
+                    //_notificationManager.SendVmMessage(vm.Id, newState);
                 }
             }
         }

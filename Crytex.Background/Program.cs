@@ -18,15 +18,15 @@
             UnityConfig.Configure();
             var scheduler = UnityConfig.Resolve<ISchedulerJobs>();
             var taskManager = UnityConfig.Resolve<ITaskManager>();
-            taskManager.RunTasks();
+            //taskManager.RunTasks();
 
             scheduler.StartScheduler();
 
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
-            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/1 * * * * ?");
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
             //scheduler.TriggerJob(emai);
-            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "*/1 * * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }
