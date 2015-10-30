@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using Crytex.Core.Extension;
+using Crytex.Service.Extension;
 using Crytex.Service.Model;
 using PagedList;
 
@@ -42,9 +43,11 @@ namespace Crytex.Service.Service
             return statistic;
         }
 
-        public IPagedList<Statistic> GetAllPageStatistics(int pageNumber, int pageSize, StatisticType? type = null)
+        public IPagedList<Statistic> GetAllPageStatistics(int pageNumber, int pageSize, StatisticType? type = null, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
             var page = new Page(pageNumber, pageSize);
+            var minDate = dateFrom ?? DateTime.MinValue;
+            var maxDate = dateTo ?? DateTime.MaxValue;
 
             Expression<Func<Statistic, bool>> where = x => true;
 
@@ -75,6 +78,8 @@ namespace Crytex.Service.Service
                     @where = x => x.Type == TypeStatistic.UsersWithLeastOneRunningMachine;
                     break;
             }
+
+            where = where.And(x => x.Date >= minDate && x.Date <= maxDate);
 
             var pageList = _statisticRepository.GetPage(page, where, s => s.Date);
             return pageList;

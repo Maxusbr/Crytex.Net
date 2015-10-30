@@ -31,10 +31,12 @@ namespace Crytex.Web.Areas.Admin
         /// <param name="statisticType"></param>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
+        /// <param name="dateFrom"></param>
+        /// <param name="dateTo"></param>
         /// <returns></returns>
         // GET: api/AdminStatistic
         [ResponseType(typeof(PageModel<StatisticViewModel>))]
-        public IHttpActionResult Get(int pageNumber, int pageSize, StatisticType? statisticType = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize, StatisticType? statisticType = null, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be grater than 1");
@@ -42,7 +44,7 @@ namespace Crytex.Web.Areas.Admin
             {
                 return BadRequest(ModelState);
             }
-            var statistics = _statisticService.GetAllPageStatistics(pageNumber, pageSize, statisticType);
+            var statistics = _statisticService.GetAllPageStatistics(pageNumber, pageSize, statisticType, dateFrom, dateTo);
             var viewStatistics = AutoMapper.Mapper.Map<PageModel<StatisticViewModel>>(statistics);
 
             return Ok(viewStatistics);
