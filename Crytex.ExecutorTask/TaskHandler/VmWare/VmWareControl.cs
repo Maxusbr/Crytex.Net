@@ -20,20 +20,22 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public Guid CreateVm(TaskV2 task)
+        public Guid CreateVm(TaskV2 task, ServerTemplate serverTemplate)
         {
             // Connect to server
             ConnectIfNotConnected();
             
             // Generate unique server machine-name by generating new Guid
             var machineGuid = Guid.NewGuid();
+            var machineName = machineGuid.ToString();
 
             // Create new vm
             var createOptions = task.GetOptions<CreateVmOptions>();
-            var ramMB = createOptions.Ram * 1024;
             try
             {
-                this._vmWareProvider.CreateVm(machineGuid.ToString(), createOptions.Cpu, ramMB);
+                this._vmWareProvider.CloneVm(serverTemplate.OperatingSystem.ServerTemplateName, machineName);
+                this._vmWareProvider.ModifyMachine(machineName, createOptions.Cpu, createOptions.Ram, createOptions.Hdd);
+                this._vmWareProvider.StartMachine(machineName);
             }
             catch (ApplicationException ex)
             {
