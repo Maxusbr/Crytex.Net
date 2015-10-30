@@ -80,12 +80,18 @@ namespace Crytex.Web.Areas.Admin
         /// Создание нового TaskV2
         /// </summary>
         /// <param name="task"></param>
+        /// <param name="userId"></param>
         /// <returns></returns>
         // POST: api/TaskV2
-        public IHttpActionResult Post([FromBody]TaskV2ViewModel task)
+        public IHttpActionResult Post([FromBody]TaskV2ViewModel task, string userId = null)
         {
             if (!ModelState.IsValid || task == null)
                 return BadRequest(ModelState);
+            
+            if (string.IsNullOrEmpty(userId))
+            {
+                task.UserId = CrytexContext.UserInfoProvider.GetUserId();
+            }
 
             if (task.TypeTask == TypeTask.UpdateVm || task.TypeTask == TypeTask.CreateVm)
             {
