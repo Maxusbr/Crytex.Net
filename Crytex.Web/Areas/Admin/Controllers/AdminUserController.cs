@@ -139,7 +139,8 @@ namespace Crytex.Web.Areas.Admin
             {
                 return NotFound();
             }
-            this.UserManager.Delete(user);
+            
+            _applicationUserService.DeleteUser(user);
 
             return Ok();
         }

@@ -5,15 +5,21 @@ using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
+using Microsoft.Practices.Unity;
 using PagedList;
 
 namespace Crytex.Service.Service
 {
     public class ApplicationUserService : IApplicationUserService
     {
-        public ApplicationUserService(IApplicationUserRepository applicationUserRepository)
+        private IUserVmRepository _userVmRepository;
+        private IUnitOfWork _unitOfWork;
+        
+        public ApplicationUserService(IApplicationUserRepository applicationUserRepository, IUnitOfWork unitOfWork, IUserVmRepository userVmRepository)
         {
             _applicationUserRepository = applicationUserRepository;
+            _userVmRepository = userVmRepository;
+            _unitOfWork = unitOfWork;
         }
 
         IApplicationUserRepository _applicationUserRepository { get; }
@@ -35,6 +41,13 @@ namespace Crytex.Service.Service
         public ApplicationUser GetUserById(string id)
         {
             return _applicationUserRepository.GetById(id);
+        }
+
+        public void DeleteUser(ApplicationUser user)
+        {
+            _userVmRepository.Delete(v=>v.UserId == user.Id);
+            _applicationUserRepository.Delete(u=>u.Id == user.Id);
+            _unitOfWork.Commit();
         }
     }
 }
