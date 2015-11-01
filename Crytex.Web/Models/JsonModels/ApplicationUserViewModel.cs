@@ -8,6 +8,7 @@ namespace Crytex.Web.Models.JsonModels
         [EmailAddress]
         public string Email { get; set; }
         public string Password { get; set; }
+        public bool ChangePassword { get; set; }
 
         public bool ValidateForCreationScenario()
         {

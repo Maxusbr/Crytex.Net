@@ -84,14 +84,14 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult Put(string id, ApplicationUserViewModel model)
+        public IHttpActionResult Put(string id, [FromBody]ApplicationUserViewModel model)
         {
             if (!model.ValidateForEditingScenario() || !this.ModelState.IsValid)
             {
                 return BadRequest("Some params are empty. UserName or Password or Email are required");
             }
             // If password is set - update password using UserManager
-            if (!string.IsNullOrEmpty(model.Password))
+            if (!string.IsNullOrEmpty(model.Password) && model.ChangePassword)
             {
                 this.UserManager.RemovePassword(id);
                 var editResult = this.UserManager.AddPassword(id, model.Password);
@@ -104,7 +104,7 @@ namespace Crytex.Web.Areas.Admin
             }
 
             // If UserName or Email are set - update them via UserService
-            if (!(string.IsNullOrEmpty(model.UserName) && string.IsNullOrEmpty(model.Email)))
+            if (!(string.IsNullOrEmpty(model.UserName) && string.IsNullOrEmpty(model.Email)) && !model.ChangePassword)
             {
                 var user = this.UserManager.FindById(id);
                 if (!string.IsNullOrEmpty(model.UserName))
