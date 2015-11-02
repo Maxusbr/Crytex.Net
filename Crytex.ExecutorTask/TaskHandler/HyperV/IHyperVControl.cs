@@ -4,7 +4,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public interface IHyperVControl
     {
-        Guid CreateVm(TaskV2 task);
+        Guid CreateVm(TaskV2 task, ServerTemplate template);
 
         void UpdateVm(TaskV2 updateVmTask);
 

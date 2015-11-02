@@ -8,8 +8,9 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         /// Созданёт виртуальную машину
         /// </summary>
         /// <param name="task">Объект задачи создания</param>
+        /// <param name="serverTemplate">Объект шаблона машины. Обязательно инициализированное св-во OperatingSystem</param>
         /// <returns></returns>
-        Guid CreateVm(TaskV2 task);
+        Guid CreateVm(TaskV2 task, ServerTemplate serverTemplate);
 
         /// <summary>
         /// Обновляет конфигурацию виртуальной машины

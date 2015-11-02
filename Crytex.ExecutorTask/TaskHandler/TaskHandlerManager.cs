@@ -16,16 +16,18 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IUserVmService _userVmService;
         private INotificationManager _notificationManager;
         private IVmWareVCenterService _vmWareVCenterService;
+        private IHyperVHostService _vmHyperVHostCenterService;
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
-            IServerTemplateService serverTemplateService)
+            IServerTemplateService serverTemplateService, IHyperVHostService vmHyperVHostCenterService)
         {
             this._handlerFactory = new TaskHandlerFactory(serverTemplateService);
             this._taskService = taskService;
             this._userVmService = userVmService;
             this._notificationManager = notificationManager;
             this._vmWareVCenterService = vmWareVCenterService;
+            this._vmHyperVHostCenterService = vmHyperVHostCenterService;
         }
 
         public PendingTaskHandlerBox GetTaskHandlers()
@@ -79,13 +81,13 @@ namespace Crytex.ExecutorTask.TaskHandler
         private VmWareVCenter GetVmWareVCenterForTask(TaskV2 task)
         {
             var vCenter = this._vmWareVCenterService.GetAllVCenters().First();
-
             return vCenter;
         }
 
         private HyperVHost GetHyperVHostForTask(TaskV2 task)
         {
-            return new HyperVHost();
+            var hyperVHost = this._vmHyperVHostCenterService.GetAllHyperVHosts().First();
+            return hyperVHost;
         }
 
         private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult e)
@@ -132,10 +134,10 @@ namespace Crytex.ExecutorTask.TaskHandler
                 switch (taskEntity.Virtualization)
                 {
                     case TypeVirtualization.HyperV:
-                        newVm.VmWareCenterId = e.VirtualizationServerEnitityId;
+                        newVm.HyperVHostId = e.VirtualizationServerEnitityId;
                         break;
                     case TypeVirtualization.VmWare:
-                        newVm.HyperVHostId = e.VirtualizationServerEnitityId;
+                        newVm.VmWareCenterId = e.VirtualizationServerEnitityId;
                         break;
                 }
 
