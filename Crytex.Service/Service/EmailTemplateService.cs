@@ -20,7 +20,7 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
-        public EmailTemplate AddTemplate(string subject, string body, EmailTemplateType emailTemplateType, List<KeyValuePair<string, string>> parameters = null)
+        public EmailTemplate AddTemplate(string subject, string body, EmailTemplateType emailTemplateType, List<string> parameters = null)
         {
             var newTemplate = new EmailTemplate()
             {
@@ -36,7 +36,7 @@ namespace Crytex.Service.Service
             return newTemplate;
         }
 
-        public EmailTemplate UpdateTemplate(int id, string subject, string body, List<KeyValuePair<string, string>> parameters = null)
+        public EmailTemplate UpdateTemplate(int id, string subject, string body, List<string> parameters = null)
         {
             var template = _emailTemplateRepository.GetById(id);
             if (template == null)
