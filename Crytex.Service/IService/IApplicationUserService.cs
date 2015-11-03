@@ -11,5 +11,7 @@ namespace Crytex.Service.IService
         IPagedList<ApplicationUser> GetPage(int pageSize, int pageIndex, string userName, string email);
 
         ApplicationUser GetUserById(string id);
+
+        void DeleteUser(ApplicationUser user);
     }
 }
