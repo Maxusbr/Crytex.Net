@@ -6,6 +6,7 @@ using Crytex.Model.Models.Notifications;
 using Crytex.Notification;
 using Crytex.Notification.Models;
 using System.Linq;
+using Crytex.Core;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -107,14 +108,19 @@ namespace Crytex.ExecutorTask.TaskHandler
             if (e.Success)
             {
                 this.UpdateTaskStatus(taskEntity.Id, StatusTask.End, finishDate, null);
-                this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
             else
             {
                 this.UpdateTaskStatus(taskEntity.Id, StatusTask.EndWithErrors, finishDate, e.ErrorMessage);
+            }
+            try
+            {
                 this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
-
+            catch (Exception ex)
+            {
+                LoggerCrytex.Logger.Error("Ошибка отправки сообщения " + ex);
+            }
             if (taskEntity.TypeTask == TypeTask.CreateVm)
             {
                 var taskOptions = e.TaskEntity.GetOptions<CreateVmOptions>();

@@ -86,7 +86,15 @@ namespace Crytex.Service.Service
 
                 if (searchParams.StatusTask != null)
                 {
-                    where = where.And(x => x.StatusTask == searchParams.StatusTask);
+                    if (searchParams.StatusTask == StatusTask.Processing)
+                    {
+                        where = where.And(x => x.StatusTask == StatusTask.Start|| x.StatusTask == StatusTask.Pending||x.StatusTask ==StatusTask.Processing);
+                    }
+                    else
+                    {
+                        where = where.And(x => x.StatusTask == searchParams.StatusTask);
+                    }
+                   
                 }
 
                 if (searchParams.UserId != null)

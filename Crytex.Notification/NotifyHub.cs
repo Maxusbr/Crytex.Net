@@ -15,6 +15,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Crytex.Notification
 {
+ 
     public class NotifyHub : CrytexHub, INotifyHub
     {
         private readonly static ConnectionMapping<string> Connections =
