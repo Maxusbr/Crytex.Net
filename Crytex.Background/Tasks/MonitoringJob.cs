@@ -62,6 +62,11 @@ namespace Crytex.Background.Tasks
             foreach (var vm in hostVms)
             {
                 var stateData = hyperVMonitor.GetVmByName(vm.Name);
+                
+                if (stateData.State == "Running")
+                    vm.Status = StatusVM.Enable;
+                else
+                    vm.Status = StatusVM.Disable;
 
                 StateMachine vmState = new StateMachine
                 {

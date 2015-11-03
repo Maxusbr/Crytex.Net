@@ -8,6 +8,7 @@ using Crytex.Background.Monitor.Vmware;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using HyperVRemote;
+using VmWareRemote.Model;
 
 namespace Crytex.Background.Tasks
 {
@@ -60,6 +61,10 @@ namespace Crytex.Background.Tasks
             foreach (var vm in hostVms)
             {
                 var stateData = vmWareMonitor.GetVmByName(vm.Name);
+                if (stateData.State == VmPowerState.On)
+                    vm.Status = StatusVM.Enable;
+                else if (stateData.State == VmPowerState.Off)
+                    vm.Status = StatusVM.Disable;
 
                 StateMachine vmState = new StateMachine
                 {
