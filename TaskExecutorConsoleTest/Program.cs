@@ -22,9 +22,9 @@ namespace TaskExecutorConsoleTest
             var config = new ExecutorTaskConfig();
             Console.WriteLine(config.GetHyperVTemplateDriveRoot());
             Console.WriteLine(config.GetHyperVVmDriveRoot());
-            userName = "administrator@vsphere.local";
-             password = "QwerT@12";
-             server = "51.254.55.136";
+            var userName = "administrator@vsphere.local";
+           var   password = "QwerT@12";
+          var   server = "51.254.55.136";
 
             IVmWareProvider provider = new VmWareProvider(userName, password, server);
             var vmWareControl = new VmWareControl(provider);

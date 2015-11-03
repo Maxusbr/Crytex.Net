@@ -37,6 +37,13 @@ namespace Crytex.Service.Service
             return servers;
         }
 
+        public IEnumerable<ServerTemplate> GetSystemTemplates()
+        {
+            var servers = this._serverTemplateRepo.GetMany(t => t.UserId == null);
+
+            return servers;
+        }
+
         public ServerTemplate GeById(int id)
         {
             var template = this._serverTemplateRepo.Get(x => x.Id == id, x => x.OperatingSystem);

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Crytex.Background.Tasks
 {
+    [PersistJobDataAfterExecution]
     [DisallowConcurrentExecution]
     class TaskExecutorUpdateJob : IJob
     {
