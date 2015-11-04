@@ -110,6 +110,7 @@
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
+    <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
     <Compile Include="Service\ApplicationUserService.cs" />

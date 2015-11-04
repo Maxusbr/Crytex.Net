@@ -1,4 +1,6 @@
-﻿namespace Crytex.Service.IService
+﻿using Crytex.Service.Model;
+
+namespace Crytex.Service.IService
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +10,8 @@
     public interface IEmailInfoService
     {
         EmailInfo GetEmail(int id);
+
+        List<EmailInfo> GetEmails(SearchEmailParams searchParams = null);
 
         List<EmailInfo> GetEmailsByEmail(string toEmail);
 
