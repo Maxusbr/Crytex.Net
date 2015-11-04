@@ -52,7 +52,31 @@ namespace Crytex.Data.Migrations
             if (context.VmWareVCenters.All(c => c.Name != defVCenter.Name))
                 context.VmWareVCenters.Add(defVCenter);
 
+            if (!context.SystemCenterVirtualManagers.Any())
+            {
+                var systemCenter = new SystemCenterVirtualManager()
+                {
 
+                    UserName = "username",
+                    Password = "password",
+                    Host = "51.254.55.136",
+                    
+                };
+                context.SystemCenterVirtualManagers.Add(systemCenter);
+                context.Commit();
+                var hyperVDev = new HyperVHost()
+                {
+                    DateAdded = DateTime.UtcNow,
+                    UserName = "username",
+                    Password = "password",
+                    Host = "51.254.55.136",
+                    SystemCenterVirtualManagerId = systemCenter.Id
+                };
+                context.HyperVHosts.Add(hyperVDev);
+                context.Commit();
+
+
+            }
             if (this.CreateFakeEntries)
             {
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
@@ -232,6 +256,7 @@ namespace Crytex.Data.Migrations
                         operations[i] = allOperations.First(o => o.Name == operations[i].Name);
                 }
 
+                context.Commit();
 
                 for (int i = 0; i < 2; i++)
                 {
@@ -244,7 +269,7 @@ namespace Crytex.Data.Migrations
                         MinHardDriveSize = 4000,
                         ImageFileId = image.Id,
                         OperatingSystemId = operations[0].Id,
-                        UserId = userForLog.Id
+                        
                     };
                     context.ServerTemplates.Add(serverTemplate);
                 }
@@ -260,7 +285,6 @@ namespace Crytex.Data.Migrations
                         MinHardDriveSize = 4000,
                         ImageFileId = image.Id,
                         OperatingSystemId = operations[1].Id,
-                        UserId = userForLog.Id
                     };
                     context.ServerTemplates.Add(serverTemplate);
                 }

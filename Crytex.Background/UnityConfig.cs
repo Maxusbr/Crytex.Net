@@ -21,6 +21,7 @@ namespace Crytex.Background
     using Crytex.ExecutorTask.TaskHandler;
     using Crytex.Background.Monitor.HyperV;
     using Crytex.ExecutorTask;
+    using Crytex.Background.Config;
 
     public class UnityConfig : UnityConfigBase
     {
@@ -28,21 +29,16 @@ namespace Crytex.Background
         {
             UnityConfigureFunc = unityContainer =>
             {
-                Crytex.Service.UnityConfig.Register<PerRequestLifetimeManager>(unityContainer);
-                unityContainer.RegisterType<IUnitOfWork, UnitOfWork>( new ContainerControlledLifetimeManager());
-                unityContainer.RegisterType<IDatabaseFactory, DatabaseFactory>( new ContainerControlledLifetimeManager());
+                Crytex.Service.UnityConfig.Register<PerThreadLifetimeManager>(unityContainer);
 
                 unityContainer.RegisterType<ISchedulerJobs, SchedulerJobs>();
                 unityContainer.RegisterType<IJobFactory, UnityJobFactory>();
-                unityContainer.RegisterType<INotificationManager, NotificationManager>();
-                unityContainer.RegisterType<IEmailSender, EmailMandrillSender>();
-                unityContainer.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();
-                unityContainer.RegisterType<IEmailInfoRepository, EmailInfoRepository>();
-                unityContainer.RegisterType<IEmailInfoService, EmailInfoService>();
-                unityContainer.RegisterType<IEmailTemplateService, EmailTemplateService>();
-                unityContainer.RegisterType<IAppConfig, AppConfig>();
+                unityContainer.RegisterType<IAppConfig, BackgroundConfig>();
                 unityContainer.RegisterType<IHyperVMonitorFactory, FakeHyperVMonitorFactory>();
                 unityContainer.RegisterType<IVmWareMonitorFactory, FakeVmWareMonitorFactory>();
+
+                unityContainer.RegisterType<INotificationManager, NotificationManager>();
+                unityContainer.RegisterType<IEmailSender, EmailMandrillSender>();
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
 
                 unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>();

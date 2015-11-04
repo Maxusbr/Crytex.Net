@@ -5,8 +5,11 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Owin;
 using Crytex.Model.Models;
+using Crytex.Web.App_Start;
 using Microsoft.Owin.Security.OAuth;
 using Crytex.Web.Auth;
+using Microsoft.AspNet.SignalR;
+using Microsoft.Owin.Cors;
 
 namespace Crytex.Web
 {
@@ -26,6 +29,8 @@ namespace Crytex.Web
         // Дополнительные сведения о настройке проверки подлинности см. по адресу: http://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
+           
+           
             // Разрешить кросдоменные запросы (на тот случай если будут действовать два разных сайта)
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             // Настройка контекста базы данных, диспетчера пользователей и диспетчера входа для использования одного экземпляра на запрос
@@ -83,13 +88,14 @@ namespace Crytex.Web
             //    ClientId = "",
             //    ClientSecret = ""
             //});
-
+       
             ConfigureOAuth(app);
+          
         }
 
         public void ConfigureOAuth(IAppBuilder app)
         {
-            var OAuthServerOptions = new OAuthAuthorizationServerOptions()
+            OAuth = new OAuthAuthorizationServerOptions()
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
@@ -97,11 +103,12 @@ namespace Crytex.Web
                 Provider = new SimpleAuthorizationServerProvider(),
                 RefreshTokenProvider = new SimpleRefreshTokenProvider()
             };
-
             // Token Generation
-            app.UseOAuthAuthorizationServer(OAuthServerOptions);
+            app.UseOAuthAuthorizationServer(OAuth);
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions());
 
         }
+
+        public static OAuthAuthorizationServerOptions OAuth;
     }
 }

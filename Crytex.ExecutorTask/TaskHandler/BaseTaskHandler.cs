@@ -32,13 +32,14 @@ namespace Crytex.ExecutorTask.TaskHandler
             var taskResult = this.ExecuteLogic();
             taskResult.TaskEntity = this.TaskEntity;
 
+            taskResult.TypeVirtualization = this.TypeVirtualization;
+            taskResult.VirtualizationServerEnitityId = this.VirtualizationServerEnitityId;
+
             if (this.ProcessingFinished != null)
             {
                 this.ProcessingFinished(this, taskResult);
             }
 
-            taskResult.TypeVirtualization = this.TypeVirtualization;
-            taskResult.VirtualizationServerEnitityId = this.VirtualizationServerEnitityId;
 
             return taskResult;
         }

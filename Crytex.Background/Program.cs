@@ -2,7 +2,7 @@
 using System.Linq;
 using Crytex.Background.Statistic;
 using Crytex.Model.Models;
-
+using System.Threading;
 namespace Crytex.Background
 {
     using Crytex.Core;
@@ -22,8 +22,13 @@ namespace Crytex.Background
             LoggerCrytex.SetSource(SourceLog.Background);
             UnityConfig.Configure();
             var scheduler = UnityConfig.Resolve<ISchedulerJobs>();
+
+            var Thread = new Thread((() =>
+            {
             var taskManager = UnityConfig.Resolve<ITaskManager>();
             taskManager.RunTasks();
+            }));
+            Thread.Start();
             
             scheduler.StartScheduler();
 

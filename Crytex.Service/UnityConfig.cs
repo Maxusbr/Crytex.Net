@@ -66,6 +66,7 @@ namespace Crytex.Service
             container.RegisterType<ISystemCenterVirtualManagerService, SystemCenterVirtualManagerService>();
             container.RegisterType<ITaskV2Service, TaskV2Service>();
             container.RegisterType<IStateMachineService, StateMachineService>();
+			container.RegisterType<IHyperVHostService, HyperVHostService>();
             container.RegisterType<IStatisticService, StatisticService>();
 
         }

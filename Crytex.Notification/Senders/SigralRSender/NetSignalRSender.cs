@@ -45,7 +45,7 @@ namespace Crytex.Notification.Senders.SigralRSender
             Lazy<IHubProxy> hubProxy;
             if (_hubProxy.TryGetValue(HubNames.NotifyHub, out hubProxy))
             {
-                hubProxy.Value.Invoke("Notify", message);
+                hubProxy.Value.Invoke("Notify", message).Wait();
             }
         }
 
@@ -54,7 +54,7 @@ namespace Crytex.Notification.Senders.SigralRSender
             Lazy<IHubProxy> hubProxy;
             if (_hubProxy.TryGetValue(HubNames.MonitorHub, out hubProxy))
             {
-                hubProxy.Value.Invoke("Sybscribe", vmId);
+                hubProxy.Value.Invoke("Sybscribe", vmId).Wait();
             }
         }
 
@@ -63,7 +63,7 @@ namespace Crytex.Notification.Senders.SigralRSender
             Lazy<IHubProxy> hubProxy;
             if (_hubProxy.TryGetValue(HubNames.MonitorHub, out hubProxy))
             {
-                hubProxy.Value.Invoke("SendVmMessage", vmId, stateMachine);
+                hubProxy.Value.Invoke("SendVmMessage", vmId, stateMachine).Wait();
             }
         }
 
@@ -72,7 +72,9 @@ namespace Crytex.Notification.Senders.SigralRSender
             Lazy<IHubProxy> hubProxy;
             if (_hubProxy.TryGetValue(HubNames.MonitorHub, out hubProxy))
             {
-                return hubProxy.Value.Invoke<List<Guid>>("GetVMs").Result;
+                var task = hubProxy.Value.Invoke<List<Guid>>("GetVMs");
+                task.Wait();
+                return task.Result;
             }
             return new List<Guid>();
         }
@@ -87,7 +89,7 @@ namespace Crytex.Notification.Senders.SigralRSender
             Lazy<IHubProxy> hubProxy;
             if (_hubProxy.TryGetValue(HubNames.NotifyHub, out hubProxy))
             {
-                hubProxy.Value.Invoke("SendToUserNotification", userId, message);
+                hubProxy.Value.Invoke("SendToUserNotification", userId, message).Wait();
             }
         }
     }
