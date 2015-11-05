@@ -63,13 +63,9 @@ namespace Crytex.Web.Areas.Admin
             if (!ModelState.IsValid || model == null)
                 return BadRequest(ModelState);
 
-            //когда ParameterNames введены в неправильном формате
-            if (!string.IsNullOrEmpty(model.ParameterNames) && !model.ParameterNamesList.Any())
-                return BadRequest("ParameterNames has not valid format");
-
             //когда Body и Subject содержат не все переменные из ParameterNames
             var emailText = (model.Subject + model.Body);
-            if (!model.ParameterNamesList.TrueForAll(x => emailText.IndexOf("{" + x.Key + "}", StringComparison.Ordinal) >= 0))
+            if (!model.ParameterNamesList.TrueForAll(x => emailText.IndexOf("{" + x + "}", StringComparison.Ordinal) >= 0))
                 return BadRequest("Subject and Body contain not all properties that are noticed in ParameterNames.");
 
             var templates = _emailTemplateService.GetTemplateByType(model.EmailTemplateType);
@@ -87,13 +83,13 @@ namespace Crytex.Web.Areas.Admin
         /// <param name="model"></param>
         /// <returns></returns>
         // PUT api/EmailTemplate/5
-        public IHttpActionResult Put(int id, [FromBody]UpdateEmailTemplateViewModel model)
+        public IHttpActionResult Put(int id, [FromBody]EmailTemplateViewModel model)
         {
             if (!ModelState.IsValid || model == null)
                 return BadRequest(ModelState);
 
             var emailText = model.Subject + model.Body;
-            if (!model.ParameterNamesList.TrueForAll(x => emailText.IndexOf("{" + x.Key + "}", StringComparison.Ordinal) >= 0))
+            if (!model.ParameterNamesList.TrueForAll(x => emailText.IndexOf("{" + x + "}", StringComparison.Ordinal) >= 0))
                 return BadRequest("Subject and Body contain not all properties that are noticed in ParameterNames.");
 
             var template = _emailTemplateService.GetTemplateById(id);

@@ -134,7 +134,7 @@ namespace Crytex.Notification
         private static void CheckEmailParameters(EmailInfo emailInfo, EmailTemplate emailTemplate)
         {
             var emailParameters = emailInfo.SubjectParamsList.Union(emailInfo.BodyParamsList).Select(x => x.Key).ToList();
-            var templateParameters = emailTemplate.ParameterNamesList.Select(x => x.Key).ToList();
+            var templateParameters = emailTemplate.ParameterNamesList;
 
             if (!templateParameters.All(emailParameters.Contains))
                 LoggerCrytex.Logger.Error("Email(id: " + emailInfo.Id + ") and Template(id: " + emailTemplate.Id + ", type: " + emailTemplate.EmailTemplateType + ") parameters are not the same.");
