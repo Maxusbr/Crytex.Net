@@ -1,4 +1,5 @@
 ﻿using Crytex.Service.Model;
+using PagedList;
 
 namespace Crytex.Service.IService
 {
@@ -11,7 +12,7 @@ namespace Crytex.Service.IService
     {
         EmailInfo GetEmail(int id);
 
-        List<EmailInfo> GetEmails(SearchEmailParams searchParams = null);
+        IPagedList<EmailInfo> GetEmails(int pageNumber, int pageSize, SearchEmailParams searchParams = null);
 
         List<EmailInfo> GetEmailsByEmail(string toEmail);
 

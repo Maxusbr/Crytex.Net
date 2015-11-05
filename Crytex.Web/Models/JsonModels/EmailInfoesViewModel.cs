@@ -8,6 +8,7 @@ namespace Crytex.Web.Models.JsonModels
 {
     public class EmailInfoesViewModel
     {
+        public int Id { get; set; }
         public DateTime? DateSending { get; set; }
         public string From { get; set; }
         public string To { get; set; }
