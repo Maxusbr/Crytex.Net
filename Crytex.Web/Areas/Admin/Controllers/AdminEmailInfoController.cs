@@ -16,11 +16,11 @@ using PagedList;
 
 namespace Crytex.Web.Areas.Admin
 {
-    public class EmailInfoController : AdminCrytexController
+    public class AdminEmailInfoController : AdminCrytexController
     {
         private readonly IEmailInfoService _emailInfoService;
 
-        public EmailInfoController(IEmailInfoService emailInfoService)
+        public AdminEmailInfoController(IEmailInfoService emailInfoService)
         {
             this._emailInfoService = emailInfoService;
         }
@@ -30,17 +30,22 @@ namespace Crytex.Web.Areas.Admin
         /// Получение списка EmailInfo
         /// </summary>
         /// <param name="searchParams"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         // GET: api/EmailInfo
-        [ResponseType(typeof(List<EmailInfoesViewModel>))]
-        public IHttpActionResult Get([FromUri]SearchEmailParams searchParams = null)
+        [ResponseType(typeof(PageModel<EmailInfoesViewModel>))]
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]SearchEmailParams searchParams = null)
         {
+            if (pageNumber <= 0 || pageSize <= 0)
+                return BadRequest("PageNumber and PageSize must be grater than 1");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var emails = this._emailInfoService.GetEmails(searchParams);
-            var viewEmailInfoes = AutoMapper.Mapper.Map<List<EmailInfoesViewModel>>(emails);
+            var emails = this._emailInfoService.GetEmails(pageNumber, pageSize, searchParams);
+            var viewEmailInfoes = AutoMapper.Mapper.Map<PageModel<EmailInfoesViewModel>>(emails);
             return Ok(viewEmailInfoes);
         }
 

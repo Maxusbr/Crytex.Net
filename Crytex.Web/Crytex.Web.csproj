@@ -277,7 +277,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminStateMachineController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSystemCenterVirtualManagerController.cs" />
-    <Compile Include="Areas\Admin\Controllers\EmailInfoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminEmailInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminTaskV2Controller.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />

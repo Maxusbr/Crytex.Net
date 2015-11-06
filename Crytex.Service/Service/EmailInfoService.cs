@@ -11,6 +11,7 @@ using Crytex.Model.Models.Notifications;
 using Crytex.Service.Extension;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
+using PagedList;
 
 namespace Crytex.Service.Service
 {
@@ -35,9 +36,11 @@ namespace Crytex.Service.Service
             return _emailInfoRepository.GetMany(x => x.To == toEmail).ToList();
         }
 
-        public List<EmailInfo> GetEmails(SearchEmailParams searchParams = null)
+        public IPagedList<EmailInfo> GetEmails(int pageNumber, int pageSize, SearchEmailParams searchParams = null)
         {
+            var page = new Page(pageNumber, pageSize);
             Expression<Func<EmailInfo, bool>> where = x => true;
+
             if (searchParams != null)
             {
                 if (searchParams.EmailStatus != null)
@@ -66,9 +69,9 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var list = _emailInfoRepository.GetMany(where).ToList();
-
-            return list;
+            var listPage = _emailInfoRepository.GetPage(page, where, x => x.DateSending);
+            
+            return listPage;
         }
 
         public EmailInfo SaveEmail(string @from, string to, EmailTemplateType emailTemplateType, bool isSentImmediately, List<KeyValuePair<string, string>> subjectParams = null, List<KeyValuePair<string, string>> bodyParams = null, DateTime? dateSending = null)
