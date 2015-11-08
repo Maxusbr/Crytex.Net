@@ -30,7 +30,7 @@ namespace Crytex.Web.Areas.Admin
         public IHttpActionResult Get()
         {
             var managers = this._managerService.GetAll(false);
-            var model = AutoMapper.Mapper.Map<System.Collections.Generic.List<SystemCenterVirtualManagerViewModel>>(managers);
+            var model = AutoMapper.Mapper.Map<List<SystemCenterVirtualManagerViewModel>>(managers);
 
             return Ok(model);
         }
@@ -63,7 +63,7 @@ namespace Crytex.Web.Areas.Admin
             var newManager = AutoMapper.Mapper.Map<SystemCenterVirtualManager>(model);
             newManager = this._managerService.Create(newManager);
 
-            return Created(Url.Link("DefaultApi", new { controller = "AdminSystemCenterVirtualManager", id = newManager.Id.ToString() }), new { id = newManager.Id.ToString() });
+            return Created(Url.Link("DefaultApiAdmin", new { controller = "AdminSystemCenterVirtualManager", id = newManager.Id.ToString() }), new { id = newManager.Id.ToString() });
 
             
 
