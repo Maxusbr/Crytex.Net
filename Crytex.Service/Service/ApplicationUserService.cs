@@ -26,7 +26,7 @@ namespace Crytex.Service.Service
 
         public List<ApplicationUser> GetAll()
         {
-            return _applicationUserRepository.GetAll().ToList();
+            return _applicationUserRepository.GetAll();
         }
 
         public IPagedList<ApplicationUser> GetPage(int pageSize, int pageIndex, string userName, string email)
