@@ -33,7 +33,7 @@ namespace Crytex.Service.Service
 
         public List<EmailInfo> GetEmailsByEmail(string toEmail)
         {
-            return _emailInfoRepository.GetMany(x => x.To == toEmail).ToList();
+            return _emailInfoRepository.GetMany(x => x.To == toEmail);
         }
 
         public IPagedList<EmailInfo> GetEmails(int pageNumber, int pageSize, SearchEmailParams searchParams = null)
@@ -117,7 +117,7 @@ namespace Crytex.Service.Service
 
         public List<EmailInfo> GetEmailInQueue()
         {
-            var emails = _emailInfoRepository.GetMany(x => !x.IsProcessed).ToList();
+            var emails = _emailInfoRepository.GetMany(x => !x.IsProcessed);
             return emails;
         }
     }

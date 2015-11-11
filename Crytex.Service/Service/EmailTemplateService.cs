@@ -55,7 +55,7 @@ namespace Crytex.Service.Service
 
         public EmailTemplate GetTemplateByType(EmailTemplateType emailTemplateType)
         {
-            var templates = _emailTemplateRepository.GetMany(x => x.EmailTemplateType == emailTemplateType).ToList();
+            var templates = _emailTemplateRepository.GetMany(x => x.EmailTemplateType == emailTemplateType);
 
             if (!templates.Any())
                 LoggerCrytex.Logger.Error("Attempt to get a non-existent email template: " + emailTemplateType);
@@ -80,12 +80,12 @@ namespace Crytex.Service.Service
 
         public List<EmailTemplate> GetTemplateByTypes(List<EmailTemplateType> templateTypes)
         {
-            return _emailTemplateRepository.GetMany(x => templateTypes.Contains(x.EmailTemplateType)).ToList();
+            return _emailTemplateRepository.GetMany(x => templateTypes.Contains(x.EmailTemplateType));
         }
 
         public List<EmailTemplate> GetAllTemplates()
         {
-            return _emailTemplateRepository.GetAll().ToList();
+            return _emailTemplateRepository.GetAll();
         }
 
         public EmailTemplate GetTemplateById(int id)
