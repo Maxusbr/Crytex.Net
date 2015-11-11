@@ -249,6 +249,7 @@ namespace Crytex.Data.Migrations
                         Description = "Description",
                         ImageFileId = image.Id,
                         ServerTemplateName = "ServerTemplateName",
+                        Family = OperatingSystemFamily.Windows2012
                     };
                     if (allOperations.All(o => o.Name != operations[i].Name))
                         context.OperatingSystems.Add(operations[i]);
@@ -305,7 +306,7 @@ namespace Crytex.Data.Migrations
         private string CreateImage()
         {
             var rootFolder = Directory.GetParent(@"./").FullName;
-            
+
             string newFilePath = rootFolder + @"\Crytex.Web\App_Data\Files\Images";
             Directory.CreateDirectory(newFilePath);
 

@@ -23,7 +23,7 @@ namespace Crytex.Service.Service
 
         public List<LogEntry> GetLogEntries()
         {
-            return _logRepository.GetAll().ToList();
+            return _logRepository.GetAll();
         }
 
         public IPagedList<LogEntry> GetLogEntries(int pageSize, int pageIndex, DateTime? dateFrom, DateTime? dateTo, string sourceLog)

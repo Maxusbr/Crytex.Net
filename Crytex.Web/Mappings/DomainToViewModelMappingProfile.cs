@@ -67,8 +67,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>()
                 .ForMember(x=>x.ImageSrc, opt=>opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
             Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
+            Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
-
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
@@ -80,6 +80,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<LogEntry, LogEntryViewModel>();
             this.MapPagedList<ApplicationUser, ApplicationUserViewModel>();
             this.MapPagedList<Statistic, StatisticViewModel>();
+            this.MapPagedList<EmailInfo, EmailInfoesViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

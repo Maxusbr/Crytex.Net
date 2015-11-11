@@ -25,7 +25,7 @@ namespace Crytex.Service.Service
 
         public List<Message> GetAll()
         {
-            return _focusRepository.GetAll().ToList();
+            return _focusRepository.GetAll();
         }
     }
 }

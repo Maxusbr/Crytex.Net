@@ -20,7 +20,7 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
-        public EmailTemplate AddTemplate(string subject, string body, EmailTemplateType emailTemplateType, List<KeyValuePair<string, string>> parameters = null)
+        public EmailTemplate AddTemplate(string subject, string body, EmailTemplateType emailTemplateType, List<string> parameters = null)
         {
             var newTemplate = new EmailTemplate()
             {
@@ -36,7 +36,7 @@ namespace Crytex.Service.Service
             return newTemplate;
         }
 
-        public EmailTemplate UpdateTemplate(int id, string subject, string body, List<KeyValuePair<string, string>> parameters = null)
+        public EmailTemplate UpdateTemplate(int id, string subject, string body, List<string> parameters = null)
         {
             var template = _emailTemplateRepository.GetById(id);
             if (template == null)
@@ -55,7 +55,7 @@ namespace Crytex.Service.Service
 
         public EmailTemplate GetTemplateByType(EmailTemplateType emailTemplateType)
         {
-            var templates = _emailTemplateRepository.GetMany(x => x.EmailTemplateType == emailTemplateType).ToList();
+            var templates = _emailTemplateRepository.GetMany(x => x.EmailTemplateType == emailTemplateType);
 
             if (!templates.Any())
                 LoggerCrytex.Logger.Error("Attempt to get a non-existent email template: " + emailTemplateType);
@@ -80,12 +80,12 @@ namespace Crytex.Service.Service
 
         public List<EmailTemplate> GetTemplateByTypes(List<EmailTemplateType> templateTypes)
         {
-            return _emailTemplateRepository.GetMany(x => templateTypes.Contains(x.EmailTemplateType)).ToList();
+            return _emailTemplateRepository.GetMany(x => templateTypes.Contains(x.EmailTemplateType));
         }
 
         public List<EmailTemplate> GetAllTemplates()
         {
-            return _emailTemplateRepository.GetAll().ToList();
+            return _emailTemplateRepository.GetAll();
         }
 
         public EmailTemplate GetTemplateById(int id)
