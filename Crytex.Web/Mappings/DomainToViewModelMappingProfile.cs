@@ -80,6 +80,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<LogEntry, LogEntryViewModel>();
             this.MapPagedList<ApplicationUser, ApplicationUserViewModel>();
             this.MapPagedList<EmailInfo, EmailInfoesViewModel>();
+            this.MapPagedList<SnapshotVm, SnapshotVmViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

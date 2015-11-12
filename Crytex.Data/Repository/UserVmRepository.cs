@@ -33,15 +33,16 @@ namespace Crytex.Data.Repository
             return vmsPagedList;
         }
 
-        //TODO: разобраться в ошибке:
-        //public override UserVm GetById(Guid guid)
-        //{
-        //    var userVmQuery = this.DataContext.UserVms.Where(vm => vm.Id == guid);
-        //    var finalQuery = this.AppendIncludesToVmQuey(userVmQuery);
-        //    var result = finalQuery.SingleOrDefault();
+        //Когда понадобятся связи - раскомитить
+        public override UserVm GetById(Guid guid)
+        {
+            var userVmQuery = this.DataContext.UserVms;
+            var finalQuery = this.AppendIncludesToVmQuey(userVmQuery);
 
-        //    return result;
-        //}
+            var result = finalQuery.SingleOrDefault(vm => vm.Id == guid);
+
+            return result;
+        }
 
         private IQueryable<UserVm> AppendIncludesToVmQuey(IQueryable<UserVm> query)
         {
