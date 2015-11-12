@@ -36,6 +36,7 @@ namespace Crytex.Service
             container.RegisterType<IVmWareVCenterRepository, VmWareVCenterRepository>();
             container.RegisterType<IOAuthClientApplicationRepository, OAuthClientApplicationRepository>();
             container.RegisterType<IOAuthRefreshTokenRepository, OAuthRefreshTokenRepository>();
+            container.RegisterType<IStatisticRepository, StatisticRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -65,7 +66,8 @@ namespace Crytex.Service
             container.RegisterType<ISystemCenterVirtualManagerService, SystemCenterVirtualManagerService>();
             container.RegisterType<ITaskV2Service, TaskV2Service>();
             container.RegisterType<IStateMachineService, StateMachineService>();
-            container.RegisterType<IHyperVHostService, HyperVHostService>();
+			container.RegisterType<IHyperVHostService, HyperVHostService>();
+            container.RegisterType<IStatisticService, StatisticService>();
 
         }
     }

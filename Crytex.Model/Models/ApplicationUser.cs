@@ -30,5 +30,7 @@ namespace Crytex.Model.Models
         public virtual ICollection<BillingTransaction> BillingTransactions { get; set; }
         [InverseProperty("User")]
         public virtual ICollection<CreditPaymentOrder> CreditPaymentOrders { get; set; }
+        [InverseProperty("User")]
+        public virtual ICollection<UserVm> UserVms { get; set; }
     }
 }

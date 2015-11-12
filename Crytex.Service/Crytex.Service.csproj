@@ -92,6 +92,7 @@
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\IOAuthService.cs" />
+    <Compile Include="IService\IStatisticService.cs" />
     <Compile Include="IService\IRegionService.cs" />
     <Compile Include="IService\ISnapshotVmService.cs" />
     <Compile Include="IService\IMessageService.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
+    <Compile Include="Model\StatisticType.cs" />
     <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\OAuthService.cs" />
+    <Compile Include="Service\StatisticService.cs" />
     <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\StateMachineService.cs" />
     <Compile Include="Service\SnapshotVmService.cs" />

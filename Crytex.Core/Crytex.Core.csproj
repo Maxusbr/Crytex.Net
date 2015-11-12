@@ -90,6 +90,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="AppConfig\AppConfig.cs" />
     <Compile Include="AppConfig\IAppConfig.cs" />
+    <Compile Include="Extension\DateTimeExtension.cs" />
     <Compile Include="Logger\LoggerCrytex.cs" />
     <Compile Include="Logger\SourceLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
