@@ -36,6 +36,17 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 this._vmWareProvider.CloneVm(serverTemplate.OperatingSystem.ServerTemplateName, machineName);
                 this._vmWareProvider.ModifyMachine(machineName, createOptions.Cpu, createOptions.Ram, createOptions.Hdd);
                 this._vmWareProvider.StartMachine(machineName);
+
+                var userName = "Administrator";
+                var oldPassword = serverTemplate.OperatingSystem.DefaultAdminPassword;
+                var newPassword = "Pass1324";
+                switch (serverTemplate.OperatingSystem.Family)
+                {
+                    case OperatingSystemFamily.Windows2012:
+                        var script = $@"Set-ADAccountPassword -Identity '{userName}' -OldPassword (ConvertTo-SecureString -AsPlainText '{oldPassword}' -Force) -NewPassword (ConvertTo-SecureString -AsPlainText '{newPassword}' -Force)";
+                        this._vmWareProvider.RunPowerShellScript(machineName, userName, oldPassword, script);
+                        break;
+                }
             }
             catch (ApplicationException ex)
             {

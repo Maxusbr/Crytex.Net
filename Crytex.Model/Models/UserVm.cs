@@ -19,6 +19,7 @@ namespace Crytex.Model.Models
         public TypeVirtualization VurtualizationType { get; set; }
         public Guid? HyperVHostId { get; set; }
         public Guid? VmWareCenterId { get; set; }
+        public string OperatingSystemPassword { get; set; }
 
         [ForeignKey("ServerTemplateId")]
         public ServerTemplate ServerTemplate { get; set; }

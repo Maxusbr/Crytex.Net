@@ -60,7 +60,6 @@ namespace Crytex.Service.Service
             return task;
         }
 
-
         public IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TaskV2SearchParams searchParams = null)
         {
             var page = new Page(pageNumber, pageSize);

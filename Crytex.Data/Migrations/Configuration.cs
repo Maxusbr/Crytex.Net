@@ -249,7 +249,8 @@ namespace Crytex.Data.Migrations
                         Description = "Description",
                         ImageFileId = image.Id,
                         ServerTemplateName = "ServerTemplateName",
-                        Family = OperatingSystemFamily.Windows2012
+                        Family = OperatingSystemFamily.Windows2012,
+                        DefaultAdminPassword = "Password123"
                     };
                     if (allOperations.All(o => o.Name != operations[i].Name))
                         context.OperatingSystems.Add(operations[i]);
