@@ -81,43 +81,50 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 
         public void StartVm(string machineName)
         {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Start);
+            this._hyperVProvider.Connect();
+            if (this._hyperVProvider.IsVmExist(machineName))
+            {
+                var machine = this._hyperVProvider.GetVmByName(machineName);
+                this._hyperVProvider.Start(machine);
+            }
+            else
+            {
+                ThrowInvalidIdentifierException(machineName);
+            }
         }
 
         public void StopVm(string machineName)
-        {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Stop);
-        }
-
-        public void RemoveVm(string machineName)
-        {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Remove);
-        }
-
-        private void StandartOperationInner(string machineName, TypeStandartVmTask type)
         {
             this._hyperVProvider.Connect();
             if (this._hyperVProvider.IsVmExist(machineName))
             {
                 var machine = this._hyperVProvider.GetVmByName(machineName);
-                switch (type)
-                {
-                    case TypeStandartVmTask.Start:
-                        this._hyperVProvider.Start(machine);
-                        break;
-                    case TypeStandartVmTask.Stop:
-                        this._hyperVProvider.Stop(machine);
-                        break;
-                    case TypeStandartVmTask.Remove:
-                        this._hyperVProvider.RemoveVm(machine);
-                        break;
-                }
+                this._hyperVProvider.Stop(machine);
             }
             else
             {
-                throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
-                    machineName));
+                ThrowInvalidIdentifierException(machineName);
             }
+        }
+
+        public void RemoveVm(string machineName)
+        {
+            this._hyperVProvider.Connect();
+            if (this._hyperVProvider.IsVmExist(machineName))
+            {
+                var machine = this._hyperVProvider.GetVmByName(machineName);
+                this._hyperVProvider.RemoveVm(machine);
+            }
+            else
+            {
+                ThrowInvalidIdentifierException(machineName);
+            }
+        }
+
+        private void ThrowInvalidIdentifierException(string machineName)
+        {
+            throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
+                machineName));
         }
     }
 }

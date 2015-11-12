@@ -10,12 +10,9 @@ namespace Crytex.ControlApp
     /// </summary>
     public partial class CreateVm : Window
     {
-        private ITaskVmService _taskVmBackGroundService;
-    
-        public CreateVm(ITaskVmService taskVmBackGroundService)
+        public CreateVm()
         {
             InitializeComponent();
-            _taskVmBackGroundService = taskVmBackGroundService;
         }
 
         private void btnCreateVm_Click(object sender, RoutedEventArgs e)
@@ -24,14 +21,6 @@ namespace Crytex.ControlApp
             var cpu = Convert.ToInt32(txtCore.Text);
             var ram = Convert.ToInt32(txtRam.Text);
             var hdd = Convert.ToInt32(txtHdd.Text);
-            _taskVmBackGroundService.CreateVm(new CreateVmTask()
-            {
-                Cpu = cpu,
-                Hdd = hdd,
-                Name=name,
-                Ram = ram,
-                UserId = ""
-            });
         }
     }
 }
