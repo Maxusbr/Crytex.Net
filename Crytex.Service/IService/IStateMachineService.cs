@@ -8,6 +8,7 @@ namespace Crytex.Service.IService
     public interface IStateMachineService
     {
         IEnumerable<StateMachine> GetStateAll();
+        IEnumerable<StateMachine> GetStateByVmId(Guid vmId, int diffInMinutes = 0);
         StateMachine GetStateById(int id);
         StateMachine CreateState(StateMachine state);
     }
