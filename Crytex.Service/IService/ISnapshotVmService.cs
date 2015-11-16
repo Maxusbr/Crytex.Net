@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Crytex.Model.Models;
+using PagedList;
 
 namespace Crytex.Service.IService
 {
     public interface ISnapshotVmService
     {
-        IEnumerable<SnapshotVm> GetAllByVmId(Guid VmId);
+        IPagedList<SnapshotVm> GetAllByVmId(Guid VmId, int pageNumber, int pageSize);
     }
 }

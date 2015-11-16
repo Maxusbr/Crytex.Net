@@ -97,7 +97,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             TaskEndNotify taskEndNotify = new TaskEndNotify
             {
                 UserId = e.TaskEntity.UserId,
-                TaskId = e.TaskEntity.Id,
+                Task = e.TaskEntity,
                 TypeError = TypeError.Unknown,
                 TypeNotify = TypeNotify.EndTask,
                 Success = e.Success,
@@ -113,14 +113,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             {
                 this.UpdateTaskStatus(taskEntity.Id, StatusTask.EndWithErrors, finishDate, e.ErrorMessage);
             }
-            try
-            {
-                this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
-            }
-            catch (Exception ex)
-            {
-                LoggerCrytex.Logger.Error("Ошибка отправки сообщения " + ex);
-            }
+
             if (taskEntity.TypeTask == TypeTask.CreateVm)
             {
                 var taskOptions = e.TaskEntity.GetOptions<CreateVmOptions>();
@@ -147,12 +140,27 @@ namespace Crytex.ExecutorTask.TaskHandler
                         break;
                 }
 
-                this._userVmService.CreateVm(newVm);
+                taskEntity.ResourceId = this._userVmService.CreateVm(newVm);
+                this._taskService.UpdateTask(taskEntity);
             }
-            if (taskEntity.TypeTask == TypeTask.UpdateVm)
+            else if (taskEntity.TypeTask == TypeTask.UpdateVm)
             {
                 var taskOptions = e.TaskEntity.GetOptions<UpdateVmOptions>();
                 this._userVmService.UpdateVm(taskOptions.VmId, taskOptions.Cpu, taskOptions.Hdd, taskOptions.Ram);
+            }
+            else if (taskEntity.TypeTask == TypeTask.ChangeStatus)
+            {
+                var taskOptions = e.TaskEntity.GetOptions<ChangeStatusOptions>();
+                this._userVmService.UpdateVmStatus(taskOptions.VmId, taskOptions.TypeChangeStatus);
+            }
+
+            try
+            {
+                this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
+            }
+            catch (Exception ex)
+            {
+                LoggerCrytex.Logger.Error("Ошибка отправки сообщения " + ex);
             }
         }
 

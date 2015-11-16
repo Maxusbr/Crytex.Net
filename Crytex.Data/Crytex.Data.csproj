@@ -47,6 +47,7 @@
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="IRepository\IApplicationUserRepository.cs" />
+   
     <Compile Include="IRepository\IBillingTransactionRepository.cs" />
     <Compile Include="IRepository\ICreditPaymentOrderRepository.cs" />
     <Compile Include="IRepository\IEmailInfoRepository.cs" />
@@ -64,7 +65,9 @@
     <Compile Include="IRepository\IOperatingSystemRepository.cs" />
     <Compile Include="IRepository\IServerTemplateRepository.cs" />
     <Compile Include="IRepository\ISystemCenterVirtualManagerRepository.cs" />
+    
     <Compile Include="IRepository\IStateMachineRepository.cs" />
+    <Compile Include="IRepository\IStatisticRepository.cs" />
     <Compile Include="IRepository\IUserInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
@@ -138,10 +141,15 @@
     <Compile Include="Migrations\201510182143126_Fixation_19_10_2015.Designer.cs">
       <DependentUpon>201510182143126_Fixation_19_10_2015.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510231719228_newUpdate.cs" />
+    <Compile Include="Migrations\201510231719228_newUpdate.Designer.cs">
+      <DependentUpon>201510231719228_newUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
     <Compile Include="Repository\BillingTransactionRepository.cs" />
+   
     <Compile Include="Repository\CreditPayementOrderRepository.cs" />
     <Compile Include="Repository\EmailInfoRepository.cs" />
     <Compile Include="Repository\EmailTemplateRepository.cs" />
@@ -156,10 +164,13 @@
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
     <Compile Include="Repository\ServerTemplateRepository.cs" />
+    
     <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />
+
     <Compile Include="Repository\RegionRepository.cs" />
     <Compile Include="Repository\StateMachineRepository.cs" />
     <Compile Include="Repository\TaskV2Repository.cs" />
+    <Compile Include="Repository\StatisticRepository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
@@ -231,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510182143126_Fixation_19_10_2015.resx">
       <DependentUpon>201510182143126_Fixation_19_10_2015.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510231719228_newUpdate.resx">
+      <DependentUpon>201510231719228_newUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

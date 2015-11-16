@@ -86,7 +86,9 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
+    
     <Compile Include="Models\BillingTransaction.cs" />
+   
     <Compile Include="Models\CreditPaymentOrder.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
     <Compile Include="Models\GuidBaseEntity.cs" />
@@ -103,10 +105,13 @@
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\ServerTemplate.cs" />
     <Compile Include="Models\SnapshotVm.cs" />
+ 
     <Compile Include="Models\HelpDeskRequest.cs" />
     <Compile Include="Models\StateMachine.cs" />
+    <Compile Include="Models\Statistic.cs" />
     <Compile Include="Models\SystemCenterVirtualManager.cs" />
     <Compile Include="Models\TaskV2.cs" />
+   
     <Compile Include="Models\UserInfo.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Models\VmWareHost.cs" />

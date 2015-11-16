@@ -5,6 +5,7 @@ using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
+using PagedList;
 
 namespace Crytex.Service.Service
 {
@@ -18,9 +19,11 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<SnapshotVm> GetAllByVmId(Guid VmId)
+        public IPagedList<SnapshotVm> GetAllByVmId(Guid VmId, int pageNumber, int pageSize)
         {
-            var snapshots = _snapshotVmRepository.GetMany(s=>s.VmId == VmId && s.Validation);
+            var page = new Page(pageNumber, pageSize);
+            var snapshots = _snapshotVmRepository.GetPage(page, s => s.VmId == VmId && s.Validation, s=>s.Date);
+
             return snapshots;
         }
     }

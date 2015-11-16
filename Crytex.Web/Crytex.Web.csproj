@@ -277,6 +277,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminStateMachineController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSystemCenterVirtualManagerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminStatisticController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminEmailInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminTaskV2Controller.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
@@ -290,6 +291,7 @@
     <Compile Include="Auth\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\AccountController.cs" />
+  
     <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestController.cs" />
@@ -298,6 +300,7 @@
     <Compile Include="Areas\User\Controllers\StateMachineController.cs" />
     <Compile Include="Areas\User\Controllers\TaskV2Controller.cs" />
     <Compile Include="Areas\User\Controllers\UserVmController.cs" />
+  
     <Compile Include="Controllers\Api\VmWareVCenterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -314,14 +317,18 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+  
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\StatisticViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2SearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2ViewModel.cs" />
+    
     <Compile Include="Models\JsonModels\HyperVHostResourceViewModel.cs" />
     <Compile Include="Models\JsonModels\HyperVHostViewModel.cs" />
+    <
     <Compile Include="Models\JsonModels\SystemCenterVirtualManagerViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateEmailTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
