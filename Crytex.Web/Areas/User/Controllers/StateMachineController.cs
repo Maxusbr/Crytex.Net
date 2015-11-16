@@ -26,9 +26,9 @@ namespace Crytex.Web.Areas.User
         /// <returns></returns>
         // GET: api/StateMachine
         [ResponseType(typeof(IEnumerable<StateMachine>))]
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(Guid vmId, int diffTime = 0)
         {
-            return Ok(_stateMachineService.GetStateAll());
+            return Ok(_stateMachineService.GetStateByVmId(vmId, diffTime));
         }
 
         /// <summary>
