@@ -328,7 +328,7 @@
     
     <Compile Include="Models\JsonModels\HyperVHostResourceViewModel.cs" />
     <Compile Include="Models\JsonModels\HyperVHostViewModel.cs" />
-    <
+    
     <Compile Include="Models\JsonModels\SystemCenterVirtualManagerViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateEmailTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
