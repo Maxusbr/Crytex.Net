@@ -9,6 +9,7 @@ using Crytex.Service.Extension;
 using System.Linq.Expressions;
 using Crytex.Service.Model;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crytex.Service.Service
 {
@@ -84,17 +85,10 @@ namespace Crytex.Service.Service
                     where = where.And(x => x.ResourceId == searchParams.ResourceId);
                 }
 
-                if (searchParams.StatusTask != null)
+                if (searchParams.StatusTasks.Length != 0)
                 {
-                    if (searchParams.StatusTask == StatusTask.Processing)
-                    {
-                        where = where.And(x => x.StatusTask == StatusTask.Start|| x.StatusTask == StatusTask.Pending||x.StatusTask ==StatusTask.Processing);
-                    }
-                    else
-                    {
-                        where = where.And(x => x.StatusTask == searchParams.StatusTask);
-                    }
-                   
+                    where = where.And(x => searchParams.StatusTasks.Contains(x.StatusTask));
+                    //x => x.StatusTask == StatusTask.Start|| x.StatusTask == StatusTask.Pending||x.StatusTask ==StatusTask.Processing
                 }
 
                 if (searchParams.UserId != null)

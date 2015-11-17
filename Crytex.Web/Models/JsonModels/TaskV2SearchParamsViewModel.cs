@@ -14,8 +14,8 @@ namespace Crytex.Web.Models.JsonModels
         public string UserId { get; set; }
         [EnumDataType(typeof(TypeTask))]
         public TypeTask? TypeTask { get; set; }
-        [EnumDataType(typeof(StatusTask))]
-        public StatusTask? StatusTask { get; set; }
+      //  [EnumDataType(typeof(StatusTask[]))]
+        public StatusTask[] StatusTasks { get; set; }
         [EnumDataType(typeof(TypeVirtualization))]
         public TypeVirtualization? Virtualization { get; set; }
     }
