@@ -4,8 +4,8 @@ using Crytex.Model.Models;
 
 namespace Crytex.Data.Repository
 {
-    public class UserInfoRepository : RepositoryBase<UserInfo>, IUserInfoRepository
+    public class StatisticRepository : RepositoryBase<Statistic>, IStatisticRepository
     {
-        public UserInfoRepository(DatabaseFactory dbFacrory) : base(dbFacrory){ }
+        public StatisticRepository(IDatabaseFactory dbFacrory) : base(dbFacrory){ }
     }
 }

@@ -93,9 +93,17 @@ namespace Crytex.Web.Areas.Admin
                 task.UserId = CrytexContext.UserInfoProvider.GetUserId();
             }
 
-            if (task.TypeTask == TypeTask.UpdateVm || task.TypeTask == TypeTask.CreateVm)
+            if (task.TypeTask == TypeTask.CreateVm)
             {
-                if (!IsValidOptions<ConfigVmOptions>(task.Options)) {
+                if (!IsValidOptions<CreateVmOptions>(task.Options)) {
+                    ModelState.AddModelError("Options", "Not Valid Options for this type Task");
+                    return BadRequest(ModelState);
+                }
+            }
+            else if (task.TypeTask == TypeTask.UpdateVm)
+            {
+                if (!IsValidOptions<UpdateVmOptions>(task.Options))
+                {
                     ModelState.AddModelError("Options", "Not Valid Options for this type Task");
                     return BadRequest(ModelState);
                 }

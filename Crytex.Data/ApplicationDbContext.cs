@@ -24,6 +24,7 @@ namespace Crytex.Data
         }
 
 
+        public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<HelpDeskRequest> HelpDeskRequests { get; set; }
@@ -32,9 +33,6 @@ namespace Crytex.Data
         
         public DbSet<TaskV2> TaskV2 { get; set; }
 
-        public DbSet<CreateVmTask> CreateVmTasks { get; set; }
-        public DbSet<StandartVmTask> StandartVmTasks { get; set; }
-        public DbSet<UpdateVmTask> UpdateVmTasks { get; set; }
         public DbSet<UserVm> UserVms { get; set; }
         public DbSet<FileDescriptor> Files { get; set; }
         public DbSet<OperatingSystem> OperatingSystems { get; set; }

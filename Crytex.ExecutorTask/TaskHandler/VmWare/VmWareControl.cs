@@ -74,40 +74,12 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
         public void StartVm(string machineName)
         {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Start);
-        }
-
-        public void StopVm(string machineName)
-        {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Stop);
-        }
-
-        public void RemoveVm(string machineName)
-        {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Remove);
-        }
-
-        #region Private methods
-
-        private void StandartOperationInner(string machineName, TypeStandartVmTask typeStandartVmTask)
-        {
             // Connect to server
             ConnectIfNotConnected();
 
             try
             {
-                switch (typeStandartVmTask)
-                {
-                    case TypeStandartVmTask.Start:
-                        this._vmWareProvider.StartMachine(machineName);
-                        break;
-                    case TypeStandartVmTask.Stop:
-                        this._vmWareProvider.StopMachine(machineName);
-                        break;
-                    case TypeStandartVmTask.Remove:
-                        this._vmWareProvider.DeleteMachine(machineName);
-                        break;
-                }
+                this._vmWareProvider.StartMachine(machineName);
             }
             // Handle invalid name exceptions
             catch (InvalidNameException e)
@@ -115,7 +87,40 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 throw new InvalidIdentifierException("Invalid name. See inner exception", e);
             }
         }
-        
+
+        public void StopVm(string machineName)
+        {
+            // Connect to server
+            ConnectIfNotConnected();
+
+            try
+            {
+                this._vmWareProvider.StartMachine(machineName);
+            }
+            // Handle invalid name exceptions
+            catch (InvalidNameException e)
+            {
+                throw new InvalidIdentifierException("Invalid name. See inner exception", e);
+            }
+        }
+
+        public void RemoveVm(string machineName)
+        {
+            // Connect to server
+            ConnectIfNotConnected();
+
+            try
+            {
+                this._vmWareProvider.StartMachine(machineName);
+            }
+            // Handle invalid name exceptions
+            catch (InvalidNameException e)
+            {
+                throw new InvalidIdentifierException("Invalid name. See inner exception", e);
+            }
+        }
+
+        #region Private methods
         private void ConnectIfNotConnected()
         {
             if (this._vmWareProvider.ConnectionState != ConnectionState.Connected)

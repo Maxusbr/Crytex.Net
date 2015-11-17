@@ -25,21 +25,23 @@ namespace Crytex.Web.Areas.Admin
         /// <summary>
         /// Получение снимка машины по id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="vmId"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
         /// <returns></returns>
         // GET: api/SnapShotVm
-        [ResponseType(typeof(SnapshotVmViewModel))]
-        public IHttpActionResult Get(string id)
+        [ResponseType(typeof(PageModel<SnapshotVmViewModel>))]
+        public IHttpActionResult Get(int pageNumber, int pageSize, string vmId)
         {
             Guid guid;
-            if (!Guid.TryParse(id, out guid))
+            if (!Guid.TryParse(vmId, out guid))
             {
                 this.ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
 
-            var snapshots = _snapshotVmService.GetAllByVmId(guid);
-            var snapshotsView = AutoMapper.Mapper.Map<IEnumerable<SnapshotVmViewModel>>(snapshots);
+            var snapshots = _snapshotVmService.GetAllByVmId(guid, pageNumber, pageSize);
+            var snapshotsView = AutoMapper.Mapper.Map<PageModel<SnapshotVmViewModel>>(snapshots);
 
             return Ok(snapshotsView);
         }

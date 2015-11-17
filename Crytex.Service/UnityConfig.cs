@@ -14,10 +14,6 @@ namespace Crytex.Service
         public static void Register<TLifetimeManager>(IUnityContainer container) where TLifetimeManager :LifetimeManager,new()
         {
             container.RegisterType<IMessageRepository, MessageRepository>();
-            container.RegisterType<ICreateVmTaskRepository,CreateVmTaskRepository>();
-            container.RegisterType<IUpdateVmTaskRepository, UpdateTaskVmRepository>();
-            container.RegisterType<IStandartVmTaskRepository, StandartVmTaskRepository >();
-            container.RegisterType<IStandartVmTaskService, StandartVmTaskService>();
             container.RegisterType<IHelpDeskRequestRepository, HelpDeskRequestRepository>();
             container.RegisterType<IHelpDeskRequestCommentRepository, HelpDeskRequestCommentRepository>();
             container.RegisterType<IFileDescriptorRepository, FileDescriptorRepository>();
@@ -36,6 +32,7 @@ namespace Crytex.Service
             container.RegisterType<IVmWareVCenterRepository, VmWareVCenterRepository>();
             container.RegisterType<IOAuthClientApplicationRepository, OAuthClientApplicationRepository>();
             container.RegisterType<IOAuthRefreshTokenRepository, OAuthRefreshTokenRepository>();
+            container.RegisterType<IStatisticRepository, StatisticRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -45,7 +42,6 @@ namespace Crytex.Service
             container.RegisterType<IOperatingSystemsService, OperatingSystemService>();
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
             container.RegisterType<IPaymentService, PaymentService>();
-            container.RegisterType<ITaskVmService,TaskVmService>();
             container.RegisterType<IUserVmService, UserVmService>();
             container.RegisterType<ISnapshotVmService, SnapshotVmService>();
             container.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();
@@ -65,7 +61,8 @@ namespace Crytex.Service
             container.RegisterType<ISystemCenterVirtualManagerService, SystemCenterVirtualManagerService>();
             container.RegisterType<ITaskV2Service, TaskV2Service>();
             container.RegisterType<IStateMachineService, StateMachineService>();
-            container.RegisterType<IHyperVHostService, HyperVHostService>();
+			container.RegisterType<IHyperVHostService, HyperVHostService>();
+            container.RegisterType<IStatisticService, StatisticService>();
 
         }
     }

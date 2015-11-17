@@ -3,7 +3,7 @@ using Crytex.Model.Models;
 
 namespace Crytex.Data.IRepository
 {
-    public interface IStandartVmTaskRepository : IRepository<StandartVmTask>
+    public interface IStatisticRepository : IRepository<Statistic>
     {
     }
 }
