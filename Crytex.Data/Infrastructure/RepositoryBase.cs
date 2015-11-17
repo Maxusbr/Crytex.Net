@@ -61,14 +61,14 @@ namespace Crytex.Data.Infrastructure
             return dbset.Find(id);
         }
 
-        public virtual IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includes)
+        public virtual List<T> GetAll(params Expression<Func<T, object>>[] includes)
         {
             var query = this.AppendIncludes(dbset, includes);
 
             return query.ToList();
         }
 
-        public virtual IEnumerable<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
+        public virtual List<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes)
         {
             var query = dbset.Where(where);
             query = this.AppendIncludes(query, includes);

@@ -1,4 +1,7 @@
-﻿namespace Crytex.Service.IService
+﻿using Crytex.Service.Model;
+using PagedList;
+
+namespace Crytex.Service.IService
 {
     using System;
     using System.Collections.Generic;
@@ -8,6 +11,8 @@
     public interface IEmailInfoService
     {
         EmailInfo GetEmail(int id);
+
+        IPagedList<EmailInfo> GetEmails(int pageNumber, int pageSize, SearchEmailParams searchParams = null);
 
         List<EmailInfo> GetEmailsByEmail(string toEmail);
 

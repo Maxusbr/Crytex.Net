@@ -67,6 +67,10 @@
       <Project>{f2a280df-098c-474a-9476-253996729571}</Project>
       <Name>VmWareRemote</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">
+      <Project>{0b23b88c-b5fc-42f6-ac62-27725f34487b}</Project>
+      <Name>Crytex.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Crytex.ExecutorTask\Crytex.ExecutorTask.csproj">
       <Project>{80d3fd00-5ade-4bb0-ada8-6450346bfc05}</Project>
       <Name>Crytex.ExecutorTask</Name>

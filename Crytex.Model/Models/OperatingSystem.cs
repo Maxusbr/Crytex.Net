@@ -9,9 +9,14 @@ namespace Crytex.Model.Models
         public string Description { get; set; }
         public Int32 ImageFileId { get; set; }
         public String ServerTemplateName { get; set; }
+        public OperatingSystemFamily Family { get; set; }
 
         [ForeignKey("ImageFileId")]
         public FileDescriptor ImageFileDescriptor { get; set; }
-    
+    }
+    public enum OperatingSystemFamily
+    {
+        Windows2012 = 0,
+        Ubuntu = 1
     }
 }

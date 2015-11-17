@@ -70,7 +70,8 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+            var handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), this._serverTemplateService,
+                vCenter.ServerAddress);
 
             return handler;
         }
@@ -118,7 +119,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)
         {
             var vmWareProvider = new VmWareProvider(vCenter.UserName, vCenter.Password, vCenter.ServerAddress);
-            var control = new VmWareControl(vmWareProvider);
+            var control = new FakeVmWareControl(vmWareProvider);
 
             return control;
         }

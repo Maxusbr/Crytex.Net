@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Crytex.Model.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Web.Models.JsonModels
@@ -12,6 +13,8 @@ namespace Crytex.Web.Models.JsonModels
         public String ServerTemplateName { get; set; }
         [Required]
         public int? ImageFileId { get; set; }
+        [Required]
+        public OperatingSystemFamily? Family { get; set; }
 
         public string ImagePath { get; set; }
     }

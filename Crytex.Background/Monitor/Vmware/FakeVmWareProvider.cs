@@ -92,5 +92,21 @@ namespace Crytex.Background.Monitor.Vmware
         {
             throw new NotImplementedException();
         }
+
+
+        public void CloneVm(string sourceVmName, string newVmName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int RunPowerShellScript(string machineName, string userName, string password, string script)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int RunLinuxShellScript(string machineName, string userName, string password, string script)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crytex.Data.Infrastructure;
+using Crytex.Model.Models;
+using System.Linq.Expressions;
 
 namespace Crytex.Test.FakeImplementations
 {
@@ -63,6 +66,16 @@ namespace Crytex.Test.FakeImplementations
         }
 
         public PagedList.IPagedList<Model.Models.FileDescriptor> GetPage<TOrder>(Data.Infrastructure.Page page, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, TOrder>> order, params System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, object>>[] includes)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<FileDescriptor> IRepository<FileDescriptor>.GetAll(params Expression<Func<FileDescriptor, object>>[] includes)
+        {
+            throw new NotImplementedException();
+        }
+
+        List<FileDescriptor> IRepository<FileDescriptor>.GetMany(Expression<Func<FileDescriptor, bool>> where, params Expression<Func<FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }

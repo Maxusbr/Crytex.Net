@@ -232,6 +232,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="UsefulBits.Web.Http.Areas, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UsefulBits.Web.Http.Areas.1.2.0.0\lib\net45\UsefulBits.Web.Http.Areas.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WebActivatorEx">
       <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
@@ -252,6 +256,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\NamespaceHttpControllerSelector.cs" />
+    <Compile Include="App_Start\OwinMiddleWareQueryStringExtractor.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
@@ -272,6 +277,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminStateMachineController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSystemCenterVirtualManagerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminEmailInfoController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminTaskV2Controller.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
@@ -279,6 +285,7 @@
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
+    <Compile Include="Auth\OauthTokenQuery.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Auth\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
@@ -313,6 +320,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\JsonModels\CreateStandartVmTaskViewModel.cs" />
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
+    <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2SearchParamsViewModel.cs" />

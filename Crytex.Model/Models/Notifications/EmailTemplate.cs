@@ -9,7 +9,7 @@ namespace Crytex.Model.Models.Notifications
     {
         public EmailTemplate()
         {
-            ParameterNamesList = new List<KeyValuePair<string, string>>();
+            ParameterNamesList = new List<string>();
         }
 
         public string Subject { get; set; }
@@ -18,10 +18,10 @@ namespace Crytex.Model.Models.Notifications
         public string ParameterNames { get; set; }
 
         [NotMapped]
-        public List<KeyValuePair<string, string>> ParameterNamesList
+        public List<string> ParameterNamesList
         {
-            get { return JsonConvert.DeserializeObject<List<KeyValuePair<string, string>>>(ParameterNames) ?? new List<KeyValuePair<string, string>>(); }
-            set { ParameterNames = JsonConvert.SerializeObject(value ?? new List<KeyValuePair<string, string>>()); }
+            get { return JsonConvert.DeserializeObject<List<string>>(ParameterNames) ?? new List<string>(); }
+            set { ParameterNames = JsonConvert.SerializeObject(value ?? new List<string>()); }
         }
     }
 }

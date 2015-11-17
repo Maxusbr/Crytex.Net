@@ -1,4 +1,5 @@
-﻿using Crytex.Model.Exceptions;
+﻿using Crytex.ExecutorTask.Config;
+using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using HyperVRemote;
 using System;
@@ -8,22 +9,47 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
     public class HyperVControl : IHyperVControl
     {
         private IHyperVProvider _hyperVProvider;
+        private IExecutorTaskConfig _config;
         
-        public HyperVControl(IHyperVProvider hyperVProvider)
+        public HyperVControl(IHyperVProvider hyperVProvider, IExecutorTaskConfig config)
         {
             this._hyperVProvider = hyperVProvider;
+            this._config = config;
         }
 
-        public Guid CreateVm(TaskV2 task)
+        public Guid CreateVm(TaskV2 task, ServerTemplate template)
         {
             this._hyperVProvider.Connect();
             var machineGuid = Guid.NewGuid();
+            var machineName = machineGuid.ToString();
             var taskOptions = task.GetOptions<CreateVmOptions>();
-            var createMachineRes = this._hyperVProvider.CreateVm(machineGuid.ToString(), (uint)taskOptions.Ram * 1024);
+            var createMachineRes = this._hyperVProvider.CreateVm(machineName, (uint)taskOptions.Ram * 1024);
 
             if (createMachineRes.IsSuccess)
             {
+                // Modify machine provessor count
                 this._hyperVProvider.ModifyProcessorVm(createMachineRes.Vm, (uint)taskOptions.Cpu);
+                
+                // Copy vhd to new machine
+                var templateDriveRoot = this._config.GetHyperVTemplateDriveRoot();
+                var systemDrivePath = templateDriveRoot + template.Name;
+                var vhdService = this._hyperVProvider.GetVhdService();
+                var vmDriveRoot = this._config.GetHyperVVmDriveRoot();
+                var newMachineDrivePath = vmDriveRoot + machineName;
+                vhdService.CopyItem(systemDrivePath, newMachineDrivePath);
+
+                // Resize copied vhd if needed
+                var machineVhd = vhdService.GetVhd(newMachineDrivePath);
+                if (machineVhd.VirtualHardDisk.FileSize != (uint)taskOptions.Hdd)
+                {
+                    vhdService.ResizeVhd(machineVhd.VirtualHardDisk, (uint)taskOptions.Hdd);
+                }
+                
+                // Attach disk to machine
+                vhdService.AttachVhd(createMachineRes.Vm, newMachineDrivePath);
+
+                // Start vm
+                this._hyperVProvider.Start(createMachineRes.Vm);
             }
             else
             {

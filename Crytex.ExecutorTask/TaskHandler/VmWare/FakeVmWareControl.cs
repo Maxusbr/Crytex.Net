@@ -79,5 +79,17 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         {
             throw new NotImplementedException();
         }
+
+        public Guid CreateVm(TaskV2 task, ServerTemplate serverTemplate)
+        {
+            Thread.Sleep(10000);
+
+            if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
+            {
+
+                throw new CreateVmException("Don't create VM");
+            }
+            return Guid.NewGuid();
+        }
     }
 }

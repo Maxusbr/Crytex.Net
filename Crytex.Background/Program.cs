@@ -1,4 +1,6 @@
-﻿namespace Crytex.Background
+﻿using System.Threading;
+
+namespace Crytex.Background
 {
     using Crytex.Core;
     using Crytex.Data.Infrastructure;
@@ -17,16 +19,21 @@
             LoggerCrytex.SetSource(SourceLog.Background);
             UnityConfig.Configure();
             var scheduler = UnityConfig.Resolve<ISchedulerJobs>();
-            var taskManager = UnityConfig.Resolve<ITaskManager>();
-            taskManager.RunTasks();
+
+            var Thread = new Thread((() =>
+            {
+                var taskManager = UnityConfig.Resolve<ITaskManager>();
+                taskManager.RunTasks();
+            }));
+            Thread.Start();
 
             scheduler.StartScheduler();
 
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
-            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+           //// scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
             //scheduler.TriggerJob(emai);
-            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0/2 * * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }

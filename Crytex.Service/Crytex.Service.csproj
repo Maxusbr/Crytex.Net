@@ -105,11 +105,13 @@
     <Compile Include="IService\ITaskVmService.cs" />
     <Compile Include="IService\IStateMachineService.cs" />
     <Compile Include="IService\IUserVmService.cs" />
+    <Compile Include="IService\IHyperVHostService.cs" />
     <Compile Include="IService\IVmWareVCenterService.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
+    <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
     <Compile Include="Service\ApplicationUserService.cs" />
@@ -132,6 +134,7 @@
     <Compile Include="Service\TaskVmService.cs" />
     <Compile Include="Service\TaskV2Service.cs" />
     <Compile Include="Service\UserVmService.cs" />
+    <Compile Include="Service\HyperVHostService.cs" />
     <Compile Include="Service\VmWareVCenterService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>

@@ -23,7 +23,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             {
                 var serverTemplateId = this.TaskEntity.GetOptions<CreateVmOptions>().ServerTemplateId;
                 var serverTemplate = this._serverTemplateService.GeById(serverTemplateId);
-                var machineGuid = this._hyperVControl.CreateVm(this.TaskEntity);
+                var machineGuid = this._hyperVControl.CreateVm(this.TaskEntity, serverTemplate);
                 taskExecutionResult.Success = true;
                 taskExecutionResult.MachineGuid = machineGuid;
             }

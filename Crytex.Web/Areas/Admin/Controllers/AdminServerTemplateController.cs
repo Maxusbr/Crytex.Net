@@ -35,7 +35,7 @@ namespace Crytex.Web.Areas.Admin
                 userId = CrytexContext.UserInfoProvider.GetUserId();
             }
 
-            var servers = this._serverTemplateService.GeAllForUser(userId).ToList();
+            var servers = this._serverTemplateService.GetSystemTemplates().ToList();
             var model = AutoMapper.Mapper.Map<List<ServerTemplate>, List<ServerTemplateViewModel>>(servers);
 
             return Ok(model);
