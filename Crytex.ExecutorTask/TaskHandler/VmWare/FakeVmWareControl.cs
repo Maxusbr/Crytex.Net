@@ -17,7 +17,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public Guid CreateVm(CreateVmTask task)
+        public CreateVmResult CreateVm(CreateVmTask task)
         {
             Thread.Sleep(10000);
 
@@ -25,7 +25,8 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             {
                 throw new CreateVmException("Don't create VM");
             }
-            return Guid.NewGuid();
+
+            return new CreateVmResult { MachineGuid = Guid.NewGuid()};
         }
 
 
@@ -90,6 +91,11 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 throw new CreateVmException("Don't create VM");
             }
             return Guid.NewGuid();
+        }
+
+        CreateVmResult IVmWareControl.CreateVm(TaskV2 task, ServerTemplate serverTemplate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

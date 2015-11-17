@@ -108,5 +108,10 @@ namespace Crytex.Background.Monitor.Vmware
         {
             throw new NotImplementedException();
         }
+
+        public void StartMachine(string machineName, bool waitForOsLoad = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

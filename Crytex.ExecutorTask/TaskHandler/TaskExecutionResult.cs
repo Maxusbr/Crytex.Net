@@ -16,5 +16,6 @@ namespace Crytex.ExecutorTask.TaskHandler
         public TypeVirtualization TypeVirtualization { get; set; }
         // VmWareVCenterId or HyperVHostId
         public Guid VirtualizationServerEnitityId { get; set; }
+        public string GuestOsPassword { get; internal set; }
     }
 }

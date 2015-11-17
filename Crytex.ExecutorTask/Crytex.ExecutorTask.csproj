@@ -52,6 +52,7 @@
       <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,6 +79,7 @@
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />
     <Compile Include="TaskHandler\TaskHandlerFactory.cs" />
     <Compile Include="TaskHandler\VmWare\BaseVmWareTaskHandler.cs" />
+    <Compile Include="TaskHandler\VmWare\CreateVmResult.cs" />
     <Compile Include="TaskHandler\VmWare\FakeVmWareControl.cs" />
     <Compile Include="TaskHandler\VmWare\IVmWareControl.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareControl.cs" />

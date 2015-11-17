@@ -7,7 +7,6 @@ namespace Crytex.Model.Models
     public class UserVm
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }
