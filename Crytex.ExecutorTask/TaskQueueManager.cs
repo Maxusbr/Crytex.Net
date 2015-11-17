@@ -1,5 +1,4 @@
 ﻿using Crytex.ExecutorTask.TaskHandler;
-using System.Collections.Generic;
 using System.Threading.Tasks.Dataflow;
 
 namespace Crytex.ExecutorTask
@@ -24,15 +23,9 @@ namespace Crytex.ExecutorTask
         {
             while (true)
             {
-                IList<ITaskHandler> tasksHandlers;
-                if (this._taskHandlerBuffer.TryReceiveAll(out tasksHandlers))
-                {
-                    foreach (var handler in tasksHandlers)
-                    {
-                        var result = handler.Execute();
-                        this._taskResultsBuffer.Post(result);
-                    }
-                }
+                var handler = this._taskHandlerBuffer.ReceiveAsync().Result;
+                var result = handler.Execute();
+                this._taskResultsBuffer.Post(result);
             }
         }
     }
