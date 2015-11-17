@@ -34,8 +34,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
             Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
-            Mapper.CreateMap<CreateVmTask, CreateVmTaskAdminViewModel>()
-                .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ServerTemplate.ImageFileDescriptor.Path));
+
 
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
                     .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
@@ -48,15 +47,11 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.OsImageFilePath, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.ImageFileDescriptor.Path))
                 .ForMember(x => x.OsName, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.Name));
 
-            Mapper.CreateMap<StandartVmTask, StandartVmTaskViewModel>();
-
             Mapper.CreateMap<EmailTemplate, EmailTemplateViewModel>();
             Mapper.CreateMap<EmailTemplate, UpdateEmailTemplateViewModel>();
             Mapper.CreateMap<HyperVHostResource, HyperVHostResourceViewModel>();
             Mapper.CreateMap<HyperVHost, HyperVHostViewModel>();
             Mapper.CreateMap<SystemCenterVirtualManager, SystemCenterVirtualManagerViewModel>();
-            Mapper.CreateMap<UpdateVmTask, UpdateVmTaskViewModel>()
-                .ForMember(x => x.VmId, opt => opt.MapFrom(source => source.VmId.ToString()));
             Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
             Mapper.CreateMap<Region, RegionViewModel>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
@@ -70,10 +65,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
-            this.MapPagedList<CreateVmTask, CreateVmTaskViewModel>();
-            this.MapPagedList<CreateVmTask, CreateVmTaskAdminViewModel>();
             this.MapPagedList<UserVm, UserVmViewModel>();
-            this.MapPagedList<UpdateVmTask, UpdateVmTaskViewModel>();
             this.MapPagedList<TaskV2, TaskV2ViewModel>();
             this.MapPagedList<LogEntry, LogEntryViewModel>();
             this.MapPagedList<ApplicationUser, ApplicationUserViewModel>();

@@ -14,10 +14,6 @@ namespace Crytex.Service
         public static void Register<TLifetimeManager>(IUnityContainer container) where TLifetimeManager :LifetimeManager,new()
         {
             container.RegisterType<IMessageRepository, MessageRepository>();
-            container.RegisterType<ICreateVmTaskRepository,CreateVmTaskRepository>();
-            container.RegisterType<IUpdateVmTaskRepository, UpdateTaskVmRepository>();
-            container.RegisterType<IStandartVmTaskRepository, StandartVmTaskRepository >();
-            container.RegisterType<IStandartVmTaskService, StandartVmTaskService>();
             container.RegisterType<IHelpDeskRequestRepository, HelpDeskRequestRepository>();
             container.RegisterType<IHelpDeskRequestCommentRepository, HelpDeskRequestCommentRepository>();
             container.RegisterType<IFileDescriptorRepository, FileDescriptorRepository>();
@@ -46,7 +42,6 @@ namespace Crytex.Service
             container.RegisterType<IOperatingSystemsService, OperatingSystemService>();
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
             container.RegisterType<IPaymentService, PaymentService>();
-            container.RegisterType<ITaskVmService,TaskVmService>();
             container.RegisterType<IUserVmService, UserVmService>();
             container.RegisterType<ISnapshotVmService, SnapshotVmService>();
             container.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();

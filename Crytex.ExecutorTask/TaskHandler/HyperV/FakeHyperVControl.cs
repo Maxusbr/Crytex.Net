@@ -28,6 +28,20 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             return Guid.NewGuid();
         }
 
+        public void RemoveVm(string machineName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartVm(string machineName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StopVm(string machineName)
+        {
+            throw new NotImplementedException();
+        }
 
         public void UpdateVm(TaskV2 updateVmTask)
         {
@@ -36,32 +50,6 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             {
                 throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
                   updateVmTask.GetOptions<UpdateVmOptions>().VmId));
-            }
-        }
-
-        public void StartVm(string machineName)
-        {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Start);
-        }
-
-        public void StopVm(string machineName)
-        {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Stop);
-        }
-
-        public void RemoveVm(string machineName)
-        {
-            this.StandartOperationInner(machineName, TypeStandartVmTask.Remove);
-        }
-
-        private void StandartOperationInner(string machineName, TypeStandartVmTask type)
-        {
-            Thread.Sleep(10000);
-            if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
-            {
-                throw new InvalidIdentifierException(
-                    string.Format("Virtual machine with name {0} doesnt exist on this host",
-                        machineName));
             }
         }
     }

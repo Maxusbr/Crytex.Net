@@ -17,7 +17,7 @@ namespace Crytex.Data.Migrations
                         Area = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
-            
+
             AddColumn("dbo.CreateVmTasks", "ErrorMessage", c => c.String());
             AddColumn("dbo.UserVms", "VurtualizationType", c => c.Int(nullable: false));
             AddColumn("dbo.UserVms", "HyperVHostId", c => c.Guid(nullable: false));

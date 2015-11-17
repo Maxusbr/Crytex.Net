@@ -36,6 +36,22 @@ namespace Crytex.Model.Models
         }
 
     }
+
+    public enum TypeVirtualization
+    {
+        HyperV = 0,
+        VmWare = 1
+    }
+
+    public enum StatusTask
+    {
+        Start = 0,
+        Pending = 1,
+        Processing = 2,
+        End = 3,
+        EndWithErrors = 4
+    }
+
     public enum TypeTask 
     {
         CreateVm = 0,
