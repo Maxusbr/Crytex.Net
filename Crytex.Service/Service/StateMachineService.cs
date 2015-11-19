@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
+using Crytex.Service.Extension;
 using Crytex.Service.IService;
 
 namespace Crytex.Service.Service
@@ -18,9 +21,22 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
+        public IEnumerable<StateMachine> GetStateByVmId(Guid vmId, int diffInMinutes = 0)
+        {
+            Expression<Func<StateMachine, bool>> where = s => s.VmId == vmId;
+            if (diffInMinutes != 0)
+            {
+                var previewDate = DateTime.UtcNow.AddMinutes(-diffInMinutes);
+                where = where.And(s => s.Date >= previewDate);
+            } 
+
+            var stateMachines = this._stateMachineRepository.GetMany(where, s=>s.Date);
+            return stateMachines;
+        }
+
         public IEnumerable<StateMachine> GetStateAll()
         {
-            return this._stateMachineRepository.GetAll();
+            throw new NotImplementedException();
         }
 
         public StateMachine GetStateById(int id)

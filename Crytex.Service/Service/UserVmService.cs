@@ -56,7 +56,7 @@ namespace Crytex.Service.Service
             return list;
         }
 
-        public void CreateVm(UserVm userVm)
+        public Guid CreateVm(UserVm userVm)
         {
             if (userVm.VurtualizationType == TypeVirtualization.HyperV && userVm.HyperVHostId == null)
             {
@@ -69,6 +69,8 @@ namespace Crytex.Service.Service
 
             this._userVmRepo.Add(userVm);
             this._unitOfWork.Commit();
+
+            return userVm.Id;
         }
 
         public void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null)
@@ -87,5 +89,35 @@ namespace Crytex.Service.Service
             this._userVmRepo.Update(userVm);
             this._unitOfWork.Commit();
         }
+
+        public void UpdateVmStatus(Guid vmId, TypeChangeStatus status)
+        {
+            var userVm = this._userVmRepo.GetById(vmId);
+
+            if (userVm == null)
+            {
+                throw new InvalidIdentifierException(string.Format("UserVm with Id = {0} doesnt exist.", vmId));
+            }
+
+            switch (status)
+            {
+                case TypeChangeStatus.Start:
+                    userVm.Status = StatusVM.Enable;
+                    break;
+                case TypeChangeStatus.Reload:
+                    userVm.Status = StatusVM.Enable;
+                    break;
+                case TypeChangeStatus.PowerOf:
+                    userVm.Status = StatusVM.Disable;
+                    break;
+                case TypeChangeStatus.Stop:
+                    userVm.Status = StatusVM.Disable;
+                    break;
+            }
+
+            this._userVmRepo.Update(userVm);
+            this._unitOfWork.Commit();
+        }
+
     }
 }

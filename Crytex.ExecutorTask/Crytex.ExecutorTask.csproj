@@ -74,7 +74,6 @@
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
     <Compile Include="TaskHandler\PendingTaskHandlerBox.cs" />
     <Compile Include="TaskHandler\TaskHandlerManager.cs" />
-    <Compile Include="TaskHandler\FakeTaskHandler.cs" />
     <Compile Include="TaskHandler\ITaskHandler.cs" />
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />
     <Compile Include="TaskHandler\TaskHandlerFactory.cs" />

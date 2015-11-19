@@ -1,5 +1,8 @@
-﻿using System.Threading;
-
+﻿using System;
+using System.Linq;
+using Crytex.Background.Statistic;
+using Crytex.Model.Models;
+using System.Threading;
 namespace Crytex.Background
 {
     using Crytex.Core;
@@ -22,18 +25,44 @@ namespace Crytex.Background
 
             var Thread = new Thread((() =>
             {
-                var taskManager = UnityConfig.Resolve<ITaskManager>();
-                taskManager.RunTasks();
+            var taskManager = UnityConfig.Resolve<ITaskManager>();
+            taskManager.RunTasks();
             }));
             Thread.Start();
-
+            
             scheduler.StartScheduler();
 
+            //var statisticData = new List<KeyValuePair<string, Object>>
+            //{
+            //    new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberRunningMachine)
+            //};
+            //scheduler.ScheduleJob<StatisticJob>("NumberRunningMachine", "0 */1 * 1/1 * ? *", statisticData);
+
+            //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberStoppedMachine);
+            //scheduler.ScheduleJob<StatisticJob>("NumberStoppedMachine", "0 */1 * 1/1 * ? *", statisticData);
+
+            //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberTasksCompletedDuringPeriod);
+            //scheduler.ScheduleJob<StatisticJob>("NumberTasksCompletedDuringPeriod", "0 0 */1 1/1 * ? *", statisticData);
+
+            //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberTasks);
+            //scheduler.ScheduleJob<StatisticJob>("NumberTasksJob", "0 0/5 * 1/1 * ? *", statisticData);
+
+            //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.NumberUsers);
+            //scheduler.ScheduleJob<StatisticJob>("NumberUsersJob", "0 0 0 1/1 * ? *", statisticData);
+
+            //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.AverageDelayStartEndTasksInPeriod);
+            //scheduler.ScheduleJob<StatisticJob>("AverageDelayStartEndTasksInPeriod", "0 */10 * 1/1 * ? *", statisticData);
+
+            //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.UsersWithLeastOneRunningMachine);
+            //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
+            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
-           //// scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
             //scheduler.TriggerJob(emai);
-            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
+
+            // scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }

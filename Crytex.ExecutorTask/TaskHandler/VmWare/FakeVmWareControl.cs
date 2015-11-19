@@ -17,7 +17,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public CreateVmResult CreateVm(CreateVmTask task)
+        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
         {
             Thread.Sleep(10000);
 
@@ -30,7 +30,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         }
 
 
-        public void UpdateVm(UpdateVmTask updateVmTask)
+        public void UpdateVm(TaskV2 updateVmTask)
         {
             Thread.Sleep(10000);
             if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
@@ -70,32 +70,12 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         }
 
         #endregion // Private methods
+    }
 
-        public Guid CreateVm(TaskV2 task)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateVm(TaskV2 updateVmTask)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Guid CreateVm(TaskV2 task, ServerTemplate serverTemplate)
-        {
-            Thread.Sleep(10000);
-
-            if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
-            {
-
-                throw new CreateVmException("Don't create VM");
-            }
-            return Guid.NewGuid();
-        }
-
-        CreateVmResult IVmWareControl.CreateVm(TaskV2 task, ServerTemplate serverTemplate)
-        {
-            throw new NotImplementedException();
-        }
+    internal enum TypeStandartVmTask
+    {
+        Start,
+        Stop,
+        Remove
     }
 }

@@ -60,8 +60,10 @@ namespace Crytex.Test.Controllers
         [Test]
         public void GetResponseBadRequestWhenCallGetWithInvalidParams()
         {
+            int pageSize = 1;
+            int pageNumber = 1;
             string VmIdIncorrect = "ahskdjghasdkjg"; //this true and for incorrect value
-            var actionResultIncorrectId = _snapShotVmController.Get(VmIdIncorrect) as InvalidModelStateResult;
+            var actionResultIncorrectId = _snapShotVmController.Get(pageNumber, pageSize, VmIdIncorrect) as InvalidModelStateResult;
             IsNotNull(actionResultIncorrectId);
             AreEqual(actionResultIncorrectId.ModelState.Keys.FirstOrDefault(), "id");
             AreEqual(actionResultIncorrectId.ModelState.Values.First().Errors.First().ErrorMessage, "Invalid Guid format");
@@ -76,7 +78,7 @@ namespace Crytex.Test.Controllers
 
             _userVmService.GetVmById(VmID).Returns(VM);
 
-            var actionResultIncorrectUser = _snapShotVmController.Get(VmID.ToString()) as BadRequestErrorMessageResult;
+            var actionResultIncorrectUser = _snapShotVmController.Get(pageNumber, pageSize, VmID.ToString()) as BadRequestErrorMessageResult;
             IsNotNull(actionResultIncorrectUser);
             AreEqual(actionResultIncorrectUser.Message, "Are not allowed for this action");
         }
@@ -84,19 +86,16 @@ namespace Crytex.Test.Controllers
         [Test]
         public void GetResponseOkWithIEnumerableDataWhenCallGetWithValidParams()
         {
+            int pageSize = 1;
+            int pageNumber = 1;
             Guid VmID = Guid.NewGuid();
-            var snapShotVmRequests = (IEnumerable<SnapshotVm>) new List<SnapshotVm>()
+            var snapShotVmRequests = new List<SnapshotVm>()
             {
                 new SnapshotVm() {Id = 1, VmId = VmID},
                 new SnapshotVm() {Id = 2, VmId = VmID},
                 new SnapshotVm() {Id = 3, VmId = VmID},
             };
-            var snapShotVmRequestsView = (IEnumerable<SnapshotVmViewModel>) new List<SnapshotVmViewModel>()
-            {
-                new SnapshotVmViewModel() {Id = 1, VmId = VmID},
-                new SnapshotVmViewModel() {Id = 2, VmId = VmID},
-                new SnapshotVmViewModel() {Id = 3, VmId = VmID},
-            };
+
             var VM = new UserVm
             {
                 Id = VmID,
@@ -105,17 +104,17 @@ namespace Crytex.Test.Controllers
 
             _userVmService.GetVmById(VmID).Returns(VM);
 
-            _snapshotVmService.GetAllByVmId(VmID).Returns(snapShotVmRequests);
+            _snapshotVmService.GetAllByVmId(VmID, pageNumber, pageSize).Returns(new PagedList<SnapshotVm>(snapShotVmRequests, pageNumber, pageSize));
 
             var actionResult =
-                _snapShotVmController.Get(VmID.ToString()) as OkNegotiatedContentResult<IEnumerable<SnapshotVmViewModel>>;
+                _snapShotVmController.Get(pageSize, pageNumber, VmID.ToString()) as OkNegotiatedContentResult<PageModel<SnapshotVmViewModel>>;
 
             IsNotNull(actionResult);
             var model = actionResult.Content;
             IsNotNull(model);
-            That(snapShotVmRequestsView.Select(x => x.Id), Is.EquivalentTo(model.Select(x => x.Id)));
+            That(snapShotVmRequests.Select(x => x.Id), Is.EquivalentTo(model.Items.Select(x => x.Id)));
 
-            _snapshotVmService.Received(1).GetAllByVmId(VmID);
+            _snapshotVmService.Received(1).GetAllByVmId(VmID, pageNumber, pageSize);
             _snapshotVmService.ClearReceivedCalls();
 
         }
