@@ -22,12 +22,12 @@ namespace Crytex.Service.Service
             this._fileDescriptorRepo = fileDescriptorRepo;
         }
 
-        public OperatingSystem CreateOperatingSystem(OperatingSystem newOS)
+        public OperatingSystem CreateOperatingSystem(OperatingSystem newOs)
         {
-            this._operatingSystemRepo.Add(newOS);
+            this._operatingSystemRepo.Add(newOs);
             this._unitOfWork.Commit();
 
-            return newOS;
+            return newOs;
         }
 
         public OperatingSystem GeById(int id)
@@ -87,6 +87,8 @@ namespace Crytex.Service.Service
             os.ServerTemplateName = updatedOs.ServerTemplateName;
             os.Name = updatedOs.Name;
             os.Description = updatedOs.Description;
+            os.DefaultAdminPassword = updatedOs.DefaultAdminPassword;
+            os.Family = updatedOs.Family;
 
             this._operatingSystemRepo.Update(os);
             this._unitOfWork.Commit();

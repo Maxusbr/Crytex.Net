@@ -5,7 +5,7 @@ namespace Crytex.Service.IService
 {
     public interface IOperatingSystemsService
     {
-        OperatingSystem CreateOperatingSystem(OperatingSystem newOS);
+        OperatingSystem CreateOperatingSystem(OperatingSystem newOs);
 
         OperatingSystem GeById(int id);
 
