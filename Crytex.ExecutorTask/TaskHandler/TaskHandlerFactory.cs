@@ -119,7 +119,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)
         {
             var vmWareProvider = new VmWareProvider(vCenter.UserName, vCenter.Password, vCenter.ServerAddress);
-            var control = new FakeVmWareControl(vmWareProvider);
+            var control = new VmWareControl(vmWareProvider);
 
             return control;
         }

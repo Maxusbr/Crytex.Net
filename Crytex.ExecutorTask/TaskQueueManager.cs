@@ -1,5 +1,6 @@
 ﻿using Crytex.ExecutorTask.TaskHandler;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks.Dataflow;
 
 namespace Crytex.ExecutorTask
@@ -33,6 +34,7 @@ namespace Crytex.ExecutorTask
                         this._taskResultsBuffer.Post(result);
                     }
                 }
+                Thread.Sleep(10000);
             }
         }
     }

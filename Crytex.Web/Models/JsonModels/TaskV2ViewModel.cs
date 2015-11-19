@@ -10,6 +10,13 @@ namespace Crytex.Web.Models.JsonModels
     public class TaskV2ViewModel
     {
         public Guid? Id { get; set; }
+        /// <summary>
+        /// Тип ресурса на сервере виртаулизации (например - виртуальная машина)
+        /// </summary>
+        public ResourceType ResourceType { get; set; }
+        /// <summary>
+        /// Id ресурса на сервере виртаулизации (например имя виртуальной машины на сервере виртуализации)
+        /// </summary>
         public Guid ResourceId { get; set; }
         [Required]
         [EnumDataType(typeof(TypeTask))]
@@ -17,7 +24,6 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         [EnumDataType(typeof(StatusTask))]
         public StatusTask? StatusTask { get; set; }
-        public ResourceType ResourceType { get; set; }
         public string Options { get; set; }
         public string UserId { get; set; }
         public string ErrorMessage { get; set; }

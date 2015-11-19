@@ -7,7 +7,6 @@ namespace Crytex.Model.Models
     public class UserVm
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }
@@ -19,6 +18,7 @@ namespace Crytex.Model.Models
         public TypeVirtualization VurtualizationType { get; set; }
         public Guid? HyperVHostId { get; set; }
         public Guid? VmWareCenterId { get; set; }
+        public string OperatingSystemPassword { get; set; }
 
         [ForeignKey("ServerTemplateId")]
         public ServerTemplate ServerTemplate { get; set; }

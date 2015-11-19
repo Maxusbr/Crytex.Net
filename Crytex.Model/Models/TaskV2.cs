@@ -11,10 +11,12 @@ namespace Crytex.Model.Models
     public class TaskV2
     {
         public Guid Id { get; set; }
+        // Тип ресурса на сервере виртаулизации (например - виртуальная машина)
+        public ResourceType ResourceType { get; set; }
+        // Id ресурса на сервере виртаулизации (например имя виртуальной машины на сервере виртуализации)
         public Guid? ResourceId { get; set; }
         public TypeTask TypeTask { get; set; }
         public StatusTask StatusTask { get; set; }
-        public ResourceType ResourceType { get; set; }
         public string Options { get; set; }
         public string UserId { get; set; }
         public string ErrorMessage { get; set; }
@@ -72,6 +74,7 @@ namespace Crytex.Model.Models
         public Int32 Cpu { get; set; }
         public Int32 Ram { get; set; }
         public Int32 Hdd { get; set; }
+        // Пользовательское имя виртауальной машины. Используется для отображения на UI
         public String Name { get; set; }
     }
 

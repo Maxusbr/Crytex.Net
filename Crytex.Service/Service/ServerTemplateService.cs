@@ -44,7 +44,7 @@ namespace Crytex.Service.Service
             return servers;
         }
 
-        public ServerTemplate GeById(int id)
+        public ServerTemplate GetById(int id)
         {
             var template = this._serverTemplateRepo.Get(x => x.Id == id, x => x.OperatingSystem);
 
