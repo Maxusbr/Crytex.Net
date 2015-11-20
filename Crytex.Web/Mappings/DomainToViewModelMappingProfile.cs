@@ -35,6 +35,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
 
+
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
                     .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
 
