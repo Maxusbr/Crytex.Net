@@ -24,7 +24,7 @@ namespace Crytex.Web.Areas.Admin
             this._statisticService = statisticService;
         }
 
-
+        
         /// <summary>
         /// Получение списка Statistic
         /// </summary>
@@ -48,6 +48,18 @@ namespace Crytex.Web.Areas.Admin
             var viewStatistics = AutoMapper.Mapper.Map<PageModel<StatisticViewModel>>(statistics);
 
             return Ok(viewStatistics);
+        }
+
+        /// <summary>
+        /// Получение StatisticSummary
+        /// </summary>
+        // GET: api/Admin/AdminStatistic/method/summary
+        [ResponseType(typeof(StatisticSummary))]
+        [Route("api/Admin/AdminStatistic/method/summary")]
+        public IHttpActionResult GetSummary()
+        {
+            var statisticSummary = _statisticService.GetSummary();
+            return Ok(statisticSummary);
         }
 
         /// <summary>

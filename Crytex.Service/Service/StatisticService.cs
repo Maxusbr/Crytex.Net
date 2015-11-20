@@ -43,6 +43,20 @@ namespace Crytex.Service.Service
             return statistic;
         }
 
+        public StatisticSummary GetSummary()
+        {
+            var statistic = new StatisticSummary();
+            statistic.NumberUsers = _applicationUserRepository.CountUsers(u => true);
+            statistic.NumberActiveUsers = _applicationUserRepository.CountUsers(u => u.UserVms.Count > 0);
+            statistic.NumberMachine = _userVmRepository.CountUserVms(m => true);
+            statistic.NumberRunningMachine = _userVmRepository.CountUserVms(m => m.Status == StatusVM.Enable);
+            DateTime today = DateTime.UtcNow.TrimDate(TimeSpan.TicksPerDay);
+            DateTime tomorrow = today.AddDays(1);
+            statistic.CreatedMachinesToday = _taskV2Repository.CountTaskV2(t => t.TypeTask == TypeTask.CreateVm && t.CompletedAt >= today && t.CompletedAt <= tomorrow);
+
+            return statistic;
+        }
+
         public IPagedList<Statistic> GetAllPageStatistics(int pageNumber, int pageSize, StatisticType? type = null, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
             var page = new Page(pageNumber, pageSize);

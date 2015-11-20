@@ -9,6 +9,7 @@ namespace Crytex.Service.IService
     public interface IStatisticService
     {
         IEnumerable<Statistic> GetAllStatistics();
+        StatisticSummary GetSummary();
         IPagedList<Statistic> GetAllPageStatistics(int pageNumber, int pageSize, StatisticType? type = null, DateTime? dateFrom = null, DateTime? dateTo= null);
         Statistic GetStatisticById(int id);
         Statistic CreateStatistic(Statistic newStatistic);
