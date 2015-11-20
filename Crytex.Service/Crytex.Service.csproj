@@ -100,10 +100,8 @@
     <Compile Include="IService\IOperatingSystemsService.cs" />
     <Compile Include="IService\IPaymentService.cs" />
     <Compile Include="IService\IServerTemplateService.cs" />
-
     <Compile Include="IService\ISystemCenterVirtualManagerService.cs" />
     <Compile Include="IService\ITaskV2Service.cs" />
-  
     <Compile Include="IService\IStateMachineService.cs" />
     <Compile Include="IService\IUserVmService.cs" />
     <Compile Include="IService\IHyperVHostService.cs" />
@@ -112,6 +110,7 @@
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
+    <Compile Include="Model\StatisticSummary.cs" />
     <Compile Include="Model\StatisticType.cs" />
     <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
@@ -132,9 +131,7 @@
     <Compile Include="Service\OperatingSystemService.cs" />
     <Compile Include="Service\PaymentService.cs" />
     <Compile Include="Service\ServerTemplateService.cs" />
-  
     <Compile Include="Service\SystemCenterVirtualManagerService.cs" />
-
     <Compile Include="Service\TaskV2Service.cs" />
     <Compile Include="Service\UserVmService.cs" />
     <Compile Include="Service\HyperVHostService.cs" />
