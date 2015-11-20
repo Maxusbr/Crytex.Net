@@ -11,7 +11,7 @@ namespace Crytex.Service.IService
 
 
         IEnumerable<ServerTemplate> GetSystemTemplates();
-        ServerTemplate GeById(int id);
+        ServerTemplate GetById(int id);
 
         void Update(int id, ServerTemplate updatedTemplate);
 

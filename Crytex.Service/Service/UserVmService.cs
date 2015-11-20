@@ -23,7 +23,7 @@ namespace Crytex.Service.Service
 
         public UserVm GetVmById(Guid id)
         {
-            var vm = this._userVmRepo.GetById(id);
+            var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.ServerTemplate);
             if (vm == null)
             {
                 throw new InvalidIdentifierException(string.Format("UserVm with id={0} doesnt exist.", id));

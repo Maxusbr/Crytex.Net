@@ -50,7 +50,7 @@ namespace Crytex.Web.Areas.Admin
         [ResponseType(typeof(ServerTemplateViewModel))]
         public IHttpActionResult Get(int id)
         {
-            var os = this._serverTemplateService.GeById(id);
+            var os = this._serverTemplateService.GetById(id);
             var model = AutoMapper.Mapper.Map<ServerTemplateViewModel>(os);
 
             return Ok(model);

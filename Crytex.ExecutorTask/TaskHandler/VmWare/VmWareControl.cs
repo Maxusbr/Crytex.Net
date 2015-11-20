@@ -20,7 +20,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public Guid CreateVm(TaskV2 task, ServerTemplate serverTemplate)
+        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate serverTemplate)
         {
             // Connect to server
             ConnectIfNotConnected();
@@ -31,18 +31,45 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
             // Create new vm
             var createOptions = task.GetOptions<CreateVmOptions>();
+
+            var newPassword = System.Web.Security.Membership.GeneratePassword(6, 0);
             try
             {
                 this._vmWareProvider.CloneVm(serverTemplate.OperatingSystem.ServerTemplateName, machineName);
                 this._vmWareProvider.ModifyMachine(machineName, createOptions.Cpu, createOptions.Ram, createOptions.Hdd);
-                this._vmWareProvider.StartMachine(machineName);
+                this._vmWareProvider.StartMachine(machineName, true);
+
+                var oldPassword = serverTemplate.OperatingSystem.DefaultAdminPassword;
+                var scriptBuilder = new StringBuilder();
+                switch (serverTemplate.OperatingSystem.Family)
+                {
+                    case OperatingSystemFamily.Windows2012:
+                        var userName = "Administrator";
+                        scriptBuilder.AppendLine("$Computername = $env:COMPUTERNAME");
+                        scriptBuilder.AppendLine("$user = \"Administrator\"");
+                        scriptBuilder.AppendLine("$user = [adsi]\"WinNT://$ComputerName/$user,user\"");
+                        scriptBuilder.AppendLine("$pass = \""+newPassword+"\"");
+                        scriptBuilder.AppendLine("$user.SetPassword($pass)");
+                        this._vmWareProvider.RunPowerShellScript(machineName, userName, oldPassword, scriptBuilder.ToString());
+                        break;
+                    case OperatingSystemFamily.Ubuntu:
+                        userName = "administrator";
+                        scriptBuilder.AppendFormat("echo -e \"{0}\\n{1}\\n{1}\" | passwd", oldPassword, newPassword);
+                        this._vmWareProvider.RunLinuxShellScript(machineName, userName, oldPassword, scriptBuilder.ToString());
+                        break;
+                }
+                
             }
             catch (ApplicationException ex)
             {
                 throw new CreateVmException(ex.Message, ex);
             }
-
-            return machineGuid;
+            var result = new CreateVmResult
+            {
+                MachineGuid = machineGuid,
+                GuestOsAdminPassword = newPassword
+            };
+            return result;
         }
 
 
@@ -95,7 +122,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
             try
             {
-                this._vmWareProvider.StartMachine(machineName);
+                this._vmWareProvider.StopMachine(machineName);
             }
             // Handle invalid name exceptions
             catch (InvalidNameException e)
@@ -111,7 +138,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
             try
             {
-                this._vmWareProvider.StartMachine(machineName);
+                this._vmWareProvider.DeleteMachine(machineName);
             }
             // Handle invalid name exceptions
             catch (InvalidNameException e)

@@ -1,4 +1,5 @@
 ﻿using System;
+using Crytex.Model.Models;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -11,5 +12,7 @@ namespace Crytex.Web.Models.JsonModels
         public string ImageSrc { get; set; }
         public int ImageFileId { get; set; }
         public string ServerTemplateName { get; set; }
+        public string DefaultAdminPassword { get; set; }
+        public OperatingSystemFamily Family { get; set; }
     }
 }

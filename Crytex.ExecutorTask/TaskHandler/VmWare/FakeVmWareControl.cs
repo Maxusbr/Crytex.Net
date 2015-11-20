@@ -17,41 +17,65 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public Guid CreateVm(TaskV2 task)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateVm(TaskV2 updateVmTask)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Guid CreateVm(TaskV2 task, ServerTemplate serverTemplate)
+        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
         {
             Thread.Sleep(10000);
 
             if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
             {
-
                 throw new CreateVmException("Don't create VM");
             }
-            return Guid.NewGuid();
+
+            return new CreateVmResult { MachineGuid = Guid.NewGuid()};
+        }
+
+
+        public void UpdateVm(TaskV2 updateVmTask)
+        {
+            Thread.Sleep(10000);
+            if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
+            {
+                throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
+                  "Name"));
+            }
+
         }
 
         public void StartVm(string machineName)
         {
-            throw new NotImplementedException();
+            this.StandartOperationInner(machineName, TypeStandartVmTask.Start);
         }
 
         public void StopVm(string machineName)
         {
-            throw new NotImplementedException();
+            this.StandartOperationInner(machineName, TypeStandartVmTask.Stop);
         }
 
         public void RemoveVm(string machineName)
         {
-            throw new NotImplementedException();
+            this.StandartOperationInner(machineName, TypeStandartVmTask.Remove);
         }
+
+        #region Private methods
+
+        private void StandartOperationInner(string machineName, TypeStandartVmTask typeStandartVmTask)
+        {
+            Thread.Sleep(10000);
+            if (ConfigurationManager.AppSettings["StatusTask"] == "EndWithError")
+            {
+                throw new InvalidIdentifierException(
+                    string.Format("Virtual machine with name {0} doesnt exist on this host",
+                        machineName));
+            }
+        }
+
+        #endregion // Private methods
+    }
+
+    internal enum TypeStandartVmTask
+    {
+        Start,
+        Stop,
+        Remove
     }
 }

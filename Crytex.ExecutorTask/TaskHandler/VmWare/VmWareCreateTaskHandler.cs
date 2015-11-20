@@ -22,12 +22,13 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             try
             {
                 var serverTemplateId = this.TaskEntity.GetOptions<CreateVmOptions>().ServerTemplateId;
-                var serverTemplate = this._serverTemplateService.GeById(serverTemplateId);
-                var machineGuid = this._vmWareControl.CreateVm(this.TaskEntity, serverTemplate);
+                var serverTemplate = this._serverTemplateService.GetById(serverTemplateId);
+                var createResult = this._vmWareControl.CreateVm(this.TaskEntity, serverTemplate);
                 taskExecutionResult.Success = true;
-                taskExecutionResult.MachineGuid = machineGuid;
+                taskExecutionResult.MachineGuid = createResult.MachineGuid;
+                taskExecutionResult.GuestOsPassword = createResult.GuestOsAdminPassword;
             }
-            catch (Exception ex) when (ex is CreateVmException || ex is InvalidIdentifierException) 
+            catch (Exception ex)
             {
                 taskExecutionResult.Success = false;
                 taskExecutionResult.ErrorMessage = ex.Message;

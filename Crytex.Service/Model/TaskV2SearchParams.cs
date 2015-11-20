@@ -11,7 +11,7 @@ namespace Crytex.Service.Model
     {
         public Guid? ResourceId { get; set; }
         public TypeTask? TypeTask { get; set; }
-        public StatusTask? StatusTask { get; set; }
+        public StatusTask[] StatusTasks { get; set; }
         public TypeVirtualization? Virtualization { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

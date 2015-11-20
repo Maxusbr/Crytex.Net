@@ -17,5 +17,7 @@ namespace Crytex.Web.Models.JsonModels
         public OperatingSystemFamily? Family { get; set; }
 
         public string ImagePath { get; set; }
+        [Required]
+        public string DefaultAdminPassword { get; set; }
     }
 }

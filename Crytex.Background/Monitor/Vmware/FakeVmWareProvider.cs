@@ -106,6 +106,11 @@ namespace Crytex.Background.Monitor.Vmware
         public int RunLinuxShellScript(string machineName, string userName, string password, string script)
         {
             throw new NotImplementedException();
-}
+        }
+
+        public void StartMachine(string machineName, bool waitForOsLoad = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
