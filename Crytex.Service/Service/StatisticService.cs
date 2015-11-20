@@ -132,6 +132,7 @@ namespace Crytex.Service.Service
 
             this._statisticRepository.Delete(statistic);
             this._unitOfWork.Commit();
+            
         }
 
         public void CalculateStatistic(TypeStatistic type)
