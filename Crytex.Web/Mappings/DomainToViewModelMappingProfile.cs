@@ -53,6 +53,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<SystemCenterVirtualManager, SystemCenterVirtualManagerViewModel>();
             Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
             Mapper.CreateMap<Region, RegionViewModel>();
+            Mapper.CreateMap<Tariff, TariffViewModel>();
+            Mapper.CreateMap<TariffViewModel, Tariff>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
             Mapper.CreateMap<FileDescriptor, FileDescriptorViewModel>()
                 .ForMember(x => x.Path, opt => opt.MapFrom(source => "small_" + source.Path));
