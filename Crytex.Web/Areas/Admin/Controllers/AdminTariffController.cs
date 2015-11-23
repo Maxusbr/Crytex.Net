@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Areas.Admin
@@ -85,10 +80,7 @@ namespace Crytex.Web.Areas.Admin
         public IHttpActionResult GetTotalPrice(double processor, double HDD, double SSD, double RAM512, Guid tariffId)
         {
             var tariff = _tariffInfoService.GetTariffById(tariffId);
-            double totalPrice = processor * tariff.Processor1 +
-                                HDD * tariff.HDD1 +
-                                SSD * tariff.SSD1 +
-                                RAM512 * tariff.RAM512;
+            double totalPrice = _tariffInfoService.CalculateTotalPrice(processor, HDD, SSD, RAM512, tariff);            
             return Ok(totalPrice);
         }
 
