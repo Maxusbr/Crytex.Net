@@ -65,6 +65,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
             Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
+            Mapper.CreateMap<Discount, DiscountViewModel>();
+            
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<Payment, PaymentView>();

@@ -93,6 +93,7 @@
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\IOAuthService.cs" />
+    <Compile Include="IService\IDiscountService.cs" />
     <Compile Include="IService\IStatisticService.cs" />
     <Compile Include="IService\IRegionService.cs" />
     <Compile Include="IService\ISnapshotVmService.cs" />
@@ -126,6 +127,7 @@
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\OAuthService.cs" />
+    <Compile Include="Service\DiscountService.cs" />
     <Compile Include="Service\StatisticService.cs" />
     <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\StateMachineService.cs" />
