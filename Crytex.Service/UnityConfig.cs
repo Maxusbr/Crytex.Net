@@ -33,6 +33,7 @@ namespace Crytex.Service
             container.RegisterType<IOAuthClientApplicationRepository, OAuthClientApplicationRepository>();
             container.RegisterType<IOAuthRefreshTokenRepository, OAuthRefreshTokenRepository>();
             container.RegisterType<IStatisticRepository, StatisticRepository>();
+            container.RegisterType<ISubscriptionVmRepository, SubscriptionVmRepository>();
 
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -49,6 +50,8 @@ namespace Crytex.Service
             container.RegisterType<IEmailInfoService, EmailInfoService>();
             container.RegisterType<IEmailTemplateService, EmailTemplateService>();
             container.RegisterType<IRegionService, RegionService>();
+            container.RegisterType<ITariffInfoService, TariffInfoService>();
+            container.RegisterType<ITariffInfoRepository, TariffInfoRepository>();
             container.RegisterType<IVmWareVCenterService, VmWareVCenterService>();
             container.RegisterType<IOAuthService, OAuthService>();
 
@@ -63,7 +66,7 @@ namespace Crytex.Service
             container.RegisterType<IStateMachineService, StateMachineService>();
 			container.RegisterType<IHyperVHostService, HyperVHostService>();
             container.RegisterType<IStatisticService, StatisticService>();
-
+            container.RegisterType<ISubscriptionVmService, SubscriptionVmService>();
         }
     }
 }

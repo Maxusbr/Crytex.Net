@@ -7,11 +7,11 @@ using System.Web.Http;
 
 namespace Crytex.Web.Controllers.Api
 {
-    public class CreditPaymentOrderController : CrytexApiController
+    public class PaymentController : CrytexApiController
     {
         private readonly IPaymentService _paymentService;
 
-        public CreditPaymentOrderController(IPaymentService paymentService)
+        public PaymentController(IPaymentService paymentService)
         {
             this._paymentService = paymentService;
         }
@@ -25,7 +25,7 @@ namespace Crytex.Web.Controllers.Api
             }
 
             var page = this._paymentService.GetPage(pageNumber, pageSize);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<CreditPaymentOrderViewModel>>(page);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<PaymentView>>(page);
 
             return Ok(viewModel);
         }
@@ -41,13 +41,13 @@ namespace Crytex.Web.Controllers.Api
             }
 
             var order = this._paymentService.GetCreditPaymentOrderById(guid);
-            var model = AutoMapper.Mapper.Map<CreditPaymentOrderViewModel>(order);
+            var model = AutoMapper.Mapper.Map<PaymentView>(order);
 
             return Ok(model);
         }
 
         // POST: api/CreditPaymentOrder
-        public IHttpActionResult Post([FromBody]CreditPaymentOrderViewModel model)
+        public IHttpActionResult Post([FromBody]PaymentView model)
         {
             if (!ModelState.IsValid)
             {

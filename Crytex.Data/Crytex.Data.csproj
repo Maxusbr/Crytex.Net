@@ -63,9 +63,11 @@
     <Compile Include="IRepository\IMessageRepository.cs" />
     <Compile Include="IRepository\IOperatingSystemRepository.cs" />
     <Compile Include="IRepository\IServerTemplateRepository.cs" />
+    <Compile Include="IRepository\ISubscriptionVmRepository.cs" />
     <Compile Include="IRepository\ISystemCenterVirtualManagerRepository.cs" />
     <Compile Include="IRepository\IStateMachineRepository.cs" />
     <Compile Include="IRepository\IStatisticRepository.cs" />
+    <Compile Include="IRepository\ITariffInfoRepository.cs" />
     <Compile Include="IRepository\IUserInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
@@ -161,9 +163,11 @@
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
     <Compile Include="Repository\ServerTemplateRepository.cs" />
+    <Compile Include="Repository\SubscriptionVmRepository.cs" />
     <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />
     <Compile Include="Repository\RegionRepository.cs" />
     <Compile Include="Repository\StateMachineRepository.cs" />
+    <Compile Include="Repository\TariffInfoRepository.cs" />
     <Compile Include="Repository\TaskV2Repository.cs" />
     <Compile Include="Repository\StatisticRepository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />

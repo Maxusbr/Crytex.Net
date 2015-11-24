@@ -2,6 +2,7 @@
 using AutoMapper;
 using Crytex.Core.Service;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 using Crytex.Web.Models.JsonModels;
 using PagedList;
 using Crytex.Web.Models.ViewModels;
@@ -32,7 +33,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
-            Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
+            Mapper.CreateMap<Payment, PaymentView>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
 
 
@@ -54,6 +55,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<SystemCenterVirtualManager, SystemCenterVirtualManagerViewModel>();
             Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
             Mapper.CreateMap<Region, RegionViewModel>();
+            Mapper.CreateMap<Tariff, TariffViewModel>();
+            Mapper.CreateMap<TariffViewModel, Tariff>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
             Mapper.CreateMap<FileDescriptor, FileDescriptorViewModel>()
                 .ForMember(x => x.Path, opt => opt.MapFrom(source => "small_" + source.Path));
@@ -64,7 +67,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Statistic, StatisticViewModel>();
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
-            this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
+            this.MapPagedList<Payment, PaymentView>();
             this.MapPagedList<UserVm, UserVmViewModel>();
             this.MapPagedList<TaskV2, TaskV2ViewModel>();
             this.MapPagedList<LogEntry, LogEntryViewModel>();
