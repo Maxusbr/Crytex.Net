@@ -15,32 +15,32 @@ namespace Crytex.Service.Service
     {
         private readonly IHelpDeskRequestRepository _requestRepository;
         private readonly IHelpDeskRequestCommentRepository _requestCommentRepository;
+        private readonly IFileDescriptorRepository _fileDescriptorRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public HelpDeskRequestService(IHelpDeskRequestRepository requestRepo,
-            IHelpDeskRequestCommentRepository requestCommentRepo, IUnitOfWork unitOfWork)
+            IHelpDeskRequestCommentRepository requestCommentRepo, IFileDescriptorRepository fileDescriptorRepository, IUnitOfWork unitOfWork)
         {
             this._requestRepository = requestRepo;
             this._requestCommentRepository = requestCommentRepo;
             this._unitOfWork = unitOfWork;
+            this._fileDescriptorRepository = fileDescriptorRepository;
         }
 
-        public HelpDeskRequest CreateNew(string summary, string details, string userId)
+        public HelpDeskRequest CreateNew(HelpDeskRequest request)
         {
-            var newRequest = new HelpDeskRequest
-            {
-                Summary = summary,
-                Details = details,
-                UserId = userId,
-                Status = RequestStatus.New,
-                CreationDate = DateTime.UtcNow,
-                Read = false
-            };
+            request.Read = false;
+            request.Status = RequestStatus.New;
+            request.CreationDate = DateTime.UtcNow;
 
-            this._requestRepository.Add(newRequest);
+            var requestFileIds = request.FileDescriptors.Select(x => x.Id).ToArray();
+            var requestFiles = this._fileDescriptorRepository.GetMany(x => requestFileIds.Contains(x.Id));
+            request.FileDescriptors = requestFiles;
+
+            this._requestRepository.Add(request);
             this._unitOfWork.Commit();
 
-            return newRequest;
+            return request;
         }
 
 

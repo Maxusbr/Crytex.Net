@@ -71,8 +71,10 @@ namespace Crytex.Web.Areas.Admin
             {
                 userId = CrytexContext.UserInfoProvider.GetUserId();
             }
-            
-            var newRequest = _helpDeskRequestService.CreateNew(model.Summary, model.Details, userId);
+
+            var requestToCreate = AutoMapper.Mapper.Map<HelpDeskRequest>(model);
+            requestToCreate.UserId = userId;
+            var newRequest = _helpDeskRequestService.CreateNew(requestToCreate);
 
             return Ok(new { id = newRequest.Id });
         }

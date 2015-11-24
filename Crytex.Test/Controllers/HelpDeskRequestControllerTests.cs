@@ -129,17 +129,23 @@ namespace Crytex.Test.Controllers
         public void PostModelAndGetResponseOkWhenTryPostModelWithValidModel()
         {
             var helpDeskRequestViewModel = new HelpDeskRequestViewModel() { Summary = "summary", Details = "Details" };
-            var helpDeskRequest = new HelpDeskRequest() { Id = 5, Summary = helpDeskRequestViewModel.Summary, Details = helpDeskRequestViewModel.Details };
-            _helpDeskRequestService.CreateNew(helpDeskRequestViewModel.Summary, helpDeskRequestViewModel.Details, _userInfo.UserId).Returns(helpDeskRequest);
+            var returnedHelpDeskRequest = new HelpDeskRequest() { Id = 5, Summary = helpDeskRequestViewModel.Summary, Details = helpDeskRequestViewModel.Details };
+            var requestToCreate = new HelpDeskRequest
+            {
+                Summary = helpDeskRequestViewModel.Summary,
+                Details = helpDeskRequestViewModel.Details,
+                UserId = _userInfo.UserId
+            };
+            _helpDeskRequestService.CreateNew(requestToCreate).Returns(returnedHelpDeskRequest);
 
             var actionResult = _helpDeskRequestController.Post(helpDeskRequestViewModel);
 
             IsNotNull(actionResult);
             var model = actionResult.GetValueProperty("Content");
             IsNotNull(model);
-            AreEqual(model.GetValueProperty("id"), helpDeskRequest.Id);
-            AreEqual(actionResult.GetValueProperty("Location"), "/api/HelpDeskRequest/"+helpDeskRequest.Id);
-            _helpDeskRequestService.Received(1).CreateNew(helpDeskRequestViewModel.Summary, helpDeskRequestViewModel.Details, _userInfo.UserId);
+            AreEqual(model.GetValueProperty("id"), returnedHelpDeskRequest.Id);
+            AreEqual(actionResult.GetValueProperty("Location"), "/api/HelpDeskRequest/"+returnedHelpDeskRequest.Id);
+            _helpDeskRequestService.Received(1).CreateNew(requestToCreate);
             _helpDeskRequestService.ClearReceivedCalls();
         }
 

@@ -4,6 +4,7 @@ using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using Crytex.Service.Model;
+using System.Linq;
 
 namespace Crytex.Web.Mappings
 {
@@ -16,7 +17,8 @@ namespace Crytex.Web.Mappings
 
         protected override void Configure()
         {
-            Mapper.CreateMap<HelpDeskRequestViewModel, HelpDeskRequest>();
+            Mapper.CreateMap<HelpDeskRequestViewModel, HelpDeskRequest>()
+                .ForMember(req => req.FileDescriptors, opt => opt.MapFrom(s => s.FileDescriptorIds != null ? s.FileDescriptorIds.Select(id => new FileDescriptor {Id = id }) : new FileDescriptor[0]));
             Mapper.CreateMap<OperatingSystemEditViewModel, OperatingSystem>();
             Mapper.CreateMap<ServerTemplateEditViewModel, ServerTemplate>();
             Mapper.CreateMap<SystemCenterVirtualManagerViewModel, SystemCenterVirtualManager>();
