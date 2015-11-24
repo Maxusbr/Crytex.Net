@@ -143,6 +143,10 @@
     <Compile Include="Migrations\201511161036526_fix_16_11.Designer.cs">
       <DependentUpon>201511161036526_fix_16_11.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511241436429_userUpdate.cs" />
+    <Compile Include="Migrations\201511241436429_userUpdate.Designer.cs">
+      <DependentUpon>201511241436429_userUpdate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
@@ -240,6 +244,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511161036526_fix_16_11.resx">
       <DependentUpon>201511161036526_fix_16_11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511241436429_userUpdate.resx">
+      <DependentUpon>201511241436429_userUpdate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
