@@ -4,10 +4,13 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
+using Crytex.Service.Model;
 
-namespace Crytex.Web.Controllers.Api
+
+namespace Crytex.Web.Areas.User
 {
-    public class PaymentController : CrytexApiController
+    public class PaymentController : UserCrytexController
     {
         private readonly IPaymentService _paymentService;
 
@@ -16,21 +19,31 @@ namespace Crytex.Web.Controllers.Api
             this._paymentService = paymentService;
         }
 
-        // GET: api/CreditPaymentOrder
-        public IHttpActionResult Get(int pageNumber, int pageSize)
+        /// <summary>
+        /// Получение списка Payment
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [ResponseType(typeof(PageModel<PaymentView>))]
+        // GET: api/Payment
+        public IHttpActionResult Get(int pageNumber, int pageSize, SearchPaymentParams filter)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
                 return BadRequest("PageNumber and PageSize must be grater than 1");
             }
 
-            var page = this._paymentService.GetPage(pageNumber, pageSize);
+            filter.UserId = CrytexContext.UserInfoProvider.GetUserId();
+
+            var page = this._paymentService.GetPage(pageNumber, pageSize, filter);
             var viewModel = AutoMapper.Mapper.Map<PageModel<PaymentView>>(page);
 
             return Ok(viewModel);
         }
 
-        // GET: api/CreditPaymentOrder/5
+        // GET: api/Payment/5
         public IHttpActionResult Get(string id)
         {
             Guid guid;
@@ -41,12 +54,18 @@ namespace Crytex.Web.Controllers.Api
             }
 
             var order = this._paymentService.GetCreditPaymentOrderById(guid);
+
+            if (order.UserId != CrytexContext.UserInfoProvider.GetUserId())
+            {
+                return BadRequest("Are not allowed for this action");
+            }
+
             var model = AutoMapper.Mapper.Map<PaymentView>(order);
 
             return Ok(model);
         }
 
-        // POST: api/CreditPaymentOrder
+        // POST: api/Payment
         public IHttpActionResult Post([FromBody]PaymentView model)
         {
             if (!ModelState.IsValid)
@@ -59,7 +78,7 @@ namespace Crytex.Web.Controllers.Api
             return Ok(new { id = newOrder.Guid });
         }
 
-        // DELETE: api/CreditPaymentOrder/5
+        // DELETE: api/Payment/5
         public IHttpActionResult Delete(string id)
         {
             Guid guid;
