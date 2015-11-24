@@ -292,7 +292,7 @@
     <Compile Include="Auth\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\AccountController.cs" />
-    <Compile Include="Controllers\Api\CreditPaymentOrderController.cs" />
+    <Compile Include="Controllers\Api\PaymentController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />
@@ -328,7 +328,7 @@
     <Compile Include="Models\JsonModels\HyperVHostViewModel.cs" />
     <Compile Include="Models\JsonModels\SystemCenterVirtualManagerViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateEmailTemplateViewModel.cs" />
-    <Compile Include="Models\JsonModels\CreditPaymentOrderViewModel.cs" />
+    <Compile Include="Models\JsonModels\PaymentView.cs" />
     <Compile Include="Models\JsonModels\EmailTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\FileDescriptorViewModel.cs" />
     <Compile Include="Models\JsonModels\HelpDeskRequestCommentViewModel.cs" />

@@ -1,26 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Crytex.Model.Models
+namespace Crytex.Model.Models.Biling
 {
-    public class Payment : GuidBaseEntity
+    public class Payment
     {
-        public decimal Amount { get; set; }
-        public DateTime DateCreate { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Guid { get; set; }
+        public DateTime Date { get; set; }
         public DateTime? DateEnd { get; set; }
+        public decimal CashAmount { get; set; }
         public string UserId { get; set; }
-        public ApplicationUser User { get; set; }
+        public PaymentSystemType PaymentSystem { get; set; }
         public bool Succes { get; set; }
-        public TypePayment TypePayment { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
     }
 
-    public enum TypePayment
+    public enum PaymentSystemType
     {
-        Interkassa = 0,
-        Onpay = 1
+        Onpay = 0,
+        Sprypay = 1,
+        Interkassa = 2,
+        PayPal = 3,
+        WebMoney = 4,
+        YandexMoney = 5
     }
-
 }

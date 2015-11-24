@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="Extension\PredicatBuilder.cs" />
     <Compile Include="IService\IApplicationUserService.cs" />
+    <Compile Include="IService\IBilingService.cs" />
     <Compile Include="IService\IEmailTemplateService.cs" />
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
@@ -100,6 +101,7 @@
     <Compile Include="IService\IOperatingSystemsService.cs" />
     <Compile Include="IService\IPaymentService.cs" />
     <Compile Include="IService\IServerTemplateService.cs" />
+    <Compile Include="IService\ISubscriptionVmService.cs" />
     <Compile Include="IService\ISystemCenterVirtualManagerService.cs" />
     <Compile Include="IService\ITariffInfoService.cs" />
     <Compile Include="IService\ITaskV2Service.cs" />
@@ -117,6 +119,7 @@
     <Compile Include="Model\TaskV2SearchParams.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
     <Compile Include="Service\ApplicationUserService.cs" />
+    <Compile Include="Service\BilingService.cs" />
     <Compile Include="Service\EmailInfoService.cs" />
     <Compile Include="Service\EmailTemplateService.cs" />
     <Compile Include="Service\FileService.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Service\OperatingSystemService.cs" />
     <Compile Include="Service\PaymentService.cs" />
     <Compile Include="Service\ServerTemplateService.cs" />
+    <Compile Include="Service\SubscriptionVmService.cs" />
     <Compile Include="Service\SystemCenterVirtualManagerService.cs" />
     <Compile Include="Service\TariffInfoService.cs" />
     <Compile Include="Service\TaskV2Service.cs" />

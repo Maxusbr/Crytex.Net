@@ -1,6 +1,7 @@
 ﻿using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Data.Repository
 {

@@ -5,6 +5,7 @@ using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Service.Service
 {
@@ -24,9 +25,9 @@ namespace Crytex.Service.Service
             this._creditPaymentOrderRepository = creditPaymentOrderRepo;
         }
 
-        public CreditPaymentOrder CreateCreditPaymentOrder(decimal cashAmount, string userId, PaymentSystemType paymentSystem)
+        public Payment CreateCreditPaymentOrder(decimal cashAmount, string userId, PaymentSystemType paymentSystem)
         {
-            var newOrder = new CreditPaymentOrder
+            var newOrder = new Payment
             {
                 CashAmount = cashAmount,
                 UserId = userId,
@@ -54,7 +55,7 @@ namespace Crytex.Service.Service
         }
 
 
-        public CreditPaymentOrder GetCreditPaymentOrderById(Guid guid)
+        public Payment GetCreditPaymentOrderById(Guid guid)
         {
             var order = this._creditPaymentOrderRepository.GetById(guid);
             if (order == null)
@@ -66,11 +67,14 @@ namespace Crytex.Service.Service
         }
 
 
-        public IPagedList<CreditPaymentOrder> GetPage(int pageNumber, int pageSize)
+        public IPagedList<Payment> GetPage(int pageNumber, int pageSize)
         {
             var page = this._creditPaymentOrderRepository.GetPage(new Page(pageNumber, pageSize), (x => true), (x => x.Date));
 
             return page;
         }
+
+
+
     }
 }

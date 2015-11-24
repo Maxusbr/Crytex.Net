@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Crytex.Model.Models
+namespace Crytex.Service.IService
 {
-    class Subscription
+    public interface IBilingService
     {
     }
 }

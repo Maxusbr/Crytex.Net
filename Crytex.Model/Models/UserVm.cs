@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Model.Models
 {
@@ -20,6 +21,7 @@ namespace Crytex.Model.Models
         public Guid? VmWareCenterId { get; set; }
         public string OperatingSystemPassword { get; set; }
 
+        public Guid? SubscriptionVmId { get; set; }
         [ForeignKey("ServerTemplateId")]
         public ServerTemplate ServerTemplate { get; set; }
         [ForeignKey("UserId")]
@@ -28,6 +30,9 @@ namespace Crytex.Model.Models
         public HyperVHost HyperVHost { get; set; }
         [ForeignKey("VmWareCenterId")]
         public VmWareVCenter VmWareCenter { get; set; }
+        [ForeignKey("SubscriptionVmId")]
+        public SubscriptionVm SubscriptionVm { get; set; }
+
     }
 
 

@@ -1,6 +1,7 @@
 ﻿using System.Data.Entity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Data
 {
@@ -40,7 +41,8 @@ namespace Crytex.Data
         public DbSet<ServerTemplate> ServerTemplates { get; set; }
         public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<BillingTransaction> BillingTransactions { get; set; }
-        public DbSet<CreditPaymentOrder> CreditPaymentOrders { get; set; }
+        public DbSet<SubscriptionVm> SubscriptionVms { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<LogEntry> LogEntries { get; set; }
         public DbSet<EmailInfo> EmailInfos { get; set; }
         public DbSet<EmailTemplate> EmailTemplates { get; set; }
@@ -50,6 +52,10 @@ namespace Crytex.Data
         public DbSet<SnapshotVm> SnapshotVm { get; set; }
         public DbSet<VmWareVCenter> VmWareVCenters { get; set; }
         public DbSet<OAuthClientApplication> OAuthClientApplications { get; set; }
-        public DbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }        
+        public DbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
+
+     
+
+
     }
 }
