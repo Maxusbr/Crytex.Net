@@ -26,7 +26,7 @@ namespace Crytex.Notification
             this._userVmService = userVmService;
         }
 
-        public void Sybscribe(string vmId)
+        public void Subscribe(string vmId)
         {
             Guid VmId;
             if (!Guid.TryParse(vmId, out VmId))

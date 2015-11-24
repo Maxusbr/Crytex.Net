@@ -54,7 +54,7 @@ namespace Crytex.Data.Infrastructure
         public virtual T GetById(string id)
         {
             return dbset.Find(id);
-        }
+}
 
         public virtual T GetById(Guid id)
         {

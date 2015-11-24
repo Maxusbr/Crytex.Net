@@ -26,6 +26,7 @@ namespace Crytex.Data
 
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }
+        public DbSet<Tariff> Tariffs { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<HelpDeskRequest> HelpDeskRequests { get; set; }
         public DbSet<HelpDeskRequestComment> HelpDeskRequestComments { get; set; }
