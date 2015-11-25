@@ -28,7 +28,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Message, MessageViewModel>();
             Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
-                .ForMember(x => x.FileDescriptorIds, opt => opt.MapFrom(source => source.FileDescriptors.Select(fd => fd.Id)));
+                .ForMember(x => x.FileDescriptorParams, opt => opt.MapFrom(source => source.FileDescriptors.Select(fd => new FileDescriptorParam{Id = fd.Id, Name = fd.Name, Path = fd.Path})));
 			Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()

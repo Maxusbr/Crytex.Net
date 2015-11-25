@@ -18,7 +18,7 @@ namespace Crytex.Web.Mappings
         protected override void Configure()
         {
             Mapper.CreateMap<HelpDeskRequestViewModel, HelpDeskRequest>()
-                .ForMember(req => req.FileDescriptors, opt => opt.MapFrom(s => s.FileDescriptorIds != null ? s.FileDescriptorIds.Select(id => new FileDescriptor {Id = id }) : new FileDescriptor[0]));
+                .ForMember(req => req.FileDescriptors, opt => opt.MapFrom(s => s.FileDescriptorParams != null ? s.FileDescriptorParams.Select(p => new FileDescriptor {Id = p.Id, Name = p.Name, Path = p.Path}) : new FileDescriptor[0]));
             Mapper.CreateMap<OperatingSystemEditViewModel, OperatingSystem>();
             Mapper.CreateMap<ServerTemplateEditViewModel, ServerTemplate>();
             Mapper.CreateMap<SystemCenterVirtualManagerViewModel, SystemCenterVirtualManager>();
