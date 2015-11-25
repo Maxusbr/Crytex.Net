@@ -53,6 +53,7 @@ namespace Crytex.Data
         public DbSet<VmWareVCenter> VmWareVCenters { get; set; }
         public DbSet<OAuthClientApplication> OAuthClientApplications { get; set; }
         public DbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
 
         public DbSet<PhoneCallRequest> PhoneCallRequests { get; set; }     
 

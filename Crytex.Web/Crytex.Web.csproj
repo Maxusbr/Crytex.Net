@@ -272,8 +272,9 @@
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminLogController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminOperatingSystemController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminPhoneCallRequestController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminRegionControlle.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminPhoneCallRequestController.cs" />    
+	<Compile Include="Areas\Admin\Controllers\AdminDiscountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminRegionController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminServerTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminStateMachineController.cs" />
@@ -320,6 +321,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
+    <Compile Include="Models\JsonModels\DiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\PhoneCallRequestViewModels.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />

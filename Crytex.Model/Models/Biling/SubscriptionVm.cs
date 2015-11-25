@@ -14,6 +14,7 @@ namespace Crytex.Model.Models.Biling
         
         [ForeignKey("TariffId")]
         public Tariff Tariff { get; set; }
-  
+
+
     }
 }
