@@ -25,11 +25,11 @@ namespace Crytex.Background
 
             var Thread = new Thread((() =>
             {
-            var taskManager = UnityConfig.Resolve<ITaskManager>();
-            taskManager.RunTasks();
+                var taskManager = UnityConfig.Resolve<ITaskManager>();
+                taskManager.RunTasks();
             }));
             Thread.Start();
-            
+
             scheduler.StartScheduler();
 
             //var statisticData = new List<KeyValuePair<string, Object>>
@@ -55,18 +55,18 @@ namespace Crytex.Background
 
             //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.UsersWithLeastOneRunningMachine);
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
-            scheduler.ScheduleJob<MonitoringJob>("monitoring", "*/30 * * * * ?");
+            scheduler.ScheduleJob<MonitoringJob>("monitoring", "1/10 * * * * ?");
 
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
 
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
             //scheduler.TriggerJob(emai);
 
-            // scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "0 * * * * ?");
+           // scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }
 
-         
+
     }
 }

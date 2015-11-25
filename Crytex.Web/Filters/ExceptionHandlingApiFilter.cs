@@ -30,6 +30,11 @@ namespace Crytex.Web.Filters
                     context.Response = context.Request.CreateResponse(HttpStatusCode.Forbidden, new {errorMessage = context.Exception.Message});
                     return;
                 }
+                if(context.Exception is InvalidIdentifierException)
+                {
+                    context.Response = context.Request.CreateResponse(HttpStatusCode.NotFound, new { errorMessage = context.Exception.Message });
+                    return;
+                }
             }
             else{
                 LoggerCrytex.Logger.Error(context.Exception);

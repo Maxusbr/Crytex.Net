@@ -2,6 +2,7 @@
 using AutoMapper;
 using Crytex.Core.Service;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 using Crytex.Web.Models.JsonModels;
 using PagedList;
 using Crytex.Web.Models.ViewModels;
@@ -33,8 +34,9 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
-            Mapper.CreateMap<CreditPaymentOrder, CreditPaymentOrderViewModel>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
+            Mapper.CreateMap<Payment, PaymentView>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Guid.ToString()))
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
 
 
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
@@ -55,6 +57,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<SystemCenterVirtualManager, SystemCenterVirtualManagerViewModel>();
             Mapper.CreateMap<SnapshotVm, SnapshotVmViewModel>();
             Mapper.CreateMap<Region, RegionViewModel>();
+            Mapper.CreateMap<Tariff, TariffViewModel>();
+            Mapper.CreateMap<TariffViewModel, Tariff>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
             Mapper.CreateMap<FileDescriptor, FileDescriptorViewModel>()
                 .ForMember(x => x.Path, opt => opt.MapFrom(source => "small_" + source.Path));
@@ -63,9 +67,10 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
             Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
-            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
+            Mapper.CreateMap<Discount, DiscountViewModel>();
+            Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
-            this.MapPagedList<CreditPaymentOrder, CreditPaymentOrderViewModel>();
+            this.MapPagedList<Payment, PaymentView>();
             this.MapPagedList<UserVm, UserVmViewModel>();
             this.MapPagedList<TaskV2, TaskV2ViewModel>();
             this.MapPagedList<LogEntry, LogEntryViewModel>();
@@ -73,6 +78,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<Statistic, StatisticViewModel>();
             this.MapPagedList<EmailInfo, EmailInfoesViewModel>();
             this.MapPagedList<SnapshotVm, SnapshotVmViewModel>();
+            this.MapPagedList<PhoneCallRequest, PhoneCallRequestViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

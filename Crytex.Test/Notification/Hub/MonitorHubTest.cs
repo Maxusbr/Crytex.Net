@@ -83,7 +83,7 @@ namespace Crytex.Test.Notification.Hub
             _userVmService.GetVmById(VM.Id).Returns(VM);
             _monitorHub.OnConnected();
 
-            _monitorHub.Sybscribe(VM.Id.ToString());
+            _monitorHub.Subscribe(VM.Id.ToString());
             List<Guid> VMs = _monitorHub.GetVMs();
             NotNull(VMs);
             AreEqual(VMs.FirstOrDefault(), VM.Id);
@@ -100,7 +100,7 @@ namespace Crytex.Test.Notification.Hub
             _userVmService.GetVmById(VM.Id).Returns(VM);
             _monitorHub.OnConnected();
 
-            _monitorHub.Sybscribe(VM.Id.ToString());
+            _monitorHub.Subscribe(VM.Id.ToString());
             List<Guid> VMs = _monitorHub.GetVMs();
             IsEmpty(VMs);
         }

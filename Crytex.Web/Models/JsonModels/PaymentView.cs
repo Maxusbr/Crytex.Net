@@ -1,10 +1,11 @@
 ﻿using Crytex.Model.Models;
 using System;
 using System.ComponentModel.DataAnnotations;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Web.Models.JsonModels
 {
-    public class CreditPaymentOrderViewModel
+    public class PaymentView
     {
         public string Id { get; set; }
         [Required]
@@ -12,6 +13,9 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public PaymentSystemType? PaymentSystem { get; set; }
         public DateTime Date { get; set; }
+        public DateTime? DateEnd { get; set; }
         public string UserId { get; set; }
+        public bool Success { get; set; }
+        public string UserName { get; set; }
     }
 }

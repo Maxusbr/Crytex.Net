@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Crytex.Model.Models;
+
 namespace Crytex.Web.Models.JsonModels
 {
     public class ApplicationUserViewModel
@@ -9,6 +11,14 @@ namespace Crytex.Web.Models.JsonModels
         public string Email { get; set; }
         public string Password { get; set; }
         public bool ChangePassword { get; set; }
+
+        public string Name { get; set; }
+        public string Patronymic { get; set; }
+        public string City { get; set; }
+        public string Areas { get; set; }
+        public string Address { get; set; }
+        public string CodePhrase { get; set; }
+        public TypeUser UserType { get; set; }
 
         public bool ValidateForCreationScenario()
         {

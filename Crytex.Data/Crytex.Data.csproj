@@ -59,13 +59,17 @@
     <Compile Include="IRepository\ILogRepository.cs" />
     <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
     <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
+    <Compile Include="IRepository\IPhoneCallRequestRepository.cs" />
+	<Compile Include="IRepository\IDiscountRepository.cs" />
     <Compile Include="IRepository\ISnapshotVmRepository.cs" />
     <Compile Include="IRepository\IMessageRepository.cs" />
     <Compile Include="IRepository\IOperatingSystemRepository.cs" />
     <Compile Include="IRepository\IServerTemplateRepository.cs" />
+    <Compile Include="IRepository\ISubscriptionVmRepository.cs" />
     <Compile Include="IRepository\ISystemCenterVirtualManagerRepository.cs" />
     <Compile Include="IRepository\IStateMachineRepository.cs" />
     <Compile Include="IRepository\IStatisticRepository.cs" />
+    <Compile Include="IRepository\ITariffInfoRepository.cs" />
     <Compile Include="IRepository\IUserInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
@@ -143,6 +147,10 @@
     <Compile Include="Migrations\201511161036526_fix_16_11.Designer.cs">
       <DependentUpon>201511161036526_fix_16_11.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511241701449_Discount.cs" />
+    <Compile Include="Migrations\201511241701449_Discount.Designer.cs">
+      <DependentUpon>201511241701449_Discount.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
@@ -160,15 +168,19 @@
     <Compile Include="Repository\OAuthClientApplicationRepository.cs" />
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
+    <Compile Include="Repository\PhoneCallRequestRepository.cs" />
     <Compile Include="Repository\ServerTemplateRepository.cs" />
+    <Compile Include="Repository\SubscriptionVmRepository.cs" />
     <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />
     <Compile Include="Repository\RegionRepository.cs" />
     <Compile Include="Repository\StateMachineRepository.cs" />
+    <Compile Include="Repository\TariffInfoRepository.cs" />
     <Compile Include="Repository\TaskV2Repository.cs" />
     <Compile Include="Repository\StatisticRepository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
+    <Compile Include="Repository\DiscountRepository.cs" />
     <Compile Include="Repository\VmWareVCenterRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -240,6 +252,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511161036526_fix_16_11.resx">
       <DependentUpon>201511161036526_fix_16_11.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511241701449_Discount.resx">
+      <DependentUpon>201511241701449_Discount.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

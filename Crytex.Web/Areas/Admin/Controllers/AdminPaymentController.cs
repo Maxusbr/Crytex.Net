@@ -4,28 +4,38 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Description;
+using Crytex.Service.Model;
 
-namespace Crytex.Web.Controllers.Api
+namespace Crytex.Web.Areas.Admin
 {
-    public class CreditPaymentOrderController : CrytexApiController
+    public class AdminPaymentController : AdminCrytexController
     {
         private readonly IPaymentService _paymentService;
 
-        public CreditPaymentOrderController(IPaymentService paymentService)
+        public AdminPaymentController(IPaymentService paymentService)
         {
             this._paymentService = paymentService;
         }
 
+        /// <summary>
+        /// Получение списка Payment
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        [ResponseType(typeof(PageModel<PaymentView>))]
         // GET: api/CreditPaymentOrder
-        public IHttpActionResult Get(int pageNumber, int pageSize)
+        public IHttpActionResult Get(int pageNumber, int pageSize, SearchPaymentParams filter)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
                 return BadRequest("PageNumber and PageSize must be grater than 1");
             }
 
-            var page = this._paymentService.GetPage(pageNumber, pageSize);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<CreditPaymentOrderViewModel>>(page);
+            var page = this._paymentService.GetPage(pageNumber, pageSize, filter);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<PaymentView>>(page);
 
             return Ok(viewModel);
         }
@@ -41,13 +51,13 @@ namespace Crytex.Web.Controllers.Api
             }
 
             var order = this._paymentService.GetCreditPaymentOrderById(guid);
-            var model = AutoMapper.Mapper.Map<CreditPaymentOrderViewModel>(order);
+            var model = AutoMapper.Mapper.Map<PaymentView>(order);
 
             return Ok(model);
         }
 
         // POST: api/CreditPaymentOrder
-        public IHttpActionResult Post([FromBody]CreditPaymentOrderViewModel model)
+        public IHttpActionResult Post([FromBody]PaymentView model)
         {
             if (!ModelState.IsValid)
             {
