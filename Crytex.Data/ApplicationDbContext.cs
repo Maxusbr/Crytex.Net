@@ -55,7 +55,7 @@ namespace Crytex.Data
         public DbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
         public DbSet<Discount> Discounts { get; set; }
 
-
+        public DbSet<PhoneCallRequest> PhoneCallRequests { get; set; }     
 
 
     }

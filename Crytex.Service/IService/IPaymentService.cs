@@ -2,6 +2,7 @@
 using Crytex.Model.Models;
 using System;
 using Crytex.Model.Models.Biling;
+using Crytex.Service.Model;
 
 namespace Crytex.Service.IService
 {
@@ -13,6 +14,6 @@ namespace Crytex.Service.IService
 
         Payment GetCreditPaymentOrderById(Guid guid);
 
-        IPagedList<Payment> GetPage(int pageNumber, int pageSize);
+        IPagedList<Payment> GetPage(int pageNumber, int pageSize, SearchPaymentParams filter = null);
     }
 }

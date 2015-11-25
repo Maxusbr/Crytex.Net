@@ -16,8 +16,5 @@ namespace Crytex.Model.Models.Biling
         public Tariff Tariff { get; set; }
 
 
-        public BillingTransaction BillingTransaction { get; set; }
-
-        
     }
 }

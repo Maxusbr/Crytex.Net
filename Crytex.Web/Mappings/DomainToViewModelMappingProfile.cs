@@ -34,7 +34,8 @@ namespace Crytex.Web.Mappings
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
             Mapper.CreateMap<Payment, PaymentView>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
+                .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Guid.ToString()))
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
 
 
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
@@ -66,8 +67,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
             Mapper.CreateMap<Discount, DiscountViewModel>();
-            
-            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
+            Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<Payment, PaymentView>();
             this.MapPagedList<UserVm, UserVmViewModel>();
@@ -77,6 +77,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<Statistic, StatisticViewModel>();
             this.MapPagedList<EmailInfo, EmailInfoesViewModel>();
             this.MapPagedList<SnapshotVm, SnapshotVmViewModel>();
+            this.MapPagedList<PhoneCallRequest, PhoneCallRequestViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

@@ -35,7 +35,7 @@ namespace Crytex.Service
             container.RegisterType<IStatisticRepository, StatisticRepository>();
             container.RegisterType<ISubscriptionVmRepository, SubscriptionVmRepository>();
             container.RegisterType<IDiscountRepository, DiscountRepository>();
-
+            container.RegisterType<IPhoneCallRequestRepository, PhoneCallRequestRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
             container.RegisterType<IMessageService, MessageService>();
@@ -68,6 +68,7 @@ namespace Crytex.Service
 			container.RegisterType<IHyperVHostService, HyperVHostService>();
             container.RegisterType<IStatisticService, StatisticService>();
             container.RegisterType<ISubscriptionVmService, SubscriptionVmService>();
+            container.RegisterType<IPhoneCallRequestService, PhoneCallRequestService>();
             container.RegisterType<IDiscountService, DiscountService>();
         }
     }
