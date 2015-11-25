@@ -65,6 +65,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
             Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
+            Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<Payment, PaymentView>();
@@ -75,6 +76,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<Statistic, StatisticViewModel>();
             this.MapPagedList<EmailInfo, EmailInfoesViewModel>();
             this.MapPagedList<SnapshotVm, SnapshotVmViewModel>();
+            this.MapPagedList<PhoneCallRequest, PhoneCallRequestViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()
