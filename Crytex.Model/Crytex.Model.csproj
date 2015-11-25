@@ -86,8 +86,6 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
-    <Compile Include="Models\BillingTransaction.cs" />
-    <Compile Include="Models\CreditPaymentOrder.cs" />
     <Compile Include="Models\Biling\Payment.cs" />
     <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
