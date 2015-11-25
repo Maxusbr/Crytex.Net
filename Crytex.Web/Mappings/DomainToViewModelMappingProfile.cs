@@ -34,7 +34,8 @@ namespace Crytex.Web.Mappings
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
             Mapper.CreateMap<Payment, PaymentView>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(source => source.Guid.ToString()));
+                .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Guid.ToString()))
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
 
 
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()

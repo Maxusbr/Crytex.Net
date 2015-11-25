@@ -17,7 +17,7 @@ namespace Crytex.Model.Models.Biling
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        public string SubscriptionUserVmId { get; set; }
+        public Guid SubscriptionUserVmId { get; set; }
         [ForeignKey("SubscriptionUserVmId")]
         public SubscriptionVm UserVm { get; set; }
 

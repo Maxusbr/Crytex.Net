@@ -13,6 +13,9 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public PaymentSystemType? PaymentSystem { get; set; }
         public DateTime Date { get; set; }
+        public DateTime? DateEnd { get; set; }
         public string UserId { get; set; }
+        public bool Success { get; set; }
+        public string UserName { get; set; }
     }
 }

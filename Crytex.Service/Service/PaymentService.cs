@@ -5,7 +5,10 @@ using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
+using System.Linq.Expressions;
 using Crytex.Model.Models.Biling;
+using Crytex.Service.Extension;
+using Crytex.Service.Model;
 
 namespace Crytex.Service.Service
 {
@@ -67,9 +70,37 @@ namespace Crytex.Service.Service
         }
 
 
-        public IPagedList<Payment> GetPage(int pageNumber, int pageSize)
+        public IPagedList<Payment> GetPage(int pageNumber, int pageSize, SearchPaymentParams filter = null)
         {
-            var page = this._creditPaymentOrderRepository.GetPage(new Page(pageNumber, pageSize), (x => true), (x => x.Date));
+            Expression<Func<Payment, bool>> where = x => true;
+
+            if (filter != null)
+            {
+                if (string.IsNullOrEmpty(filter.UserId))
+                {
+                    where = where.And(p => p.UserId == filter.UserId);
+                }
+
+                if (filter.Success != null)
+                {
+                    where = where.And(p => p.Success == filter.Success);
+                }
+
+                if (filter.DateType != null)
+                {
+
+                    if (filter.DateType == DateType.StartTransaction)
+                    {
+                        where = where.And(x => x.Date >= filter.FromDate && x.Date <= filter.ToDate);
+                    }
+                    if (filter.DateType == DateType.EndTramsaction)
+                    {
+                        where = where.And(x => x.DateEnd >= filter.FromDate && x.DateEnd <= filter.ToDate);
+                    }
+                }
+            }
+
+            var page = this._creditPaymentOrderRepository.GetPage(new Page(pageNumber, pageSize), where, (x => x.Date), x=>x.User);
 
             return page;
         }

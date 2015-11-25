@@ -284,7 +284,9 @@
     <Compile Include="Areas\Admin\Controllers\AdminTaskV2Controller.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminPaymentController.cs" />
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
+    <Compile Include="Areas\User\Controllers\PaymentController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\User\Controllers\PhoneCallRequestController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
@@ -294,7 +296,6 @@
     <Compile Include="Auth\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\AccountController.cs" />
-    <Compile Include="Controllers\Api\PaymentController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />
