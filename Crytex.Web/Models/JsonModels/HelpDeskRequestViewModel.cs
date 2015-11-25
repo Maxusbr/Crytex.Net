@@ -1,5 +1,7 @@
-﻿using Crytex.Model.Models;
+﻿using Crytex.Model.Enums;
+using Crytex.Model.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Web.Models.JsonModels
@@ -23,5 +25,9 @@ namespace Crytex.Web.Models.JsonModels
         public string UserId { get; set; }
 		
 		public string UserName { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
+        public UrgencyLevel Urgency { get; set; }
+        public int[] FileDescriptorIds { get; set; }
     }
 }

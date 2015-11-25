@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Crytex.Model.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,6 +7,10 @@ namespace Crytex.Model.Models
 {
     public class HelpDeskRequest : BaseEntity
     {
+        // Имя автора вопроса. Не путать с имененем зарегистрированного юзера.
+        public string AskerName { get; set; }
+        public string Email { get; set; }
+        public UrgencyLevel Urgency { get; set; }
         public string Summary { get; set; }
 
         public string Details { get; set; }
@@ -23,6 +28,8 @@ namespace Crytex.Model.Models
         
         [InverseProperty("Request")]
         public virtual ICollection<HelpDeskRequestComment> Comments { get; set; }
+
+        public virtual ICollection<FileDescriptor> FileDescriptors { get; set; }
     }
 
     public enum RequestStatus

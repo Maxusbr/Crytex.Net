@@ -7,7 +7,7 @@ namespace Crytex.Service.IService
 {
     public interface IHelpDeskRequestService
     {
-        HelpDeskRequest CreateNew(string summary, string details, string userId);
+        HelpDeskRequest CreateNew(HelpDeskRequest request);
 
         void Update(HelpDeskRequest request);
 
