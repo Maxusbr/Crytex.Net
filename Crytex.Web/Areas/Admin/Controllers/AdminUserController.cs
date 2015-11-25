@@ -6,6 +6,7 @@ using Crytex.Web.Models.JsonModels;
 using System;
 using System.Web.Http.Description;
 using Microsoft.AspNet.Identity;
+using Microsoft.Owin.BuilderProperties;
 
 namespace Crytex.Web.Areas.Admin
 {
@@ -67,7 +68,17 @@ namespace Crytex.Web.Areas.Admin
                 return BadRequest("Some params are empty. UserName, Password and Email are required");
             }
 
-            var newUser = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+            var newUser = new ApplicationUser {
+                UserName = model.UserName,
+                Email = model.Email,
+                Name = model.Name,
+                Patronymic = model.Patronymic,
+                City = model.City,
+                Areas = model.Areas,
+                Address = model.Address,
+                CodePhrase = model.CodePhrase,
+                UserType = model.UserType
+            };
 
             var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
             if (!creationResult.Succeeded)
@@ -115,6 +126,15 @@ namespace Crytex.Web.Areas.Admin
                 {
                     user.Email = model.Email;
                 }
+
+                user.Name = model.Name;
+                user.Patronymic = model.Patronymic;
+                user.City = model.City;
+                user.Areas = model.Areas;
+                user.Address = model.Address;
+                user.CodePhrase = model.CodePhrase;
+                user.UserType = model.UserType;
+
                 var updateResult = this.UserManager.Update(user);
 
                 if (!updateResult.Succeeded)
