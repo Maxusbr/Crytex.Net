@@ -10,7 +10,7 @@ namespace Crytex.Data.Migrations
                 "dbo.BillingTransactions",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
+                        Id = c.Guid(nullable: false, identity: true),
                         UserId = c.String(maxLength: 128),
                         TransactionType = c.Int(nullable: false),
                         Date = c.DateTime(nullable: false),

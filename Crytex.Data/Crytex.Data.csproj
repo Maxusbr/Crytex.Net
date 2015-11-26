@@ -49,6 +49,7 @@
     <Compile Include="IRepository\IApplicationUserRepository.cs" />
     <Compile Include="IRepository\IBillingTransactionRepository.cs" />
     <Compile Include="IRepository\ICreditPaymentOrderRepository.cs" />
+    <Compile Include="IRepository\IDiscountRepository.cs" />
     <Compile Include="IRepository\IEmailInfoRepository.cs" />
     <Compile Include="IRepository\IEmailTemplateRepository.cs" />
     <Compile Include="IRepository\IFileDescriptorRepository.cs" />
@@ -60,7 +61,6 @@
     <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
     <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
     <Compile Include="IRepository\IPhoneCallRequestRepository.cs" />
-	<Compile Include="IRepository\IDiscountRepository.cs" />
     <Compile Include="IRepository\ISnapshotVmRepository.cs" />
     <Compile Include="IRepository\IMessageRepository.cs" />
     <Compile Include="IRepository\IOperatingSystemRepository.cs" />
@@ -146,10 +146,6 @@
     <Compile Include="Migrations\201511161036526_fix_16_11.cs" />
     <Compile Include="Migrations\201511161036526_fix_16_11.Designer.cs">
       <DependentUpon>201511161036526_fix_16_11.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511241701449_Discount.cs" />
-    <Compile Include="Migrations\201511241701449_Discount.Designer.cs">
-      <DependentUpon>201511241701449_Discount.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -252,9 +248,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201511161036526_fix_16_11.resx">
       <DependentUpon>201511161036526_fix_16_11.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511241701449_Discount.resx">
-      <DependentUpon>201511241701449_Discount.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
