@@ -16,7 +16,11 @@ namespace Crytex.Model.Models.Biling
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-     
+
+        public Guid? BillingTransactionId { get; set; }
+
+        [ForeignKey("BillingTransactionId")]
+        public virtual SubscriptionVm SubscriptionVm { get; set; }
     }
 
     public enum BillingTransactionType

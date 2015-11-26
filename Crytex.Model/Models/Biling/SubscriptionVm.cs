@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Crytex.Model.Models.Biling
@@ -15,9 +16,7 @@ namespace Crytex.Model.Models.Biling
         [ForeignKey("TariffId")]
         public Tariff Tariff { get; set; }
 
-        public Guid BillingTransactionId { get; set; }
-        [ForeignKey("BillingTransactionId")]
-        public virtual BillingTransaction BillingTransaction { get; set; }
+        public virtual ICollection<BillingTransaction> BillingTransaction { get; set; }
 
     }
 }
