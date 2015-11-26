@@ -77,6 +77,7 @@
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Enums\EnumApplicationType.cs" />
+    <Compile Include="Enums\UrgencyLevel.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
     <Compile Include="Exceptions\CreateVmException.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\BaseEntity.cs" />
+    <Compile Include="Models\Biling\BillingTransaction.cs" />
     <Compile Include="Models\Biling\Payment.cs" />
     <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
