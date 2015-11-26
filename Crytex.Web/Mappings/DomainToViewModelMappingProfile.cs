@@ -60,6 +60,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Tariff, TariffViewModel>();
             Mapper.CreateMap<TariffViewModel, Tariff>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
+            Mapper.CreateMap<BillingTransaction, BillingViewModel>();
             Mapper.CreateMap<FileDescriptor, FileDescriptorViewModel>()
                 .ForMember(x => x.Path, opt => opt.MapFrom(source => "small_" + source.Path));
             Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>()
