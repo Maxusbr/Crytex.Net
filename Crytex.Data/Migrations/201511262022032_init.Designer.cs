@@ -7,13 +7,13 @@ namespace Crytex.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class ServerTemplateAndOperatingSystemMigration : IMigrationMetadata
+    public sealed partial class init : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ServerTemplateAndOperatingSystemMigration));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(init));
         
         string IMigrationMetadata.Id
         {
-            get { return "201508100815035_ServerTemplateAndOperatingSystemMigration"; }
+            get { return "201511262022032_init"; }
         }
         
         string IMigrationMetadata.Source
