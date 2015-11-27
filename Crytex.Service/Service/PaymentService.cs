@@ -76,7 +76,7 @@ namespace Crytex.Service.Service
 
             if (filter != null)
             {
-                if (string.IsNullOrEmpty(filter.UserId))
+                if (!string.IsNullOrEmpty(filter.UserId))
                 {
                     where = where.And(p => p.UserId == filter.UserId);
                 }

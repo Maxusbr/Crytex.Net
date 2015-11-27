@@ -27,7 +27,7 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         [ResponseType(typeof(PageModel<PaymentView>))]
         // GET: api/CreditPaymentOrder
-        public IHttpActionResult Get(int pageNumber, int pageSize, SearchPaymentParams filter)
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]SearchPaymentParams filter)
         {
             if (pageNumber <= 0 || pageSize <= 0)
             {
