@@ -8,6 +8,7 @@ namespace Crytex.Web.Models.JsonModels
 {
     public class DiscountViewModel
     {
+        public int Id { get; set; }
         public int Count { get; set; }
         public double DiscountSize { get; set; }
         public bool Disable { get; set; }

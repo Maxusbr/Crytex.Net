@@ -10,5 +10,6 @@ namespace Crytex.Service.IService
         Discount CreateDiscount(Discount newDiscount);
         void UpdateDiscount(Discount updatedDiscount);
         void DeleteDiscountById(int id);
+        void UpdateDisable(bool disable, TypeDiscount discountType);
     }
 }

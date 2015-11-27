@@ -30,6 +30,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<TaskV2SearchParamsViewModel, TaskV2SearchParams>();
             Mapper.CreateMap<PhoneCallRequestViewModel, PhoneCallRequest>();
             Mapper.CreateMap<PhoneCallRequestEditViewModel, PhoneCallRequest>();
+            Mapper.CreateMap<DiscountViewModel, Discount>();
         }
     }
 }

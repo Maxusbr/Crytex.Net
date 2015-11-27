@@ -76,6 +76,17 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
+        public void UpdateDisable(bool disable, TypeDiscount discountType)
+        {
+            var discounts = this._discountRepository.GetMany(d => d.DiscountType == discountType);
+            for (int i = 0; i < discounts.Count; i++)
+            {
+                discounts[i].Disable = disable;
+            }
+
+            this._unitOfWork.Commit();
+        }
+
 
     }
 }

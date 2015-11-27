@@ -84,5 +84,21 @@ namespace Crytex.Web.Areas.Admin
             this._discountService.DeleteDiscountById(id);
             return Ok();
         }
+
+        /// <summary>
+        /// Обновление DiscountDisable
+        /// </summary>
+        /// <param name="disable"></param>
+        /// <param name="typeDiscount"></param>
+        /// <returns></returns>
+        // POST: api/AdminDiscount/BlockType/5
+        [HttpPost]//api/Admin/AdminStatistic/method/summary
+        [Route("api/Admin/AdminDiscount/BlockType/{typeDiscount}/{disable}")]
+        public IHttpActionResult BlockType(TypeDiscount typeDiscount, bool disable)
+        {
+            this._discountService.UpdateDisable(disable, typeDiscount);
+
+            return Ok(disable);
+        }
     }
 }
