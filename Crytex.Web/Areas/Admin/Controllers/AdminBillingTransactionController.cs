@@ -52,10 +52,28 @@ namespace Crytex.Web.Areas.Admin.Controllers
             else
             {
                 transactions = _billingService.GetPageBillingTransaction(pageNumber, pageSize);
-            }
+            }           
 
             var viewTransactions = AutoMapper.Mapper.Map<PageModel<BillingViewModel>>(transactions);
             return Ok(viewTransactions);
+        }
+
+
+        /// <summary>
+        /// Получение BillingTransaction по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/Admin/AdminBillingTransaction/1
+        [ResponseType(typeof(BillingViewModel))]
+        public IHttpActionResult Get(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+                return BadRequest("Invalid Guid format");
+            var transaction = _billingService.GetTransactionById(guid);
+            var viewTransaction = AutoMapper.Mapper.Map<BillingViewModel>(transaction);
+            return Ok(viewTransaction);
         }
     }
 }

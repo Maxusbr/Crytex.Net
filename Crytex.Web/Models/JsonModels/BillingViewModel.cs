@@ -15,6 +15,6 @@ namespace Crytex.Web.Models.JsonModels
         public BillingTransactionType TransactionType { get; set; }
         public decimal CashAmount { get; set; }
         public string Description { get; set; }        
-        public string SubscriptionUserVmId { get; set; }
+        public string SubscriptionVmId { get; set; }
     }
 }

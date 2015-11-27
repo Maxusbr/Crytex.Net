@@ -12,5 +12,6 @@ namespace Crytex.Service.IService
     public interface IBilingService
     {
         IPagedList<BillingTransaction> GetPageBillingTransaction(int pageNumber, int pageSize, BillingSearchParams searchParams = null);
+        BillingTransaction GetTransactionById(Guid id);
     }
 }
