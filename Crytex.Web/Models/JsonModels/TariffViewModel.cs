@@ -27,6 +27,10 @@ namespace Crytex.Web.Models.JsonModels
 
         [Required]
         public Double SSD1 { get; set; }
+
+        [Required]
+        public Double Load10Percent { get; set; }
+
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }
     }

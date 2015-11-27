@@ -73,12 +73,13 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public double CalculateTotalPrice(double processor, double HDD, double SSD, double RAM512, Tariff tariff)
+        public double CalculateTotalPrice(double processor, double HDD, double SSD, double RAM512, double load10Percent, Tariff tariff)
         {
             double totalPrice = processor * tariff.Processor1 +
                                 HDD * tariff.HDD1 +
                                 SSD * tariff.SSD1 +
-                                RAM512 * tariff.RAM512;
+                                RAM512 * tariff.RAM512 +
+                                load10Percent * tariff.Load10Percent;
             return totalPrice;
         }
     }
