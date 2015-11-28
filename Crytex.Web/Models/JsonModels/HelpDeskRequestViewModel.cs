@@ -28,6 +28,15 @@ namespace Crytex.Web.Models.JsonModels
         [EmailAddress]
         public string Email { get; set; }
         public UrgencyLevel Urgency { get; set; }
-        public int[] FileDescriptorIds { get; set; }
+
+        public List<FileDescriptorParam> FileDescriptorParams { get; set; }
     }
+
+    public class FileDescriptorParam
+    {
+        public int Id { get; set; }
+        public string Path { get; set; }
+        public string Name { get; set; }
+    }
+
 }
