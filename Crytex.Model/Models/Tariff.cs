@@ -9,6 +9,7 @@ namespace Crytex.Model.Models
         public Double RAM512 { get; set; }
         public Double HDD1 { get; set; }
         public Double SSD1 { get; set; }
+        public Double Load10Percent { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }        
     }
