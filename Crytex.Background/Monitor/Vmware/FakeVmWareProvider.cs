@@ -112,5 +112,10 @@ namespace Crytex.Background.Monitor.Vmware
         {
             throw new NotImplementedException();
         }
+
+        public NetTrafficInfo GetNetTraffic(string machineName, DateTime from, DateTime? to = default(DateTime?))
+        {
+            throw new NotImplementedException();
+        }
     }
 }

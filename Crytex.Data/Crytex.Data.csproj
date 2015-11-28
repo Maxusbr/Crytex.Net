@@ -58,6 +58,7 @@
     <Compile Include="IRepository\IHyperVHostRepository.cs" />
     <Compile Include="IRepository\IHyperVHostResourceRepository.cs" />
     <Compile Include="IRepository\ILogRepository.cs" />
+    <Compile Include="IRepository\INetTrafficCounterRepository.cs" />
     <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
     <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
     <Compile Include="IRepository\IPhoneCallRequestRepository.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Repository\HyperVHostResourceRepository.cs" />
     <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\MessageRepository.cs" />
+    <Compile Include="Repository\NetTrafficCounterRepository.cs" />
     <Compile Include="Repository\OAuthClientApplicationRepository.cs" />
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
