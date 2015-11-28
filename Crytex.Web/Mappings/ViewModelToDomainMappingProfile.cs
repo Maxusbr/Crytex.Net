@@ -31,6 +31,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhoneCallRequestViewModel, PhoneCallRequest>();
             Mapper.CreateMap<PhoneCallRequestEditViewModel, PhoneCallRequest>();
             Mapper.CreateMap<AdminBillingSearchParamsViewModel, BillingSearchParams>();
+            Mapper.CreateMap<DiscountViewModel, Discount>();
         }
     }
 }
