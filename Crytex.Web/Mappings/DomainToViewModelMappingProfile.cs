@@ -28,7 +28,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Message, MessageViewModel>();
             Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
-                .ForMember(x => x.FileDescriptorIds, opt => opt.MapFrom(source => source.FileDescriptors.Select(fd => fd.Id)));
+                .ForMember(x => x.FileDescriptorParams, opt => opt.MapFrom(source => source.FileDescriptors.Select(fd => new FileDescriptorParam{Id = fd.Id, Name = fd.Name, Path = fd.Path})));
 			Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
@@ -60,6 +60,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Tariff, TariffViewModel>();
             Mapper.CreateMap<TariffViewModel, Tariff>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
+            Mapper.CreateMap<BillingTransaction, BillingViewModel>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
             Mapper.CreateMap<FileDescriptor, FileDescriptorViewModel>()
                 .ForMember(x => x.Path, opt => opt.MapFrom(source => "small_" + source.Path));
             Mapper.CreateMap<ServerTemplate, ServerTemplateViewModel>()
@@ -73,6 +75,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<Payment, PaymentView>();
             this.MapPagedList<UserVm, UserVmViewModel>();
             this.MapPagedList<TaskV2, TaskV2ViewModel>();
+            this.MapPagedList<BillingTransaction, BillingViewModel>();
             this.MapPagedList<LogEntry, LogEntryViewModel>();
             this.MapPagedList<ApplicationUser, ApplicationUserViewModel>();
             this.MapPagedList<Statistic, StatisticViewModel>();
