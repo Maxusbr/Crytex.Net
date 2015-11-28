@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Crytex.Model.Models.Biling
 {
-    public class BillingTransaction : BaseEntity
+    public class BillingTransaction : GuidBaseEntity
     {
       
         public BillingTransactionType TransactionType { get; set; }
@@ -12,17 +12,15 @@ namespace Crytex.Model.Models.Biling
        
         public string Description { get; set; }
 
-
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
-        public Guid SubscriptionUserVmId { get; set; }
-        [ForeignKey("SubscriptionUserVmId")]
-        public virtual SubscriptionVm UserVm { get; set; }
 
+        public Guid? SubscriptionVmId { get; set; }
 
-
+        [ForeignKey("SubscriptionVmId")]
+        public virtual SubscriptionVm SubscriptionVm { get; set; }
     }
 
     public enum BillingTransactionType

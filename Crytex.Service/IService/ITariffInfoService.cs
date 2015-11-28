@@ -9,7 +9,7 @@ namespace Crytex.Service.IService
         Tariff GetTariffById(Guid id);
         Tariff GetTariffByVirtualization(TypeVirtualization virtualization);
         Tariff CreateTariff(Tariff createTariff);
-        double CalculateTotalPrice(double processor, double HDD, double SSD, double RAM512, Tariff tariff);
+        double CalculateTotalPrice(double processor, double HDD, double SSD, double RAM512, double Load10Percent, Tariff tariff);
         void UpdateTariff(Tariff updateTariff);
     }
 }

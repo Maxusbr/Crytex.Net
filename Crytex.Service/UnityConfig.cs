@@ -20,6 +20,7 @@ namespace Crytex.Service
             container.RegisterType<IOperatingSystemRepository, OperatingSystemRepository>();
             container.RegisterType<IServerTemplateRepository, ServerTemplateRepository>();
             container.RegisterType<IBillingTransactionRepository, BillingTransactionRepository>();
+            container.RegisterType<IBilingService, BilingService>();
             container.RegisterType<IUserInfoRepository, UserInfoRepository>();
             container.RegisterType<ICreditPaymentOrderRepository, CreditPayementOrderRepository>();
             container.RegisterType<IUserVmRepository, UserVmRepository>();
