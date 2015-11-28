@@ -7,6 +7,7 @@ using Crytex.Web.Models.JsonModels;
 using PagedList;
 using Crytex.Web.Models.ViewModels;
 using Crytex.Model.Models.Notifications;
+using Crytex.Web.Models;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
@@ -59,6 +60,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Region, RegionViewModel>();
             Mapper.CreateMap<Tariff, TariffViewModel>();
             Mapper.CreateMap<TariffViewModel, Tariff>();
+            Mapper.CreateMap<ApplicationUser, SimpleApplicationUserViewModel>();
             Mapper.CreateMap<TaskV2, TaskV2ViewModel>();
             Mapper.CreateMap<BillingTransaction, BillingViewModel>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
@@ -72,6 +74,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Discount, DiscountViewModel>();
             Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
+            this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
             this.MapPagedList<Payment, PaymentView>();
             this.MapPagedList<UserVm, UserVmViewModel>();
             this.MapPagedList<TaskV2, TaskV2ViewModel>();

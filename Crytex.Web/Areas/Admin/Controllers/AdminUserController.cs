@@ -5,6 +5,7 @@ using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
 using System.Web.Http.Description;
+using Crytex.Web.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.BuilderProperties;
 
@@ -54,6 +55,25 @@ namespace Crytex.Web.Areas.Admin
             var user = _applicationUserService.GetUserById(id);
             var model = AutoMapper.Mapper.Map<ApplicationUser, ApplicationUserViewModel>(user);
             return Ok(model);
+        }
+
+        /// <summary>
+        /// Поиск пользователя по email или userName
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
+        // GET api/Admin/UserSearch
+        [Route("api/Admin/UserSearch")]
+        [HttpGet]
+        [ResponseType(typeof(List<SimpleApplicationUserViewModel>))]
+        public IHttpActionResult Search(string searchValue)
+        {
+            if (string.IsNullOrEmpty(searchValue))
+                return Ok("Username or Email is null or empty.");
+
+            var users = _applicationUserService.Search(searchValue);
+            var models = AutoMapper.Mapper.Map<List<ApplicationUser>, List<SimpleApplicationUserViewModel>>(users);
+            return Ok(models);
         }
 
         /// <summary>
