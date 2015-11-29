@@ -43,6 +43,11 @@ namespace Crytex.Service.Service
             return _applicationUserRepository.GetById(id);
         }
 
+        public List<ApplicationUser> Search(string searchParam)
+        {
+            return _applicationUserRepository.GetMany(x => x.UserName.Contains(searchParam) || x.Email.Contains(searchParam));
+        }
+
         public void DeleteUser(ApplicationUser user)
         {
             _userVmRepository.Delete(v=>v.UserId == user.Id);
