@@ -379,7 +379,7 @@ namespace Crytex.Data.Migrations
             return start.AddDays(gen.Next(range));
         }
 
-        public static DateTime RandomDateCurrentMonth(DateTime dateNow)
+        private DateTime RandomDateCurrentMonth(DateTime dateNow)
         {
             Random gen = new Random();
             return new DateTime(dateNow.Year, dateNow.Month, gen.Next(1, 29));
