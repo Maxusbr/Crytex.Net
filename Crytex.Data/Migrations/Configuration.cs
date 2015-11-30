@@ -274,7 +274,7 @@ namespace Crytex.Data.Migrations
                         MinCoreCount = 2,
                         MinRamCount = 512,
                         MinHardDriveSize = 50000,
-                        ImageFileId = 1,//image.Id,
+                        ImageFileId = image.Id,
                         OperatingSystemId = operations[target].Id,
                     };
 
@@ -324,7 +324,7 @@ namespace Crytex.Data.Migrations
                             var transaction = new BillingTransaction
                             {
                                 TransactionType = (BillingTransactionType)typeTrans,
-                                Date = DateTime.Now,
+                                Date = RandomDateCurrentMonth(DateTime.UtcNow),
                                 CashAmount = cash,
                                 Description = "description transaction on" + cash + "$",
                                 UserId = userMoney.Id,
@@ -338,11 +338,12 @@ namespace Crytex.Data.Migrations
                         foreach (var typePayment in valuesPayment)
                         {
                             var cash = random.Next(200, 1000);
+                            var startDate = RandomDateCurrentMonth(DateTime.UtcNow);
                             var payment = new Payment
                             {
                                 CashAmount = cash,
-                                Date = DateTime.UtcNow,
-                                DateEnd = DateTime.UtcNow.AddHours(1),
+                                Date = startDate,
+                                DateEnd = startDate.AddHours(1),
                                 UserId = userMoney.Id,
                                 Success = (random.Next(2) > 0),
                                 PaymentSystem = (PaymentSystemType)typePayment
@@ -376,6 +377,12 @@ namespace Crytex.Data.Migrations
 
             int range = (DateTime.Today - start).Days;
             return start.AddDays(gen.Next(range));
+        }
+
+        public static DateTime RandomDateCurrentMonth(DateTime dateNow)
+        {
+            Random gen = new Random();
+            return new DateTime(dateNow.Year, dateNow.Month, gen.Next(1, 29));
         }
 
         private string CreateImage()
