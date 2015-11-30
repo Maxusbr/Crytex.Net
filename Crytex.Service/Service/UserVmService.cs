@@ -37,6 +37,11 @@ namespace Crytex.Service.Service
             return _userVmRepo.GetMany(x=>x.VurtualizationType == TypeVirtualization.HyperV);
         }
 
+        public IEnumerable<UserVm> GetAllVmsVmWare()
+        {
+            return _userVmRepo.GetMany(x => x.VurtualizationType == TypeVirtualization.VmWare);
+        }
+
         public IEnumerable<UserVm> GetVmByListId(List<Guid> listId)
         {
             
@@ -118,6 +123,5 @@ namespace Crytex.Service.Service
             this._userVmRepo.Update(userVm);
             this._unitOfWork.Commit();
         }
-
     }
 }

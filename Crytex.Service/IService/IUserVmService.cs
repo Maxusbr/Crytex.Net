@@ -20,5 +20,7 @@ namespace Crytex.Service.IService
         IEnumerable<UserVm> GetVmByListId(List<Guid> listId);
 
         IEnumerable<UserVm> GetAllVmsHyperV();
+
+        IEnumerable<UserVm> GetAllVmsVmWare();
     }
 }

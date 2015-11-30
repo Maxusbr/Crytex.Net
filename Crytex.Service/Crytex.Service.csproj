@@ -92,7 +92,7 @@
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
-    <Compile Include="IService\InetTrafficCounterService.cs" />
+    <Compile Include="IService\INetTrafficCounterService.cs" />
     <Compile Include="IService\IOAuthService.cs" />
     <Compile Include="IService\IPhoneCallRequestService.cs" />
     <Compile Include="IService\IDiscountService.cs" />

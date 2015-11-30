@@ -1,6 +1,12 @@
-﻿namespace Crytex.Service.IService
+﻿using Crytex.Model.Models;
+using System;
+
+namespace Crytex.Service.IService
 {
-    public interface InetTrafficCounterService
+    public interface INetTrafficCounterService
     {
+        NetTrafficCounter GetCurrentDayCounterForVm(Guid machineId);
+        NetTrafficCounter CreateCounterForToday(Guid machineId);
+        void UpdateCounter(NetTrafficCounter counter);
     }
 }
