@@ -118,17 +118,16 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)
         {
-            var vmWareProvider = new VmWareProvider(vCenter.UserName, vCenter.Password, vCenter.ServerAddress);
-            var control = new VmWareControl(vmWareProvider);
+      
+            var control = new FakeVmWareControl(null);
 
             return control;
         }
 
         private IHyperVControl CreateHyperVControl(TaskV2 task, HyperVHost host)
         {
-            var configuration = new HyperVConfiguration(host.UserName, host.Password, host.Host);
-            var hyperVProvider = new HyperVProvider(configuration);
-            var control = new FakeHyperVControl(hyperVProvider);
+     
+            var control = new FakeHyperVControl(null);
 
             return control;
         }

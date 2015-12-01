@@ -62,9 +62,9 @@ namespace Crytex.Background
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
             //scheduler.TriggerJob(emai);
 
-            // scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
-            scheduler.ScheduleJob<NetTrafficCounterUpdateJob>("net traffic", "0 */15 * * * ?");
+            //scheduler.ScheduleJob<NetTrafficCounterUpdateJob>("net traffic", "0 */15 * * * ?");
 
             LoggerCrytex.Logger.Info("Hello from Background");
         }

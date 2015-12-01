@@ -21,7 +21,7 @@ namespace Crytex.Data.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            CreateFakeEntries = false;
+            CreateFakeEntries = true;
         }
         protected  override void Seed(ApplicationDbContext context)
         {

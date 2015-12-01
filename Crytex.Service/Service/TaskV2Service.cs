@@ -109,7 +109,7 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var list = this._taskV2Repo.GetPage(page, where, x => x.Id);
+            var list = this._taskV2Repo.GetPage(page, where, x => x.CompletedAt);
             return list;
         }
 
