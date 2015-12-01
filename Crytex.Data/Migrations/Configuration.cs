@@ -10,6 +10,7 @@ using Crytex.Model.Models;
 using Crytex.Model.Enums;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using System.IO;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Data.Migrations
 {
@@ -20,11 +21,10 @@ namespace Crytex.Data.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            CreateFakeEntries = true;
+            CreateFakeEntries = false;
         }
-        protected override void Seed(ApplicationDbContext context)
+        protected  override void Seed(ApplicationDbContext context)
         {
-            
 
             if (!context.OAuthClientApplications.Any())
             {
@@ -60,7 +60,7 @@ namespace Crytex.Data.Migrations
                     UserName = "username",
                     Password = "password",
                     Host = "51.254.55.136",
-                    
+
                 };
                 context.SystemCenterVirtualManagers.Add(systemCenter);
                 context.Commit();
@@ -133,7 +133,7 @@ namespace Crytex.Data.Migrations
                     }
                 }
 
-                // ///////////////////////////////////
+                ///////////////////////////////////
 
                 for (int i = 1; i < 6; i++)
                 {
@@ -249,7 +249,7 @@ namespace Crytex.Data.Migrations
                         Description = "Description",
                         ImageFileId = image.Id,
                         ServerTemplateName = "ServerTemplateName",
-                        Family = OperatingSystemFamily.Windows2012,
+                        Family = (OperatingSystemFamily)i,
                         DefaultAdminPassword = "Password123"
                     };
                     if (allOperations.All(o => o.Name != operations[i].Name))
@@ -260,36 +260,111 @@ namespace Crytex.Data.Migrations
 
                 context.Commit();
 
-                for (int i = 0; i < 2; i++)
+                ServerTemplate[] serverTemplates = new ServerTemplate[4];
+                var allTemplates = context.ServerTemplates.ToList();
+                for (int i = 0; i < 4; i++)
                 {
-                    var serverTemplate = new ServerTemplate
+                    var name = (i < 2) ? "ServerTemplateWindow" : "ServerTemplateUbuntu";
+                    var target = (i < 2) ? 0 : 1;
+
+                    serverTemplates[i] = new ServerTemplate
                     {
-                        Name = "Name" + i,
+                        Name = name + i,
                         Description = "Description",
-                        MinCoreCount = 20,
-                        MinRamCount = 300,
-                        MinHardDriveSize = 4000,
+                        MinCoreCount = 2,
+                        MinRamCount = 512,
+                        MinHardDriveSize = 50000,
                         ImageFileId = image.Id,
-                        OperatingSystemId = operations[0].Id,
-                        
+                        OperatingSystemId = operations[target].Id,
                     };
-                    context.ServerTemplates.Add(serverTemplate);
+
+                    if (allTemplates.All(o => o.Name != serverTemplates[i].Name))
+                        context.ServerTemplates.Add(serverTemplates[i]);
+                    else
+                        serverTemplates[i] = allTemplates.First(o => o.Name == serverTemplates[i].Name);
+                }
+                context.Commit();
+
+                var allMachine = context.UserVms.ToList();
+                for (int i = 1; i < 3; i++)
+                {
+                    var adminUser = allUsers.First(u => u.UserName == "AdminUser" + i);
+                    for (int c = 0; c < 4; c++)
+                    {
+                        var vm = new UserVm
+                        {
+                            Id = Guid.NewGuid(),
+                            HardDriveSize = 50000,
+                            CoreCount = 2,
+                            RamCount = 512,
+                            Status = StatusVM.Disable,
+                            UserId = adminUser.Id,
+                            ServerTemplateId = serverTemplates[c].Id,
+                            Name = "Machine " + i + "" + c,
+                            VurtualizationType = (c < 2) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
+                            OperatingSystemPassword = "1111"
+                        };
+                        if (allMachine.All(o => o.Name != vm.Name))
+                            context.UserVms.Add(vm);
+                    }
                 }
 
-                for (int i = 0; i < 2; i++)
+                for (int i = 1; i < 5; i++)
                 {
-                    var serverTemplate = new ServerTemplate
+                    var userMoney = allUsers.First(u => u.UserName == "User" + i);
+                    var valuesTransaction = Enum.GetValues(typeof(BillingTransactionType));
+                    var valuesPayment = Enum.GetValues(typeof(PaymentSystemType));
+                    Random random = new Random();
+
+                    for (int b = 0; b < 2; b++)
                     {
-                        Name = "Name" + i,
-                        Description = "Description",
-                        MinCoreCount = 20,
-                        MinRamCount = 300,
-                        MinHardDriveSize = 4000,
-                        ImageFileId = image.Id,
-                        OperatingSystemId = operations[1].Id,
-                    };
-                    context.ServerTemplates.Add(serverTemplate);
+                        foreach (var typeTrans in valuesTransaction)
+                        {
+                            var cash = random.Next(200, 1000);
+                            var transaction = new BillingTransaction
+                            {
+                                TransactionType = (BillingTransactionType)typeTrans,
+                                Date = RandomDateCurrentMonth(DateTime.UtcNow),
+                                CashAmount = cash,
+                                Description = "description transaction on" + cash + "$",
+                                UserId = userMoney.Id,
+                            };
+                            context.BillingTransactions.Add(transaction);
+                        }
+                    }
+
+                    for (int b = 0; b < 2; b++)
+                    {
+                        foreach (var typePayment in valuesPayment)
+                        {
+                            var cash = random.Next(200, 1000);
+                            var startDate = RandomDateCurrentMonth(DateTime.UtcNow);
+                            var payment = new Payment
+                            {
+                                CashAmount = cash,
+                                Date = startDate,
+                                DateEnd = startDate.AddHours(1),
+                                UserId = userMoney.Id,
+                                Success = (random.Next(2) > 0),
+                                PaymentSystem = (PaymentSystemType)typePayment
+                            };
+                            context.Payments.Add(payment);
+                        }
+                    }
                 }
+                for (int i = 0; i < 10; i++)
+                {
+                    Random random = new Random();
+                    var call = new PhoneCallRequest
+                    {
+                        PhoneNumber = "38067777827" + i,
+                        CreationDate = DateTime.UtcNow,
+                        IsRead = (random.Next(2) > 0)
+                    };
+                    context.PhoneCallRequests.Add(call);
+                }
+
+
             }
 
             context.Commit();
@@ -304,6 +379,12 @@ namespace Crytex.Data.Migrations
             return start.AddDays(gen.Next(range));
         }
 
+        private DateTime RandomDateCurrentMonth(DateTime dateNow)
+        {
+            Random gen = new Random();
+            return new DateTime(dateNow.Year, dateNow.Month, gen.Next(1, 29));
+        }
+
         private string CreateImage()
         {
             var rootFolder = Directory.GetParent(@"./").FullName;
@@ -313,7 +394,7 @@ namespace Crytex.Data.Migrations
 
             string nameFile = "ImageTest.jpg";
             newFilePath += @"\small_" + nameFile;
-            
+
             string currentFilePath = rootFolder + @"\" + nameFile;
             File.Copy(currentFilePath, newFilePath, true);
 
