@@ -2,14 +2,14 @@
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models.Biling;
-using Crytex.Service.IService.ISecureService;
+using Crytex.Service.IService;
 using Microsoft.AspNet.Identity;
 using System;
 using System.Security.Principal;
 
-namespace Crytex.Service.Service
+namespace Crytex.Service.Service.SecureService
 {
-    public class SecurePaymentService : PaymentService, ISecurePaymentService
+    public class SecurePaymentService : PaymentService, IPaymentService
     {
         private readonly IIdentity _userIdentity;
 

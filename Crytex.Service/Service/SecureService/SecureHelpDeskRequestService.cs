@@ -2,13 +2,13 @@
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
-using Crytex.Service.IService.ISecureService;
+using Crytex.Service.IService;
 using Microsoft.AspNet.Identity;
 using System.Security.Principal;
 
 namespace Crytex.Service.Service.SecureService
 {
-    public class SecureHelpDeskRequestService : HelpDeskRequestService, ISecureHelpDeskRequestService
+    public class SecureHelpDeskRequestService : HelpDeskRequestService, IHelpDeskRequestService
     {
         private readonly IIdentity _userIdentity;
 

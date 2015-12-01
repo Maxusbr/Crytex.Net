@@ -12,7 +12,7 @@ using NUnit.Framework;
 using PagedList;
 using static NUnit.Framework.Assert;
 using Crytex.Web.Areas.User;
-using Crytex.Service.IService.ISecureService;
+using Crytex.Service.IService;
 
 namespace Crytex.Test.Controllers
 {
@@ -23,7 +23,7 @@ namespace Crytex.Test.Controllers
 
         IUserInfoProvider _userInfoProvider { get; set; }
 
-        ISecureHelpDeskRequestService _helpDeskRequestService { get; set; }
+        IHelpDeskRequestService _helpDeskRequestService { get; set; }
 
         HelpDeskRequestController _helpDeskRequestController { get; set; }
 
@@ -31,7 +31,7 @@ namespace Crytex.Test.Controllers
         public void Init()
         {
             AutoMapperConfiguration.Configure();
-            _helpDeskRequestService = Substitute.For<ISecureHelpDeskRequestService>();
+            _helpDeskRequestService = Substitute.For<IHelpDeskRequestService>();
             _helpDeskRequestController = new HelpDeskRequestController(_helpDeskRequestService);
             _helpDeskRequestController.CrytexContext = Substitute.For<ICrytexContext>();
 

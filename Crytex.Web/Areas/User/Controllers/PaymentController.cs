@@ -6,15 +6,15 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;
-using Crytex.Service.IService.ISecureService;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User
 {
     public class PaymentController : UserCrytexController
     {
-        private readonly ISecurePaymentService _paymentService;
+        private readonly IPaymentService _paymentService;
 
-        public PaymentController(ISecurePaymentService paymentService)
+        public PaymentController([Dependency("Secured")]IPaymentService paymentService)
         {
             this._paymentService = paymentService;
         }
@@ -54,11 +54,6 @@ namespace Crytex.Web.Areas.User
             }
 
             var order = this._paymentService.GetCreditPaymentOrderById(guid);
-
-            if (order.UserId != CrytexContext.UserInfoProvider.GetUserId())
-            {
-                return BadRequest("Are not allowed for this action");
-            }
 
             var model = AutoMapper.Mapper.Map<PaymentView>(order);
 

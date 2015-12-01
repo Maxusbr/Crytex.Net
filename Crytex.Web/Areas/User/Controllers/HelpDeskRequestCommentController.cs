@@ -4,15 +4,16 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
-using Crytex.Service.IService.ISecureService;
+using Crytex.Service.IService;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User
 {
     public class HelpDeskRequestCommentController : UserCrytexController
     {
-        private readonly ISecureHelpDeskRequestService _helpDeskRequestService;
+        private readonly IHelpDeskRequestService _helpDeskRequestService;
 
-        public HelpDeskRequestCommentController(ISecureHelpDeskRequestService helpDeskRequstService)
+        public HelpDeskRequestCommentController([Dependency("Secured")]IHelpDeskRequestService helpDeskRequstService)
         {
             this._helpDeskRequestService = helpDeskRequstService;
         }
