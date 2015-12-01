@@ -38,9 +38,9 @@ namespace Crytex.Model.Models
 
     public enum StatusVM
     {
-        Enable,
-        Disable,
-        Error,
-        Creating
+        Enable = 0,
+        Disable = 1,
+        Error = 2,
+        Creating = 3
     }
 }

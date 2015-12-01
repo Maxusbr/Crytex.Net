@@ -74,6 +74,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\CountingPeriodType.cs" />
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Enums\EnumApplicationType.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Models\HyperVHostResource.cs" />
     <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\NetTrafficCounter.cs" />
     <Compile Include="Models\Notifications\EmailInfo.cs" />
     <Compile Include="Models\Notifications\EmailTemplate.cs" />
     <Compile Include="Models\OAuthClientApplication.cs" />

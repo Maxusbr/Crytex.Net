@@ -14,6 +14,7 @@ namespace Crytex.Data
             : base("DefaultConnection", throwIfV1Schema: false)
         {
         }
+
         public virtual void Commit()
         {
             SaveChanges();
@@ -24,7 +25,6 @@ namespace Crytex.Data
             return new ApplicationDbContext();
         }
 
-
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Tariff> Tariffs { get; set; }
@@ -32,9 +32,7 @@ namespace Crytex.Data
         public DbSet<HelpDeskRequest> HelpDeskRequests { get; set; }
         public DbSet<HelpDeskRequestComment> HelpDeskRequestComments { get; set; }
         public DbSet<StateMachine> StateMachines { get; set; }
-        
         public DbSet<TaskV2> TaskV2 { get; set; }
-
         public DbSet<UserVm> UserVms { get; set; }
         public DbSet<FileDescriptor> Files { get; set; }
         public DbSet<OperatingSystem> OperatingSystems { get; set; }
@@ -54,9 +52,7 @@ namespace Crytex.Data
         public DbSet<OAuthClientApplication> OAuthClientApplications { get; set; }
         public DbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
         public DbSet<Discount> Discounts { get; set; }
-
         public DbSet<PhoneCallRequest> PhoneCallRequests { get; set; }     
-
-
+        public DbSet<NetTrafficCounter> NetTrafficCounters { get; set; }
     }
 }
