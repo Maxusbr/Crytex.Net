@@ -5,15 +5,15 @@ using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;
-
+using Crytex.Model.Exceptions;
 
 namespace Crytex.Web.Areas.User
 {
     public class HelpDeskRequestController : UserCrytexController
     {
-        private IHelpDeskRequestService _helpDeskRequestService { get; }
+        private ISecureHelpDeskRequestService _helpDeskRequestService { get; }
 
-        public HelpDeskRequestController(IHelpDeskRequestService helpDeskRequestService)
+        public HelpDeskRequestController(ISecureHelpDeskRequestService helpDeskRequestService)
         {
             this._helpDeskRequestService = helpDeskRequestService;
         }

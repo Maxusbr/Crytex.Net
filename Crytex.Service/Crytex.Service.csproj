@@ -96,6 +96,7 @@
     <Compile Include="IService\IOAuthService.cs" />
     <Compile Include="IService\IPhoneCallRequestService.cs" />
     <Compile Include="IService\IDiscountService.cs" />
+    <Compile Include="IService\ISecureHelpDeskRequestService.cs" />
     <Compile Include="IService\IStatisticService.cs" />
     <Compile Include="IService\IRegionService.cs" />
     <Compile Include="IService\ISnapshotVmService.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
+    <Compile Include="Service\SecureHelpDeskRequestService.cs" />
     <Compile Include="Service\StatisticService.cs" />
     <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\StateMachineService.cs" />

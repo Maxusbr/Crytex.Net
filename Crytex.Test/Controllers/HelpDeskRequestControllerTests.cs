@@ -32,7 +32,7 @@ namespace Crytex.Test.Controllers
 
         IUserInfoProvider _userInfoProvider { get; set; }
 
-        IHelpDeskRequestService _helpDeskRequestService { get; set; }
+        ISecureHelpDeskRequestService _helpDeskRequestService { get; set; }
 
         HelpDeskRequestController _helpDeskRequestController { get; set; }
 
@@ -40,7 +40,7 @@ namespace Crytex.Test.Controllers
         public void Init()
         {
             AutoMapperConfiguration.Configure();
-            _helpDeskRequestService = Substitute.For<IHelpDeskRequestService>();
+            _helpDeskRequestService = Substitute.For<ISecureHelpDeskRequestService>();
             _helpDeskRequestController = new HelpDeskRequestController(_helpDeskRequestService);
             _helpDeskRequestController.CrytexContext = Substitute.For<ICrytexContext>();
 

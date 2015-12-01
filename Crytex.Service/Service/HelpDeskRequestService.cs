@@ -44,7 +44,7 @@ namespace Crytex.Service.Service
         }
 
 
-        public void Update(HelpDeskRequest request)
+        public virtual void Update(HelpDeskRequest request)
         {
             var requestToUpdate = this._requestRepository.GetById(request.Id);
 
@@ -63,7 +63,7 @@ namespace Crytex.Service.Service
         }
 
 
-        public HelpDeskRequest GeById(int id)
+        public virtual HelpDeskRequest GeById(int id)
         {
             var request = this._requestRepository.GetById(id);
 
@@ -75,14 +75,9 @@ namespace Crytex.Service.Service
             return request;
         }
 
-        public void DeleteById(int id)
+        public virtual void DeleteById(int id)
         {
-            var request = this._requestRepository.GetById(id);
-
-            if (request == null)
-            {
-                throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
-            }
+            var request = this.GeById(id);
 
             this._requestRepository.Delete(request);
             this._unitOfWork.Commit();
@@ -109,12 +104,7 @@ namespace Crytex.Service.Service
 
         public IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id)
         {
-            var request = this._requestRepository.GetById(id);
-
-            if (request == null)
-            {
-                throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
-            }
+            var request = this.GeById(id);
 
             var comments = _requestCommentRepository.GetMany(c=>c.RequestId == id, i=>i.User);
 
@@ -123,12 +113,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<HelpDeskRequestComment> GetPageCommentsByRequestId(int id, int pageNumber, int pageSize)
         {
-            var request = this._requestRepository.GetById(id);
-
-            if (request == null)
-            {
-                throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
-            }
+            var request = this.GeById(id);
 
             var comments = _requestCommentRepository.GetPage(new Page(pageNumber, pageSize), (x => x.RequestId == request.Id), (x => x.CreationDate));
 
@@ -138,12 +123,7 @@ namespace Crytex.Service.Service
 
         public HelpDeskRequestComment CreateComment(int requestId, string comment, string userId, bool isRead = false)
         {
-            var request = this._requestRepository.GetById(requestId);
-
-            if (request == null)
-            {
-                throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", requestId));
-            }
+            var request = this.GeById(requestId);
 
             var newComment = new HelpDeskRequestComment
             {
@@ -163,12 +143,7 @@ namespace Crytex.Service.Service
 
         public void DeleteCommentById(int id)
         {
-            var comment = this._requestCommentRepository.GetById(id);
-
-            if (comment == null)
-            {
-                throw new InvalidIdentifierException(string.Format("HelpDeskRequestComment width Id={0} doesn't exists", id));
-            }
+            var comment = this.GetCommentById(id);
 
             this._requestCommentRepository.Delete(comment);
             this._unitOfWork.Commit();
@@ -176,17 +151,24 @@ namespace Crytex.Service.Service
 
         public void UpdateComment(int commentId, string comment)
         {
-            var commentToUpdate = this._requestCommentRepository.GetById(commentId);
-
-            if (commentToUpdate == null)
-            {
-                throw new InvalidIdentifierException(string.Format("HelpDeskRequestComment width Id={0} doesn't exists", commentId));
-            }
+            var commentToUpdate = this.GetCommentById(commentId);
 
             commentToUpdate.Comment = comment;
 
             this._requestCommentRepository.Update(commentToUpdate);
             this._unitOfWork.Commit();
+        }
+
+        private HelpDeskRequestComment GetCommentById(int id)
+        {
+            var comment = this._requestCommentRepository.GetById(id);
+
+            if (comment == null)
+            {
+                throw new InvalidIdentifierException(string.Format("HelpDeskRequestComment width Id={0} doesn't exists", id));
+            }
+
+            return comment;
         }
     }
 }
