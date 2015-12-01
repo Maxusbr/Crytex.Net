@@ -1,11 +1,10 @@
 ﻿using System;
 using Crytex.Model.Models;
-using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;
-using Crytex.Model.Exceptions;
+using Crytex.Service.IService.ISecureService;
 
 namespace Crytex.Web.Areas.User
 {
@@ -48,7 +47,7 @@ namespace Crytex.Web.Areas.User
         [ResponseType(typeof(HelpDeskRequestViewModel))]
         public IHttpActionResult Get(int id)
         {
-            var request = this._helpDeskRequestService.GeById(id);
+            var request = this._helpDeskRequestService.GetById(id);
             var model = AutoMapper.Mapper.Map<HelpDeskRequestViewModel>(request);
 
             return Ok(model);

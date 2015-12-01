@@ -46,7 +46,7 @@ namespace Crytex.Service.Service
 
         public virtual void Update(HelpDeskRequest request)
         {
-            var requestToUpdate = this._requestRepository.GetById(request.Id);
+            var requestToUpdate = this.GetById(request.Id);
 
             if (requestToUpdate == null)
             {
@@ -62,8 +62,8 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-
-        public virtual HelpDeskRequest GeById(int id)
+        // Use this method to get HelpDeskRequest intstance by id intead of using HelpDeskRequestRepository directly!!!
+        public virtual HelpDeskRequest GetById(int id)
         {
             var request = this._requestRepository.GetById(id);
 
@@ -77,7 +77,7 @@ namespace Crytex.Service.Service
 
         public virtual void DeleteById(int id)
         {
-            var request = this.GeById(id);
+            var request = this.GetById(id);
 
             this._requestRepository.Delete(request);
             this._unitOfWork.Commit();
@@ -102,18 +102,18 @@ namespace Crytex.Service.Service
         }
 
 
-        public IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id)
+        public virtual IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id)
         {
-            var request = this.GeById(id);
+            var request = this.GetById(id);
 
             var comments = _requestCommentRepository.GetMany(c=>c.RequestId == id, i=>i.User);
 
             return comments;
         }
 
-        public IPagedList<HelpDeskRequestComment> GetPageCommentsByRequestId(int id, int pageNumber, int pageSize)
+        public virtual IPagedList<HelpDeskRequestComment> GetPageCommentsByRequestId(int id, int pageNumber, int pageSize)
         {
-            var request = this.GeById(id);
+            var request = this.GetById(id);
 
             var comments = _requestCommentRepository.GetPage(new Page(pageNumber, pageSize), (x => x.RequestId == request.Id), (x => x.CreationDate));
 
@@ -123,7 +123,7 @@ namespace Crytex.Service.Service
 
         public HelpDeskRequestComment CreateComment(int requestId, string comment, string userId, bool isRead = false)
         {
-            var request = this.GeById(requestId);
+            var request = this.GetById(requestId);
 
             var newComment = new HelpDeskRequestComment
             {
@@ -141,7 +141,7 @@ namespace Crytex.Service.Service
             return newComment;
         }
 
-        public void DeleteCommentById(int id)
+        public virtual void DeleteCommentById(int id)
         {
             var comment = this.GetCommentById(id);
 
@@ -149,7 +149,7 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public void UpdateComment(int commentId, string comment)
+        public virtual void UpdateComment(int commentId, string comment)
         {
             var commentToUpdate = this.GetCommentById(commentId);
 
@@ -159,7 +159,7 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        private HelpDeskRequestComment GetCommentById(int id)
+        protected virtual HelpDeskRequestComment GetCommentById(int id)
         {
             var comment = this._requestCommentRepository.GetById(id);
 

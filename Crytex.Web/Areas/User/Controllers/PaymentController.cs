@@ -6,15 +6,15 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;
-
+using Crytex.Service.IService.ISecureService;
 
 namespace Crytex.Web.Areas.User
 {
     public class PaymentController : UserCrytexController
     {
-        private readonly IPaymentService _paymentService;
+        private readonly ISecurePaymentService _paymentService;
 
-        public PaymentController(IPaymentService paymentService)
+        public PaymentController(ISecurePaymentService paymentService)
         {
             this._paymentService = paymentService;
         }
