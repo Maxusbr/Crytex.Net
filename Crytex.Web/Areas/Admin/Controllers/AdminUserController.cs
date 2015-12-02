@@ -3,11 +3,11 @@ using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
-using System;
 using System.Web.Http.Description;
+using Crytex.Service.Model;
 using Crytex.Web.Models;
 using Microsoft.AspNet.Identity;
-using Microsoft.Owin.BuilderProperties;
+using PagedList;
 
 namespace Crytex.Web.Areas.Admin
 {
@@ -24,20 +24,30 @@ namespace Crytex.Web.Areas.Admin
         /// Получение списка пользователей
         /// </summary>
         /// <param name="pageSize"></param>
-        /// <param name="pageIndex"></param>
-        /// <param name="userName"></param>
-        /// <param name="email"></param>
+        /// <param name="pageNumber"></param>
+        /// <param name="searchParams"></param>
         /// <returns></returns>
         // GET api/<controller>
         [ResponseType(typeof(PageModel<ApplicationUserViewModel>))]
-        public IHttpActionResult Get(int pageSize = 20, int pageIndex = 1, string userName = null, string email = null)
+        public IHttpActionResult Get(int pageNumber = 20, int pageSize = 1, [FromUri]AdminApplicationUserSearchParamsViewModel searchParams = null)
         {
-            if (pageIndex <= 0 || pageSize <= 0)
-                return BadRequest("PageSize and PageIndex must be positive.");
+            if (pageNumber <= 0 || pageSize <= 0)
+                return BadRequest("PageSize and PageNumber must be positive.");
 
-            var users = _applicationUserService.GetPage(pageSize, pageIndex, userName, email);
-            var model = AutoMapper.Mapper.Map<PageModel<ApplicationUserViewModel>>(users);
-            return Ok(model);
+            IPagedList<ApplicationUser> users = new PagedList<ApplicationUser>(new List<ApplicationUser>(), pageNumber, pageSize);
+
+            if (searchParams != null)
+            {
+                var applicationUsersParams = AutoMapper.Mapper.Map<ApplicationUserSearchParams>(searchParams);
+                users = _applicationUserService.GetPage(pageNumber, pageSize, applicationUsersParams);
+            }
+            else
+            {
+                users = _applicationUserService.GetPage(pageNumber, pageSize);
+            }
+
+            var viewUsers = AutoMapper.Mapper.Map<PageModel<ApplicationUserViewModel>>(users);
+            return Ok(viewUsers);          
         }
 
         /// <summary>
