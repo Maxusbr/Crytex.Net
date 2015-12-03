@@ -27,9 +27,9 @@ namespace Crytex.Web.Areas.Admin
         /// <param name="pageNumber"></param>
         /// <param name="searchParams"></param>
         /// <returns></returns>
-        // GET api/<controller>
+        // GET api/Admin/<controller>
         [ResponseType(typeof(PageModel<ApplicationUserViewModel>))]
-        public IHttpActionResult Get(int pageNumber = 20, int pageSize = 1, [FromUri]AdminApplicationUserSearchParamsViewModel searchParams = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]AdminApplicationUserSearchParamsViewModel searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageSize and PageNumber must be positive.");
@@ -55,7 +55,7 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        // GET api/<controller>/5
+        // GET api/Admin/<controller>/5
         [ResponseType(typeof(ApplicationUserViewModel))]
         public IHttpActionResult Get(string id)
         {
