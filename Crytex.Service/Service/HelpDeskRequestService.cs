@@ -66,7 +66,7 @@ namespace Crytex.Service.Service
 
         public HelpDeskRequest GeById(int id)
         {
-            var request = this._requestRepository.GetById(id);
+            var request = this._requestRepository.Get(h => h.Id == id, r => r.User, r => r.FileDescriptors);
 
             if (request == null)
             {
