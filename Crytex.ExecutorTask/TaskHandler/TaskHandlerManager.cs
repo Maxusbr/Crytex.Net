@@ -127,7 +127,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                     ServerTemplateId = taskOptions.ServerTemplateId,
                     Status = StatusVM.Enable,
                     UserId = e.TaskEntity.UserId,
-                    VurtualizationType = e.TaskEntity.Virtualization,
+                    VirtualizationType = e.TaskEntity.Virtualization,
                     OperatingSystemPassword = e.GuestOsPassword
                 };
 

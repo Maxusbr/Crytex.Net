@@ -348,6 +348,7 @@
     <Compile Include="Models\JsonModels\PageModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
+    <Compile Include="Models\JsonModels\UserVmSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\UserVmViewModel.cs" />
     <Compile Include="Models\JsonModels\VmWareVCenterViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />

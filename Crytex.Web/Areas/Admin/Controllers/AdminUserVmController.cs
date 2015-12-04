@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Crytex.Model.Models;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Service.IService;
+using Crytex.Service.Model;
 using Crytex.Web.Areas.Admin;
+using PagedList;
 
 
 namespace Crytex.Web.Areas.Admin
@@ -24,18 +28,26 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
-        /// <param name="userId"></param>
+        /// <param name="searchParams"></param>
         /// <returns></returns>
         [ResponseType(typeof(PageModel<UserVmViewModel>))]
         [Authorize]
-        public IHttpActionResult Get(int pageNumber, int pageSize, string userId = null)
-        {
-            if (string.IsNullOrEmpty(userId))
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]AdminUserVmSearchParamsViewModel searchParams = null)
+        {     
+            if (pageNumber <= 0 || pageSize <= 0)
+                return BadRequest("PageNumber and PageSize must be grater than 1");
+            if (!ModelState.IsValid)
             {
-                userId = CrytexContext.UserInfoProvider.GetUserId();
+                return BadRequest(ModelState);
             }
 
-            return this.GetPageInner(pageNumber, pageSize, userId);
+            IPagedList<UserVm> machines = new PagedList<UserVm>(new List<UserVm>(), pageNumber, pageSize);
+
+            var machineParams = AutoMapper.Mapper.Map<UserVmSearchParams>(searchParams);
+            machines = _userVmService.GetPage(pageNumber, pageSize, machineParams);
+
+            var viewMachines = AutoMapper.Mapper.Map<PageModel<UserVmViewModel>>(machines);
+            return Ok(viewMachines);
         }
 
         /// <summary>
@@ -56,22 +68,6 @@ namespace Crytex.Web.Areas.Admin
             var model = AutoMapper.Mapper.Map<UserVmViewModel>(vm);
 
             return Ok(model);
-        }
-
-        private IHttpActionResult GetPageInner(int pageNumber, int pageSize, string userId = null)
-        {
-            if (pageNumber <= 0 || pageSize <= 0)
-            {
-                return BadRequest("PageNumber and PageSize must be grater than 1");
-            }
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                userId = CrytexContext.UserInfoProvider.GetUserId();
-            }
-            var page = this._userVmService.GetPage(pageNumber, pageSize, userId);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<UserVmViewModel>>(page);
-            return Ok(viewModel);
-        }
+        }        
     }
 }
