@@ -50,7 +50,7 @@ namespace Crytex.Web.Areas.Admin
         [ResponseType(typeof(HelpDeskRequestViewModel))]
         public IHttpActionResult Get(int id)
         {
-            var request = this._helpDeskRequestService.GeById(id);
+            var request = this._helpDeskRequestService.GetById(id);
             var model = AutoMapper.Mapper.Map<HelpDeskRequestViewModel>(request);
 
             return Ok(model);

@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -35,12 +36,14 @@ namespace Crytex.Model.Models
         public virtual ICollection<UserVm> UserVms { get; set; }
 
         public string Name { get; set; }
+        public string Lastname { get; set; }
         public string Patronymic { get; set; }
         public string City { get; set; }
         public string Areas { get; set; }
         public string Address { get; set; }
         public string CodePhrase { get; set; }
         public TypeUser UserType { get; set; }
+        public DateTime RegisterDate { get; set; }
     }
 
     public  enum TypeUser

@@ -12,6 +12,7 @@ using Crytex.Web.Models.JsonModels;
 using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using PagedList;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User
 {
@@ -19,7 +20,7 @@ namespace Crytex.Web.Areas.User
     {
         private readonly ITaskV2Service _taskService;
 
-        public TaskV2Controller(ITaskV2Service taskService)
+        public TaskV2Controller([Dependency("Secured")]ITaskV2Service taskService)
         {
             this._taskService = taskService;
         }
@@ -114,6 +115,8 @@ namespace Crytex.Web.Areas.User
             }
 
             var modelTask = AutoMapper.Mapper.Map<TaskV2>(task);
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            modelTask.UserId = userId;
 
             var newTask = _taskService.CreateTask(modelTask, modelTask.Options);
 
