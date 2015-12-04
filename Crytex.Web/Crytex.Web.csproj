@@ -321,6 +321,7 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JsonModels\ApplicationUserSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingViewModel.cs" />
