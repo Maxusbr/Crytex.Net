@@ -8,14 +8,14 @@ using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
-
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User
 {
     public class StateMachineController : UserCrytexController
     {
         private IStateMachineService _stateMachineService ;
-        public StateMachineController(IStateMachineService stateMachineService)
+        public StateMachineController([Dependency("Secured")]IStateMachineService stateMachineService)
         {
             this._stateMachineService = stateMachineService;
         }

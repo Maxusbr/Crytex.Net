@@ -21,7 +21,7 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
-        public IEnumerable<StateMachine> GetStateByVmId(Guid vmId, int diffInMinutes = 0)
+        public virtual IEnumerable<StateMachine> GetStateByVmId(Guid vmId, int diffInMinutes = 0)
         {
             Expression<Func<StateMachine, bool>> where = s => s.VmId == vmId;
             if (diffInMinutes != 0)
@@ -39,7 +39,7 @@ namespace Crytex.Service.Service
             throw new NotImplementedException();
         }
 
-        public StateMachine GetStateById(int id)
+        public virtual StateMachine GetStateById(int id)
         {
             var state = this._stateMachineRepository.GetById(id);
             if (state == null)

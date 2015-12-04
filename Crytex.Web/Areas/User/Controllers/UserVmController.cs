@@ -5,6 +5,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Service.IService;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User
 {
@@ -12,7 +13,7 @@ namespace Crytex.Web.Areas.User
     {
         private readonly IUserVmService _userVmService;
 
-        public UserVmController(IUserVmService userVmService)
+        public UserVmController([Dependency("Secured")]IUserVmService userVmService)
         {
             this._userVmService = userVmService;
         }

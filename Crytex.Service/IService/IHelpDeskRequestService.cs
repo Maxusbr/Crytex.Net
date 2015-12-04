@@ -11,7 +11,7 @@ namespace Crytex.Service.IService
 
         void Update(HelpDeskRequest request);
 
-        HelpDeskRequest GeById(int id);
+        HelpDeskRequest GetById(int id);
 
         void DeleteById(int id);
 

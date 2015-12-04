@@ -24,7 +24,7 @@ namespace Crytex.Service.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public TaskV2 GetTaskById(Guid id)
+        public virtual TaskV2 GetTaskById(Guid id)
         {
             var vm = this._taskV2Repo.GetById(id);
             if (vm == null)
@@ -111,12 +111,7 @@ namespace Crytex.Service.Service
 
         public void UpdateTask(TaskV2 updateTask)
         {
-            var task = this._taskV2Repo.GetById(updateTask.Id);
-            
-            if (task == null)
-            {
-                throw new InvalidIdentifierException(string.Format("UserVm with Id = {0} doesnt exist.", updateTask.Id));
-            }
+            var task = this.GetTaskById(updateTask.Id);
 
             task.ResourceId = updateTask.ResourceId;
             task.StatusTask = StatusTask.End;
@@ -140,12 +135,7 @@ namespace Crytex.Service.Service
 
         public void RemoveTask(Guid id)
         {
-            var task = this._taskV2Repo.GetById(id);
-
-            if (task == null)
-            {
-                throw new InvalidIdentifierException(string.Format("Region with Id={0} doesn't exists", id));
-            }
+            var task = this.GetTaskById(id);
 
             this._taskV2Repo.Delete(task);
             this._unitOfWork.Commit();
@@ -160,7 +150,7 @@ namespace Crytex.Service.Service
 
         public void UpdateTaskStatus(Guid id, StatusTask status, DateTime? date = null, string errorMessage = null)
         {
-            var task = this._taskV2Repo.GetById(id);
+            var task = this.GetTaskById(id);
 
             if (task == null)
             {

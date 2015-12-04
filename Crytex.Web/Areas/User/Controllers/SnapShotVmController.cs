@@ -8,6 +8,7 @@ using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User
 {
@@ -16,7 +17,7 @@ namespace Crytex.Web.Areas.User
     {
         private ISnapshotVmService _snapshotVmService;
         private IUserVmService _userVmService;
-        public SnapShotVmController(ISnapshotVmService snapshotVmService, IUserVmService userVmService)
+        public SnapShotVmController(ISnapshotVmService snapshotVmService, [Dependency("Secured")]IUserVmService userVmService)
         {
             this._snapshotVmService = snapshotVmService;
             this._userVmService = userVmService;
@@ -39,11 +40,7 @@ namespace Crytex.Web.Areas.User
                 this.ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-            var VM = _userVmService.GetVmById(guid);
-            if (VM.UserId != CrytexContext.UserInfoProvider.GetUserId())
-            {
-                return BadRequest("Are not allowed for this action");
-            }
+            var vm = _userVmService.GetVmById(guid);
 
             var snapshots = _snapshotVmService.GetAllByVmId(guid, pageNumber, pageSize);
             var snapshotsView = AutoMapper.Mapper.Map<PageModel<SnapshotVmViewModel>>(snapshots);

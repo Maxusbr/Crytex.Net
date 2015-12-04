@@ -1,13 +1,11 @@
-﻿using Crytex.Service.IService;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
-
+using Crytex.Service.IService;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User
 {
@@ -15,7 +13,7 @@ namespace Crytex.Web.Areas.User
     {
         private readonly IHelpDeskRequestService _helpDeskRequestService;
 
-        public HelpDeskRequestCommentController(IHelpDeskRequestService helpDeskRequstService)
+        public HelpDeskRequestCommentController([Dependency("Secured")]IHelpDeskRequestService helpDeskRequstService)
         {
             this._helpDeskRequestService = helpDeskRequstService;
         }

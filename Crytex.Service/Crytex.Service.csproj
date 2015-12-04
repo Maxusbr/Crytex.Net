@@ -135,6 +135,11 @@
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
+    <Compile Include="Service\SecureService\SecureHelpDeskRequestService.cs" />
+    <Compile Include="Service\SecureService\SecurePaymentService.cs" />
+    <Compile Include="Service\SecureService\SecureStateMachineService.cs" />
+    <Compile Include="Service\SecureService\SecureTaskV2Service.cs" />
+    <Compile Include="Service\SecureService\SecureUserVmService.cs" />
     <Compile Include="Service\StatisticService.cs" />
     <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\StateMachineService.cs" />
