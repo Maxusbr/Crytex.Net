@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Crytex.Data.Infrastructure;
 using Crytex.Model.Models;
 using System.Linq.Expressions;
+using PagedList;
 
 namespace Crytex.Test.FakeImplementations
 {
@@ -76,6 +77,11 @@ namespace Crytex.Test.FakeImplementations
         }
 
         List<FileDescriptor> IRepository<FileDescriptor>.GetMany(Expression<Func<FileDescriptor, bool>> where, params Expression<Func<FileDescriptor, object>>[] includes)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IPagedList<FileDescriptor> GetPage<TOrder>(Page page, Expression<Func<FileDescriptor, bool>> where, Expression<Func<FileDescriptor, TOrder>> order, bool reverse = false, params Expression<Func<FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }

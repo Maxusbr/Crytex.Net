@@ -100,7 +100,7 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var page = this._creditPaymentOrderRepository.GetPage(new Page(pageNumber, pageSize), where, (x => x.Date), x=>x.User);
+            var page = this._creditPaymentOrderRepository.GetPage(new Page(pageNumber, pageSize), where, (x => x.Date), true,x=>x.User);
 
             return page;
         }

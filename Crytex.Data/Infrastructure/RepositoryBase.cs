@@ -54,7 +54,7 @@ namespace Crytex.Data.Infrastructure
         public virtual T GetById(string id)
         {
             return dbset.Find(id);
-}
+        }
 
         public virtual T GetById(Guid id)
         {
@@ -84,12 +84,27 @@ namespace Crytex.Data.Infrastructure
         /// <param name="where">Where clause to apply</param>
         /// <param name="order">Order by to apply</param>
         /// <returns></returns>
-        public virtual IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order,
+        public virtual IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, Boolean reverse = true,
             params Expression<Func<T, object>>[] includes)
         {
-            var query = dbset.OrderBy(order).Where(where).GetPage(page);
+
+            IOrderedQueryable<T> orderQuery = null;
+
+            if (reverse)
+            {
+                orderQuery = dbset.OrderBy(order);
+
+            }
+            else
+            {
+                orderQuery = dbset.OrderByDescending(order);
+            }
+
+               
+
+            var query = orderQuery.Where(where).GetPage(page);
             query = this.AppendIncludes(query, includes);
-            
+
             var results = query.ToList();
             var total = dbset.Count(where);
 

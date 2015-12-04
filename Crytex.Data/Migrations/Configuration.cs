@@ -21,7 +21,7 @@ namespace Crytex.Data.Migrations
         {
             AutomaticMigrationsEnabled = true;
             AutomaticMigrationDataLossAllowed = true;
-            CreateFakeEntries = false;
+            CreateFakeEntries = true;
         }
         protected  override void Seed(ApplicationDbContext context)
         {
@@ -95,6 +95,7 @@ namespace Crytex.Data.Migrations
                         UserName = "AdminUser" + i,
                         Email = "admin" + i + "@admin.com",
                         EmailConfirmed = true,
+                        RegisterDate = DateTime.Now
                     };
                     if (allUsers.All(u => u.UserName != admin.UserName))
                     {
@@ -110,6 +111,7 @@ namespace Crytex.Data.Migrations
                         UserName = "SupportUser" + i,
                         Email = "support" + i + "@admin.com",
                         EmailConfirmed = true,
+                        RegisterDate = DateTime.Now
                     };
                     if (allUsers.All(u => u.UserName != support.UserName))
                     {
@@ -125,6 +127,7 @@ namespace Crytex.Data.Migrations
                         UserName = "User" + i,
                         Email = "user" + i + "@admin.com",
                         EmailConfirmed = true,
+                        RegisterDate = DateTime.Now
                     };
                     if (allUsers.All(u => u.UserName != user.UserName))
                     {

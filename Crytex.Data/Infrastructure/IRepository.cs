@@ -17,6 +17,6 @@ namespace Crytex.Data.Infrastructure
         T Get(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
         List<T> GetAll(params Expression<Func<T, object>>[] includes);
         List<T> GetMany(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includes);
-        IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, params Expression<Func<T, object>>[] includes);
+        IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, Boolean reverse=false, params Expression<Func<T, object>>[] includes);
     }
 }

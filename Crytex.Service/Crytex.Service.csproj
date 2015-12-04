@@ -112,6 +112,7 @@
     <Compile Include="IService\IUserVmService.cs" />
     <Compile Include="IService\IHyperVHostService.cs" />
     <Compile Include="IService\IVmWareVCenterService.cs" />
+    <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
