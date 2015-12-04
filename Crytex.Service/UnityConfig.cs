@@ -68,6 +68,7 @@ namespace Crytex.Service
             container.RegisterType<IUserVmService, SecureUserVmService>("Secured");
             container.RegisterType<IStateMachineService, SecureStateMachineService>("Secured");
             container.RegisterType<ITaskV2Service, SecureTaskV2Service>("Secured");
+            container.RegisterType<IVmBackupService, SecureVmBackupService>("Secured");
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();

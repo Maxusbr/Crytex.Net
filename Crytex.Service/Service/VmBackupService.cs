@@ -27,11 +27,11 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public VmBackup GetById(Guid guid)
+        public virtual VmBackup GetById(Guid guid)
         {
-            var backup = this._backupRepository.GetById(guid);
+            var backup = this._backupRepository.Get(b => b.Id == guid, b => b.Vm);
 
-            if(backup == null)
+            if (backup == null)
             {
                 throw new InvalidIdentifierException($"Backup with id={guid.ToString()} doesn't exist");
             }
@@ -39,23 +39,30 @@ namespace Crytex.Service.Service
             return backup;
         }
 
-        public IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from, DateTime? to)
+        public virtual IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from, DateTime? to)
+        {
+            Expression<Func<VmBackup, bool>> where = x => true;
+            if (from != null)
+            {
+                where = where.And(x => x.DateCreated >= from);
+            }
+            if (to != null)
+            {
+                where = where.And(x => x.DateCreated <= to);
+            }
+
+            var page = this.GetPage(pageNumber, pageSize, where);
+
+            return page;
+        }
+
+        protected IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, Expression<Func<VmBackup, bool>> where)
         {
             var pageInfo = new PageInfo
             {
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
-
-            Expression<Func<VmBackup, bool>> where = x => true;
-            if(from != null)
-            {
-                where = where.And(x => x.DateCreated >= from);
-            }
-            if(to != null)
-            {
-                where = where.And(x => x.DateCreated <= to);
-            }
 
             var page = this._backupRepository.GetPage(pageInfo, where, b => b.DateCreated);
 
