@@ -287,6 +287,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminVmBackupController.cs" />
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
     <Compile Include="Areas\User\Controllers\PaymentController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
@@ -349,6 +350,7 @@
     <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\UserVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\VmBackupViewModel.cs" />
     <Compile Include="Models\JsonModels\VmWareVCenterViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\JsonModels\SimpleApplicationUserViewModel.cs" />

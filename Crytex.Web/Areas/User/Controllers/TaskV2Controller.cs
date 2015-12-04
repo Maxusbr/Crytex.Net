@@ -101,6 +101,9 @@ namespace Crytex.Web.Areas.User
                 case TypeTask.RemoveVm:
                     taskOptionsValid = IsValidOptions<RemoveVmOptions>(task.Options);
                     break;
+                case TypeTask.Backup:
+                    taskOptionsValid = IsValidOptions<BackupOptions>(task.Options);
+                    break;
                 default:
                     throw new ApplicationException(string.Format("Unknown task type: {0}", task.TypeTask.ToString()));
             }

@@ -54,5 +54,6 @@ namespace Crytex.Data
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<PhoneCallRequest> PhoneCallRequests { get; set; }     
         public DbSet<NetTrafficCounter> NetTrafficCounters { get; set; }
+        public DbSet<VmBackup> VmBackups { get; set; }
     }
 }

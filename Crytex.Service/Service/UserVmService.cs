@@ -56,7 +56,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
             var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.Id);
             return list;
         }

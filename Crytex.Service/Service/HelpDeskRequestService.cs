@@ -92,15 +92,15 @@ namespace Crytex.Service.Service
         {
             IPagedList<HelpDeskRequest> page = new PagedList<HelpDeskRequest>(Enumerable.Empty<HelpDeskRequest>().AsQueryable(), 1, 1);
             if (filter == HelpDeskRequestFilter.All) { 
-                page = this._requestRepository.GetPage(new Page(pageNumber, pageSize), (x => true), (x => x.Read), (x => x.CreationDate));
+                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => true), (x => x.Read), (x => x.CreationDate));
             }
             else if (filter == HelpDeskRequestFilter.Read)
             {
-                page = this._requestRepository.GetPage(new Page(pageNumber, pageSize), (x => x.Read), (x => x.CreationDate));
+                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => x.Read), (x => x.CreationDate));
             }
             else if (filter == HelpDeskRequestFilter.Unread)
             {
-                page = this._requestRepository.GetPage(new Page(pageNumber, pageSize), (x => !x.Read), (x => x.CreationDate));
+                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => !x.Read), (x => x.CreationDate));
             }
 
             return page;
@@ -130,7 +130,7 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException(string.Format("HelpDeskRequest width Id={0} doesn't exists", id));
             }
 
-            var comments = _requestCommentRepository.GetPage(new Page(pageNumber, pageSize), (x => x.RequestId == request.Id), (x => x.CreationDate));
+            var comments = _requestCommentRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => x.RequestId == request.Id), (x => x.CreationDate));
 
             return comments;
         }

@@ -63,7 +63,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TaskV2SearchParams searchParams = null)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
 
             Expression<Func<TaskV2, bool>> where = x => true;
             

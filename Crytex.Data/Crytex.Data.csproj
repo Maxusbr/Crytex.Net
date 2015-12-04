@@ -43,7 +43,7 @@
     <Compile Include="Infrastructure\IDatabaseFactory.cs" />
     <Compile Include="Infrastructure\IRepository.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
-    <Compile Include="Infrastructure\Page.cs" />
+    <Compile Include="Infrastructure\PageInfo.cs" />
     <Compile Include="Infrastructure\RepositoryBase.cs" />
     <Compile Include="Infrastructure\UnitOfWork.cs" />
     <Compile Include="IRepository\IApplicationUserRepository.cs" />
@@ -75,6 +75,7 @@
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
+    <Compile Include="IRepository\IVmBackupRepository.cs" />
     <Compile Include="IRepository\IVmWareVCenterRepository.cs" />
     <Compile Include="Migrations\201511262022032_init.cs" />
     <Compile Include="Migrations\201511262022032_init.Designer.cs">
@@ -111,6 +112,7 @@
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
     <Compile Include="Repository\DiscountRepository.cs" />
+    <Compile Include="Repository\VmBackupRepository.cs" />
     <Compile Include="Repository\VmWareVCenterRepository.cs" />
   </ItemGroup>
   <ItemGroup>

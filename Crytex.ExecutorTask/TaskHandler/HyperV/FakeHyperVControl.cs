@@ -17,6 +17,11 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             this._hyperVProvider = hyperVProvider;
         }
 
+        public Guid BackupVm(TaskV2 taskEntity)
+        {
+            throw new NotImplementedException();
+        }
+
         public Guid CreateVm(TaskV2 task, ServerTemplate template)
         {
             Thread.Sleep(10000);

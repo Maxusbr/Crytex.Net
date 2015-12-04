@@ -31,7 +31,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<ApplicationUser> GetPage(int pageSize, int pageIndex, string userName, string email)
         {
-            return _applicationUserRepository.GetPage(new Page(pageIndex, pageSize),
+            return _applicationUserRepository.GetPage(new PageInfo(pageIndex, pageSize),
                     x => (string.IsNullOrEmpty(userName) && string.IsNullOrEmpty(email)) 
                     || (!string.IsNullOrEmpty(userName) && x.UserName.Contains(userName)) 
                     || (!string.IsNullOrEmpty(email) && x.Email.Contains(email)),

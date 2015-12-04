@@ -111,6 +111,7 @@
     <Compile Include="IService\IStateMachineService.cs" />
     <Compile Include="IService\IUserVmService.cs" />
     <Compile Include="IService\IHyperVHostService.cs" />
+    <Compile Include="IService\IVmBackupService.cs" />
     <Compile Include="IService\IVmWareVCenterService.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
@@ -149,6 +150,7 @@
     <Compile Include="Service\TaskV2Service.cs" />
     <Compile Include="Service\UserVmService.cs" />
     <Compile Include="Service\HyperVHostService.cs" />
+    <Compile Include="Service\VmBackupService.cs" />
     <Compile Include="Service\VmWareVCenterService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>

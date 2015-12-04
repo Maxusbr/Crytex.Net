@@ -38,19 +38,14 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Payment, PaymentView>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Guid.ToString()))
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
-
-
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
                     .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
-
             Mapper.CreateMap<ApplicationUser, ApplicationUserViewModel>();
-
             Mapper.CreateMap<UserVm, UserVmViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Id.ToString()))
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source =>source.User.UserName))
                 .ForMember(x => x.OsImageFilePath, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.ImageFileDescriptor.Path))
                 .ForMember(x => x.OsName, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.Name));
-
             Mapper.CreateMap<EmailTemplate, EmailTemplateViewModel>();
             Mapper.CreateMap<EmailTemplate, UpdateEmailTemplateViewModel>();
             Mapper.CreateMap<HyperVHostResource, HyperVHostResourceViewModel>();
@@ -72,7 +67,10 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
             Mapper.CreateMap<Discount, DiscountViewModel>();
-            Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
+            Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
+            Mapper.CreateMap<VmBackup, VmBackupViewModel>();
+
+            this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
             this.MapPagedList<Payment, PaymentView>();
@@ -85,6 +83,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<EmailInfo, EmailInfoesViewModel>();
             this.MapPagedList<SnapshotVm, SnapshotVmViewModel>();
             this.MapPagedList<PhoneCallRequest, PhoneCallRequestViewModel>();
+            this.MapPagedList<VmBackup, VmBackupViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()
