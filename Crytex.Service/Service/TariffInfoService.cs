@@ -67,7 +67,8 @@ namespace Crytex.Service.Service
             tariff.HDD1 = updateTariff.HDD1;
             tariff.SSD1 = updateTariff.SSD1;
             tariff.RAM512 = updateTariff.RAM512;
-            tariff.Processor1 = updateTariff.Processor1;           
+            tariff.Processor1 = updateTariff.Processor1;
+            tariff.Load10Percent = updateTariff.Load10Percent;
 
             this._tariffInfoRepo.Update(tariff);
             this._unitOfWork.Commit();
