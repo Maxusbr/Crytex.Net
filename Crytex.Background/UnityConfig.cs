@@ -29,7 +29,7 @@ namespace Crytex.Background
         {
             UnityConfigureFunc = unityContainer =>
             {
-                Crytex.Service.UnityConfig.Register<PerThreadLifetimeManager>(unityContainer);
+                Crytex.Service.UnityConfig.Register<TransientLifetimeManager>(unityContainer);
 
                 unityContainer.RegisterType<ISchedulerJobs, SchedulerJobs>();
                 unityContainer.RegisterType<IJobFactory, UnityJobFactory>();
