@@ -31,7 +31,7 @@ namespace Crytex.Service.Service
             var minDate = dateFrom ?? DateTime.MinValue;
             var maxDate = dateTo ?? DateTime.MaxValue;
 
-            var logEntries = _logRepository.GetPage(new Page(pageIndex, pageSize),
+            var logEntries = _logRepository.GetPage(new PageInfo(pageIndex, pageSize),
                     x => (string.IsNullOrEmpty(sourceLog) || x.Source == sourceLog) && 
                          (x.Date >= minDate && x.Date <= maxDate),
                     x => x.Id);
@@ -51,7 +51,7 @@ namespace Crytex.Service.Service
                 where.And(addLogExpression);
             }
 
-            var logEntries = _logRepository.GetPage(new Page(pageIndex, pageSize), where, x => x.Id);
+            var logEntries = _logRepository.GetPage(new PageInfo(pageIndex, pageSize), where, x => x.Id);
 
             return logEntries;
         }

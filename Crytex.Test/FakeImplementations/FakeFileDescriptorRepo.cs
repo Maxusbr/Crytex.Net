@@ -66,7 +66,7 @@ namespace Crytex.Test.FakeImplementations
             throw new NotImplementedException();
         }
 
-        public PagedList.IPagedList<Model.Models.FileDescriptor> GetPage<TOrder>(Data.Infrastructure.Page page, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, TOrder>> order, params System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, object>>[] includes)
+        public PagedList.IPagedList<Model.Models.FileDescriptor> GetPage<TOrder>(Data.Infrastructure.PageInfo page, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, bool>> where, System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, TOrder>> order, params System.Linq.Expressions.Expression<Func<Model.Models.FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }
@@ -81,7 +81,7 @@ namespace Crytex.Test.FakeImplementations
             throw new NotImplementedException();
         }
 
-        public IPagedList<FileDescriptor> GetPage<TOrder>(Page page, Expression<Func<FileDescriptor, bool>> where, Expression<Func<FileDescriptor, TOrder>> order, bool reverse = false, params Expression<Func<FileDescriptor, object>>[] includes)
+        public IPagedList<FileDescriptor> GetPage<TOrder>(PageInfo page, Expression<Func<FileDescriptor, bool>> where, Expression<Func<FileDescriptor, TOrder>> order, bool reverse = false, params Expression<Func<FileDescriptor, object>>[] includes)
         {
             throw new NotImplementedException();
         }

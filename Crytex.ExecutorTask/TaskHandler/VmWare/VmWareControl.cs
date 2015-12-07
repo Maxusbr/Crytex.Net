@@ -155,6 +155,11 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 this._vmWareProvider.Connect();
             }
         }
+
+        public Guid BackupVm(TaskV2 taskEntity)
+        {
+            throw new NotImplementedException();
+        }
         #endregion // Private methods
     }
 }

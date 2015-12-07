@@ -2,18 +2,18 @@
 
 namespace Crytex.Data.Infrastructure
 {
-    public class Page
+    public class PageInfo
     {
         public int PageNumber { get; set; }
         public int PageSize { get; set; }
 
-        public Page()
+        public PageInfo()
         {
             PageNumber = 1;
             PageSize = 10;
         }
      
-        public Page(int pageNumber, int pageSize)
+        public PageInfo(int pageNumber, int pageSize)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
@@ -34,7 +34,7 @@ namespace Crytex.Data.Infrastructure
         /// <param name="queryable"></param>
         /// <param name="page"></param>
         /// <returns>IQueryable with Skip and Take having been performed</returns>
-        public static IQueryable<T> GetPage<T>(this IQueryable<T> queryable, Page page)
+        public static IQueryable<T> GetPage<T>(this IQueryable<T> queryable, PageInfo page)
         {
             return queryable.Skip(page.Skip).Take(page.PageSize);
         }

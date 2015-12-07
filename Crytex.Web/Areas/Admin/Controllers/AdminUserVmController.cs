@@ -50,7 +50,7 @@ namespace Crytex.Web.Areas.Admin
             if (!Guid.TryParse(id, out guid))
             {
                 this.ModelState.AddModelError("id", "Invalid Guid format");
-                BadRequest(ModelState);
+                return BadRequest(ModelState);
             }
             var vm = this._userVmService.GetVmById(guid);
             var model = AutoMapper.Mapper.Map<UserVmViewModel>(vm);

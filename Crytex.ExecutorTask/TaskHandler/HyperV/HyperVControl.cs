@@ -126,5 +126,10 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             throw new InvalidIdentifierException(string.Format("Virtual machine with name {0} doesnt exist on this host",
                 machineName));
         }
+
+        public Guid BackupVm(TaskV2 taskEntity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

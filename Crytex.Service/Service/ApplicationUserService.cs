@@ -35,7 +35,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<ApplicationUser> GetPage(int pageNumber, int pageSize, ApplicationUserSearchParams searchParams = null)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
 
             Expression<Func<ApplicationUser, bool>> where = x => true;
 

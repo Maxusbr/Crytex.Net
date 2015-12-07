@@ -39,7 +39,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<PhoneCallRequest> GetPage(int pageNumber, int pageSize)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
             var pagedList = this._phoneCallRequestRepo.GetPage(page, x => true, x => x.CreationDate);
 
             return pagedList;
