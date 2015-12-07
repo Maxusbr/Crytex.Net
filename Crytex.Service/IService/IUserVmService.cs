@@ -2,6 +2,7 @@
 using Crytex.Model.Models;
 using System;
 using System.Collections.Generic;
+using Crytex.Service.Model;
 
 namespace Crytex.Service.IService
 {
@@ -9,7 +10,9 @@ namespace Crytex.Service.IService
     {
         UserVm GetVmById(Guid id);
 
-        IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId);
+        IPagedList<UserVm> GetPage(int pageNumber, int pageSize, UserVmSearchParams searchParams = null);
+
+        IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId = null);
 
         Guid CreateVm(UserVm userVm);
 

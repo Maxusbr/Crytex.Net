@@ -56,7 +56,7 @@ namespace Crytex.Background.Tasks
         public void GetVmInfo(VmWareVCenter vCenter, List<UserVm> allVMs, List<Guid> vmActiveList)
         {
             var vmWareMonitor = _vmWareMonitorFactory.CreateVmWareVMonitor(vCenter);
-            var hostVms = allVMs.Where(v => v.VurtualizationType == TypeVirtualization.VmWare && v.VmWareCenterId == vCenter.Id);
+            var hostVms = allVMs.Where(v => v.VirtualizationType == TypeVirtualization.VmWare && v.VmWareCenterId == vCenter.Id);
 
             foreach (var vm in hostVms)
             {

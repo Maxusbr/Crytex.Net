@@ -103,26 +103,31 @@ namespace Crytex.ExecutorTask.TaskHandler
                 Task = execResult.TaskEntity,
                 TypeError = TypeError.Unknown,
                 TypeNotify = TypeNotify.EndTask,
+
                 Success = execResult.Success,
                 Error = execResult.ErrorMessage
             };
 
             var finishDate = DateTime.UtcNow;
+           
             if (execResult.Success)
             {
                 this.UpdateTaskStatus(taskEntity.Id, StatusTask.End, finishDate, null);
             }
             else
             {
+                
                 this.UpdateTaskStatus(taskEntity.Id, StatusTask.EndWithErrors, finishDate, execResult.ErrorMessage);
             }
 
             if (taskEntity.TypeTask == TypeTask.CreateVm)
             {
+         
                 var taskOptions = execResult.TaskEntity.GetOptions<CreateVmOptions>();
                 var createTaskExecResult = (CreateVmTaskExecutionResult)execResult;
                 var newVm = new UserVm
                 {
+
                     Id = createTaskExecResult.MachineGuid,
                     CoreCount = taskOptions.Cpu,
                     HardDriveSize = taskOptions.Hdd,
@@ -130,6 +135,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                     RamCount = taskOptions.Ram,
                     ServerTemplateId = taskOptions.ServerTemplateId,
                     Status = StatusVM.Enable,
+
                     UserId = execResult.TaskEntity.UserId,
                     VurtualizationType = execResult.TaskEntity.Virtualization,
                     OperatingSystemPassword = createTaskExecResult.GuestOsPassword
@@ -138,9 +144,11 @@ namespace Crytex.ExecutorTask.TaskHandler
                 switch (taskEntity.Virtualization)
                 {
                     case TypeVirtualization.HyperV:
+                     
                         newVm.HyperVHostId = execResult.VirtualizationServerEnitityId;
                         break;
                     case TypeVirtualization.VmWare:
+                        
                         newVm.VmWareCenterId = execResult.VirtualizationServerEnitityId;
                         break;
                 }
@@ -150,11 +158,13 @@ namespace Crytex.ExecutorTask.TaskHandler
             }
             else if (taskEntity.TypeTask == TypeTask.UpdateVm)
             {
+              
                 var taskOptions = execResult.TaskEntity.GetOptions<UpdateVmOptions>();
                 this._userVmService.UpdateVm(taskOptions.VmId, taskOptions.Cpu, taskOptions.Hdd, taskOptions.Ram);
             }
             else if (taskEntity.TypeTask == TypeTask.ChangeStatus)
             {
+              
                 var taskOptions = execResult.TaskEntity.GetOptions<ChangeStatusOptions>();
                 this._userVmService.UpdateVmStatus(taskOptions.VmId, taskOptions.TypeChangeStatus);
             }

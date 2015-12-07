@@ -304,7 +304,7 @@ namespace Crytex.Data.Migrations
                             UserId = adminUser.Id,
                             ServerTemplateId = serverTemplates[c].Id,
                             Name = "Machine " + i + "" + c,
-                            VurtualizationType = (c < 2) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
+                            VirtualizationType = (c < 2) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
                             OperatingSystemPassword = "1111"
                         };
                         if (allMachine.All(o => o.Name != vm.Name))

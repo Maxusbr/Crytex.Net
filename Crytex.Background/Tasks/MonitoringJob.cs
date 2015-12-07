@@ -57,7 +57,7 @@ namespace Crytex.Background.Tasks
         public void GetVmInfo(HyperVHost host, List<UserVm> allVMs, List<Guid> vmActiveList)
         {
             var hyperVMonitor = _hyperVMonitorFactory.CreateHyperVMonitor(host);
-            var hostVms = allVMs.Where(v=>v.VurtualizationType == TypeVirtualization.HyperV && v.HyperVHostId == host.Id);
+            var hostVms = allVMs.Where(v=>v.VirtualizationType == TypeVirtualization.HyperV && v.HyperVHostId == host.Id);
 
             foreach (var vm in hostVms)
             {

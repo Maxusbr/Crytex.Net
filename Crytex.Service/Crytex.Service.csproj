@@ -125,6 +125,7 @@
     <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
+    <Compile Include="Model\UserVmSearchParams.cs" />
     <Compile Include="Service\ApplicationUserService.cs" />
     <Compile Include="Service\BilingService.cs" />
     <Compile Include="Service\EmailInfoService.cs" />
