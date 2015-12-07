@@ -3,6 +3,7 @@ using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Crytex.Data.IRepository;
 using Crytex.Data.Infrastructure;
 using Crytex.Model.Exceptions;
@@ -65,7 +66,7 @@ namespace Crytex.Service.Service
         // Use this method to get HelpDeskRequest intstance by id intead of using HelpDeskRequestRepository directly!!!
         public virtual HelpDeskRequest GetById(int id)
         {
-            var request = this._requestRepository.GetById(id);
+            var request = this._requestRepository.Get(h => h.Id == id, r => r.User, r => r.FileDescriptors);
 
             if (request == null)
             {
@@ -75,10 +76,13 @@ namespace Crytex.Service.Service
             return request;
         }
 
+      
         public virtual void DeleteById(int id)
         {
+            
             var request = this.GetById(id);
 
+        
             this._requestRepository.Delete(request);
             this._unitOfWork.Commit();
         }
@@ -87,10 +91,12 @@ namespace Crytex.Service.Service
         {
             IPagedList<HelpDeskRequest> page = new PagedList<HelpDeskRequest>(Enumerable.Empty<HelpDeskRequest>().AsQueryable(), 1, 1);
             if (filter == HelpDeskRequestFilter.All) { 
+             
                 page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => true), (x => x.Read), (x => x.CreationDate));
             }
             else if (filter == HelpDeskRequestFilter.Read)
             {
+               
                 page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => x.Read), (x => x.CreationDate));
             }
             else if (filter == HelpDeskRequestFilter.Unread)
@@ -102,8 +108,10 @@ namespace Crytex.Service.Service
         }
 
 
+     
         public virtual IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id)
         {
+           
             var request = this.GetById(id);
 
             var comments = _requestCommentRepository.GetMany(c=>c.RequestId == id, i=>i.User);
@@ -111,20 +119,25 @@ namespace Crytex.Service.Service
             return comments;
         }
 
+   
         public virtual IPagedList<HelpDeskRequestComment> GetPageCommentsByRequestId(int id, int pageNumber, int pageSize)
         {
+           
             var request = this.GetById(id);
 
             var comments = _requestCommentRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => x.RequestId == request.Id), (x => x.CreationDate));
 
+         
             return comments;
         }
 
 
         public HelpDeskRequestComment CreateComment(int requestId, string comment, string userId, bool isRead = false)
         {
+          
             var request = this.GetById(requestId);
 
+        
             var newComment = new HelpDeskRequestComment
             {
                 Comment = comment,
@@ -141,18 +154,24 @@ namespace Crytex.Service.Service
             return newComment;
         }
 
+       
         public virtual void DeleteCommentById(int id)
         {
+         
             var comment = this.GetCommentById(id);
 
+        
             this._requestCommentRepository.Delete(comment);
             this._unitOfWork.Commit();
         }
 
+
         public virtual void UpdateComment(int commentId, string comment)
         {
+          
             var commentToUpdate = this.GetCommentById(commentId);
 
+       
             commentToUpdate.Comment = comment;
 
             this._requestCommentRepository.Update(commentToUpdate);
