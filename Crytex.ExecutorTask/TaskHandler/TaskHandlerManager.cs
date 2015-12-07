@@ -18,10 +18,12 @@ namespace Crytex.ExecutorTask.TaskHandler
         private INotificationManager _notificationManager;
         private IVmWareVCenterService _vmWareVCenterService;
         private IHyperVHostService _vmHyperVHostCenterService;
+        private IVmBackupService _vmBackupService;
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
-            IServerTemplateService serverTemplateService, IHyperVHostService vmHyperVHostCenterService)
+            IServerTemplateService serverTemplateService, IHyperVHostService vmHyperVHostCenterService,
+            IVmBackupService vmBackupService)
         {
             this._handlerFactory = new TaskHandlerFactory(serverTemplateService);
             this._taskService = taskService;
@@ -29,6 +31,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._notificationManager = notificationManager;
             this._vmWareVCenterService = vmWareVCenterService;
             this._vmHyperVHostCenterService = vmHyperVHostCenterService;
+            this._vmBackupService = vmBackupService;
         }
 
         public PendingTaskHandlerBox GetTaskHandlers()
@@ -91,53 +94,62 @@ namespace Crytex.ExecutorTask.TaskHandler
             return hyperVHost;
         }
 
-        private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult e)
+        private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult execResult)
         {
             var taskEntity = ((ITaskHandler)sender).TaskEntity;
             TaskEndNotify taskEndNotify = new TaskEndNotify
             {
-                UserId = e.TaskEntity.UserId,
-                Task = e.TaskEntity,
+                UserId = execResult.TaskEntity.UserId,
+                Task = execResult.TaskEntity,
                 TypeError = TypeError.Unknown,
                 TypeNotify = TypeNotify.EndTask,
-                Success = e.Success,
-                Error = e.ErrorMessage
+
+                Success = execResult.Success,
+                Error = execResult.ErrorMessage
             };
 
             var finishDate = DateTime.UtcNow;
-            if (e.Success)
+           
+            if (execResult.Success)
             {
                 this.UpdateTaskStatus(taskEntity.Id, StatusTask.End, finishDate, null);
             }
             else
             {
-                this.UpdateTaskStatus(taskEntity.Id, StatusTask.EndWithErrors, finishDate, e.ErrorMessage);
+                
+                this.UpdateTaskStatus(taskEntity.Id, StatusTask.EndWithErrors, finishDate, execResult.ErrorMessage);
             }
 
             if (taskEntity.TypeTask == TypeTask.CreateVm)
             {
-                var taskOptions = e.TaskEntity.GetOptions<CreateVmOptions>();
+         
+                var taskOptions = execResult.TaskEntity.GetOptions<CreateVmOptions>();
+                var createTaskExecResult = (CreateVmTaskExecutionResult)execResult;
                 var newVm = new UserVm
                 {
-                    Id = e.MachineGuid,
+
+                    Id = createTaskExecResult.MachineGuid,
                     CoreCount = taskOptions.Cpu,
                     HardDriveSize = taskOptions.Hdd,
                     Name = taskOptions.Name,
                     RamCount = taskOptions.Ram,
                     ServerTemplateId = taskOptions.ServerTemplateId,
                     Status = StatusVM.Enable,
-                    UserId = e.TaskEntity.UserId,
-                    VirtualizationType = e.TaskEntity.Virtualization,
-                    OperatingSystemPassword = e.GuestOsPassword
+
+                    UserId = execResult.TaskEntity.UserId,
+                    VurtualizationType = execResult.TaskEntity.Virtualization,
+                    OperatingSystemPassword = createTaskExecResult.GuestOsPassword
                 };
 
                 switch (taskEntity.Virtualization)
                 {
                     case TypeVirtualization.HyperV:
-                        newVm.HyperVHostId = e.VirtualizationServerEnitityId;
+                     
+                        newVm.HyperVHostId = execResult.VirtualizationServerEnitityId;
                         break;
                     case TypeVirtualization.VmWare:
-                        newVm.VmWareCenterId = e.VirtualizationServerEnitityId;
+                        
+                        newVm.VmWareCenterId = execResult.VirtualizationServerEnitityId;
                         break;
                 }
 
@@ -146,13 +158,29 @@ namespace Crytex.ExecutorTask.TaskHandler
             }
             else if (taskEntity.TypeTask == TypeTask.UpdateVm)
             {
-                var taskOptions = e.TaskEntity.GetOptions<UpdateVmOptions>();
+              
+                var taskOptions = execResult.TaskEntity.GetOptions<UpdateVmOptions>();
                 this._userVmService.UpdateVm(taskOptions.VmId, taskOptions.Cpu, taskOptions.Hdd, taskOptions.Ram);
             }
             else if (taskEntity.TypeTask == TypeTask.ChangeStatus)
             {
-                var taskOptions = e.TaskEntity.GetOptions<ChangeStatusOptions>();
+              
+                var taskOptions = execResult.TaskEntity.GetOptions<ChangeStatusOptions>();
                 this._userVmService.UpdateVmStatus(taskOptions.VmId, taskOptions.TypeChangeStatus);
+            }
+            else if(taskEntity.TypeTask == TypeTask.Backup)
+            {
+                var backupExecResult = (BackupTaskExecutionResult)execResult;
+                var taskOptions = backupExecResult.TaskEntity.GetOptions<BackupOptions>();
+                var newBackupDbEntity = new VmBackup
+                {
+                    DateCreated = DateTime.UtcNow,
+                    Name = taskOptions.BackupName,
+                    Id = backupExecResult.BackupGuid,
+                    VmId = taskOptions.VmId
+                };
+
+                this._vmBackupService.Create(newBackupDbEntity);
             }
 
             try

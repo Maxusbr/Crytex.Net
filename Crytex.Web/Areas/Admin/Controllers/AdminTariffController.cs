@@ -40,6 +40,8 @@ namespace Crytex.Web.Areas.Admin
         {
             if (!ModelState.IsValid || tariff == null)
                 return BadRequest(ModelState);
+
+            tariff.CreateDate = DateTime.UtcNow;
             
             var modelTariff = AutoMapper.Mapper.Map<Tariff>(tariff);
 
@@ -58,6 +60,8 @@ namespace Crytex.Web.Areas.Admin
         {
             if (!ModelState.IsValid || tariff == null)
                 return BadRequest(ModelState);
+
+            tariff.UpdateDate = DateTime.UtcNow;
 
             var modelTariff = AutoMapper.Mapper.Map<Tariff>(tariff);
 

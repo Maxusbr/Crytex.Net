@@ -37,7 +37,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<BillingTransaction> GetPageBillingTransaction(int pageNumber, int pageSize, BillingSearchParams searchParams = null)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
 
             Expression<Func<BillingTransaction, bool>> where = x => true;
 

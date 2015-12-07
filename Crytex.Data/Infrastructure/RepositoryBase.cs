@@ -84,7 +84,7 @@ namespace Crytex.Data.Infrastructure
         /// <param name="where">Where clause to apply</param>
         /// <param name="order">Order by to apply</param>
         /// <returns></returns>
-        public virtual IPagedList<T> GetPage<TOrder>(Page page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, Boolean reverse = true,
+        public virtual IPagedList<T> GetPage<TOrder>(PageInfo page, Expression<Func<T, bool>> where, Expression<Func<T, TOrder>> order, Boolean reverse = true,
             params Expression<Func<T, object>>[] includes)
         {
 

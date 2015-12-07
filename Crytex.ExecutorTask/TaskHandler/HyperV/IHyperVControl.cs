@@ -13,5 +13,6 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         void StopVm(string machineName);
 
         void RemoveVm(string machineName);
+        Guid BackupVm(TaskV2 taskEntity);
     }
 }

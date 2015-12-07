@@ -47,18 +47,14 @@ namespace Crytex.Service.Service
 
         public void DeleteCreditPaymentOrderById(Guid id)
         {
-            var orderToDelete = this._creditPaymentOrderRepository.GetById(id);
-            if (orderToDelete == null)
-            {
-                throw new InvalidIdentifierException(string.Format("CreditPaymentOrder with id = {0} doesn't exist.", id.ToString()));
-            }
+            var orderToDelete = this.GetCreditPaymentOrderById(id);
 
             this._creditPaymentOrderRepository.Delete(orderToDelete);
             this._unitOfWork.Commit();
         }
 
 
-        public Payment GetCreditPaymentOrderById(Guid guid)
+        public virtual Payment GetCreditPaymentOrderById(Guid guid)
         {
             var order = this._creditPaymentOrderRepository.GetById(guid);
             if (order == null)
@@ -100,7 +96,7 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var page = this._creditPaymentOrderRepository.GetPage(new Page(pageNumber, pageSize), where, (x => x.Date), true,x=>x.User);
+            var page = this._creditPaymentOrderRepository.GetPage(new PageInfo(pageNumber, pageSize), where, (x => x.Date), true,x=>x.User);
 
             return page;
         }

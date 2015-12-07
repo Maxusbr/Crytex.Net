@@ -1,27 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Hosting;
 using System.Web.Http.Results;
-using System.Web.Http.Routing;
 using Crytex.Core.Service;
 using Crytex.Model.Models;
-using Crytex.Service.IService;
-using Crytex.Web;
 
 
 using Crytex.Web.Mappings;
 using Crytex.Web.Models.JsonModels;
-using Crytex.Web.Service;
 using NSubstitute;
 using NUnit.Framework;
 using PagedList;
 using static NUnit.Framework.Assert;
-using Crytex.Web.Areas.Admin;
 using Crytex.Web.Areas.User;
+using Crytex.Service.IService;
 
 namespace Crytex.Test.Controllers
 {
@@ -100,7 +91,7 @@ namespace Crytex.Test.Controllers
         public void GetResponseOkWithDataWhenCallGetWithValidId()
         {
             var id = 5;
-            _helpDeskRequestService.GeById(id).Returns(new HelpDeskRequest() { Id = id });
+            _helpDeskRequestService.GetById(id).Returns(new HelpDeskRequest() { Id = id });
 
             var actionResult = _helpDeskRequestController.Get(id) as OkNegotiatedContentResult<HelpDeskRequestViewModel>;
 

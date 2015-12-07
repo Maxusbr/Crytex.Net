@@ -59,7 +59,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<Statistic> GetAllPageStatistics(int pageNumber, int pageSize, StatisticType? type = null, DateTime? dateFrom = null, DateTime? dateTo = null)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
             var minDate = dateFrom ?? DateTime.MinValue;
             var maxDate = dateTo ?? DateTime.MaxValue;
 

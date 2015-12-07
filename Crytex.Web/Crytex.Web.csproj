@@ -287,11 +287,13 @@
     <Compile Include="Areas\Admin\Controllers\AdminUserController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminVmBackupController.cs" />
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
     <Compile Include="Areas\User\Controllers\PaymentController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\User\Controllers\PhoneCallRequestController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
+    <Compile Include="Areas\User\Controllers\VmBackupController.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
     <Compile Include="Auth\OauthTokenQuery.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
@@ -321,6 +323,7 @@
     <Compile Include="Mappings\ViewModelToDomainMappingProfile.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\JsonModels\ApplicationUserSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingViewModel.cs" />
@@ -350,6 +353,7 @@
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\UserVmSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\UserVmViewModel.cs" />
+    <Compile Include="Models\JsonModels\VmBackupViewModel.cs" />
     <Compile Include="Models\JsonModels\VmWareVCenterViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\JsonModels\SimpleApplicationUserViewModel.cs" />

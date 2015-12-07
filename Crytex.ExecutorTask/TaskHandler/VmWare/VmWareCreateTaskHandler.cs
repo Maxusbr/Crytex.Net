@@ -18,7 +18,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
         protected override TaskExecutionResult ExecuteLogic()
         {
-            var taskExecutionResult = new TaskExecutionResult();
+            var taskExecutionResult = new CreateVmTaskExecutionResult();
             try
             {
                 var serverTemplateId = this.TaskEntity.GetOptions<CreateVmOptions>().ServerTemplateId;

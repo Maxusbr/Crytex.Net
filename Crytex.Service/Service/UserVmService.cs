@@ -24,7 +24,8 @@ namespace Crytex.Service.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public UserVm GetVmById(Guid id)
+
+        public virtual UserVm GetVmById(Guid id)
         {
             var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.ServerTemplate);
             if (vm == null)
@@ -37,11 +38,13 @@ namespace Crytex.Service.Service
 
         public IEnumerable<UserVm> GetAllVmsHyperV()
         {
+           
             return _userVmRepo.GetMany(x=>x.VirtualizationType == TypeVirtualization.HyperV);
         }
 
         public IEnumerable<UserVm> GetAllVmsVmWare()
         {
+        
             return _userVmRepo.GetMany(x => x.VirtualizationType == TypeVirtualization.VmWare);
         }
 
@@ -89,17 +92,21 @@ namespace Crytex.Service.Service
 
         public IPagedList<UserVm> GetPage(int pageNumber, int pageSize, string userId)
         {
-            var page = new Page(pageNumber, pageSize);
+    
+            var page = new PageInfo(pageNumber, pageSize);
+       
             var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.CreateDate);            
             return list;
         }
 
         public Guid CreateVm(UserVm userVm)
         {
+           
             if (userVm.VirtualizationType == TypeVirtualization.HyperV && userVm.HyperVHostId == null)
             {
                 throw new ApplicationException("HyperVHostId property value is required for HyperV virtualization type");
             }
+         
             if (userVm.VirtualizationType == TypeVirtualization.VmWare && userVm.VmWareCenterId == null)
             {
                 throw new ApplicationException("VmWareCenterId property value is required for VmWare virtualization type");
@@ -113,12 +120,8 @@ namespace Crytex.Service.Service
 
         public void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null)
         {
-            var userVm = this._userVmRepo.GetById(vmId);
-            
-            if (userVm == null)
-            {
-                throw new InvalidIdentifierException(string.Format("UserVm with Id = {0} doesnt exist.",vmId));
-            }
+         
+            var userVm = this.GetVmById(vmId);
 
             userVm.CoreCount = cpu ?? userVm.CoreCount;
             userVm.RamCount = ram ?? userVm.RamCount;
@@ -130,13 +133,10 @@ namespace Crytex.Service.Service
 
         public void UpdateVmStatus(Guid vmId, TypeChangeStatus status)
         {
-            var userVm = this._userVmRepo.GetById(vmId);
+            
+            var userVm = this.GetVmById(vmId);
 
-            if (userVm == null)
-            {
-                throw new InvalidIdentifierException(string.Format("UserVm with Id = {0} doesnt exist.", vmId));
-            }
-
+           
             switch (status)
             {
                 case TypeChangeStatus.Start:

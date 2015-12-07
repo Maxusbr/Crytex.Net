@@ -26,7 +26,8 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.CreateVm, this.GetCreateVmTaskHandler},
                 {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
                 {TypeTask.ChangeStatus, this.GetChangeVmStatusTaskHandler},
-                {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler}
+                {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler},
+                {TypeTask.Backup, this.GetBackupVmTaskHandler }
             };
 
             this._vmWareTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, VmWareVCenter, BaseTaskHandler>>
@@ -34,7 +35,8 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.CreateVm, this.GetCreateVmTaskHandler},
                 {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
                 {TypeTask.ChangeStatus, this.GetChangeVmStatusTaskHandler},
-                {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler}
+                {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler},
+                {TypeTask.Backup, this.GetBackupVmTaskHandler }
             };
         }
 
@@ -112,6 +114,20 @@ namespace Crytex.ExecutorTask.TaskHandler
         private BaseTaskHandler GetRemoveVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             var handler = new VmWareRemoveVmTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+
+            return handler;
+        }
+
+        private BaseTaskHandler GetBackupVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        {
+            var handler = new VmWareBackupTaskHandler(task, this.CreateVmWareControl(vCenter), vCenter.ServerAddress);
+
+            return handler;
+        }
+
+        private BaseTaskHandler GetBackupVmTaskHandler(TaskV2 task, HyperVHost host)
+        {
+            var handler = new HyperVBackupTaskHandler(task, this.CreateHyperVControl(task, host), host.Host);
 
             return handler;
         }
