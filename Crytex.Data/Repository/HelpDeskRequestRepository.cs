@@ -17,7 +17,7 @@ namespace Crytex.Data.Repository
         {
         }
 
-        public  IPagedList<HelpDeskRequest> GetPage<TOrder, TSecondOrder>(PageInfo page, Expression<Func<HelpDeskRequest, bool>> where, Expression<Func<HelpDeskRequest, TOrder>> order, Expression<Func<HelpDeskRequest, TSecondOrder>> secondOrder)
+        public  IPagedList<HelpDeskRequest> GetPage<TOrder, TSecondOrder>(PageInfo page, Expression<Func<HelpDeskRequest, bool>> where, Expression<Func<HelpDeskRequest, TOrder>> order, Expression<Func<HelpDeskRequest, TSecondOrder>> secondOrder, params Expression<Func<HelpDeskRequest, object>>[] includes)
         {
             var query = this.DataContext.HelpDeskRequests
                 .Where(where)

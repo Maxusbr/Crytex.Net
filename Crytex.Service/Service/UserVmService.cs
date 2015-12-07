@@ -62,7 +62,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<UserVm> GetPage(int pageNumber, int pageSize, UserVmSearchParams searchParams = null)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
 
             Expression<Func<UserVm, bool>> where = x => true;
 
