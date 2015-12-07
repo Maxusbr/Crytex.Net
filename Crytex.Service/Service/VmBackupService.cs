@@ -39,7 +39,7 @@ namespace Crytex.Service.Service
             return backup;
         }
 
-        public virtual IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from, DateTime? to)
+        public virtual IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null, Guid? vmId = null)
         {
             Expression<Func<VmBackup, bool>> where = x => true;
             if (from != null)
@@ -49,6 +49,10 @@ namespace Crytex.Service.Service
             if (to != null)
             {
                 where = where.And(x => x.DateCreated <= to);
+            }
+            if (vmId != null)
+            {
+                where = where.And(x => x.VmId == vmId);
             }
 
             var page = this.GetPage(pageNumber, pageSize, where);
