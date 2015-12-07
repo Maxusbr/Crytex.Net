@@ -38,7 +38,7 @@ namespace Crytex.Service.Service
 
         public IPagedList<EmailInfo> GetEmails(int pageNumber, int pageSize, SearchEmailParams searchParams = null)
         {
-            var page = new Page(pageNumber, pageSize);
+            var page = new PageInfo(pageNumber, pageSize);
             Expression<Func<EmailInfo, bool>> where = x => true;
 
             if (searchParams != null)

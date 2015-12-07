@@ -59,7 +59,8 @@ namespace Crytex.Model.Models
         CreateVm = 0,
         UpdateVm = 1,
         ChangeStatus = 2,
-        RemoveVm = 3
+        RemoveVm = 3,
+        Backup = 4
     }
 
     [Serializable]
@@ -100,6 +101,13 @@ namespace Crytex.Model.Models
     public class ChangeStatusOptions : BaseOptions
     {
         public TypeChangeStatus TypeChangeStatus { get; set; }
+        public Guid VmId { get; set; }
+    }
+
+    [Serializable]
+    public class BackupOptions : BaseOptions
+    {
+        public string BackupName { get; set; }
         public Guid VmId { get; set; }
     }
 

@@ -39,5 +39,12 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         /// <param name="machineName">Имя виртуальной машины</param>
         /// <exception cref="VmWareRemote.Exceptions.InvalidIdentifierException">Выбрасывается если машина с таким именем не найдена</exception>
         void RemoveVm(string machineName);
+
+        /// <summary>
+        /// Создаёт бэкап виртуальной машины
+        /// </summary>
+        /// <param name="taskEntity">Объект задачи бэкапа</param>
+        /// <returns>Идентификатор бэкапа на сервере виртуализации</returns>
+        Guid BackupVm(TaskV2 taskEntity);
     }
 }

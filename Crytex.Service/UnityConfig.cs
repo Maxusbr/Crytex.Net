@@ -5,6 +5,7 @@ using Crytex.Data.Repository;
 using Crytex.Service.IService;
 using Crytex.Service.Service;
 using Sample.Service.IService;
+using Crytex.Service.Service.SecureService;
 
 namespace Crytex.Service
 {
@@ -58,6 +59,16 @@ namespace Crytex.Service
             container.RegisterType<IOAuthService, OAuthService>();
             container.RegisterType<INetTrafficCounterService, NetTrafficCounterService>();
             container.RegisterType<INetTrafficCounterRepository, NetTrafficCounterRepository>();
+            container.RegisterType<IVmBackupRepository, VmBackupRepository>();
+            container.RegisterType<IVmBackupService, VmBackupService>();
+
+            // secure services
+            container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");
+            container.RegisterType<IPaymentService, SecurePaymentService>("Secured");
+            container.RegisterType<IUserVmService, SecureUserVmService>("Secured");
+            container.RegisterType<IStateMachineService, SecureStateMachineService>("Secured");
+            container.RegisterType<ITaskV2Service, SecureTaskV2Service>("Secured");
+            container.RegisterType<IVmBackupService, SecureVmBackupService>("Secured");
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();

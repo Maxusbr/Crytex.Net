@@ -69,6 +69,11 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             }
         }
 
+        public Guid BackupVm(TaskV2 taskEntity)
+        {
+            return Guid.NewGuid();
+        }
+
         #endregion // Private methods
     }
 

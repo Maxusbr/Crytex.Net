@@ -104,7 +104,7 @@ namespace Crytex.Test.Notification.Hub
             var userVm = new UserVm
             {
                 HyperVHostId = host.Id,
-                VurtualizationType = TypeVirtualization.HyperV
+                VirtualizationType = TypeVirtualization.HyperV
             };
             userVm.Name = "First";
             userVm.Id = Guid.NewGuid();
