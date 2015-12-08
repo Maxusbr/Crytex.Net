@@ -94,6 +94,10 @@ namespace Crytex.Service.Service
                         where = where.And(x => x.DateEnd >= filter.FromDate && x.DateEnd <= filter.ToDate);
                     }
                 }
+                if (filter.PaymentSystem != null)
+                {
+                    where = where.And(x => x.PaymentSystem == filter.PaymentSystem);
+                }
             }
 
             var page = this._creditPaymentOrderRepository.GetPage(new PageInfo(pageNumber, pageSize), where, (x => x.Date), true,x=>x.User);
