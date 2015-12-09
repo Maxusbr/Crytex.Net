@@ -194,7 +194,7 @@ namespace Crytex.Service.Service
                         StatusTask = StatusTask.Pending,
                         CreatedAt = DateTime.UtcNow,
                         UserId = vm.UserId
-                };
+                    };
 
                     task.SaveOptions(new ChangeStatusOptions
                     {
@@ -204,8 +204,9 @@ namespace Crytex.Service.Service
 
                     _taskV2Repo.Add(task);
                 }
+                this._unitOfWork.Commit();
             }
-            this._unitOfWork.Commit();
+            
         }
     }
 }
