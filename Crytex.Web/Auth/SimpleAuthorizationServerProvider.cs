@@ -21,6 +21,7 @@ namespace Crytex.Web.Auth
         #region private injected sources
 
         private ApplicationUserManager _applicationUserManager { get; set; }
+        private IUserLoginLogService _loginLogService { get; set; }
 
         private OAuthService _oauthService { get; set; }
 
@@ -31,6 +32,7 @@ namespace Crytex.Web.Auth
             var unityContainer = Crytex.Web.App_Start.UnityConfig.GetConfiguredContainer();
             this._applicationUserManager = (ApplicationUserManager)unityContainer.Resolve(typeof(ApplicationUserManager), "");
             this._oauthService = (OAuthService)unityContainer.Resolve(typeof(OAuthService), "");
+            this._loginLogService = (IUserLoginLogService)unityContainer.Resolve(typeof(IUserLoginLogService), "");
         }
 
         /// <summary>
@@ -111,11 +113,11 @@ namespace Crytex.Web.Auth
                 context.SetError("invalid_grant", "The user name or password is incorrect.");
                 return;
             }
-            //if (!user.EmailConfirmed)
-            //{
-            //    context.SetError("not_confirmed_email", "Need to confirm your email adress!", user.Id);
-            //    return;
-            //}
+            if (user.IsBlocked)
+            {
+                context.SetError("user_blocked", "This user account is blocked", user.Id);
+                return;
+            }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
@@ -144,6 +146,8 @@ namespace Crytex.Web.Auth
 
             var ticket = new AuthenticationTicket(identity, props);
             context.Validated(ticket);
+
+            this._loginLogService.CreateLogEntryForNow(user.Id, context.Request.RemoteIpAddress, context.ClientId != null);
         }
 
         /// <summary>
