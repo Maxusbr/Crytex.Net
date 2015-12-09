@@ -34,7 +34,7 @@ namespace Crytex.Service.Service.SecureService
             return backup;
         }
 
-        public override IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from, DateTime? to)
+        public override IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null, Guid? vmId = null)
         {
             var userId = this._userIdentity.GetUserId();
             Expression<Func<VmBackup, bool>> where = x => x.Vm.UserId == userId;
@@ -45,6 +45,10 @@ namespace Crytex.Service.Service.SecureService
             if (to != null)
             {
                 where = where.And(x => x.DateCreated <= to);
+            }
+            if (vmId != null)
+            {
+                where = where.And(x => x.VmId == vmId);
             }
 
             var page = this.GetPage(pageNumber, pageSize, where);

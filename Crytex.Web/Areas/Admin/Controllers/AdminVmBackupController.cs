@@ -29,12 +29,18 @@ namespace Crytex.Web.Areas.Admin.Controllers
             return this.Ok(model);
         }
 
-        public IHttpActionResult Get(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize, string vmId, DateTime? from = null, DateTime? to = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be grater than 1");
+            Guid guid;
+            if (!Guid.TryParse(vmId, out guid))
+            {
+                this.ModelState.AddModelError("id", "Invalid Guid format");
+                return this.BadRequest(ModelState);
+            }
 
-            var pagedList = this._backupService.GetPage(pageNumber, pageSize, from, to);
+            var pagedList = this._backupService.GetPage(pageNumber, pageSize, from, to, guid);
             var pageModel = AutoMapper.Mapper.Map<PageModel<VmBackupViewModel>>(pagedList);
 
             return this.Ok(pageModel);
