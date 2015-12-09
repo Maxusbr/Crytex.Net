@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Crytex.Model.Enums;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Service.Model
 {
@@ -14,6 +15,7 @@ namespace Crytex.Service.Model
         public DateType? DateType { get; set; }
         public bool? Success { get; set; }
         public string UserId { get; set; }
+        public PaymentSystemType? PaymentSystem { get; set; }
     }
 
     public enum DateType
