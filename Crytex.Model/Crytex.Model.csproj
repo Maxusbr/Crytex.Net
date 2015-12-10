@@ -116,6 +116,7 @@
     <Compile Include="Models\Tariff.cs" />
     <Compile Include="Models\TaskV2.cs" />
     <Compile Include="Models\UserInfo.cs" />
+    <Compile Include="Models\UserLoginLogEntry.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Models\VmBackup.cs" />
     <Compile Include="Models\VmWareHost.cs" />

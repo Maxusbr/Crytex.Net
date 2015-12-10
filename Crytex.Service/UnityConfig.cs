@@ -61,6 +61,8 @@ namespace Crytex.Service
             container.RegisterType<INetTrafficCounterRepository, NetTrafficCounterRepository>();
             container.RegisterType<IVmBackupRepository, VmBackupRepository>();
             container.RegisterType<IVmBackupService, VmBackupService>();
+            container.RegisterType<IUserLoginLogEntryRepository, UserLoginLogEntryRepository>();
+            container.RegisterType<IUserLoginLogService, UserLoginLogService>();
 
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");

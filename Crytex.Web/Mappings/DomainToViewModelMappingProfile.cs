@@ -69,6 +69,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Discount, DiscountViewModel>();
             Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
             Mapper.CreateMap<VmBackup, VmBackupViewModel>();
+            Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -84,6 +85,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<SnapshotVm, SnapshotVmViewModel>();
             this.MapPagedList<PhoneCallRequest, PhoneCallRequestViewModel>();
             this.MapPagedList<VmBackup, VmBackupViewModel>();
+            this.MapPagedList<UserLoginLogEntry, UserLoginLogEntryModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()
