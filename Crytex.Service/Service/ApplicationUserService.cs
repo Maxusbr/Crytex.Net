@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Security.Cryptography.X509Certificates;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
+using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using Crytex.Service.Extension;
 using Crytex.Service.IService;
@@ -16,13 +17,11 @@ namespace Crytex.Service.Service
 {
     public class ApplicationUserService : IApplicationUserService
     {
-        private IUserVmRepository _userVmRepository;
         private IUnitOfWork _unitOfWork;
         
-        public ApplicationUserService(IApplicationUserRepository applicationUserRepository, IUnitOfWork unitOfWork, IUserVmRepository userVmRepository)
+        public ApplicationUserService(IApplicationUserRepository applicationUserRepository, IUnitOfWork unitOfWork)
         {
             _applicationUserRepository = applicationUserRepository;
-            _userVmRepository = userVmRepository;
             _unitOfWork = unitOfWork;
         }
 
@@ -37,7 +36,7 @@ namespace Crytex.Service.Service
         {
             var page = new PageInfo(pageNumber, pageSize);
 
-            Expression<Func<ApplicationUser, bool>> where = x => true;
+            Expression<Func<ApplicationUser, bool>> where = x => x.Deleted == false;
 
             if (searchParams != null)
             {
@@ -72,10 +71,16 @@ namespace Crytex.Service.Service
             return _applicationUserRepository.GetMany(x => x.UserName.Contains(searchParam) || x.Email.Contains(searchParam));
         }
 
-        public void DeleteUser(ApplicationUser user)
+        public void DeleteUser(string id)
         {
-            _userVmRepository.Delete(v=>v.UserId == user.Id);
-            _applicationUserRepository.Delete(u=>u.Id == user.Id);
+            var user = this._applicationUserRepository.GetById(id);
+
+            if (user == null)
+            {
+                throw new InvalidIdentifierException(string.Format("User width Id={0} doesn't exists", id));
+            }
+            user.Deleted = true;
+            _applicationUserRepository.Update(user);
             _unitOfWork.Commit();
         }
     }
