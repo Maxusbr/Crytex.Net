@@ -74,6 +74,7 @@
     <Compile Include="IRepository\IUserInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
+    <Compile Include="IRepository\IUserLoginLogEntryRepository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="IRepository\IVmBackupRepository.cs" />
     <Compile Include="IRepository\IVmWareVCenterRepository.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Repository\StatisticRepository.cs" />
     <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
+    <Compile Include="Repository\UserLoginLogEntryRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
     <Compile Include="Repository\DiscountRepository.cs" />
     <Compile Include="Repository\VmBackupRepository.cs" />

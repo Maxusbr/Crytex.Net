@@ -45,6 +45,7 @@ namespace Crytex.Model.Models
         public TypeUser UserType { get; set; }
         public DateTime RegisterDate { get; set; }
         public bool Deleted { get; set; }
+        public bool IsBlocked { get; set; }
     }
 
     public  enum TypeUser

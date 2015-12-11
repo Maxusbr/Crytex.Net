@@ -31,7 +31,7 @@ namespace Crytex.Service.Service
         }
 
 
-        public VmWareVCenter GetVCenterById(int id)
+        public VmWareVCenter GetVCenterById(Guid id)
         {
             var vCenter = this._vCenterRepo.GetById(id);
 
@@ -50,7 +50,7 @@ namespace Crytex.Service.Service
             return vCenters;
         }
 
-        public void UpdateVCenter(int id, VmWareVCenter vCenter)
+        public void UpdateVCenter(Guid id, VmWareVCenter vCenter)
         {
             var vCenterToUpdate = this._vCenterRepo.GetById(id);
 
