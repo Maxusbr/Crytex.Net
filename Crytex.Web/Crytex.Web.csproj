@@ -309,7 +309,7 @@
     <Compile Include="Areas\User\Controllers\StateMachineController.cs" />
     <Compile Include="Areas\User\Controllers\TaskV2Controller.cs" />
     <Compile Include="Areas\User\Controllers\UserVmController.cs" />
-    <Compile Include="Controllers\Api\VmWareVCenterController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminVmWareVCenterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Filters\ExceptionHandlingWebFilter .cs" />
