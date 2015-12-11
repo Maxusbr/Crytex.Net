@@ -2,11 +2,13 @@
 using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using Crytex.Model.Models.Notifications;
 using Crytex.Notification;
 using Crytex.Notification.Models;
 using System.Linq;
 using Crytex.Core;
+using Crytex.Model.Enums;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -19,11 +21,17 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IVmWareVCenterService _vmWareVCenterService;
         private IHyperVHostService _vmHyperVHostCenterService;
         private IVmBackupService _vmBackupService;
+        private ITriggerService _triggerService;
+        private IApplicationUserService _applicationUserService;
+        private IEmailTemplateService _emailTemplateService;
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
             IServerTemplateService serverTemplateService, IHyperVHostService vmHyperVHostCenterService,
-            IVmBackupService vmBackupService)
+            IVmBackupService vmBackupService,
+            ITriggerService triggerService,
+            IApplicationUserService applicationUserService,
+            IEmailTemplateService emailTemplateService)
         {
             this._handlerFactory = new TaskHandlerFactory(serverTemplateService);
             this._taskService = taskService;
@@ -32,6 +40,9 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._vmWareVCenterService = vmWareVCenterService;
             this._vmHyperVHostCenterService = vmHyperVHostCenterService;
             this._vmBackupService = vmBackupService;
+            this._triggerService = triggerService;
+            this._applicationUserService = applicationUserService;
+            this._emailTemplateService = emailTemplateService;
         }
 
         public PendingTaskHandlerBox GetTaskHandlers()
@@ -190,6 +201,35 @@ namespace Crytex.ExecutorTask.TaskHandler
             catch (Exception ex)
             {
                 LoggerCrytex.Logger.Error("Ошибка отправки сообщения " + ex);
+            }
+
+            if (taskEntity.TypeTask == TypeTask.CreateVm || taskEntity.TypeTask == TypeTask.UpdateVm)
+            {
+                var standartTiggers = this._triggerService.GetUserTrigers(taskEntity.UserId, TriggerType.EndTask);
+                if (standartTiggers.Count > 0)
+                {
+                    var user = this._applicationUserService.GetUserById(taskEntity.UserId);
+                    var template = new EmailTemplate();
+                    EmailTemplateType? emailType = null;
+
+                    if (standartTiggers.Find(t => t.ThresholdValue == Convert.ToDouble(TypeTask.UpdateVm)) != null && taskEntity.TypeTask == TypeTask.UpdateVm)
+                    {
+                        emailType = EmailTemplateType.UpdateVm;
+                    }
+                    if (standartTiggers.Find(t => t.ThresholdValue == Convert.ToDouble(TypeTask.CreateVm)) != null && taskEntity.TypeTask == TypeTask.CreateVm)
+                    {
+                        emailType = EmailTemplateType.CreateVm;
+                    }
+
+                    template = _emailTemplateService.GetTemplateByType(emailType.Value);
+                    if (template != null)
+                    {
+                        var parameters = template.ParameterNamesList.Select(key => new KeyValuePair<string, string>(key, key)).ToList();
+                        var from = ConfigurationManager.AppSettings["Email"];
+                        this._notificationManager.SendEmailImmediately(from, user.Email, template.EmailTemplateType, parameters, parameters, DateTime.UtcNow);
+                    }
+
+                }
             }
         }
 

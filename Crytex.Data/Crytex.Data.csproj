@@ -62,6 +62,7 @@
     <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
     <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
     <Compile Include="IRepository\IPhoneCallRequestRepository.cs" />
+    <Compile Include="IRepository\ITriggerRepository.cs" />
     <Compile Include="IRepository\ISnapshotVmRepository.cs" />
     <Compile Include="IRepository\IMessageRepository.cs" />
     <Compile Include="IRepository\IOperatingSystemRepository.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
     <Compile Include="Repository\PhoneCallRequestRepository.cs" />
+    <Compile Include="Repository\TriggerRepository.cs" />
     <Compile Include="Repository\ServerTemplateRepository.cs" />
     <Compile Include="Repository\SubscriptionVmRepository.cs" />
     <Compile Include="Repository\SystemCenterVirtualManagerRepository.cs" />

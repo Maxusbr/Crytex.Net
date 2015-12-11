@@ -56,5 +56,6 @@ namespace Crytex.Data
         public DbSet<NetTrafficCounter> NetTrafficCounters { get; set; }
         public DbSet<VmBackup> VmBackups { get; set; }
         public DbSet<UserLoginLogEntry> UserLoginLogEntries { get; set; }
+        public DbSet<Trigger> Triggers { get; set; }
     }
 }

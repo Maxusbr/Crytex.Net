@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
@@ -13,12 +14,14 @@ namespace Crytex.Web.Areas.Admin
 {
     public class AdminUserController : AdminCrytexController
     {
-        public AdminUserController(IApplicationUserService applicationUserService)
+        public AdminUserController(IApplicationUserService applicationUserService, ITriggerService triggerService)
         {
             _applicationUserService = applicationUserService;
+            _triggerService = triggerService;
         }
 
-        IApplicationUserService _applicationUserService { get; }
+        private IApplicationUserService _applicationUserService { get; }
+        private  ITriggerService _triggerService { get; set; }
 
         /// <summary>
         /// Получение списка пользователей
@@ -107,7 +110,8 @@ namespace Crytex.Web.Areas.Admin
                 Areas = model.Areas,
                 Address = model.Address,
                 CodePhrase = model.CodePhrase,
-                UserType = model.UserType
+                UserType = model.UserType,
+                RegisterDate = DateTime.UtcNow
             };
 
             var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
@@ -116,6 +120,8 @@ namespace Crytex.Web.Areas.Admin
                 AddErrors(creationResult);
                 return BadRequest(this.ModelState);
             }
+
+            _triggerService.InitStandartTriggersForUser(newUser.Id);
 
             return Created(Url.Link("DefaultApiAdmin", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
         }
