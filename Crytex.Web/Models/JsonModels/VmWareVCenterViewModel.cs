@@ -16,5 +16,6 @@ namespace Crytex.Web.Models.JsonModels
         public string Password { get; set; }
         [Required]
         public string ServerAddress { get; set; }
+        public Guid Id { get; set; }
     }
 }

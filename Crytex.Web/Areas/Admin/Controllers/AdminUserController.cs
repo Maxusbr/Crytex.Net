@@ -14,14 +14,16 @@ namespace Crytex.Web.Areas.Admin
 {
     public class AdminUserController : AdminCrytexController
     {
-        public AdminUserController(IApplicationUserService applicationUserService, ITriggerService triggerService)
+        public AdminUserController(IApplicationUserService applicationUserService, ITaskV2Service taskService, ITriggerService triggerService)
         {
             _applicationUserService = applicationUserService;
-            _triggerService = triggerService;
+            _taskService = taskService;
+			_triggerService = triggerService;
         }
 
         private IApplicationUserService _applicationUserService { get; }
-        private  ITriggerService _triggerService { get; set; }
+        private ITaskV2Service _taskService { get; set; }
+		private  ITriggerService _triggerService { get; set; }
 
         /// <summary>
         /// Получение списка пользователей
@@ -190,14 +192,9 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         public IHttpActionResult Delete(string id)
         {
-            var user = this.UserManager.FindById(id);
-            if(user == null)
-            {
-                return NotFound();
-            }
+            _applicationUserService.DeleteUser(id);
+            _taskService.StopAllUserMachines(id);
             
-            _applicationUserService.DeleteUser(user);
-
             return Ok();
         }
 

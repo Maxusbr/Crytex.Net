@@ -16,5 +16,6 @@ namespace Crytex.Service.IService
         void RemoveTask(Guid id);
         IEnumerable<TaskV2> GetPendingTasks();
         void UpdateTaskStatus(Guid id, StatusTask status, DateTime? date, string errorMessage = null);
+        void StopAllUserMachines(string userId);
     }
 }
