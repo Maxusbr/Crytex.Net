@@ -203,34 +203,34 @@ namespace Crytex.ExecutorTask.TaskHandler
                 LoggerCrytex.Logger.Error("Ошибка отправки сообщения " + ex);
             }
 
-            if (taskEntity.TypeTask == TypeTask.CreateVm || taskEntity.TypeTask == TypeTask.UpdateVm)
+            var standartTigger = this._triggerService.GetUserTrigger(taskEntity.UserId, TriggerType.EndTask, Convert.ToDouble(taskEntity.TypeTask));
+            if (standartTigger != null)
             {
-                var standartTiggers = this._triggerService.GetUserTrigers(taskEntity.UserId, TriggerType.EndTask);
-                if (standartTiggers.Count > 0)
+                EmailTemplateType? emailType = null;
+
+                if (taskEntity.TypeTask == TypeTask.UpdateVm)
                 {
+                    emailType = EmailTemplateType.UpdateVm;
+                }
+                if (taskEntity.TypeTask == TypeTask.CreateVm)
+                {
+                    emailType = EmailTemplateType.CreateVm;
+                }
+
+                if (emailType != null)
+                {
+                    var template = _emailTemplateService.GetTemplateByType(emailType.Value);
                     var user = this._applicationUserService.GetUserById(taskEntity.UserId);
-                    var template = new EmailTemplate();
-                    EmailTemplateType? emailType = null;
 
-                    if (standartTiggers.Find(t => t.ThresholdValue == Convert.ToDouble(TypeTask.UpdateVm)) != null && taskEntity.TypeTask == TypeTask.UpdateVm)
-                    {
-                        emailType = EmailTemplateType.UpdateVm;
-                    }
-                    if (standartTiggers.Find(t => t.ThresholdValue == Convert.ToDouble(TypeTask.CreateVm)) != null && taskEntity.TypeTask == TypeTask.CreateVm)
-                    {
-                        emailType = EmailTemplateType.CreateVm;
-                    }
-
-                    template = _emailTemplateService.GetTemplateByType(emailType.Value);
                     if (template != null)
                     {
                         var parameters = template.ParameterNamesList.Select(key => new KeyValuePair<string, string>(key, key)).ToList();
                         var from = ConfigurationManager.AppSettings["Email"];
-                        this._notificationManager.SendEmailImmediately(from, user.Email, template.EmailTemplateType, parameters, parameters, DateTime.UtcNow);
+                        this._notificationManager.SendEmailImmediately(from, user.Email, template.EmailTemplateType,
+                            parameters, parameters, DateTime.UtcNow);
                     }
-
                 }
-            }
+            }   
         }
 
         private void ProcessingStartedEventHandler(object sender, TaskV2 task)

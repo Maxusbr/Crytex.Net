@@ -20,7 +20,8 @@ namespace Crytex.Service.IService
 
         IPagedList<Trigger> GetPage(int pageNumber, int pageSize, string userId = null);
         void InitStandartTriggersForUser(string userId);
-        List<Trigger> GetUserTrigers(string userId, TriggerType? type = null);
+        List<Trigger> GetUserTriggers(string userId, TriggerType? type = null);
+        Trigger GetUserTrigger(string userId, TriggerType type, double value);
 
     }
 }

@@ -101,7 +101,7 @@ namespace Crytex.Service.Service
             return trigger;
         }
 
-        public List<Trigger> GetUserTrigers(string userId, TriggerType? type = null)
+        public List<Trigger> GetUserTriggers(string userId, TriggerType? type = null)
         {
             Expression<Func<Trigger, bool>> where = x => x.UserId == userId;
             if (type != null)
@@ -111,6 +111,13 @@ namespace Crytex.Service.Service
             var triggers = this._triggerRepository.GetMany(where);
 
             return triggers;
+        }
+
+        public Trigger GetUserTrigger(string userId, TriggerType type, double value)
+        {
+            var trigger = this._triggerRepository.Get(t => t.UserId == userId && t.Type == type && t.ThresholdValue == value);
+
+            return trigger;
         }
 
         public IPagedList<Trigger> GetPage(int pageNumber, int pageSize, string userId = null)
