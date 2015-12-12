@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
@@ -11,6 +11,7 @@ using Crytex.Model.Enums;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using System.IO;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.Notifications;
 
 namespace Crytex.Data.Migrations
 {
@@ -135,6 +136,16 @@ namespace Crytex.Data.Migrations
                         manager.AddToRoles(user.Id, new string[] { "User" });
                     }
                 }
+
+                ///////////////////////////////////
+                var emailtemplate = new EmailTemplate
+                {
+                    Body = @"Подтвердите вашу учетную запись, щелкнув <a href=""{callbackUrl}"">здесь</a>",
+                    EmailTemplateType = EmailTemplateType.Registration,
+                    ParameterNames = @"[""callbackUrl""]",
+                    Subject = "Подтверждение учетной записи"
+                };
+                context.EmailTemplates.Add(emailtemplate);
 
                 ///////////////////////////////////
 
@@ -366,8 +377,6 @@ namespace Crytex.Data.Migrations
                     };
                     context.PhoneCallRequests.Add(call);
                 }
-
-
             }
 
             context.Commit();

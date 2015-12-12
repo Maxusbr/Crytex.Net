@@ -1,12 +1,18 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Crytex.Model.Enums;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Crytex.Model.Models;
+using Crytex.Notification;
 using Crytex.Web.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security.DataProtection;
 
 namespace Crytex.Web.Controllers
 {
@@ -15,13 +21,15 @@ namespace Crytex.Web.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private NotificationManager _notificationManager { get; set; }
 
-      
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, NotificationManager notificationManager )
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _notificationManager = notificationManager;
         }
 
        
@@ -124,17 +132,23 @@ namespace Crytex.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, RegisterDate = DateTime.Now };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // Дополнительные сведения о том, как включить подтверждение учетной записи и сброс пароля, см. по адресу: http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Отправка сообщения электронной почты с этой ссылкой
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Подтверждение учетной записи", "Подтвердите вашу учетную запись, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
+
+                    var provider = new DpapiDataProtectionProvider("TestWebAPI");
+                    _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
+
+                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                    var mailParams = new List<KeyValuePair<string, string>>();
+                    mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl));
+
+                    await _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
+                        mailParams, DateTime.Now);
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -154,6 +168,8 @@ namespace Crytex.Web.Controllers
             {
                 return View("Error");
             }
+            var provider = new DpapiDataProtectionProvider("TestWebAPI");
+            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
             var result = await _userManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }

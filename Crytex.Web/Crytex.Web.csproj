@@ -370,6 +370,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Files\Images\ImageTest.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -440,7 +441,6 @@
     <Content Include="Views\Home\SignaRMonitorTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Files\Images\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\User\Models\" />
