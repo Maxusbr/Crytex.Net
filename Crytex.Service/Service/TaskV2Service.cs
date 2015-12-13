@@ -22,6 +22,7 @@ namespace Crytex.Service.Service
         public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmRepository userVmRepo, IUnitOfWork unitOfWork)
         {
             this._taskV2Repo = taskV2Repo;
+            this._userVmRepository = userVmRepo;
             this._unitOfWork = unitOfWork;
             this._userVmRepository = userVmRepo;
         }
@@ -179,6 +180,38 @@ namespace Crytex.Service.Service
 
             this._taskV2Repo.Update(task);
             this._unitOfWork.Commit();
+        }
+
+        public void StopAllUserMachines(string userId)
+        {
+           var userVms = _userVmRepository.GetMany(m => m.UserId == userId);
+            if (userVms.Count > 0)
+            {
+                foreach (var vm in userVms)
+                {
+                    var task = new TaskV2
+                    {
+                        Id = Guid.NewGuid(),
+                        ResourceType = ResourceType.Vm,
+                        ResourceId = vm.Id,
+                        TypeTask = TypeTask.ChangeStatus,
+                        Virtualization = vm.VirtualizationType,
+                        StatusTask = StatusTask.Pending,
+                        CreatedAt = DateTime.UtcNow,
+                        UserId = vm.UserId
+                    };
+
+                    task.SaveOptions(new ChangeStatusOptions
+                    {
+                        TypeChangeStatus = TypeChangeStatus.Stop,
+                        VmId = vm.Id
+                    });
+
+                    _taskV2Repo.Add(task);
+                }
+                this._unitOfWork.Commit();
+            }
+            
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
@@ -13,12 +14,14 @@ namespace Crytex.Web.Areas.Admin
 {
     public class AdminUserController : AdminCrytexController
     {
-        public AdminUserController(IApplicationUserService applicationUserService)
+        public AdminUserController(IApplicationUserService applicationUserService, ITaskV2Service taskService)
         {
             _applicationUserService = applicationUserService;
+            _taskService = taskService;
         }
 
-        IApplicationUserService _applicationUserService { get; }
+        private IApplicationUserService _applicationUserService { get; }
+        private ITaskV2Service _taskService { get; set; }
 
         /// <summary>
         /// Получение списка пользователей
@@ -184,13 +187,8 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         public IHttpActionResult Delete(string id)
         {
-            var user = this.UserManager.FindById(id);
-            if(user == null)
-            {
-                return NotFound();
-            }
-            
-            _applicationUserService.DeleteUser(user);
+            _applicationUserService.DeleteUser(id);
+            _taskService.StopAllUserMachines(id);
 
             return Ok();
         }

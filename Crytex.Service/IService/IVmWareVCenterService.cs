@@ -11,10 +11,10 @@ namespace Crytex.Service.IService
     {
         VmWareVCenter CreateVCenter(VmWareVCenter vCenter);
 
-        VmWareVCenter GetVCenterById(int id);
+        VmWareVCenter GetVCenterById(Guid id);
 
         IEnumerable<VmWareVCenter> GetAllVCenters();
 
-        void UpdateVCenter(int id, VmWareVCenter vCenter);
+        void UpdateVCenter(Guid id, VmWareVCenter vCenter);
     }
 }
