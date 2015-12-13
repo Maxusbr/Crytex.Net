@@ -305,8 +305,13 @@ namespace Crytex.Data.Migrations
                             ServerTemplateId = serverTemplates[c].Id,
                             Name = "Machine " + i + "" + c,
                             VirtualizationType = (c < 2) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
-                            OperatingSystemPassword = "1111"
+                            OperatingSystemPassword = "1111",
+                            CreateDate = DateTime.UtcNow,
                         };
+
+                        if (c < 2) vm.HyperVHostId = context.HyperVHosts.First().Id;
+                        else if (c >= 2) vm.VmWareCenterId = context.VmWareVCenters.First().Id;
+
                         if (allMachine.All(o => o.Name != vm.Name))
                             context.UserVms.Add(vm);
                     }
