@@ -34,24 +34,18 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._vmBackupService = vmBackupService;
         }
 
-        public PendingTaskHandlerBox GetTaskHandlers()
+        public IEnumerable<ITaskHandler> GetTaskHandlers(TypeVirtualization virtualizationType)
         {
-            var tasks = this._taskService.GetPendingTasks();
+            var tasks = this._taskService.GetPendingTasks(virtualizationType);
 
-            var wmWareTaskHandlers = new List<ITaskHandler>();
-            var hyperVTaskHandlers = new List<ITaskHandler>();
-            this.PopulateTaskLists(tasks, wmWareTaskHandlers, hyperVTaskHandlers);
+            var taskHandlers = this.GetTaskHandlerList(tasks, virtualizationType);
 
-            return new PendingTaskHandlerBox
-            {
-                HyperVHandlers = hyperVTaskHandlers,
-                VmWareHandlers = wmWareTaskHandlers
-            };
+            return taskHandlers;
         }
 
-        private void PopulateTaskLists(IEnumerable<TaskV2> tasks, IList<ITaskHandler> wmWareTaskHandlers,
-            IList<ITaskHandler> hyperVTaskHandlers)
+        private List<ITaskHandler> GetTaskHandlerList(IEnumerable<TaskV2> tasks, TypeVirtualization virtualizationType)
         {
+            var handlerList = new List<ITaskHandler>();
             foreach (var task in tasks)
             {
                 ITaskHandler handler = null;
@@ -70,16 +64,11 @@ namespace Crytex.ExecutorTask.TaskHandler
                 }
                 handler.ProcessingStarted += this.ProcessingStartedEventHandler;
                 handler.ProcessingFinished += this.ProcessingFinishedEventHandler;
-                switch (task.Virtualization)
-                {
-                    case TypeVirtualization.HyperV:
-                        hyperVTaskHandlers.Add(handler);
-                        break;
-                    case TypeVirtualization.VmWare:
-                        wmWareTaskHandlers.Add(handler);
-                        break;
-                }
+
+                handlerList.Add(handler);
             }
+
+            return handlerList;
         }
 
         private VmWareVCenter GetVmWareVCenterForTask(TaskV2 task)

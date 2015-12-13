@@ -41,7 +41,7 @@ namespace Crytex.Background
                 unityContainer.RegisterType<IEmailSender, EmailMandrillSender>();
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
 
-                unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>();
+                unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>(new PerResolveLifetimeManager());
                 unityContainer.RegisterType<ITaskManager, TaskManager>(new ContainerControlledLifetimeManager());
             };
         }
