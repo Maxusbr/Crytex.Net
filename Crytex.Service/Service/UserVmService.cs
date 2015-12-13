@@ -131,6 +131,28 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
+        public void UpdateVm(UserVm vm)
+        {
+            var userVm = this.GetVmById(vm.Id);
+
+            userVm.CoreCount = vm.CoreCount;
+            userVm.RamCount = vm.RamCount;
+            userVm.HardDriveSize = vm.HardDriveSize;
+            userVm.CreateDate = vm.CreateDate;
+            userVm.HyperVHostId = vm.HyperVHostId;
+            userVm.Name = vm.Name;
+            userVm.OperatingSystemPassword = vm.OperatingSystemPassword;
+            userVm.ServerTemplateId = vm.ServerTemplateId;
+            userVm.Status = vm.Status;
+            userVm.SubscriptionVmId = vm.SubscriptionVmId;
+            userVm.UserId = vm.UserId;
+            userVm.VirtualizationType = vm.VirtualizationType;
+            userVm.VmWareCenterId = vm.VmWareCenterId;
+
+            this._userVmRepo.Update(userVm);
+            this._unitOfWork.Commit();
+        }
+
         public void UpdateVmStatus(Guid vmId, TypeChangeStatus status)
         {
             

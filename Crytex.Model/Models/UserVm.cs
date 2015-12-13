@@ -20,7 +20,7 @@ namespace Crytex.Model.Models
         public Guid? HyperVHostId { get; set; }
         public Guid? VmWareCenterId { get; set; }
         public string OperatingSystemPassword { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
 
         public Guid? SubscriptionVmId { get; set; }
         [ForeignKey("ServerTemplateId")]

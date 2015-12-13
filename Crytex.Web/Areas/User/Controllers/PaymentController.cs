@@ -65,7 +65,7 @@ namespace Crytex.Web.Areas.User
         {
             if (!ModelState.IsValid)
             {
-                BadRequest(ModelState);
+                return BadRequest(ModelState);
             }
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, model.PaymentSystem.Value);

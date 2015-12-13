@@ -153,7 +153,8 @@ namespace Crytex.ExecutorTask.TaskHandler
                         break;
                 }
 
-                taskEntity.ResourceId = this._userVmService.CreateVm(newVm);
+                taskEntity.ResourceId = createTaskExecResult.MachineGuid;
+                this._userVmService.UpdateVm(newVm);
                 this._taskService.UpdateTask(taskEntity);
             }
             else if (taskEntity.TypeTask == TypeTask.UpdateVm)

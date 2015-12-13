@@ -10,7 +10,15 @@ namespace Crytex.Service.IService
     {
         IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TaskV2SearchParams searchParams = null);
         TaskV2 GetTaskById(Guid id);
+
+        /// <summary>
+        /// Создаёт новую задачу в системе и, если необходимо, связанные с ней сущности в базе данных
+        /// </summary>
         TaskV2 CreateTask(TaskV2 createTask, string option);
+
+        /// <summary>
+        /// Создаёт новую задачу в системе и, если необходимо, связанные с ней сущности в базе данных
+        /// </summary>
         TaskV2 CreateTask<T>(TaskV2 createTask, T options) where T: BaseOptions;
         void UpdateTask(TaskV2 updateTask);
         void RemoveTask(Guid id);

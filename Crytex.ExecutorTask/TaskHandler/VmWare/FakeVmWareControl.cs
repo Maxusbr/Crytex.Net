@@ -26,7 +26,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 throw new CreateVmException("Don't create VM");
             }
 
-            return new CreateVmResult { MachineGuid = Guid.NewGuid()};
+            return new CreateVmResult { MachineGuid = task.GetOptions<CreateVmOptions>().UserVmId};
         }
 
 

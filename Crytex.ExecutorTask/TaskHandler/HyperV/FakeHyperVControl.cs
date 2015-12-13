@@ -31,7 +31,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
                 
                 throw new CreateVmException("Don't create VM");
             }
-            return Guid.NewGuid();
+            return task.GetOptions<CreateVmOptions>().UserVmId;
         }
 
         public void RemoveVm(string machineName)
