@@ -20,9 +20,9 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
         public Guid CreateVm(TaskV2 task, ServerTemplate template)
         {
             this._hyperVProvider.Connect();
-            var machineGuid = Guid.NewGuid();
-            var machineName = machineGuid.ToString();
             var taskOptions = task.GetOptions<CreateVmOptions>();
+            var machineGuid = taskOptions.UserVmId;
+            var machineName = machineGuid.ToString();
             var createMachineRes = this._hyperVProvider.CreateVm(machineName, (uint)taskOptions.Ram * 1024);
 
             if (createMachineRes.IsSuccess)

@@ -17,6 +17,7 @@ namespace Crytex.Service.IService
         Guid CreateVm(UserVm userVm);
 
         void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null);
+        void UpdateVm(UserVm vm);
 
         void UpdateVmStatus(Guid vmId, TypeChangeStatus status);
 

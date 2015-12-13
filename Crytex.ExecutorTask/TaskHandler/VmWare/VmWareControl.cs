@@ -24,13 +24,12 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         {
             // Connect to server
             ConnectIfNotConnected();
-            
-            // Generate unique server machine-name by generating new Guid
-            var machineGuid = Guid.NewGuid();
-            var machineName = machineGuid.ToString();
 
             // Create new vm
             var createOptions = task.GetOptions<CreateVmOptions>();
+
+            var machineGuid = createOptions.UserVmId;
+            var machineName = machineGuid.ToString();
 
             var newPassword = System.Web.Security.Membership.GeneratePassword(6, 0);
             try

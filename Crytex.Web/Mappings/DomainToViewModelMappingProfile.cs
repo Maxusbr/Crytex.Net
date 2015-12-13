@@ -70,6 +70,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
             Mapper.CreateMap<VmBackup, VmBackupViewModel>();
             Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
+            Mapper.CreateMap<GameServer, GameServerViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -86,6 +87,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<PhoneCallRequest, PhoneCallRequestViewModel>();
             this.MapPagedList<VmBackup, VmBackupViewModel>();
             this.MapPagedList<UserLoginLogEntry, UserLoginLogEntryModel>();
+            this.MapPagedList<GameServer, GameServerViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()
