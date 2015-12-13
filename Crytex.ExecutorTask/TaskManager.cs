@@ -1,4 +1,5 @@
 ﻿using Crytex.ExecutorTask.TaskHandler;
+using Microsoft.Practices.Unity;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -6,13 +7,15 @@ namespace Crytex.ExecutorTask
 {
     public class TaskManager : ITaskManager
     {
-        private ITaskHandlerManager _taskHandlerManager;
+        private ITaskHandlerManager _hyperVTaskHandlerManager;
+        private ITaskHandlerManager _vmWareTaskHandlerManager;
         private TaskQueueManager _vmWareTaskQueueManager = new TaskQueueManager();
         private TaskQueueManager _hyperVTaskQueueManager = new TaskQueueManager();
 
-        public TaskManager(ITaskHandlerManager taskHandlerManager)
+        public TaskManager(IUnityContainer unityContainer)
         {
-            this._taskHandlerManager = taskHandlerManager;
+            this._hyperVTaskHandlerManager = unityContainer.Resolve<ITaskHandlerManager>();
+            this._vmWareTaskHandlerManager = unityContainer.Resolve<ITaskHandlerManager>();
         }
 
         public void RunTasks()
@@ -23,10 +26,11 @@ namespace Crytex.ExecutorTask
 
         public void UpdateTaskQueues()
         {
-            var handlers = this._taskHandlerManager.GetTaskHandlers();
+            var hyperVHandlers = this._hyperVTaskHandlerManager.GetTaskHandlers(Model.Models.TypeVirtualization.HyperV);
+            var vmWareHandlers = this._vmWareTaskHandlerManager.GetTaskHandlers(Model.Models.TypeVirtualization.VmWare);
 
-            this.AddHandlersToQueue(handlers.HyperVHandlers, this._hyperVTaskQueueManager);
-            this.AddHandlersToQueue(handlers.VmWareHandlers, this._vmWareTaskQueueManager);
+            this.AddHandlersToQueue(hyperVHandlers, this._hyperVTaskQueueManager);
+            this.AddHandlersToQueue(vmWareHandlers, this._vmWareTaskQueueManager);
         }
 
         private void AddHandlersToQueue(IEnumerable<ITaskHandler> handlers, TaskQueueManager queueManager)
