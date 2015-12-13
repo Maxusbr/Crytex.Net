@@ -107,11 +107,13 @@ namespace Crytex.Web.Areas.Admin
                 Name = model.Name,
                 Patronymic = model.Patronymic,
                 City = model.City,
-                Areas = model.Areas,
                 Address = model.Address,
                 CodePhrase = model.CodePhrase,
-                UserType = model.UserType
-            };
+                UserType = model.UserType,
+                Country = model.Country,
+                ContactPerson = model.ContactPerson,
+                Payer = model.Payer
+        };
 
             var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
             if (!creationResult.Succeeded)
@@ -163,10 +165,12 @@ namespace Crytex.Web.Areas.Admin
                 user.Name = model.Name;
                 user.Patronymic = model.Patronymic;
                 user.City = model.City;
-                user.Areas = model.Areas;
                 user.Address = model.Address;
                 user.CodePhrase = model.CodePhrase;
                 user.UserType = model.UserType;
+                user.Country = model.Country;
+                user.ContactPerson = model.ContactPerson;
+                user.Payer = model.Payer;
 
                 var updateResult = this.UserManager.Update(user);
 

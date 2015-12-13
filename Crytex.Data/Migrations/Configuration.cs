@@ -96,7 +96,10 @@ namespace Crytex.Data.Migrations
                         UserName = "AdminUser" + i,
                         Email = "admin" + i + "@admin.com",
                         EmailConfirmed = true,
-                        RegisterDate = DateTime.Now
+                        RegisterDate = DateTime.Now,
+                        Country = "Россия",
+                        ContactPerson = "Контактное лицо",
+                        Payer = "Плательщик"
                     };
                     if (allUsers.All(u => u.UserName != admin.UserName))
                     {
@@ -112,7 +115,10 @@ namespace Crytex.Data.Migrations
                         UserName = "SupportUser" + i,
                         Email = "support" + i + "@admin.com",
                         EmailConfirmed = true,
-                        RegisterDate = DateTime.Now
+                        RegisterDate = DateTime.Now,
+                        Country = "Россия",
+                        ContactPerson = "Контактное лицо",
+                        Payer = "Плательщик"
                     };
                     if (allUsers.All(u => u.UserName != support.UserName))
                     {
@@ -128,7 +134,10 @@ namespace Crytex.Data.Migrations
                         UserName = "User" + i,
                         Email = "user" + i + "@admin.com",
                         EmailConfirmed = true,
-                        RegisterDate = DateTime.Now
+                        RegisterDate = DateTime.Now,
+                        Country = "Россия",
+                        ContactPerson = "Контактное лицо",
+                        Payer = "Плательщик"
                     };
                     if (allUsers.All(u => u.UserName != user.UserName))
                     {
