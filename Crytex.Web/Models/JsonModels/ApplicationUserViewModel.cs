@@ -15,10 +15,12 @@ namespace Crytex.Web.Models.JsonModels
         public string Name { get; set; }
         public string Patronymic { get; set; }
         public string City { get; set; }
-        public string Areas { get; set; }
+        public string Country { get; set; }
         public string Address { get; set; }
         public string CodePhrase { get; set; }
         public TypeUser UserType { get; set; }
+        public string Payer { get; set; }
+        public string ContactPerson { get; set; }
 
         public bool ValidateForCreationScenario()
         {

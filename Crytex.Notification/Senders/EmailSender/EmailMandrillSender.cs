@@ -71,8 +71,7 @@ namespace Crytex.Notification
                 FromEmail = emailInfo.From,
                 FromName = "Crytex",
                 To = new[] { new EmailAddress(emailInfo.To) },
-                Subject = MandrillUtil.GenerateTextFromTemplate(emailTemplate.Subject, emailInfo.SubjectParamsList),
-
+                Subject = MandrillUtil.GenerateTextFromTemplate(emailTemplate.Subject, emailInfo.SubjectParamsList)
             };
 
             AddUserDynamicContent(email, emailInfo.To, emailInfo.BodyParamsList);

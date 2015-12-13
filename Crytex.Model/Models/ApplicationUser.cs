@@ -39,13 +39,15 @@ namespace Crytex.Model.Models
         public string Lastname { get; set; }
         public string Patronymic { get; set; }
         public string City { get; set; }
-        public string Areas { get; set; }
+        public string Country { get; set; }
         public string Address { get; set; }
         public string CodePhrase { get; set; }
         public TypeUser UserType { get; set; }
         public DateTime RegisterDate { get; set; }
         public bool Deleted { get; set; }
         public bool IsBlocked { get; set; }
+        public string Payer { get; set; }
+        public string ContactPerson { get; set; }
     }
 
     public  enum TypeUser

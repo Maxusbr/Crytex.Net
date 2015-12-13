@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
@@ -11,6 +11,7 @@ using Crytex.Model.Enums;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using System.IO;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.Notifications;
 
 namespace Crytex.Data.Migrations
 {
@@ -95,7 +96,10 @@ namespace Crytex.Data.Migrations
                         UserName = "AdminUser" + i,
                         Email = "admin" + i + "@admin.com",
                         EmailConfirmed = true,
-                        RegisterDate = DateTime.Now
+                        RegisterDate = DateTime.Now,
+                        Country = "Россия",
+                        ContactPerson = "Контактное лицо",
+                        Payer = "Плательщик"
                     };
                     if (allUsers.All(u => u.UserName != admin.UserName))
                     {
@@ -111,7 +115,10 @@ namespace Crytex.Data.Migrations
                         UserName = "SupportUser" + i,
                         Email = "support" + i + "@admin.com",
                         EmailConfirmed = true,
-                        RegisterDate = DateTime.Now
+                        RegisterDate = DateTime.Now,
+                        Country = "Россия",
+                        ContactPerson = "Контактное лицо",
+                        Payer = "Плательщик"
                     };
                     if (allUsers.All(u => u.UserName != support.UserName))
                     {
@@ -127,7 +134,10 @@ namespace Crytex.Data.Migrations
                         UserName = "User" + i,
                         Email = "user" + i + "@admin.com",
                         EmailConfirmed = true,
-                        RegisterDate = DateTime.Now
+                        RegisterDate = DateTime.Now,
+                        Country = "Россия",
+                        ContactPerson = "Контактное лицо",
+                        Payer = "Плательщик"
                     };
                     if (allUsers.All(u => u.UserName != user.UserName))
                     {
@@ -135,6 +145,16 @@ namespace Crytex.Data.Migrations
                         manager.AddToRoles(user.Id, new string[] { "User" });
                     }
                 }
+
+                ///////////////////////////////////
+                var emailtemplate = new EmailTemplate
+                {
+                    Body = @"Подтвердите вашу учетную запись, щелкнув <a href=""{callbackUrl}"">здесь</a>",
+                    EmailTemplateType = EmailTemplateType.Registration,
+                    ParameterNames = @"[""callbackUrl""]",
+                    Subject = "Подтверждение учетной записи"
+                };
+                context.EmailTemplates.Add(emailtemplate);
 
                 ///////////////////////////////////
 
@@ -371,8 +391,6 @@ namespace Crytex.Data.Migrations
                     };
                     context.PhoneCallRequests.Add(call);
                 }
-
-
             }
 
             context.Commit();
