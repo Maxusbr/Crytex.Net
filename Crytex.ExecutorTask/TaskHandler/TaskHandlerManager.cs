@@ -116,16 +116,6 @@ namespace Crytex.ExecutorTask.TaskHandler
                 var createTaskExecResult = (CreateVmTaskExecutionResult)execResult;
 
                 var vmId = createTaskExecResult.MachineGuid;
-                var ipAddresses = createTaskExecResult.IpAddresses == null ? null : createTaskExecResult.IpAddresses.Select(info =>
-                    new VmIpAddress
-                    {
-                        IPv4 = info.IPv4,
-                        IPv6 = info.IPv6,
-                        MAC = info.MAC,
-                        NetworkName = info.NetworkName,
-                        VmId = vmId
-                    }
-                );
 
                 var newVm = new UserVm
                 {
@@ -158,9 +148,9 @@ namespace Crytex.ExecutorTask.TaskHandler
                 taskEntity.ResourceId = createTaskExecResult.MachineGuid;
                 this._userVmService.UpdateVm(newVm);
 
-                if(ipAddresses != null)
+                if(createTaskExecResult.IpAddresses != null)
                 {
-                    this._userVmService.AddIpAddressesToVm(vmId, ipAddresses);
+                    this._userVmService.AddIpAddressesToVm(vmId, createTaskExecResult.IpAddresses);
                 }
 
                 this._taskService.UpdateTask(taskEntity);

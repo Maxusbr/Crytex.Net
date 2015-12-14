@@ -23,7 +23,7 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         public Guid MachineGuid { get; set; }
         public string GuestOsPassword { get; internal set; }
-        public List<VmWareVirtualMachine.vmIPInfo> IpAddresses { get; internal set; }
+        public IEnumerable<VmIpAddress> IpAddresses { get; internal set; }
     }
 
     public class BackupTaskExecutionResult : TaskExecutionResult
