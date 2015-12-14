@@ -92,7 +92,7 @@ namespace Crytex.Service.Service
             IPagedList<HelpDeskRequest> page = new PagedList<HelpDeskRequest>(Enumerable.Empty<HelpDeskRequest>().AsQueryable(), 1, 1);
             if (filter == HelpDeskRequestFilter.All) { 
              
-                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => true), (x => x.Read), (x => x.CreationDate));
+                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => true), (x => x.Read), (x => x.CreationDate), x => x.User);
             }
             else if (filter == HelpDeskRequestFilter.Read)
             {
@@ -114,7 +114,7 @@ namespace Crytex.Service.Service
            
             var request = this.GetById(id);
 
-            var comments = _requestCommentRepository.GetMany(c=>c.RequestId == id, i=>i.User);
+            var comments = _requestCommentRepository.GetMany(c=>c.RequestId == id, i=>i.User,i=>i.User);
 
             return comments;
         }
