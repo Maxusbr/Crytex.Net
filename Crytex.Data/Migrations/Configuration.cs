@@ -101,6 +101,7 @@ namespace Crytex.Data.Migrations
                     {
                         manager.Create(admin, "wUcheva$3a");
                         manager.AddToRoles(admin.Id, new string[] { "Admin" });
+                        allUsers.Add(admin);
                     }
                 }
 
@@ -117,6 +118,7 @@ namespace Crytex.Data.Migrations
                     {
                         manager.Create(support, "wUcheva$3a");
                         manager.AddToRoles(support.Id, new string[] { "Support" });
+                        allUsers.Add(support);
                     }
                 }
 
@@ -133,6 +135,7 @@ namespace Crytex.Data.Migrations
                     {
                         manager.Create(user, "wUcheva$3a");
                         manager.AddToRoles(user.Id, new string[] { "User" });
+                        allUsers.Add(user);
                     }
                 }
 
