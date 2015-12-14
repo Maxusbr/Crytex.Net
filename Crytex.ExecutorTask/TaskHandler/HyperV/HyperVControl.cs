@@ -4,6 +4,8 @@ using Crytex.Model.Models;
 using HyperVRemote;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public class HyperVControl : IHyperVControl
@@ -17,8 +19,10 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             this._config = config;
         }
 
-        public Guid CreateVm(TaskV2 task, ServerTemplate template)
+        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
         {
+            var result = new CreateVmResult();
+
             this._hyperVProvider.Connect();
             var taskOptions = task.GetOptions<CreateVmOptions>();
             var machineGuid = taskOptions.UserVmId;
@@ -50,13 +54,18 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 
                 // Start vm
                 this._hyperVProvider.Start(createMachineRes.Vm);
+
+                // Get vm IP addresses
+                var adapters = this._hyperVProvider.GetNetworkService().GetNetAdaptersByVm(createMachineRes.Vm).NetAdapters;
+                result.NetworkAdapters = adapters;
             }
             else
             {
                 throw new CreateVmException(createMachineRes.MessageError);
             }
 
-            return machineGuid;
+            result.MachineGuid = machineGuid;
+            return result;
         }
 
 

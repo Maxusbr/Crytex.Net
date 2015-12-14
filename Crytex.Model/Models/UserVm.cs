@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Crytex.Model.Models.Biling;
+using System.Collections.Generic;
 
 namespace Crytex.Model.Models
 {
@@ -34,6 +35,8 @@ namespace Crytex.Model.Models
         [ForeignKey("SubscriptionVmId")]
         public SubscriptionVm SubscriptionVm { get; set; }
 
+        [InverseProperty("Vm")]
+        public ICollection<VmIpAddress> IpAdresses { get; set; }
     }
 
 

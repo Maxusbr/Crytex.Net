@@ -121,6 +121,7 @@
     <Compile Include="Models\UserLoginLogEntry.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Models\VmBackup.cs" />
+    <Compile Include="Models\VmIpAddress.cs" />
     <Compile Include="Models\VmWareHost.cs" />
     <Compile Include="Models\VmWareVCenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

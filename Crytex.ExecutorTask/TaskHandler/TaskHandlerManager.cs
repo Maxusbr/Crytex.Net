@@ -114,10 +114,13 @@ namespace Crytex.ExecutorTask.TaskHandler
          
                 var taskOptions = execResult.TaskEntity.GetOptions<CreateVmOptions>();
                 var createTaskExecResult = (CreateVmTaskExecutionResult)execResult;
+
+                var vmId = createTaskExecResult.MachineGuid;
+
                 var newVm = new UserVm
                 {
 
-                    Id = createTaskExecResult.MachineGuid,
+                    Id = vmId,
                     CoreCount = taskOptions.Cpu,
                     HardDriveSize = taskOptions.Hdd,
                     Name = taskOptions.Name,
@@ -127,7 +130,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
                     UserId = execResult.TaskEntity.UserId,
                     VirtualizationType = execResult.TaskEntity.Virtualization,
-                    OperatingSystemPassword = createTaskExecResult.GuestOsPassword
+                    OperatingSystemPassword = createTaskExecResult.GuestOsPassword,
                 };
 
                 switch (taskEntity.Virtualization)
@@ -144,6 +147,12 @@ namespace Crytex.ExecutorTask.TaskHandler
 
                 taskEntity.ResourceId = createTaskExecResult.MachineGuid;
                 this._userVmService.UpdateVm(newVm);
+
+                if(createTaskExecResult.IpAddresses != null)
+                {
+                    this._userVmService.AddIpAddressesToVm(vmId, createTaskExecResult.IpAddresses);
+                }
+
                 this._taskService.UpdateTask(taskEntity);
             }
             else if (taskEntity.TypeTask == TypeTask.UpdateVm)

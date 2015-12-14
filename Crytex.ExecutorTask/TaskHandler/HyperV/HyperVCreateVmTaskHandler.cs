@@ -2,6 +2,7 @@
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
+using System.Linq;
 
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
@@ -23,9 +24,17 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             {
                 var serverTemplateId = this.TaskEntity.GetOptions<CreateVmOptions>().ServerTemplateId;
                 var serverTemplate = this._serverTemplateService.GetById(serverTemplateId);
-                var machineGuid = this._hyperVControl.CreateVm(this.TaskEntity, serverTemplate);
+                var createResult = this._hyperVControl.CreateVm(this.TaskEntity, serverTemplate);
                 taskExecutionResult.Success = true;
-                taskExecutionResult.MachineGuid = machineGuid;
+                taskExecutionResult.MachineGuid = createResult.MachineGuid;
+                taskExecutionResult.IpAddresses = createResult.NetworkAdapters.Select(adp =>
+                    new VmIpAddress
+                    {
+                        IPv4 = adp.IPAddresses,
+                        MAC = adp.MacAddress,
+                        NetworkName = adp.SwitchName
+                    }
+                );
             }
             catch (Exception ex) when (ex is CreateVmException || ex is InvalidIdentifierException) 
             {

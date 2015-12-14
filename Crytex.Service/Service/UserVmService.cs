@@ -27,7 +27,7 @@ namespace Crytex.Service.Service
 
         public virtual UserVm GetVmById(Guid id)
         {
-            var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.ServerTemplate);
+            var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.ServerTemplate, i => i.IpAdresses);
             if (vm == null)
             {
                 throw new InvalidIdentifierException(string.Format("UserVm with id={0} doesnt exist.", id));
@@ -128,6 +128,15 @@ namespace Crytex.Service.Service
             userVm.HardDriveSize = hdd ?? userVm.HardDriveSize;
 
             this._userVmRepo.Update(userVm);
+            this._unitOfWork.Commit();
+        }
+
+        public void AddIpAddressesToVm(Guid vmId, IEnumerable<VmIpAddress> addresses)
+        {
+            var vm = this.GetVmById(vmId);
+
+            foreach (var ip in addresses) { vm.IpAdresses.Add(ip); }
+
             this._unitOfWork.Commit();
         }
 

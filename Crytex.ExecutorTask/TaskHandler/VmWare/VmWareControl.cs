@@ -32,6 +32,8 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             var machineName = machineGuid.ToString();
 
             var newPassword = System.Web.Security.Membership.GeneratePassword(6, 0);
+
+            CreateVmResult result = new CreateVmResult();
             try
             {
                 this._vmWareProvider.CloneVm(serverTemplate.OperatingSystem.ServerTemplateName, machineName);
@@ -57,17 +59,17 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                         this._vmWareProvider.RunLinuxShellScript(machineName, userName, oldPassword, scriptBuilder.ToString());
                         break;
                 }
+                result.IpAddresses = this._vmWareProvider.GetMachineByName(machineName).NetworkInfo;
                 
             }
             catch (ApplicationException ex)
             {
                 throw new CreateVmException(ex.Message, ex);
             }
-            var result = new CreateVmResult
-            {
-                MachineGuid = machineGuid,
-                GuestOsAdminPassword = newPassword
-            };
+
+            result.MachineGuid = machineGuid;
+            result.GuestOsAdminPassword = newPassword;
+
             return result;
         }
 

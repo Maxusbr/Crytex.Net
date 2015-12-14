@@ -2,6 +2,8 @@
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
@@ -28,6 +30,18 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 taskExecutionResult.Success = true;
                 taskExecutionResult.MachineGuid = createResult.MachineGuid;
                 taskExecutionResult.GuestOsPassword = createResult.GuestOsAdminPassword;
+
+                var ipAddresses = createResult.IpAddresses.Select(info =>
+                    new VmIpAddress
+                    {
+                        IPv4 = info.IPv4,
+                        IPv6 = info.IPv6,
+                        NetworkName = info.NetworkName,
+                        MAC = info.MAC
+                    }
+                );
+
+                taskExecutionResult.IpAddresses = ipAddresses;
             }
             catch (Exception ex)
             {

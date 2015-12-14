@@ -26,7 +26,28 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 throw new CreateVmException("Don't create VM");
             }
 
-            return new CreateVmResult { MachineGuid = task.GetOptions<CreateVmOptions>().UserVmId};
+            var result = new CreateVmResult
+            {
+                MachineGuid = task.GetOptions<CreateVmOptions>().UserVmId,
+                IpAddresses = new System.Collections.Generic.List<VmWareRemote.Model.VmWareVirtualMachine.vmIPInfo>()
+                {
+                    new VmWareRemote.Model.VmWareVirtualMachine.vmIPInfo
+                    {
+                        IPv4 = "192.168.0.1",
+                        IPv6 =  "2001:0:5ef5:79fd:10a6:2543:3f57:fefd",
+                        MAC = "E6-F8-9C-41-98-94",
+                        NetworkName = "Test Network 1"
+                    },
+                    new VmWareRemote.Model.VmWareVirtualMachine.vmIPInfo
+                    {
+                        IPv4 = "192.168.0.2",
+                        IPv6 =  "2002:0:5ef5:79fd:10a6:2543:3f57:fefd",
+                        MAC = "E6-F8-9C-41-98-95",
+                        NetworkName = "Test Network 2"
+                    }
+                }
+            };
+            return result;
         }
 
 
