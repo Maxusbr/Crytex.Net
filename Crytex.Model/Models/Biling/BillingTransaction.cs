@@ -28,6 +28,8 @@ namespace Crytex.Model.Models.Biling
         AutomaticDebiting = 0,
         Crediting = 1,
         OneTimeDebiting = 2,
-        SystemBonus = 3
+        SystemBonus = 3,
+        ReplenishmentFromAdmin = 4,
+        WithdrawByAdmin = 5
     }
 }

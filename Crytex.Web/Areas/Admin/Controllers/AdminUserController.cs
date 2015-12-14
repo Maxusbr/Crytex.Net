@@ -14,14 +14,16 @@ namespace Crytex.Web.Areas.Admin
 {
     public class AdminUserController : AdminCrytexController
     {
-        public AdminUserController(IApplicationUserService applicationUserService, ITaskV2Service taskService)
+        public AdminUserController(IApplicationUserService applicationUserService, ITaskV2Service taskService, IBilingService billingService)
         {
             _applicationUserService = applicationUserService;
             _taskService = taskService;
+            _billingService = billingService;
         }
 
         private IApplicationUserService _applicationUserService { get; }
         private ITaskV2Service _taskService { get; set; }
+        private IBilingService _billingService { get; set; }
 
         /// <summary>
         /// Получение списка пользователей
@@ -71,25 +73,6 @@ namespace Crytex.Web.Areas.Admin
         }
 
         /// <summary>
-        /// Поиск пользователя по email или userName
-        /// </summary>
-        /// <param name="searchValue"></param>
-        /// <returns></returns>
-        // GET api/Admin/UserSearch
-        [Route("api/Admin/UserSearch")]
-        [HttpGet]
-        [ResponseType(typeof(List<SimpleApplicationUserViewModel>))]
-        public IHttpActionResult Search(string searchValue)
-        {
-            if (string.IsNullOrEmpty(searchValue))
-                return Ok("Username or Email is null or empty.");
-
-            var users = _applicationUserService.Search(searchValue);
-            var models = AutoMapper.Mapper.Map<List<ApplicationUser>, List<SimpleApplicationUserViewModel>>(users);
-            return Ok(models);
-        }
-
-        /// <summary>
         /// Создание нового пользователя
         /// </summary>
         /// <param name="model"></param>
@@ -113,7 +96,7 @@ namespace Crytex.Web.Areas.Admin
                 Country = model.Country,
                 ContactPerson = model.ContactPerson,
                 Payer = model.Payer
-        };
+            };
 
             var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
             if (!creationResult.Succeeded)
@@ -195,6 +178,54 @@ namespace Crytex.Web.Areas.Admin
             _taskService.StopAllUserMachines(id);
 
             return Ok();
+        }
+
+        /// <summary>
+        /// Обновление баланса пользователя
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [Route("api/AdminUser/UpdateBalance"), HttpPost()]
+        public IHttpActionResult UpdateBalance([FromBody]UpdateUserBalance data)
+        {
+            if (data.Amount == 0)
+                return BadRequest("amount can't be 0");
+
+            _billingService.UpdateUserBalance(data);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Управление состоянием пользователя
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        [Route("api/AdminUser/UpdateState"), HttpPost()]
+        public IHttpActionResult UpdateState([FromBody] UpdateUserState data)
+        {
+            _applicationUserService.UpdateStateUser(data);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Поиск пользователя по email или userName
+        /// </summary>
+        /// <param name="searchValue"></param>
+        /// <returns></returns>
+        // GET api/Admin/UserSearch
+        [Route("api/Admin/UserSearch")]
+        [HttpGet]
+        [ResponseType(typeof(List<SimpleApplicationUserViewModel>))]
+        public IHttpActionResult Search(string searchValue)
+        {
+            if (string.IsNullOrEmpty(searchValue))
+                return Ok("Username or Email is null or empty.");
+
+            var users = _applicationUserService.Search(searchValue);
+            var models = AutoMapper.Mapper.Map<List<ApplicationUser>, List<SimpleApplicationUserViewModel>>(users);
+            return Ok(models);
         }
 
         private void AddErrors(IdentityResult result)

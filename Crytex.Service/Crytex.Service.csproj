@@ -126,6 +126,8 @@
     <Compile Include="Model\StatisticType.cs" />
     <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
+    <Compile Include="Model\UpdateUserBalance.cs" />
+    <Compile Include="Model\UpdateUserState.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
     <Compile Include="Model\UserVmSearchParams.cs" />
     <Compile Include="Service\ApplicationUserService.cs" />
