@@ -1,5 +1,8 @@
 ﻿using Crytex.Model.Models;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using VmWareRemote.Model;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -20,6 +23,7 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         public Guid MachineGuid { get; set; }
         public string GuestOsPassword { get; internal set; }
+        public List<VmWareVirtualMachine.vmIPInfo> IpAddresses { get; internal set; }
     }
 
     public class BackupTaskExecutionResult : TaskExecutionResult

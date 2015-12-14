@@ -26,5 +26,7 @@ namespace Crytex.Service.IService
         IEnumerable<UserVm> GetAllVmsHyperV();
 
         IEnumerable<UserVm> GetAllVmsVmWare();
+
+        void AddIpAddressesToVm(Guid vmId, IEnumerable<VmIpAddress> addresses);
     }
 }

@@ -58,5 +58,6 @@ namespace Crytex.Data
         public DbSet<UserLoginLogEntry> UserLoginLogEntries { get; set; }
         public DbSet<GameServer> GameServers { get; set; }
         public DbSet<GameServerConfiguration> GameServerConfigurations { get; set; }
+        public DbSet<VmIpAddress> VmIpAddresses { get; set; }
     }
 }
