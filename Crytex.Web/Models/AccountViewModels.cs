@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Crytex.Model.Models;
 
 namespace Crytex.Web.Models
 {
@@ -61,6 +62,33 @@ namespace Crytex.Web.Models
         [Display(Name = "Запомнить меня")]
         public bool RememberMe { get; set; }
     }
+
+    public class FullUserInfoViewModel
+    {
+        [Required]
+        [Display(Name = "Плательщик")]
+        public string Payer { get; set; }
+
+        public TypeUser UserType { get; set; }
+
+        [Required]
+        [Display(Name = "Контактное лицо")]
+        public string ContactPerson { get; set; }
+
+        [Required]
+        [Display(Name = "Телефон")]
+        [Phone]
+        public string TelephoneNumber { get; set; }
+
+        [Required]
+        [Display(Name = "Страна")]
+        public string Country { get; set; }
+
+        [Required]
+        [Display(Name = "Город")]
+        public string City { get; set; }
+    }
+
 
     public class RegisterViewModel
     {

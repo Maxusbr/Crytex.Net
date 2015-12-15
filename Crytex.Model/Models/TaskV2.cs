@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Crytex.Model.Models
@@ -83,6 +78,7 @@ namespace Crytex.Model.Models
     public class CreateVmOptions : ConfigVmOptions
     {
         public Int32 ServerTemplateId { get; set; }
+        public Guid UserVmId { get; set; }
     }
 
     [Serializable]

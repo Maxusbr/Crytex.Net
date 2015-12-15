@@ -23,7 +23,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             throw new NotImplementedException();
         }
 
-        public Guid CreateVm(TaskV2 task, ServerTemplate template)
+        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
         {
             Thread.Sleep(10000);
            
@@ -31,7 +31,27 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
                 
                 throw new CreateVmException("Don't create VM");
             }
-            return Guid.NewGuid();
+            var result = new CreateVmResult
+            {
+                MachineGuid = task.GetOptions<CreateVmOptions>().UserVmId,
+                NetworkAdapters = new List<NetAdapter>
+                {
+                    new NetAdapter
+                    {
+                        SwitchName = "Test Network 1",
+                        MacAddress = "E6-F8-9C-41-98-95",
+                        IPAddresses = "192.168.0.1"
+                    },
+                    new NetAdapter
+                    {
+                        SwitchName = "Test Network 2",
+                        MacAddress = "E6-F8-9C-41-98-96",
+                        IPAddresses = "192.168.0.2"
+                    }
+                }
+            };
+
+            return result;
         }
 
         public void RemoveVm(string machineName)

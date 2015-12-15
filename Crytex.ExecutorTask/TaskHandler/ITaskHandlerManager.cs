@@ -1,7 +1,10 @@
-﻿namespace Crytex.ExecutorTask.TaskHandler
+﻿using Crytex.Model.Models;
+using System.Collections.Generic;
+
+namespace Crytex.ExecutorTask.TaskHandler
 {
     public interface ITaskHandlerManager
     {
-        PendingTaskHandlerBox GetTaskHandlers();
+        IEnumerable<ITaskHandler> GetTaskHandlers(TypeVirtualization virtualizationType);
     }
 }

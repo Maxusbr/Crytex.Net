@@ -269,6 +269,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminCrytexController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminEmailTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFileController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminLogController.cs" />
@@ -291,6 +292,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminVmBackupController.cs" />
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
+    <Compile Include="Areas\User\Controllers\GameServerController.cs" />
     <Compile Include="Areas\User\Controllers\LoginLogEntryController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
@@ -301,7 +303,7 @@
     <Compile Include="Auth\OauthTokenQuery.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Auth\SimpleRefreshTokenProvider.cs" />
-    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\AccountController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestController.cs" />
@@ -332,6 +334,7 @@
     <Compile Include="Models\JsonModels\BillingViewModel.cs" />
     <Compile Include="Models\JsonModels\DiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
+    <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\PhoneCallRequestViewModels.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
@@ -372,6 +375,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Files\Images\ImageTest.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
@@ -442,7 +446,6 @@
     <Content Include="Views\Home\SignaRMonitorTest.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Files\Images\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\User\Models\" />

@@ -66,6 +66,19 @@ namespace Crytex.Service.Service
             return _applicationUserRepository.GetById(id);
         }
 
+        public void UpdateStateUser(UpdateUserState data)
+        {
+            var user = this._applicationUserRepository.GetById(data.UserId);
+
+            if (user == null)
+            {
+                throw new InvalidIdentifierException(string.Format("User width Id={0} doesn't exists", data.UserId));
+            }
+
+            user.IsBlocked = data.Block;
+            _unitOfWork.Commit();
+        }
+
         public List<ApplicationUser> Search(string searchParam)
         {
             return _applicationUserRepository.GetMany(x => x.UserName.Contains(searchParam) || x.Email.Contains(searchParam));

@@ -60,8 +60,8 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -92,6 +92,8 @@
     <Compile Include="Models\Biling\Payment.cs" />
     <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
+    <Compile Include="Models\GameServer.cs" />
+    <Compile Include="Models\GameServerConfiguration.cs" />
     <Compile Include="Models\GuidBaseEntity.cs" />
     <Compile Include="Models\HelpDeskRequestComment.cs" />
     <Compile Include="Models\HyperVHost.cs" />
@@ -120,6 +122,7 @@
     <Compile Include="Models\UserLoginLogEntry.cs" />
     <Compile Include="Models\UserVm.cs" />
     <Compile Include="Models\VmBackup.cs" />
+    <Compile Include="Models\VmIpAddress.cs" />
     <Compile Include="Models\VmWareHost.cs" />
     <Compile Include="Models\VmWareVCenter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,6 +18,7 @@ namespace Crytex.Model.Models
     public enum TypeDiscount
     {
         BigPurchase,
-        BonusReplenishment
+        BonusReplenishment,
+        PurchaseOfLongTerm
     }
 }

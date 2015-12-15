@@ -90,6 +90,7 @@
     <Compile Include="IService\IBilingService.cs" />
     <Compile Include="IService\IEmailTemplateService.cs" />
     <Compile Include="IService\IFileService.cs" />
+    <Compile Include="IService\IGameServerService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
@@ -126,6 +127,8 @@
     <Compile Include="Model\StatisticType.cs" />
     <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
+    <Compile Include="Model\UpdateUserBalance.cs" />
+    <Compile Include="Model\UpdateUserState.cs" />
     <Compile Include="Model\UpdateVmOption.cs" />
     <Compile Include="Model\UserVmSearchParams.cs" />
     <Compile Include="Service\ApplicationUserService.cs" />
@@ -133,12 +136,14 @@
     <Compile Include="Service\EmailInfoService.cs" />
     <Compile Include="Service\EmailTemplateService.cs" />
     <Compile Include="Service\FileService.cs" />
+    <Compile Include="Service\GameServerService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\NetTrafficCounterService.cs" />
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
+    <Compile Include="Service\SecureService\SecureGameServerService.cs" />
     <Compile Include="Service\SecureService\SecureHelpDeskRequestService.cs" />
     <Compile Include="Service\SecureService\SecurePaymentService.cs" />
     <Compile Include="Service\SecureService\SecureStateMachineService.cs" />

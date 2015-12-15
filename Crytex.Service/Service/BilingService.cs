@@ -8,6 +8,7 @@ using Crytex.Model.Models.Biling;
 using Crytex.Service.Extension;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
+using Crytex.Web.Models.JsonModels;
 using PagedList;
 
 namespace Crytex.Service.Service
@@ -70,6 +71,29 @@ namespace Crytex.Service.Service
                 transaction.User = _applicationUserRepository.GetById(transaction.UserId);
             }       
             return transactionList;
+        }
+
+        public void UpdateUserBalance(UpdateUserBalance data) //не забыть ! обновить баланс user как только добавим это поле
+        {
+            var user = this._applicationUserRepository.Get(u => u.Id == data.UserId);
+
+            if (user == null)
+            {
+                throw new InvalidIdentifierException(string.Format("User width Id={0} doesn't exists", data.UserId));
+            }
+            
+            var transaction = new BillingTransaction
+            {
+                UserId = data.UserId,
+                CashAmount = Math.Abs(data.Amount),
+                TransactionType = (data.Amount > 0)? BillingTransactionType.ReplenishmentFromAdmin:BillingTransactionType.WithdrawByAdmin,
+                Description = "Admin Transaction",
+                Date = DateTime.UtcNow
+            };
+
+            _billingTransactionRepo.Add(transaction);
+            
+            _unitOfWork.Commit();
         }
 
 

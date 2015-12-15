@@ -29,9 +29,11 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<Message, MessageViewModel>();
             Mapper.CreateMap<HelpDeskRequest, HelpDeskRequestViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
+                .ForMember(x => x.Email, opt => opt.MapFrom(source => source.User.Email))
                 .ForMember(x => x.FileDescriptorParams, opt => opt.MapFrom(source => source.FileDescriptors.Select(fd => new FileDescriptorParam{Id = fd.Id, Name = fd.Name, Path = fd.Path})));
 			Mapper.CreateMap<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
+                .ForMember(x => x.UserEmail, opt => opt.MapFrom(source => source.User.Email));
             Mapper.CreateMap<OperatingSystem, OperatingSystemViewModel>()
                 .ForMember(dest => dest.ImagePath, opt => opt.MapFrom(source => source.ImageFileDescriptor.Path))
                 .ForMember(x => x.ImageSrc, opt => opt.MapFrom(source => _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path));
@@ -40,7 +42,8 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
                     .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
-            Mapper.CreateMap<ApplicationUser, ApplicationUserViewModel>();
+            Mapper.CreateMap<ApplicationUser, ApplicationUserViewModel>()
+                .ForMember(x => x.Balance, opt => opt.MapFrom(source => source.UserInfo.Balance));
             Mapper.CreateMap<UserVm, UserVmViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Id.ToString()))
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source =>source.User.UserName))
@@ -70,6 +73,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
             Mapper.CreateMap<VmBackup, VmBackupViewModel>();
             Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
+            Mapper.CreateMap<GameServer, GameServerViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -86,6 +90,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<PhoneCallRequest, PhoneCallRequestViewModel>();
             this.MapPagedList<VmBackup, VmBackupViewModel>();
             this.MapPagedList<UserLoginLogEntry, UserLoginLogEntryModel>();
+            this.MapPagedList<GameServer, GameServerViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

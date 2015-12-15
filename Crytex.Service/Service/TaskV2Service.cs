@@ -16,14 +16,15 @@ namespace Crytex.Service.Service
     public class TaskV2Service : ITaskV2Service
     {
         private ITaskV2Repository _taskV2Repo;
-        private IUserVmRepository _userVmRepository;
         private IUnitOfWork _unitOfWork;
+        private readonly IUserVmRepository _userVmRepository;
 
-        public TaskV2Service(ITaskV2Repository taskV2Repo, IUnitOfWork unitOfWork, IUserVmRepository userVmRepository)
+        public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmRepository userVmRepo, IUnitOfWork unitOfWork)
         {
             this._taskV2Repo = taskV2Repo;
-            _userVmRepository = userVmRepository;
+            this._userVmRepository = userVmRepo;
             this._unitOfWork = unitOfWork;
+            this._userVmRepository = userVmRepo;
         }
 
         public virtual TaskV2 GetTaskById(Guid id)
@@ -37,25 +38,40 @@ namespace Crytex.Service.Service
             return vm;
         }
 
-        public TaskV2 CreateTask<T>(TaskV2 createTask, T options) where T : BaseOptions
+        public TaskV2 CreateTask<T>(TaskV2 task, T options) where T : BaseOptions
         {
-            TaskV2 task = createTask;
-            task.Id = Guid.NewGuid();
             task.SaveOptions(options);
 
-            this._taskV2Repo.Add(task);
-            this._unitOfWork.Commit();
-
-            return task;
+            return this.CreateTask(task, task.Options); 
         }
 
-        public TaskV2 CreateTask(TaskV2 createTask, string option)
+        public TaskV2 CreateTask(TaskV2 task, string option)
         {
-            TaskV2 task = createTask;
             task.Id = Guid.NewGuid();
             task.Options = option;
 
-            createTask.CreatedAt = DateTime.UtcNow;
+            task.CreatedAt = DateTime.UtcNow;
+            task.StatusTask = StatusTask.Pending;
+
+            if (task.TypeTask == TypeTask.CreateVm)
+            {
+                var createOptions = task.GetOptions<CreateVmOptions>();
+                var newVm = new UserVm
+                {
+                    Id = Guid.NewGuid(),
+                    CoreCount = createOptions.Cpu,
+                    HardDriveSize = createOptions.Hdd,
+                    RamCount = createOptions.Ram,
+                    VirtualizationType = task.Virtualization,
+                    Name = createOptions.Name,
+                    ServerTemplateId = createOptions.ServerTemplateId,
+                    Status = StatusVM.Creating,
+                    UserId = task.UserId
+                };
+                createOptions.UserVmId = newVm.Id;
+                task.SaveOptions(createOptions);
+                this._userVmRepository.Add(newVm);
+            }
 
             this._taskV2Repo.Add(task);
             this._unitOfWork.Commit();
@@ -117,19 +133,8 @@ namespace Crytex.Service.Service
 
             task.ResourceId = updateTask.ResourceId;
             task.StatusTask = StatusTask.End;
-            
-            if (updateTask.TypeTask == TypeTask.CreateVm || updateTask.TypeTask == TypeTask.UpdateVm)
-            {
-                task.SaveOptions(updateTask.GetOptions<ConfigVmOptions>());
-            }
-            else if(updateTask.TypeTask == TypeTask.ChangeStatus)
-            {
-                task.SaveOptions(updateTask.GetOptions<ChangeStatusOptions>());
-            }
-            else
-            {
-                return;
-            }
+
+            task.Options = updateTask.Options;
 
             this._taskV2Repo.Update(task);
             this._unitOfWork.Commit();
@@ -143,9 +148,9 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<TaskV2> GetPendingTasks()
+        public IEnumerable<TaskV2> GetPendingTasks(TypeVirtualization virtualizationType)
         {
-            var tasks = this._taskV2Repo.GetMany(t => t.StatusTask == StatusTask.Pending);
+            var tasks = this._taskV2Repo.GetMany(t => t.StatusTask == StatusTask.Pending && t.Virtualization == virtualizationType);
 
             return tasks;
         }

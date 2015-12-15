@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Crytex.Model.Models.Biling;
+using System.Collections.Generic;
 
 namespace Crytex.Model.Models
 {
@@ -20,7 +21,7 @@ namespace Crytex.Model.Models
         public Guid? HyperVHostId { get; set; }
         public Guid? VmWareCenterId { get; set; }
         public string OperatingSystemPassword { get; set; }
-        public DateTime CreateDate { get; set; }
+        public DateTime? CreateDate { get; set; }
 
         public Guid? SubscriptionVmId { get; set; }
         [ForeignKey("ServerTemplateId")]
@@ -34,6 +35,8 @@ namespace Crytex.Model.Models
         [ForeignKey("SubscriptionVmId")]
         public SubscriptionVm SubscriptionVm { get; set; }
 
+        [InverseProperty("Vm")]
+        public ICollection<VmIpAddress> IpAdresses { get; set; }
     }
 
 
