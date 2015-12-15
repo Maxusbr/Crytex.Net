@@ -9,6 +9,8 @@ using Crytex.Service.Extension;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using PagedList;
+using System.Data.Entity.Infrastructure;
+using System.Linq;
 
 namespace Crytex.Service.Service
 {
@@ -44,8 +46,8 @@ namespace Crytex.Service.Service
             if (searchParams != null)
             {
                 if (searchParams.UserId != null)
-                {                   
-                    where = where.And(x => x.UserId == searchParams.UserId);                    
+                {
+                    where = where.And(x => x.UserId == searchParams.UserId);
                 }
 
                 if (searchParams.BillingTransactionType != null)
@@ -61,40 +63,83 @@ namespace Crytex.Service.Service
                 if (searchParams.DateTo != null)
                 {
                     where = where.And(x => x.Date <= searchParams.DateTo);
-                }                               
+                }
             }
 
             var transactionList = this._billingTransactionRepo.GetPage(page, where, x => x.Id);
             foreach (var transaction in transactionList)
             {
                 transaction.User = _applicationUserRepository.GetById(transaction.UserId);
-            }       
+            }
             return transactionList;
         }
 
-        public void UpdateUserBalance(UpdateUserBalance data) //не забыть ! обновить баланс user как только добавим это поле
+        public BillingTransaction UpdateUserBalance(UpdateUserBalance data)
         {
-            var user = this._applicationUserRepository.Get(u => u.Id == data.UserId);
+            var transactionType = (data.Amount > 0) ? BillingTransactionType.ReplenishmentFromAdmin : BillingTransactionType.WithdrawByAdmin;
+            var cashAmount = Math.Abs(data.Amount);
+            var description = "Admin Transaction";
+
+            var transaction = this.AddUserTransaction(transactionType, cashAmount, description, data.UserId);
+
+            return transaction;
+        }
+
+        public BillingTransaction AddUserTransaction(BillingTransactionType type, decimal cashAmount, string description,
+            string userId, string adminUserId = null)
+        {
+            var user = this.GetUserById(userId);
+
+            var transaction = new BillingTransaction
+            {
+                CashAmount = cashAmount,
+                TransactionType = type,
+                Description = description,
+                UserId = userId,
+                Date = DateTime.UtcNow,
+                AdminUserId = adminUserId
+            };
+            user.BillingTransactions.Add(transaction);
+
+            bool saveFailed = false;
+            var tryCount = 3;
+            for(int i = 0; i < tryCount;  i++)
+            {
+                try
+                {
+                    saveFailed = false;
+                    var userCash = user.Balance + cashAmount;
+                    user.Balance = userCash;
+                    this._applicationUserRepository.Update(user);
+                    this._unitOfWork.Commit();
+
+                    break;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    saveFailed = true;
+                    ex.Entries.Single().Reload();
+                }
+            }
+
+            if (saveFailed)
+            {
+                throw new DbUpdateApplicationException($"Cannot update user balance because of concurrent update requests. Transaction creating is aborted");
+            }
+
+            return transaction;
+        }
+
+        protected ApplicationUser GetUserById(string id)
+        {
+            var user = this._applicationUserRepository.Get(u => u.Id == id, u => u.BillingTransactions);
 
             if (user == null)
             {
-                throw new InvalidIdentifierException(string.Format("User width Id={0} doesn't exists", data.UserId));
+                throw new InvalidIdentifierException(string.Format("User width Id={0} doesn't exists", id));
             }
-            
-            var transaction = new BillingTransaction
-            {
-                UserId = data.UserId,
-                CashAmount = Math.Abs(data.Amount),
-                TransactionType = (data.Amount > 0)? BillingTransactionType.ReplenishmentFromAdmin:BillingTransactionType.WithdrawByAdmin,
-                Description = "Admin Transaction",
-                Date = DateTime.UtcNow
-            };
 
-            _billingTransactionRepo.Add(transaction);
-            
-            _unitOfWork.Commit();
+            return user;
         }
-
-
     }
 }

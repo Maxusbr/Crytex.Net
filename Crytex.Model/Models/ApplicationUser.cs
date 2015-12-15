@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using Crytex.Model.Models.Biling;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Model.Models
 {
@@ -47,6 +47,9 @@ namespace Crytex.Model.Models
         public string Payer { get; set; }
         public string ContactPerson { get; set; }
         public decimal Balance { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 
     public  enum TypeUser

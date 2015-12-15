@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
-using Crytex.Web.Models.JsonModels;
 using PagedList;
 
 namespace Crytex.Service.IService
@@ -14,6 +13,7 @@ namespace Crytex.Service.IService
     {
         IPagedList<BillingTransaction> GetPageBillingTransaction(int pageNumber, int pageSize, BillingSearchParams searchParams = null);
         BillingTransaction GetTransactionById(Guid id);
-        void UpdateUserBalance(UpdateUserBalance data);
+        BillingTransaction UpdateUserBalance(UpdateUserBalance data);
+        BillingTransaction AddUserTransaction(BillingTransactionType type, decimal cashAmount, string description, string userId, string adminUserId = null);
     }
 }
