@@ -1,4 +1,5 @@
 ﻿using Crytex.Model.Models;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using System;
 namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
@@ -8,9 +9,9 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
         /// Созданёт виртуальную машину
         /// </summary>
         /// <param name="task">Объект задачи создания</param>
-        /// <param name="serverTemplate">Объект шаблона машины. Обязательно инициализированное св-во OperatingSystem</param>
+        /// <param name="os">Объект шаблона машины c определённой ОС/param>
         /// <returns></returns>
-        CreateVmResult CreateVm(TaskV2 task, ServerTemplate serverTemplate);
+        CreateVmResult CreateVm(TaskV2 task, OperatingSystem os);
 
         /// <summary>
         /// Обновляет конфигурацию виртуальной машины

@@ -1,10 +1,12 @@
 ﻿using Crytex.Model.Models;
 using System;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
+
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public interface IHyperVControl
     {
-        CreateVmResult CreateVm(TaskV2 task, ServerTemplate template);
+        CreateVmResult CreateVm(TaskV2 task, OperatingSystem os);
 
         void UpdateVm(TaskV2 updateVmTask);
 

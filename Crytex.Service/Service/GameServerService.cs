@@ -28,15 +28,15 @@ namespace Crytex.Service.Service
 
         public GameServer CreateServer(GameServer server)
         {
-            var gameServerConf = this._gameServerConfRepository.Get(conf => conf.Id == server.GameServerConfigurationId, conf => conf.ServerTemplate);
-            var serverTemplate = gameServerConf.ServerTemplate;
+            var gameServerConf = this._gameServerConfRepository.Get(conf => conf.Id == server.GameServerConfigurationId, conf => conf.ServerTemplate.OperatingSystem);
+            var operatingSystem = gameServerConf.ServerTemplate.OperatingSystem;
 
             var taskOptions = new CreateVmOptions
             {
-                Cpu = serverTemplate.MinCoreCount,
-                Hdd = serverTemplate.MinHardDriveSize,
-                Ram = serverTemplate.MinRamCount,
-                ServerTemplateId = serverTemplate.Id
+                Cpu = operatingSystem.MinCoreCount,
+                Hdd = operatingSystem.MinHardDriveSize,
+                Ram = operatingSystem.MinRamCount,
+                OperatingSystemId = operatingSystem.Id
             };
             var newTask = new TaskV2
             {

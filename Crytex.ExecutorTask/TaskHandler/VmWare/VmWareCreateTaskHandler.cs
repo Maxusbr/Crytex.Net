@@ -9,13 +9,12 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
     public class VmWareCreateTaskHandler : BaseVmWareTaskHandler, ITaskHandler
     {
-        private IServerTemplateService _serverTemplateService;
-
-        public VmWareCreateTaskHandler(TaskV2 task, IVmWareControl vmWareControl,
-            IServerTemplateService serverTemplateService, string hostName)
-            :base(task, vmWareControl, hostName)
+        private IOperatingSystemsService _operatingSystemsService;
+        public VmWareCreateTaskHandler(TaskV2 task, IVmWareControl hyperVControl,
+            IOperatingSystemsService operatingSystemsService, string hostName) 
+            : base(task, hyperVControl, hostName) 
         {
-            this._serverTemplateService = serverTemplateService;
+            this._operatingSystemsService = operatingSystemsService;
         }
 
         protected override TaskExecutionResult ExecuteLogic()
@@ -24,9 +23,9 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             var taskExecutionResult = new CreateVmTaskExecutionResult();
             try
             {
-                var serverTemplateId = this.TaskEntity.GetOptions<CreateVmOptions>().ServerTemplateId;
-                var serverTemplate = this._serverTemplateService.GetById(serverTemplateId);
-                var createResult = this._vmWareControl.CreateVm(this.TaskEntity, serverTemplate);
+                var osId = this.TaskEntity.GetOptions<CreateVmOptions>().OperatingSystemId;
+                var os = this._operatingSystemsService.GetById(osId);
+                var createResult = this._vmWareControl.CreateVm(this.TaskEntity, os);
                 taskExecutionResult.Success = true;
                 taskExecutionResult.MachineGuid = createResult.MachineGuid;
                 taskExecutionResult.GuestOsPassword = createResult.GuestOsAdminPassword;
