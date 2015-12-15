@@ -41,13 +41,13 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
                     {
                         SwitchName = "Test Network 1",
                         MacAddress = "E6-F8-9C-41-98-95",
-                        IPAddresses = "192.168.0.1"
+                        IPAddress_v4 = "192.168.0.1"
                     },
                     new NetAdapter
                     {
                         SwitchName = "Test Network 2",
                         MacAddress = "E6-F8-9C-41-98-96",
-                        IPAddresses = "192.168.0.2"
+                        IPAddress_v4 = "192.168.0.2"
                     }
                 }
             };
