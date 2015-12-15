@@ -30,7 +30,8 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
                 taskExecutionResult.IpAddresses = createResult.NetworkAdapters.Select(adp =>
                     new VmIpAddress
                     {
-                        IPv4 = adp.IPAddresses,
+                        IPv4 = adp.IPAddress_v4,
+                        IPv6 = adp.IPAddress_v6,
                         MAC = adp.MacAddress,
                         NetworkName = adp.SwitchName
                     }
