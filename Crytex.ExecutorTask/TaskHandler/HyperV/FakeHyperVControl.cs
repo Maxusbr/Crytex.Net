@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Threading;
 using Crytex.ExecutorTask.TaskHandler.VmWare;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
@@ -23,7 +24,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             throw new NotImplementedException();
         }
 
-        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
+        public CreateVmResult CreateVm(TaskV2 task, OperatingSystem os)
         {
             Thread.Sleep(10000);
            

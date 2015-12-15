@@ -3,8 +3,7 @@ using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using HyperVRemote;
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
@@ -19,7 +18,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             this._config = config;
         }
 
-        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
+        public CreateVmResult CreateVm(TaskV2 task, OperatingSystem os)
         {
             var result = new CreateVmResult();
 
@@ -36,7 +35,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
                 
                 // Copy vhd to new machine
                 var templateDriveRoot = this._config.GetHyperVTemplateDriveRoot();
-                var systemDrivePath = templateDriveRoot + template.Name;
+                var systemDrivePath = templateDriveRoot + os.Name;
                 var vhdService = this._hyperVProvider.GetVhdService();
                 var vmDriveRoot = this._config.GetHyperVVmDriveRoot();
                 var newMachineDrivePath = vmDriveRoot + machineName;

@@ -14,7 +14,7 @@ namespace Crytex.Model.Models
         public int RamCount { get; set; }
         public int HardDriveSize { get; set; }
         public StatusVM Status { get; set; }
-        public Int32 ServerTemplateId { get; set; }
+        public int OperatingSystemId { get; set; }
         public string Name { get; set; }
         public string UserId { get; set; }
         public TypeVirtualization VirtualizationType { get; set; }
@@ -24,8 +24,8 @@ namespace Crytex.Model.Models
         public DateTime? CreateDate { get; set; }
 
         public Guid? SubscriptionVmId { get; set; }
-        [ForeignKey("ServerTemplateId")]
-        public ServerTemplate ServerTemplate { get; set; }
+        [ForeignKey("OperatingSystemId")]
+        public OperatingSystem OperatingSystem { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
         [ForeignKey("HyperVHostId")]

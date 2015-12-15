@@ -5,6 +5,7 @@ using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
 using VmWareRemote.Exceptions;
 using VmWareRemote.Interface;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
@@ -17,7 +18,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
+        public CreateVmResult CreateVm(TaskV2 task, OperatingSystem os)
         {
             Thread.Sleep(10000);
 
@@ -45,7 +46,8 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                         MAC = "E6-F8-9C-41-98-95",
                         NetworkName = "Test Network 2"
                     }
-                }
+                },
+                GuestOsAdminPassword = "fake control pass"
             };
             return result;
         }

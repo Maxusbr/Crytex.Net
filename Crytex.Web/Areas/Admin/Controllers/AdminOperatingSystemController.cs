@@ -43,7 +43,7 @@ namespace Crytex.Web.Areas.Admin
         [ResponseType(typeof(OperatingSystemViewModel))]
         public IHttpActionResult Get(int id)
         {
-            var os = this._oparaingSystemsService.GeById(id);
+            var os = this._oparaingSystemsService.GetById(id);
             var model = AutoMapper.Mapper.Map<OperatingSystemViewModel>(os);
 
             return Ok(model);

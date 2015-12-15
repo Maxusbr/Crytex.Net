@@ -80,6 +80,7 @@ namespace Crytex.Data.Migrations
             }
             if (this.CreateFakeEntries)
             {
+                Random random = new Random();
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
                 if (!roleManager.Roles.Any())
                 {
@@ -276,7 +277,10 @@ namespace Crytex.Data.Migrations
                         ImageFileId = image.Id,
                         ServerTemplateName = "ServerTemplateName",
                         Family = (OperatingSystemFamily)i,
-                        DefaultAdminPassword = "Password123"
+                        DefaultAdminPassword = "Password123",
+                        MinCoreCount = 2,
+                        MinHardDriveSize = 50000,
+                        MinRamCount = 512
                     };
                     if (allOperations.All(o => o.Name != operations[i].Name))
                         context.OperatingSystems.Add(operations[i]);
@@ -297,9 +301,9 @@ namespace Crytex.Data.Migrations
                     {
                         Name = name + i,
                         Description = "Description",
-                        MinCoreCount = 2,
-                        MinRamCount = 512,
-                        MinHardDriveSize = 50000,
+                        CoreCount = 2,
+                        RamCount = 512,
+                        HardDriveSize = 50000,
                         ImageFileId = image.Id,
                         OperatingSystemId = operations[target].Id,
                     };
@@ -325,7 +329,7 @@ namespace Crytex.Data.Migrations
                             RamCount = 512,
                             Status = StatusVM.Disable,
                             UserId = adminUser.Id,
-                            ServerTemplateId = serverTemplates[c].Id,
+                            OperatingSystemId = operations[random.Next(operations.Length)].Id,
                             Name = "Machine " + i + "" + c,
                             VirtualizationType = (c < 2) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
                             OperatingSystemPassword = "1111",
@@ -345,7 +349,6 @@ namespace Crytex.Data.Migrations
                     var userMoney = allUsers.First(u => u.UserName == "User" + i);
                     var valuesTransaction = Enum.GetValues(typeof(BillingTransactionType));
                     var valuesPayment = Enum.GetValues(typeof(PaymentSystemType));
-                    Random random = new Random();
 
                     for (int b = 0; b < 2; b++)
                     {
@@ -385,7 +388,6 @@ namespace Crytex.Data.Migrations
                 }
                 for (int i = 0; i < 10; i++)
                 {
-                    Random random = new Random();
                     var call = new PhoneCallRequest
                     {
                         PhoneNumber = "38067777827" + i,

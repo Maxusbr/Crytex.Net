@@ -8,12 +8,12 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
     public class HyperVCreateVmTaskHandler : BaseHyperVTaskHandler, ITaskHandler
     {
-        private IServerTemplateService _serverTemplateService;
+        private IOperatingSystemsService _operatingSystemsService;
         public HyperVCreateVmTaskHandler(TaskV2 task, IHyperVControl hyperVControl, 
-            IServerTemplateService serverTemplateService, string hostName) 
+            IOperatingSystemsService operatingSystemsService, string hostName) 
             : base(task, hyperVControl, hostName) 
         {
-            this._serverTemplateService = serverTemplateService;
+            this._operatingSystemsService = operatingSystemsService;
         }
 
         protected override TaskExecutionResult ExecuteLogic()
@@ -22,9 +22,9 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             var taskExecutionResult = new CreateVmTaskExecutionResult();
             try
             {
-                var serverTemplateId = this.TaskEntity.GetOptions<CreateVmOptions>().ServerTemplateId;
-                var serverTemplate = this._serverTemplateService.GetById(serverTemplateId);
-                var createResult = this._hyperVControl.CreateVm(this.TaskEntity, serverTemplate);
+                var osId = this.TaskEntity.GetOptions<CreateVmOptions>().OperatingSystemId;
+                var os = this._operatingSystemsService.GetById(osId);
+                var createResult = this._hyperVControl.CreateVm(this.TaskEntity, os);
                 taskExecutionResult.Success = true;
                 taskExecutionResult.MachineGuid = createResult.MachineGuid;
                 taskExecutionResult.IpAddresses = createResult.NetworkAdapters.Select(adp =>
