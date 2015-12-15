@@ -16,11 +16,11 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         private IDictionary<TypeTask, Func<TaskV2, HyperVHost, BaseTaskHandler>> _hyperVTaskHandlerMappings;
         private IDictionary<TypeTask, Func<TaskV2, VmWareVCenter, BaseTaskHandler>> _vmWareTaskHandlerMappings;
-        private IServerTemplateService _serverTemplateService;
+        private IOperatingSystemsService _operatingSystemService;
 
-        public TaskHandlerFactory(IServerTemplateService serverTemplateService)
+        public TaskHandlerFactory(IOperatingSystemsService operatingSystemService)
         {
-            this._serverTemplateService = serverTemplateService;
+            this._operatingSystemService = operatingSystemService;
             this._hyperVTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, HyperVHost, BaseTaskHandler>>
             {
                 {TypeTask.CreateVm, this.GetCreateVmTaskHandler},
@@ -65,14 +65,14 @@ namespace Crytex.ExecutorTask.TaskHandler
         private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             var handler = new HyperVCreateVmTaskHandler(task, this.CreateHyperVControl(task, host), 
-                this._serverTemplateService, host.Host);
+                this._operatingSystemService, host.Host);
 
             return handler;
         }
 
         private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), this._serverTemplateService,
+            var handler = new VmWareCreateTaskHandler(task, this.CreateVmWareControl(vCenter), this._operatingSystemService,
                 vCenter.ServerAddress);
 
             return handler;

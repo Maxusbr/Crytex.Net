@@ -22,10 +22,10 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
-            IServerTemplateService serverTemplateService, IHyperVHostService vmHyperVHostCenterService,
+            IOperatingSystemsService operatingSystemService, IHyperVHostService vmHyperVHostCenterService,
             IVmBackupService vmBackupService)
         {
-            this._handlerFactory = new TaskHandlerFactory(serverTemplateService);
+            this._handlerFactory = new TaskHandlerFactory(operatingSystemService);
             this._taskService = taskService;
             this._userVmService = userVmService;
             this._notificationManager = notificationManager;
@@ -125,9 +125,9 @@ namespace Crytex.ExecutorTask.TaskHandler
                     HardDriveSize = taskOptions.Hdd,
                     Name = taskOptions.Name,
                     RamCount = taskOptions.Ram,
-                    ServerTemplateId = taskOptions.ServerTemplateId,
+                    OperatingSystemId = taskOptions.OperatingSystemId,
                     Status = StatusVM.Enable,
-
+                    CreateDate = DateTime.UtcNow,
                     UserId = execResult.TaskEntity.UserId,
                     VirtualizationType = execResult.TaskEntity.Virtualization,
                     OperatingSystemPassword = createTaskExecResult.GuestOsPassword,

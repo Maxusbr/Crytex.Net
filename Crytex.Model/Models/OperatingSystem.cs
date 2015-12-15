@@ -20,6 +20,9 @@ namespace Crytex.Model.Models
         /// </summary>
         public string DefaultAdminPassword { get; set; }
         public OperatingSystemFamily Family { get; set; }
+        public int MinCoreCount { get; set; }
+        public int MinHardDriveSize { get; set; }
+        public int MinRamCount { get; set; }
 
         [ForeignKey("ImageFileId")]
         public FileDescriptor ImageFileDescriptor { get; set; }

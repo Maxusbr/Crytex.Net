@@ -77,7 +77,7 @@ namespace Crytex.Model.Models
     [Serializable]
     public class CreateVmOptions : ConfigVmOptions
     {
-        public Int32 ServerTemplateId { get; set; }
+        public int OperatingSystemId { get; set; }
         public Guid UserVmId { get; set; }
     }
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VmWareRemote.Exceptions;
 using VmWareRemote.Implementations;
 using VmWareRemote.Interface;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.ExecutorTask.TaskHandler.VmWare
 {
@@ -20,7 +21,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             this._vmWareProvider = vmWareProvider;
         }
 
-        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate serverTemplate)
+        public CreateVmResult CreateVm(TaskV2 task, OperatingSystem os)
         {
             // Connect to server
             ConnectIfNotConnected();
@@ -36,13 +37,13 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             CreateVmResult result = new CreateVmResult();
             try
             {
-                this._vmWareProvider.CloneVm(serverTemplate.OperatingSystem.ServerTemplateName, machineName);
+                this._vmWareProvider.CloneVm(os.ServerTemplateName, machineName);
                 this._vmWareProvider.ModifyMachine(machineName, createOptions.Cpu, createOptions.Ram, createOptions.Hdd);
                 this._vmWareProvider.StartMachine(machineName, true);
 
-                var oldPassword = serverTemplate.OperatingSystem.DefaultAdminPassword;
+                var oldPassword = os.DefaultAdminPassword;
                 var scriptBuilder = new StringBuilder();
-                switch (serverTemplate.OperatingSystem.Family)
+                switch (os.Family)
                 {
                     case OperatingSystemFamily.Windows2012:
                         var userName = "Administrator";

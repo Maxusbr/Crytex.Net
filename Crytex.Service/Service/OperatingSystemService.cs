@@ -5,6 +5,8 @@ using Crytex.Service.IService;
 using System.Collections.Generic;
 using System.Linq;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
+using Crytex.Model.Models;
+using System;
 
 namespace Crytex.Service.Service
 {
@@ -30,7 +32,7 @@ namespace Crytex.Service.Service
             return newOs;
         }
 
-        public OperatingSystem GeById(int id)
+        public OperatingSystem GetById(int id)
         {
             var os = this._operatingSystemRepo.GetById(id);
 

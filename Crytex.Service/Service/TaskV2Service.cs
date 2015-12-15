@@ -64,7 +64,7 @@ namespace Crytex.Service.Service
                     RamCount = createOptions.Ram,
                     VirtualizationType = task.Virtualization,
                     Name = createOptions.Name,
-                    ServerTemplateId = createOptions.ServerTemplateId,
+                    OperatingSystemId = createOptions.OperatingSystemId,
                     Status = StatusVM.Creating,
                     UserId = task.UserId
                 };

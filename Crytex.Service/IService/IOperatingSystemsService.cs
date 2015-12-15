@@ -7,7 +7,7 @@ namespace Crytex.Service.IService
     {
         OperatingSystem CreateOperatingSystem(OperatingSystem newOs);
 
-        OperatingSystem GeById(int id);
+        OperatingSystem GetById(int id);
 
         IEnumerable<OperatingSystem> GetAll();
 

@@ -68,9 +68,9 @@ namespace Crytex.Service.Service
             template.Description = updatedTemplate.Description;
             template.ImageFileId = updatedTemplate.ImageFileId;
             template.OperatingSystemId = updatedTemplate.OperatingSystemId;
-            template.MinRamCount = updatedTemplate.MinRamCount;
-            template.MinHardDriveSize = updatedTemplate.MinHardDriveSize;
-            template.MinCoreCount = updatedTemplate.MinCoreCount;
+            template.RamCount = updatedTemplate.RamCount;
+            template.HardDriveSize = updatedTemplate.HardDriveSize;
+            template.CoreCount = updatedTemplate.CoreCount;
             template.Name = updatedTemplate.Name;
 
             this._serverTemplateRepo.Update(template);
