@@ -22,16 +22,14 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IHyperVHostService _vmHyperVHostCenterService;
         private IVmBackupService _vmBackupService;
         private ITriggerService _triggerService;
-        private IApplicationUserService _applicationUserService;
-        private IEmailTemplateService _emailTemplateService;
+        
+        
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
             IServerTemplateService serverTemplateService, IHyperVHostService vmHyperVHostCenterService,
             IVmBackupService vmBackupService,
-            ITriggerService triggerService,
-            IApplicationUserService applicationUserService,
-            IEmailTemplateService emailTemplateService)
+            ITriggerService triggerService)
         {
             this._handlerFactory = new TaskHandlerFactory(serverTemplateService);
             this._taskService = taskService;
@@ -41,8 +39,6 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._vmHyperVHostCenterService = vmHyperVHostCenterService;
             this._vmBackupService = vmBackupService;
             this._triggerService = triggerService;
-            this._applicationUserService = applicationUserService;
-            this._emailTemplateService = emailTemplateService;
         }
 
         public IEnumerable<ITaskHandler> GetTaskHandlers(TypeVirtualization virtualizationType)
@@ -205,30 +201,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             var standartTigger = this._triggerService.GetUserTrigger(taskEntity.UserId, TriggerType.EndTask, Convert.ToDouble(taskEntity.TypeTask));
             if (standartTigger != null)
             {
-                EmailTemplateType? emailType = null;
-
-                if (taskEntity.TypeTask == TypeTask.UpdateVm)
-                {
-                    emailType = EmailTemplateType.UpdateVm;
-                }
-                if (taskEntity.TypeTask == TypeTask.CreateVm)
-                {
-                    emailType = EmailTemplateType.CreateVm;
-                }
-
-                if (emailType != null)
-                {
-                    var template = _emailTemplateService.GetTemplateByType(emailType.Value);
-                    var user = this._applicationUserService.GetUserById(taskEntity.UserId);
-
-                    if (template != null)
-                    {
-                        var parameters = template.ParameterNamesList.Select(key => new KeyValuePair<string, string>(key, key)).ToList();
-                        var from = ConfigurationManager.AppSettings["Email"];
-                        this._notificationManager.SendEmailImmediately(from, user.Email, template.EmailTemplateType,
-                            parameters, parameters, DateTime.UtcNow);
-                    }
-                }
+                _notificationManager.SendEmailUserByTask(taskEntity.UserId, taskEntity.TypeTask);
             }   
         }
 
