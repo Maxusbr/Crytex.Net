@@ -21,7 +21,8 @@ namespace Crytex.Web.Models.JsonModels
         public TypeUser UserType { get; set; }
         public string Payer { get; set; }
         public string ContactPerson { get; set; }
-
+        public decimal Balance { get; set; }
+        public bool IsBlocked { get; set; }
         public bool ValidateForCreationScenario()
         {
             if (string.IsNullOrEmpty(this.UserName)) return false;

@@ -16,5 +16,7 @@ namespace Crytex.Service.IService
         List<ApplicationUser> Search(string searchParam);
 
         void DeleteUser(string id);
+
+        void UpdateStateUser(UpdateUserState data);
     }
 }
