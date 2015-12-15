@@ -27,11 +27,10 @@ namespace Crytex.Test.Controllers
     [TestFixture]
     public class AdminSnapShotVmControllerTests
     {
-        private UserInfo _userInfo { get; set; }
-
         private ISnapshotVmService _snapshotVmService;
 
         private IUserVmService _userVmService;
+        private string _userId;
 
         private IUserInfoProvider _userInfoProvider { get; set; }
 
@@ -40,15 +39,15 @@ namespace Crytex.Test.Controllers
         [SetUp]
         public void Init()
         {
+            _userId = "userId";
             AutoMapperConfiguration.Configure();
             _snapshotVmService = Substitute.For<ISnapshotVmService>();
             _userVmService = Substitute.For<IUserVmService>();
             _snapShotVmController = new AdminSnapShotVmController(_snapshotVmService, _userVmService);
             _snapShotVmController.CrytexContext = Substitute.For<ICrytexContext>();
 
-            _userInfo = new UserInfo() {UserId = "userId"};
             _userInfoProvider = Substitute.For<IUserInfoProvider>();
-            _userInfoProvider.GetUserId().Returns(_userInfo.UserId);
+            _userInfoProvider.GetUserId().Returns(_userId);
 
 
             _snapShotVmController.CrytexContext.UserInfoProvider.Returns(_userInfoProvider);

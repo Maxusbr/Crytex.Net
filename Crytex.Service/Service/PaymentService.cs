@@ -16,15 +16,13 @@ namespace Crytex.Service.Service
     {
         private IUnitOfWork _unitOfWork;
         private IBillingTransactionRepository _billingTransactionRepository;
-        private IUserInfoRepository _userInfoRepository;
         private ICreditPaymentOrderRepository _creditPaymentOrderRepository;
 
         public PaymentService(IUnitOfWork unitOfWork, IBillingTransactionRepository billingRepo,
-            IUserInfoRepository userInfoRepo, ICreditPaymentOrderRepository creditPaymentOrderRepo)
+            ICreditPaymentOrderRepository creditPaymentOrderRepo)
         {
             this._unitOfWork = unitOfWork;
             this._billingTransactionRepository = billingRepo;
-            this._userInfoRepository = userInfoRepo;
             this._creditPaymentOrderRepository = creditPaymentOrderRepo;
         }
 

@@ -26,7 +26,7 @@ namespace Crytex.Test.Controllers
     [TestFixture]
     public class AdminRegionControllerTests
     {
-        UserInfo _userInfo { get; set; }
+        private string _userId;
 
         IUserInfoProvider _userInfoProvider { get; set; }
 
@@ -37,14 +37,14 @@ namespace Crytex.Test.Controllers
         [SetUp]
         public void Init()
         {
+            _userId = "userId";
             AutoMapperConfiguration.Configure();
             _regionService = Substitute.For<IRegionService>();
             _regionController = new AdminRegionController(_regionService);
             _regionController.CrytexContext = Substitute.For<ICrytexContext>();
 
-            _userInfo = new UserInfo() { UserId = "userId" };
             _userInfoProvider = Substitute.For<IUserInfoProvider>();
-            _userInfoProvider.GetUserId().Returns(_userInfo.UserId);
+            _userInfoProvider.GetUserId().Returns(_userId);
 
             _regionController.CrytexContext.UserInfoProvider.Returns(_userInfoProvider);
 

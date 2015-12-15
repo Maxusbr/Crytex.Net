@@ -20,8 +20,6 @@ namespace Crytex.Model.Models
             return userIdentity;
         }
 
-        public virtual UserInfo UserInfo { get; set; }
-
         [InverseProperty("User")]
         public virtual ICollection<HelpDeskRequest> HelpDeskRequests { get; set; }
         [InverseProperty("User")]
@@ -48,6 +46,7 @@ namespace Crytex.Model.Models
         public bool IsBlocked { get; set; }
         public string Payer { get; set; }
         public string ContactPerson { get; set; }
+        public decimal Balance { get; set; }
     }
 
     public  enum TypeUser

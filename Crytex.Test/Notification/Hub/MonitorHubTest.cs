@@ -45,21 +45,21 @@ namespace Crytex.Test.Notification.Hub
     class MonitorHubTest
     {
         MonitorHub _monitorHub { get; set; }
-        UserInfo _userInfo { get; set; }
         IUserVmService _userVmService { get; set; }
         HubCallerContext _context { get; set; }
         INotifyProvider _notifyProvider { get; set; }
         IHubCallerConnectionContext<dynamic> _client { get; set; }
         IClientContract _clientContract { get; set; }
+        string _userId { get; set; }
 
         [SetUp]
         public void Init()
         {
+            _userId = "userId";
             _userVmService = Substitute.For<IUserVmService>();
             _notifyProvider = Substitute.For<INotifyProvider>();
             _monitorHub = Substitute.For<MonitorHub>(_userVmService);
             // _monitorHub = new MonitorHub(_userVmService);
-            _userInfo = new UserInfo() { UserId = "UserId" };
             IRequest request = Substitute.For<IRequest>();
             _context = new HubCallerContext(request, "connectionId");
             _client = Substitute.For<IHubCallerConnectionContext<dynamic>>();
@@ -67,7 +67,7 @@ namespace Crytex.Test.Notification.Hub
             //_client.ReturnsForAll(_clientContract);
             //SubstituteExtensions.Returns(_client.All, _clientContract);
             _monitorHub.Clients = _client;
-            _notifyProvider.GetUserId(_context).Returns(_userInfo.UserId);
+            _notifyProvider.GetUserId(_context).Returns(_userId);
             _monitorHub.Context = _context;
             _monitorHub.NotifyProvider = _notifyProvider;
         }
@@ -78,7 +78,7 @@ namespace Crytex.Test.Notification.Hub
             UserVm VM = new UserVm
             {
                 Id = Guid.NewGuid(),
-                UserId = _userInfo.UserId
+                UserId = _userId
             };
             _userVmService.GetVmById(VM.Id).Returns(VM);
             _monitorHub.OnConnected();
@@ -95,7 +95,7 @@ namespace Crytex.Test.Notification.Hub
             UserVm VM = new UserVm
             {
                 Id = Guid.NewGuid(),
-                UserId = _userInfo.UserId + "NotValidUSer"
+                UserId = _userId + "NotValidUSer"
             };
             _userVmService.GetVmById(VM.Id).Returns(VM);
             _monitorHub.OnConnected();
