@@ -1,4 +1,5 @@
-﻿using Crytex.Service.IService;
+﻿using System;
+using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
 
@@ -14,9 +15,16 @@ namespace Crytex.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IHttpActionResult Get(int id)
+        public IHttpActionResult Get(String id)
         {
-            var server = this._gameServerService.GetById(id);
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                this.ModelState.AddModelError("id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
+
+            var server = this._gameServerService.GetById(guid);
             var model = AutoMapper.Mapper.Map<GameServerViewModel>(server);
 
             return this.Ok(model);
