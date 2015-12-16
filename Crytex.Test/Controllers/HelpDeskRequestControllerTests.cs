@@ -19,7 +19,7 @@ namespace Crytex.Test.Controllers
     [TestFixture]
     public class HelpDeskRequestControllerTests
     {
-        UserInfo _userInfo { get; set; }
+        private string _userId;
 
         IUserInfoProvider _userInfoProvider { get; set; }
 
@@ -30,14 +30,14 @@ namespace Crytex.Test.Controllers
         [SetUp]
         public void Init()
         {
+            _userId = "userId";
             AutoMapperConfiguration.Configure();
             _helpDeskRequestService = Substitute.For<IHelpDeskRequestService>();
             _helpDeskRequestController = new HelpDeskRequestController(_helpDeskRequestService);
             _helpDeskRequestController.CrytexContext = Substitute.For<ICrytexContext>();
 
-            _userInfo = new UserInfo() { UserId = "userId" };
             _userInfoProvider = Substitute.For<IUserInfoProvider>();
-            _userInfoProvider.GetUserId().Returns(_userInfo.UserId);
+            _userInfoProvider.GetUserId().Returns(_userId);
 
             _helpDeskRequestController.CrytexContext.UserInfoProvider.Returns(_userInfoProvider);
 
@@ -125,7 +125,7 @@ namespace Crytex.Test.Controllers
             {
                 Summary = helpDeskRequestViewModel.Summary,
                 Details = helpDeskRequestViewModel.Details,
-                UserId = _userInfo.UserId
+                UserId =  _userId
             };
             _helpDeskRequestService.CreateNew(requestToCreate).Returns(returnedHelpDeskRequest);
 

@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 using Crytex.Model.Models.Biling;
-
+using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Model.Models
 {
@@ -19,8 +19,6 @@ namespace Crytex.Model.Models
             // Здесь добавьте утверждения пользователя
             return userIdentity;
         }
-
-        public virtual UserInfo UserInfo { get; set; }
 
         [InverseProperty("User")]
         public virtual ICollection<HelpDeskRequest> HelpDeskRequests { get; set; }
@@ -48,6 +46,10 @@ namespace Crytex.Model.Models
         public bool IsBlocked { get; set; }
         public string Payer { get; set; }
         public string ContactPerson { get; set; }
+        public decimal Balance { get; set; }
+
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
     }
 
     public  enum TypeUser
