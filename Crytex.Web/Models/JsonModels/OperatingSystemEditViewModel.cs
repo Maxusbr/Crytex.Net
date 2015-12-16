@@ -19,5 +19,11 @@ namespace Crytex.Web.Models.JsonModels
         public string ImagePath { get; set; }
         [Required]
         public string DefaultAdminPassword { get; set; }
+        [Required]
+        public int? MinCoreCount { get; set; }
+        [Required]
+        public int? MinHardDriveSize { get; set; }
+        [Required]
+        public int? MinRamCount { get; set; }
     }
 }

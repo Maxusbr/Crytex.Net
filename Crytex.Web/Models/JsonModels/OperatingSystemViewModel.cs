@@ -14,5 +14,8 @@ namespace Crytex.Web.Models.JsonModels
         public string ServerTemplateName { get; set; }
         public string DefaultAdminPassword { get; set; }
         public OperatingSystemFamily Family { get; set; }
+        public int MinCoreCount { get; set; }
+        public int MinHardDriveSize { get; set; }
+        public int MinRamCount { get; set; }
     }
 }
