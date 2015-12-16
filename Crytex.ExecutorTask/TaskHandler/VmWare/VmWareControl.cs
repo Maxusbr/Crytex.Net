@@ -108,7 +108,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
 
             try
             {
-                this._vmWareProvider.StartMachine(machineName);
+                this._vmWareProvider.StartMachine(machineName, false);
             }
             // Handle invalid name exceptions
             catch (InvalidNameException e)

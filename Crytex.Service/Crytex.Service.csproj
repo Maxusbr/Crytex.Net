@@ -94,6 +94,7 @@
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
+    <Compile Include="IService\ITriggerService.cs" />
     <Compile Include="IService\IUserLoginLogService.cs" />
     <Compile Include="IService\IOAuthService.cs" />
     <Compile Include="IService\IPhoneCallRequestService.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Service\SystemCenterVirtualManagerService.cs" />
     <Compile Include="Service\TariffInfoService.cs" />
     <Compile Include="Service\TaskV2Service.cs" />
+    <Compile Include="Service\TriggerService.cs" />
     <Compile Include="Service\UserLoginLogService.cs" />
     <Compile Include="Service\UserVmService.cs" />
     <Compile Include="Service\HyperVHostService.cs" />
