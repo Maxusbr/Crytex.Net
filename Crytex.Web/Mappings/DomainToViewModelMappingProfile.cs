@@ -42,8 +42,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<LogEntry, LogEntryViewModel>()
                     .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
-            Mapper.CreateMap<ApplicationUser, ApplicationUserViewModel>()
-                .ForMember(x => x.Balance, opt => opt.MapFrom(source => source.UserInfo.Balance));
+            Mapper.CreateMap<ApplicationUser, ApplicationUserViewModel>();
             Mapper.CreateMap<UserVm, UserVmViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Id.ToString()))
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source =>source.User.UserName))

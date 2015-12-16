@@ -9,16 +9,15 @@ namespace Crytex.Model.Models.Biling
         public BillingTransactionType TransactionType { get; set; }
         public DateTime Date { get; set; }
         public decimal CashAmount { get; set; }
-       
         public string Description { get; set; }
-
         public string UserId { get; set; }
-        [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
-
-
+        public string AdminUserId { get; set; }
         public Guid? SubscriptionVmId { get; set; }
 
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
+        [ForeignKey("AdminUserId")]
+        public ApplicationUser AdminUser { get; set; }
         [ForeignKey("SubscriptionVmId")]
         public virtual SubscriptionVm SubscriptionVm { get; set; }
 

@@ -22,7 +22,6 @@ namespace Crytex.Service
             container.RegisterType<IServerTemplateRepository, ServerTemplateRepository>();
             container.RegisterType<IBillingTransactionRepository, BillingTransactionRepository>();
             container.RegisterType<IBilingService, BilingService>();
-            container.RegisterType<IUserInfoRepository, UserInfoRepository>();
             container.RegisterType<ICreditPaymentOrderRepository, CreditPayementOrderRepository>();
             container.RegisterType<IUserVmRepository, UserVmRepository>();
             container.RegisterType<IHyperVHostRepository, HyperVHostRepository>();
@@ -34,7 +33,6 @@ namespace Crytex.Service
             container.RegisterType<IVmWareVCenterRepository, VmWareVCenterRepository>();
             container.RegisterType<IOAuthClientApplicationRepository, OAuthClientApplicationRepository>();
             container.RegisterType<IOAuthRefreshTokenRepository, OAuthRefreshTokenRepository>();
-            container.RegisterType<IStatisticRepository, StatisticRepository>();
             container.RegisterType<ISubscriptionVmRepository, SubscriptionVmRepository>();
             container.RegisterType<IDiscountRepository, DiscountRepository>();
             container.RegisterType<IPhoneCallRequestRepository, PhoneCallRequestRepository>();

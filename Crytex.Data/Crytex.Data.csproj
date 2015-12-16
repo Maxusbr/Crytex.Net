@@ -73,7 +73,6 @@
     <Compile Include="IRepository\IStateMachineRepository.cs" />
     <Compile Include="IRepository\IStatisticRepository.cs" />
     <Compile Include="IRepository\ITariffInfoRepository.cs" />
-    <Compile Include="IRepository\IUserInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
     <Compile Include="IRepository\IUserLoginLogEntryRepository.cs" />
@@ -112,8 +111,6 @@
     <Compile Include="Repository\StateMachineRepository.cs" />
     <Compile Include="Repository\TariffInfoRepository.cs" />
     <Compile Include="Repository\TaskV2Repository.cs" />
-    <Compile Include="Repository\StatisticRepository.cs" />
-    <Compile Include="Repository\UserInfoRepository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
     <Compile Include="Repository\UserLoginLogEntryRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />

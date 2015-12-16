@@ -20,7 +20,7 @@ namespace Crytex.Web.Filters
                     context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, context.ActionContext.ModelState);
                     return;
                 }
-                if(context.Exception is TaskOperationException)
+                if(context.Exception is TaskOperationException || context.Exception is DbUpdateApplicationException)
                 {
                     context.Response = context.Request.CreateResponse(HttpStatusCode.Conflict, new {errorMessage = context.Exception.Message});
                     return;

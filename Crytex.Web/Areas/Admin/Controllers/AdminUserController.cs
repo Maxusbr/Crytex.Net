@@ -191,9 +191,9 @@ namespace Crytex.Web.Areas.Admin
             if (data.Amount == 0)
                 return BadRequest("amount can't be 0");
 
-            _billingService.UpdateUserBalance(data);
+            var billingTransaction = _billingService.UpdateUserBalance(data);
 
-            return Ok();
+            return Ok(billingTransaction);
         }
 
         /// <summary>
