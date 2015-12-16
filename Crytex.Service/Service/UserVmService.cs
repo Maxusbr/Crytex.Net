@@ -27,7 +27,7 @@ namespace Crytex.Service.Service
 
         public virtual UserVm GetVmById(Guid id)
         {
-            var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.OperatingSystem, i => i.IpAdresses);
+            var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.OperatingSystem,i=>i.OperatingSystem.ImageFileDescriptor, i => i.IpAdresses, i => i.User);
             if (vm == null)
             {
                 throw new InvalidIdentifierException(string.Format("UserVm with id={0} doesnt exist.", id));
@@ -86,7 +86,7 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var list = this._userVmRepo.GetPage(page, where, x => x.CreateDate);
+            var list = this._userVmRepo.GetPage(page, where, x => x.CreateDate, false, x => x.User);
             return list;
         }
 

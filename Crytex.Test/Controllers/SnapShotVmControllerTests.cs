@@ -27,7 +27,7 @@ namespace Crytex.Test.Controllers
     [TestFixture]
     public class SnapShotVmControllerTests
     {
-        private UserInfo _userInfo { get; set; }
+        private string _userId { get; set; }
 
         private ISnapshotVmService _snapshotVmService;
 
@@ -40,15 +40,15 @@ namespace Crytex.Test.Controllers
         [SetUp]
         public void Init()
         {
+            _userId = "userId";
             AutoMapperConfiguration.Configure();
             _snapshotVmService = Substitute.For<ISnapshotVmService>();
             _userVmService = Substitute.For<IUserVmService>();
             _snapShotVmController = new SnapShotVmController(_snapshotVmService, _userVmService);
             _snapShotVmController.CrytexContext = Substitute.For<ICrytexContext>();
 
-            _userInfo = new UserInfo() {UserId = "userId"};
             _userInfoProvider = Substitute.For<IUserInfoProvider>();
-            _userInfoProvider.GetUserId().Returns(_userInfo.UserId);
+            _userInfoProvider.GetUserId().Returns(_userId);
 
 
             _snapShotVmController.CrytexContext.UserInfoProvider.Returns(_userInfoProvider);
@@ -73,7 +73,7 @@ namespace Crytex.Test.Controllers
             var VM = new UserVm
             {
                 Id = VmID,
-                UserId = _userInfo.UserId + "NotAccessUser"
+                UserId = _userId + "NotAccessUser"
             };
 
             _userVmService.GetVmById(VmID).Returns(VM);
@@ -99,7 +99,7 @@ namespace Crytex.Test.Controllers
             var VM = new UserVm
             {
                 Id = VmID,
-                UserId = _userInfo.UserId
+                UserId = _userId
             }; // valid user with access
 
             _userVmService.GetVmById(VmID).Returns(VM);

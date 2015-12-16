@@ -16,6 +16,6 @@ namespace Crytex.Web.Models.JsonModels
         public string UserName { get; set; }
         public string OsImageFilePath { get; set; }
         public string OsName { get; set; }
-        public ServerTemplateViewModel ServerTemplate { get; set; }
+        public OperatingSystemViewModel OperatingSystem { get; set; }
     }
 }

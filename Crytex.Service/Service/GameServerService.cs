@@ -56,13 +56,13 @@ namespace Crytex.Service.Service
             return server;
         }
 
-        public virtual GameServer GetById(int id)
+        public virtual GameServer GetById(Guid guid)
         {
-            var server = this._gameServerRepository.GetById(id);
+            var server = this._gameServerRepository.GetById(guid);
             
             if(server == null)
             {
-                throw new InvalidIdentifierException($"GameServer with id={id} doesn't exist");
+                throw new InvalidIdentifierException($"GameServer with id={guid} doesn't exist");
             }
 
             return server;

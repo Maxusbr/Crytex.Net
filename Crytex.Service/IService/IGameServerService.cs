@@ -1,4 +1,5 @@
-﻿using Crytex.Model.Models;
+﻿using System;
+using Crytex.Model.Models;
 using PagedList;
 
 namespace Crytex.Service.IService
@@ -9,7 +10,7 @@ namespace Crytex.Service.IService
         /// Создаёт новый игровой сервер, задачу создания виртуальной машины, а также саму сущность виртуальной машины в БД
         /// </summary>
         GameServer CreateServer(GameServer server);
-        GameServer GetById(int id);
+        GameServer GetById(Guid guid);
         IPagedList<GameServer> GetPage(int pageNumber, int pageSize, string userId = null);
     }
 }

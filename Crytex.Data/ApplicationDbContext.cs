@@ -37,7 +37,6 @@ namespace Crytex.Data
         public DbSet<FileDescriptor> Files { get; set; }
         public DbSet<OperatingSystem> OperatingSystems { get; set; }
         public DbSet<ServerTemplate> ServerTemplates { get; set; }
-        public DbSet<UserInfo> UserInfos { get; set; }
         public DbSet<BillingTransaction> BillingTransactions { get; set; }
         public DbSet<SubscriptionVm> SubscriptionVms { get; set; }
         public DbSet<Payment> Payments { get; set; }

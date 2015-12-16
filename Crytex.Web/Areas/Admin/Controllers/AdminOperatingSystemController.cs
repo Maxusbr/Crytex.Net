@@ -63,9 +63,9 @@ namespace Crytex.Web.Areas.Admin
             }
             var newOS = AutoMapper.Mapper.Map<OperatingSystem>(model);
             newOS = this._oparaingSystemsService.CreateOperatingSystem(newOS);
+            var viewOS = AutoMapper.Mapper.Map<OperatingSystemViewModel>(newOS);
 
-            return Ok(new { id = newOS.Id });
-
+            return Ok(viewOS);
         }
 
         /// <summary>
