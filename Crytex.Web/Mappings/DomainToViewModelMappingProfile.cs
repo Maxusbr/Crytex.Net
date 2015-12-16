@@ -46,8 +46,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<UserVm, UserVmViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Id.ToString()))
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source =>source.User.UserName))
-                .ForMember(x => x.OsImageFilePath, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.ImageFileDescriptor.Path))
-                .ForMember(x => x.OsName, opt => opt.MapFrom(source => source.ServerTemplate.OperatingSystem.Name));
+                .ForMember(x => x.OsImageFilePath, opt => opt.MapFrom(source => source.OperatingSystem.ImageFileDescriptor.Path))
+                .ForMember(x => x.OsName, opt => opt.MapFrom(source => source.OperatingSystem.Name));
             Mapper.CreateMap<EmailTemplate, EmailTemplateViewModel>();
             Mapper.CreateMap<EmailTemplate, UpdateEmailTemplateViewModel>();
             Mapper.CreateMap<HyperVHostResource, HyperVHostResourceViewModel>();

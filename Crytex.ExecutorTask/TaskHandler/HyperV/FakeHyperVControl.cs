@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Threading;
 using Crytex.ExecutorTask.TaskHandler.VmWare;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.ExecutorTask.TaskHandler.HyperV
 {
@@ -23,7 +24,7 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
             throw new NotImplementedException();
         }
 
-        public CreateVmResult CreateVm(TaskV2 task, ServerTemplate template)
+        public CreateVmResult CreateVm(TaskV2 task, OperatingSystem os)
         {
             Thread.Sleep(10000);
            
@@ -40,13 +41,13 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
                     {
                         SwitchName = "Test Network 1",
                         MacAddress = "E6-F8-9C-41-98-95",
-                        IPAddresses = "192.168.0.1"
+                        IPAddress_v4 = "192.168.0.1"
                     },
                     new NetAdapter
                     {
                         SwitchName = "Test Network 2",
                         MacAddress = "E6-F8-9C-41-98-96",
-                        IPAddresses = "192.168.0.2"
+                        IPAddress_v4 = "192.168.0.2"
                     }
                 }
             };

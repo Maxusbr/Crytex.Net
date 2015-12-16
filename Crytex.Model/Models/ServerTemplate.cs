@@ -7,9 +7,9 @@ namespace Crytex.Model.Models
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public int MinCoreCount { get; set; }
-        public int MinRamCount { get; set; }
-        public int MinHardDriveSize { get; set; }
+        public int CoreCount { get; set; }
+        public int RamCount { get; set; }
+        public int HardDriveSize { get; set; }
         public Int32 ImageFileId { get; set; }
         public Int32 OperatingSystemId { get; set; }
         public string UserId { get; set; }

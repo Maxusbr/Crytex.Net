@@ -27,7 +27,7 @@ namespace Crytex.Service.Service
 
         public virtual UserVm GetVmById(Guid id)
         {
-            var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.ServerTemplate, i => i.IpAdresses);
+            var vm = this._userVmRepo.Get(v=>v.Id == id, i=>i.OperatingSystem, i => i.IpAdresses);
             if (vm == null)
             {
                 throw new InvalidIdentifierException(string.Format("UserVm with id={0} doesnt exist.", id));
@@ -151,7 +151,7 @@ namespace Crytex.Service.Service
             userVm.HyperVHostId = vm.HyperVHostId;
             userVm.Name = vm.Name;
             userVm.OperatingSystemPassword = vm.OperatingSystemPassword;
-            userVm.ServerTemplateId = vm.ServerTemplateId;
+            userVm.OperatingSystemId = vm.OperatingSystemId;
             userVm.Status = vm.Status;
             userVm.SubscriptionVmId = vm.SubscriptionVmId;
             userVm.UserId = vm.UserId;
