@@ -80,7 +80,7 @@ namespace Crytex.Web.Areas.Admin
 
                 File.Delete(file.LocalFileName);
 
-                return Ok(new { id = descriptor.Id });
+                return Ok(new { id = descriptor.Id, path = descriptor.Path });
             }
 
             return BadRequest("No files to upload");
