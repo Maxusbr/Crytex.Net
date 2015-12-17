@@ -79,9 +79,9 @@
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="IRepository\IVmBackupRepository.cs" />
     <Compile Include="IRepository\IVmWareVCenterRepository.cs" />
-    <Compile Include="Migrations\201511262022032_init.cs" />
-    <Compile Include="Migrations\201511262022032_init.Designer.cs">
-      <DependentUpon>201511262022032_init.cs</DependentUpon>
+    <Compile Include="Migrations\201512171146063_Init2.cs" />
+    <Compile Include="Migrations\201512171146063_Init2.Designer.cs">
+      <DependentUpon>201512171146063_Init2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -163,8 +163,8 @@
     <Content Include="Content\PagedList.css" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201511262022032_init.resx">
-      <DependentUpon>201511262022032_init.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201512171146063_Init2.resx">
+      <DependentUpon>201512171146063_Init2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

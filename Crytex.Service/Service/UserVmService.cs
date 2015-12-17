@@ -153,7 +153,6 @@ namespace Crytex.Service.Service
             userVm.OperatingSystemPassword = vm.OperatingSystemPassword;
             userVm.OperatingSystemId = vm.OperatingSystemId;
             userVm.Status = vm.Status;
-            userVm.SubscriptionVmId = vm.SubscriptionVmId;
             userVm.UserId = vm.UserId;
             userVm.VirtualizationType = vm.VirtualizationType;
             userVm.VmWareCenterId = vm.VmWareCenterId;
