@@ -11,7 +11,7 @@ namespace Crytex.Notification
         void SetEmailInQueue(string from, string to, EmailTemplateType emailTemplateType, List<KeyValuePair<string, string>> subjectParams = null, List<KeyValuePair<string, string>> bodyParams = null, DateTime? dateSending = null);
 
         Task SendEmailImmediately(string @from, string to, EmailTemplateType emailTemplateType, List<KeyValuePair<string, string>> subjectParams = null, List<KeyValuePair<string, string>> bodyParams = null, DateTime? dateSending = null);
-
+        Task SendEmailUserByTask(string userId, TypeTask typeTask);
         Task HandleQueueInDB();
 
         void Sybscribe(string vmId);

@@ -8,13 +8,11 @@ namespace Crytex.Web.Models.JsonModels
         public Int32 Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-      
-        public uint MinCoreCount { get; set; }
-       
-        public int MinRamCount { get; set; }
-      
-        public int MinHardDriveSize { get; set; }
-      
+
+        public int CoreCount { get; set; }
+        public int RamCount { get; set; }
+        public int HardDriveSize { get; set; }
+
         public int ImageFileId { get; set; }
      
         public int OperatingSystemId { get; set; }

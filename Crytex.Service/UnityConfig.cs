@@ -53,6 +53,7 @@ namespace Crytex.Service
             container.RegisterType<IRegionService, RegionService>();
             container.RegisterType<ITariffInfoService, TariffInfoService>();
             container.RegisterType<ITariffInfoRepository, TariffInfoRepository>();
+            container.RegisterType<ITriggerRepository, TriggerRepository>();
             container.RegisterType<IVmWareVCenterService, VmWareVCenterService>();
             container.RegisterType<IOAuthService, OAuthService>();
             container.RegisterType<INetTrafficCounterService, NetTrafficCounterService>();
@@ -61,6 +62,7 @@ namespace Crytex.Service
             container.RegisterType<IVmBackupService, VmBackupService>();
             container.RegisterType<IUserLoginLogEntryRepository, UserLoginLogEntryRepository>();
             container.RegisterType<IUserLoginLogService, UserLoginLogService>();
+			container.RegisterType<ITriggerService, TriggerService>();
             container.RegisterType<IGameServerRepository, GameServerRepository>();
             container.RegisterType<IGameServerService, GameServerService>();
             container.RegisterType<IGameServerConfigurationRepository, GameServerConfigurationRepository>();

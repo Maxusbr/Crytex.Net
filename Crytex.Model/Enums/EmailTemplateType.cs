@@ -5,6 +5,7 @@
         Registration,
         ChangePassword,
         ChangeProfile,
-
+        CreateVm,
+        UpdateVm
     }
 }

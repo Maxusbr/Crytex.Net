@@ -9,13 +9,13 @@ namespace Crytex.Web.Models.JsonModels
         public string Description { get; set; }
         [Required]
         [Range(1, int.MaxValue)]
-        public uint MinCoreCount { get; set; }
+        public uint CoreCount { get; set; }
         [Required]
         [Range(1, int.MaxValue)]
-        public int MinRamCount { get; set; }
+        public int RamCount { get; set; }
         [Required]
         [Range(1, int.MaxValue)]
-        public int MinHardDriveSize { get; set; }
+        public int HardDriveSize { get; set; }
         [Required]
         public int ImageFileId { get; set; }
         [Required]

@@ -1,4 +1,5 @@
-﻿using Crytex.Data.Infrastructure;
+﻿using System;
+using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Service.IService;
 using System.Security.Principal;
@@ -19,13 +20,13 @@ namespace Crytex.Service.Service.SecureService
             this._userIdentity = userIdentity;
         }
 
-        public override GameServer GetById(int id)
+        public override GameServer GetById(Guid guid )
         {
-            var server = base.GetById(id);
+            var server = base.GetById(guid);
 
             if(server.UserId != this._userIdentity.GetUserId())
             {
-                throw new SecurityException($"Access denied for GameServer with id={id}");
+                throw new SecurityException($"Access denied for GameServer with id={guid}");
             }
 
             return server;
