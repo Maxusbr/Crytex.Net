@@ -290,12 +290,14 @@
     <Compile Include="Areas\Admin\Controllers\AdminUserVmController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminVmBackupController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminSubscriptionVmController.cs" />
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
     <Compile Include="Areas\User\Controllers\GameServerController.cs" />
     <Compile Include="Areas\User\Controllers\LoginLogEntryController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\User\Controllers\PhoneCallRequestController.cs" />
+    <Compile Include="Areas\User\Controllers\SubscriptionVmController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
     <Compile Include="Areas\User\Controllers\VmBackupController.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
@@ -338,6 +340,7 @@
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
     <Compile Include="Models\JsonModels\StatisticViewModel.cs" />
+    <Compile Include="Models\JsonModels\SubscriptionVmViewModel.cs" />
     <Compile Include="Models\JsonModels\TariffViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2SearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2ViewModel.cs" />

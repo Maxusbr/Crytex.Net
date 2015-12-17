@@ -5,6 +5,11 @@ using Crytex.Model.Models.Biling;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Model.Models;
+using Crytex.Service.Models;
+using PagedList;
+using System.Linq.Expressions;
+using Crytex.Service.Extension;
+using Crytex.Model.Exceptions;
 
 namespace Crytex.Service.Service
 {
@@ -78,6 +83,56 @@ namespace Crytex.Service.Service
             this._billingService.AddUserTransaction(transaction);
 
             return newSubscription;
+        }
+
+        public virtual SubscriptionVm GetById(Guid guid)
+        {
+            var sub = this._subscriptionVmRepository.GetById(guid);
+
+            if(sub == null)
+            {
+                throw new InvalidIdentifierException($"Vm subscription with id={guid.ToString()} doesn't exist");
+            }
+
+            return sub;
+        }
+
+        public IPagedList<SubscriptionVm> GetPage(int pageNumber, int pageSize, string userId = null, SubscriptionVmSearchParams searchParams = null)
+        {
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+
+            Expression<Func<SubscriptionVm, bool>> where = x => true;
+
+            if (searchParams != null)
+            {
+                if (searchParams.CreatedFrom != null)
+                {
+                    where = where.And(x => x.DateCreate >= searchParams.CreatedFrom);
+                }
+
+                if (searchParams.CreatedTo != null)
+                {
+                    where = where.And(x => x.DateCreate <= searchParams.CreatedTo);
+                }
+
+                if (searchParams.EndFrom != null)
+                {
+                    where = where.And(x => x.DateEnd >= searchParams.EndFrom);
+                }
+                if(searchParams.EndTo != null)
+                {
+                    where = where.And(x => x.DateEnd <= searchParams.EndTo);
+                }
+
+                if(userId != null)
+                {
+                    where = where.And(x => x.UserId == userId);
+                }
+            }
+
+            var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate);
+
+            return pagedList;
         }
     }
 }

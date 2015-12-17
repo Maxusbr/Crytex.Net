@@ -178,7 +178,6 @@
     <Compile Include="ServerConfigTests.cs" />
     <Compile Include="FileServiceTests.cs" />
     <Compile Include="HyperVSynchronizationTests.cs" />
-    <Compile Include="SubscriptionVmServiceTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\Crytex.Data\connectionStrings.config">
