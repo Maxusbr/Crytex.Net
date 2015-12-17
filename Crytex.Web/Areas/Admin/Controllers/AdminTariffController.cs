@@ -23,9 +23,9 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         // GET: api/Admin/AdminTariff/0
         [ResponseType(typeof(TariffViewModel))]
-        public IHttpActionResult Get(TypeVirtualization virtualization)
+        public IHttpActionResult Get(TypeVirtualization virtualization, OperatingSystemFamily osFamily)
         {
-            var tariff = _tariffInfoService.GetTariffByVirtualization(virtualization);
+            var tariff = _tariffInfoService.GetTariffByVirtualization(virtualization, osFamily);
             var viewTariff = AutoMapper.Mapper.Map<TariffViewModel>(tariff);           
             return Ok(viewTariff);
         }
@@ -82,10 +82,10 @@ namespace Crytex.Web.Areas.Admin
         // GET: api/Admin/AdminTariff/Total
         [Route("api/Admin/AdminTariff/Total")]
         [ResponseType(typeof(double))]
-        public IHttpActionResult GetTotalPrice(double processor, double HDD, double SSD, double RAM512, double load10Percent, Guid tariffId)
+        public IHttpActionResult GetTotalPrice(int processor, int HDD, int SSD, int RAM512, double load10Percent, Guid tariffId)
         {
             var tariff = _tariffInfoService.GetTariffById(tariffId);
-            double totalPrice = _tariffInfoService.CalculateTotalPrice(processor, HDD, SSD, RAM512, load10Percent, tariff);            
+            decimal totalPrice = _tariffInfoService.CalculateTotalPrice(processor, HDD, SSD, RAM512, load10Percent, tariff);            
             return Ok(totalPrice);
         }
 

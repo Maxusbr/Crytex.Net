@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Crytex.Model.Models.Biling;
+using Crytex.Service.Model;
 
 namespace Crytex.Service.IService
 {
-   public interface ISubscriptionVmService
+    public interface ISubscriptionVmService
     {
+        SubscriptionVm BuySubscription(SubscriptionBuyOptions options);
     }
 }
