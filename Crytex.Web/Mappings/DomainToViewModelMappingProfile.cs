@@ -79,6 +79,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
             this.MapPagedList<Payment, PaymentView>();
             this.MapPagedList<UserVm, UserVmViewModel>();
+            this.MapPagedList<Tariff, TariffViewModel>();
             this.MapPagedList<TaskV2, TaskV2ViewModel>();
             this.MapPagedList<BillingTransaction, BillingViewModel>();
             this.MapPagedList<LogEntry, LogEntryViewModel>();

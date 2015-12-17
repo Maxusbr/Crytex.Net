@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
@@ -31,16 +32,35 @@ namespace Crytex.Service.Service
             return tariff;
         }
 
-        public Tariff GetTariffByVirtualization(TypeVirtualization virtualization)
+        public List<Tariff> GetTariffs()
+        {
+            List<Tariff> myTariffs = new List<Tariff>();
+            var tariffsByOperatingSystem = this._tariffInfoRepo.GetAll().GroupBy(x => x.OperatingSystem);
+            foreach (var tariffByoperatingSystem in tariffsByOperatingSystem)
+            {
+                var tariffsByVirtualization = tariffByoperatingSystem.GroupBy(x => x.Virtualization);
+                foreach (var tariffByVirtualization in tariffsByVirtualization)
+                {
+                    var tariffByDate = tariffByVirtualization.FirstOrDefault(t => t.CreateDate == tariffByVirtualization.Select(t2 => t2.CreateDate).Max());
+                    if (tariffByDate != null)
+                    {
+                        myTariffs.Add(tariffByDate);
+                    }
+                }
+            }
+            return myTariffs;
+        } 
+
+        public Tariff GetTariffByType(TypeVirtualization virtualization, TypeOfOperatingSystem operatingSystem)
         {
             var tariff = this._tariffInfoRepo.GetAll()
-                .Where(t => t.Virtualization == virtualization);
+                .Where(t => t.Virtualization == virtualization && t.OperatingSystem == operatingSystem);
 
             var tariffByDate = tariff.FirstOrDefault(t => t.CreateDate == tariff.Select(t2=>t2.CreateDate).Max());
 
             if (tariffByDate == null)
             {
-                throw new InvalidIdentifierException(string.Format("Tariff with virtualization={0} doesnt exist.", virtualization));
+                throw new InvalidIdentifierException(string.Format("Tariff with virtualization={0} and operatingSystem={1} doesnt exist.", virtualization, operatingSystem));
             }
             
             return tariffByDate;
@@ -74,9 +94,9 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public double CalculateTotalPrice(double processor, double HDD, double SSD, double RAM512, double load10Percent, Tariff tariff)
+        public decimal CalculateTotalPrice(decimal processor, decimal HDD, decimal SSD, decimal RAM512, decimal load10Percent, Tariff tariff)
         {
-            double totalPrice = processor * tariff.Processor1 +
+            decimal totalPrice = processor * tariff.Processor1 +
                                 HDD * tariff.HDD1 +
                                 SSD * tariff.SSD1 +
                                 RAM512 * tariff.RAM512 +

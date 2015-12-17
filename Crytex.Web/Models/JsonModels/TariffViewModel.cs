@@ -13,23 +13,27 @@ namespace Crytex.Web.Models.JsonModels
         public Int32 Id { get; set; }
 
         [Required]
+        [EnumDataType(typeof(TypeOfOperatingSystem))]
+        public TypeOfOperatingSystem OperatingSystem { get; set; }
+
+        [Required]
         [EnumDataType(typeof(TypeVirtualization))]
         public TypeVirtualization Virtualization { get; set; }
 
         [Required]
-        public Double Processor1 { get; set; }
+        public decimal Processor1 { get; set; }
 
         [Required]
-        public Double RAM512 { get; set; }
+        public decimal RAM512 { get; set; }
 
         [Required]
-        public Double HDD1 { get; set; }
+        public decimal HDD1 { get; set; }
 
         [Required]
-        public Double SSD1 { get; set; }
+        public decimal SSD1 { get; set; }
 
         [Required]
-        public Double Load10Percent { get; set; }
+        public decimal Load10Percent { get; set; }
 
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }

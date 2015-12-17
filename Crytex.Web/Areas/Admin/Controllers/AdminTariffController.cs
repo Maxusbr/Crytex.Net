@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Model.Models;
@@ -20,14 +21,24 @@ namespace Crytex.Web.Areas.Admin
         /// Получение тарифа по типу виртуализации
         /// </summary>
         /// <param name="virtualization"></param>
+        /// <param name="operatingSystem"></param>
         /// <returns></returns>
         // GET: api/Admin/AdminTariff/0
         [ResponseType(typeof(TariffViewModel))]
-        public IHttpActionResult Get(TypeVirtualization virtualization)
+        public IHttpActionResult Get(TypeVirtualization? virtualization = null, TypeOfOperatingSystem? operatingSystem = null)
         {
-            var tariff = _tariffInfoService.GetTariffByVirtualization(virtualization);
-            var viewTariff = AutoMapper.Mapper.Map<TariffViewModel>(tariff);           
-            return Ok(viewTariff);
+            if (virtualization != null)
+            {
+                var tariff = _tariffInfoService.GetTariffByType(virtualization.Value, operatingSystem.Value);
+                var viewTariff = AutoMapper.Mapper.Map<TariffViewModel>(tariff);
+                return Ok(viewTariff);
+            }
+            else
+            {
+                var tariffs = _tariffInfoService.GetTariffs();
+                var viewTariffs = AutoMapper.Mapper.Map<List<Tariff>,List<TariffViewModel>>(tariffs);
+                return Ok(viewTariffs);
+            }
         }
 
         /// <summary>
@@ -81,11 +92,11 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         // GET: api/Admin/AdminTariff/Total
         [Route("api/Admin/AdminTariff/Total")]
-        [ResponseType(typeof(double))]
-        public IHttpActionResult GetTotalPrice(double processor, double HDD, double SSD, double RAM512, double load10Percent, Guid tariffId)
+        [ResponseType(typeof(decimal))]
+        public IHttpActionResult GetTotalPrice(decimal processor, decimal HDD, decimal SSD, decimal RAM512, decimal load10Percent, Guid tariffId)
         {
             var tariff = _tariffInfoService.GetTariffById(tariffId);
-            double totalPrice = _tariffInfoService.CalculateTotalPrice(processor, HDD, SSD, RAM512, load10Percent, tariff);            
+            decimal totalPrice = _tariffInfoService.CalculateTotalPrice(processor, HDD, SSD, RAM512, load10Percent, tariff);            
             return Ok(totalPrice);
         }
 
