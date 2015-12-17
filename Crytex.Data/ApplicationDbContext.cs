@@ -1,4 +1,6 @@
 ﻿using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
@@ -24,7 +26,21 @@ namespace Crytex.Data
         {
             return new ApplicationDbContext();
         }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+         
+            modelBuilder.Entity<IdentityUserLogin>().HasKey<string>(l => l.UserId);
+            modelBuilder.Entity<IdentityRole>().HasKey<string>(r => r.Id);
+            modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
+            
+            modelBuilder.Entity<OperatingSystem>()
+    .HasRequired(t => t.ImageFileDescriptor).WithMany().HasForeignKey(system => system.ImageFileId)
+   
+    .WillCascadeOnDelete(false);
 
+
+           
+        }
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Tariff> Tariffs { get; set; }
