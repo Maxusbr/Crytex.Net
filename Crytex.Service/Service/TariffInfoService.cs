@@ -31,7 +31,7 @@ namespace Crytex.Service.Service
             return tariff;
         }
 
-        public Tariff GetTariffByVirtualization(TypeVirtualization virtualization)
+        public Tariff GetTariffByVirtualization(TypeVirtualization virtualization, OperatingSystemFamily osFamily)
         {
             var tariff = this._tariffInfoRepo.GetAll()
                 .Where(t => t.Virtualization == virtualization);
@@ -74,14 +74,14 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public double CalculateTotalPrice(double processor, double HDD, double SSD, double RAM512, double load10Percent, Tariff tariff)
+        public decimal CalculateTotalPrice(int processor, int HDD, int SSD, int RAM512, double load10Percent, Tariff tariff)
         {
             double totalPrice = processor * tariff.Processor1 +
                                 HDD * tariff.HDD1 +
                                 SSD * tariff.SSD1 +
                                 RAM512 * tariff.RAM512 +
                                 load10Percent * tariff.Load10Percent;
-            return totalPrice;
+            return (decimal)totalPrice; // TODO: убрать каст после исправления модели в бд
         }
     }
 }

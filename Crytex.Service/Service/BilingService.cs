@@ -74,19 +74,27 @@ namespace Crytex.Service.Service
             return transactionList;
         }
 
+        public BillingTransaction AddUserTransaction(BillingTransaction transaction)
+        {
+            var newTransaction = this.AddUserTransactionInner(transaction.TransactionType, transaction.CashAmount, transaction.Description,
+                transaction.UserId, transaction.AdminUserId, transaction.SubscriptionVmId, transaction.SubscriptionVmMonthCount);
+
+            return newTransaction;
+        }
+
         public BillingTransaction UpdateUserBalance(UpdateUserBalance data)
         {
             var transactionType = (data.Amount > 0) ? BillingTransactionType.ReplenishmentFromAdmin : BillingTransactionType.WithdrawByAdmin;
             var cashAmount = Math.Abs(data.Amount);
             var description = "Admin Transaction";
 
-            var transaction = this.AddUserTransaction(transactionType, cashAmount, description, data.UserId);
+            var transaction = this.AddUserTransactionInner(transactionType, cashAmount, description, data.UserId);
 
             return transaction;
         }
 
-        public BillingTransaction AddUserTransaction(BillingTransactionType type, decimal cashAmount, string description,
-            string userId, string adminUserId = null)
+        private BillingTransaction AddUserTransactionInner(BillingTransactionType type, decimal cashAmount, string description,
+            string userId, string adminUserId = null, Guid? subscriptionId = null, int? subscriptionMonthCount = null)
         {
             var user = this.GetUserById(userId);
 
@@ -97,7 +105,9 @@ namespace Crytex.Service.Service
                 Description = description,
                 UserId = userId,
                 Date = DateTime.UtcNow,
-                AdminUserId = adminUserId
+                AdminUserId = adminUserId,
+                SubscriptionVmId = subscriptionId,
+                SubscriptionVmMonthCount = subscriptionMonthCount
             };
             user.BillingTransactions.Add(transaction);
 

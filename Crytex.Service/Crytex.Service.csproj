@@ -126,6 +126,8 @@
     <Compile Include="Model\StatisticSummary.cs" />
     <Compile Include="Model\StatisticType.cs" />
     <Compile Include="Model\SearchEmailParams.cs" />
+    <Compile Include="Model\SubscriptionBuyOptions.cs" />
+    <Compile Include="Model\SubscriptionVmSearchParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
     <Compile Include="Model\UpdateUserBalance.cs" />
     <Compile Include="Model\UpdateUserState.cs" />
@@ -143,6 +145,7 @@
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
+    <Compile Include="Service\SecureService\SecuredSubscriptionVmService.cs" />
     <Compile Include="Service\SecureService\SecureGameServerService.cs" />
     <Compile Include="Service\SecureService\SecureHelpDeskRequestService.cs" />
     <Compile Include="Service\SecureService\SecurePaymentService.cs" />
