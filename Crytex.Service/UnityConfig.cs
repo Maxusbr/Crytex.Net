@@ -75,6 +75,7 @@ namespace Crytex.Service
             container.RegisterType<ITaskV2Service, SecureTaskV2Service>("Secured");
             container.RegisterType<IVmBackupService, SecureVmBackupService>("Secured");
             container.RegisterType<IGameServerService, SecureGameServerService>("Secured");
+            container.RegisterType<ISubscriptionVmService, SecuredSubscriptionVmService>("Secured");
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();

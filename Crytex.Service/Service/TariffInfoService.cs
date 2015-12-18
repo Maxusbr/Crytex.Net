@@ -32,6 +32,7 @@ namespace Crytex.Service.Service
             return tariff;
         }
 
+
         public List<Tariff> GetTariffs()
         {
             List<Tariff> myTariffs = new List<Tariff>();
@@ -51,16 +52,18 @@ namespace Crytex.Service.Service
             return myTariffs;
         } 
 
-        public Tariff GetTariffByType(TypeVirtualization virtualization, TypeOfOperatingSystem operatingSystem)
+
+        public Tariff GetTariffByType(TypeVirtualization virtualization, OperatingSystemFamily osFamily)
+
         {
             var tariff = this._tariffInfoRepo.GetAll()
-                .Where(t => t.Virtualization == virtualization && t.OperatingSystem == operatingSystem);
+                .Where(t => t.Virtualization == virtualization && t.OperatingSystem == osFamily);
 
             var tariffByDate = tariff.FirstOrDefault(t => t.CreateDate == tariff.Select(t2=>t2.CreateDate).Max());
 
             if (tariffByDate == null)
             {
-                throw new InvalidIdentifierException(string.Format("Tariff with virtualization={0} and operatingSystem={1} doesnt exist.", virtualization, operatingSystem));
+                throw new InvalidIdentifierException(string.Format("Tariff with virtualization={0} and operatingSystem={1} doesnt exist.", virtualization, osFamily));
             }
             
             return tariffByDate;
@@ -95,7 +98,9 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public decimal CalculateTotalPrice(decimal processor, decimal HDD, decimal SSD, decimal RAM512, decimal load10Percent, Tariff tariff)
+
+        public decimal CalculateTotalPrice(int processor, int HDD, int SSD, int RAM512, int load10Percent, Tariff tariff)
+
         {
             decimal totalPrice = processor * tariff.Processor1 +
                                 HDD * tariff.HDD1 +

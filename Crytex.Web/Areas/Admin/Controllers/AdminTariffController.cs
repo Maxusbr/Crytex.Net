@@ -24,8 +24,10 @@ namespace Crytex.Web.Areas.Admin
         /// <param name="operatingSystem"></param>
         /// <returns></returns>
         // GET: api/Admin/AdminTariff/0
-        [ResponseType(typeof(TariffViewModel))]
-        public IHttpActionResult Get(TypeVirtualization? virtualization = null, TypeOfOperatingSystem? operatingSystem = null)
+        [ResponseType(typeof (TariffViewModel))]
+
+        public IHttpActionResult Get(TypeVirtualization? virtualization = null,
+            OperatingSystemFamily? operatingSystem = null)
         {
             if (virtualization != null)
             {
@@ -36,7 +38,7 @@ namespace Crytex.Web.Areas.Admin
             else
             {
                 var tariffs = _tariffInfoService.GetTariffs();
-                var viewTariffs = AutoMapper.Mapper.Map<List<Tariff>,List<TariffViewModel>>(tariffs);
+                var viewTariffs = AutoMapper.Mapper.Map<List<Tariff>, List<TariffViewModel>>(tariffs);
                 return Ok(viewTariffs);
             }
         }
@@ -88,8 +90,10 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         // GET: api/Admin/AdminTariff/Total
         [Route("api/Admin/AdminTariff/Total")]
-        [ResponseType(typeof(decimal))]
-        public IHttpActionResult GetTotalPrice(decimal processor, decimal HDD, decimal SSD, decimal RAM512, decimal load10Percent, Guid tariffId)
+
+        [ResponseType(typeof(double))]
+        public IHttpActionResult GetTotalPrice(int processor, int HDD, int SSD, int RAM512, int load10Percent, Guid tariffId)
+
         {
             var tariff = _tariffInfoService.GetTariffById(tariffId);
             decimal totalPrice = _tariffInfoService.CalculateTotalPrice(processor, HDD, SSD, RAM512, load10Percent, tariff);            

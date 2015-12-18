@@ -40,11 +40,6 @@ namespace Crytex.Model.Models
         VmWare = 1
     }
 
-    public enum TypeOfOperatingSystem
-    {
-        Windows = 0,
-        Ubuntu = 1
-    }
 
     public enum StatusTask
     {

@@ -13,8 +13,8 @@ namespace Crytex.Web.Models.JsonModels
         public Int32 Id { get; set; }
 
         [Required]
-        [EnumDataType(typeof(TypeOfOperatingSystem))]
-        public TypeOfOperatingSystem OperatingSystem { get; set; }
+        [EnumDataType(typeof(OperatingSystemFamily))]
+        public OperatingSystemFamily OperatingSystem { get; set; }
 
         [Required]
         [EnumDataType(typeof(TypeVirtualization))]

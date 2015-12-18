@@ -14,6 +14,6 @@ namespace Crytex.Service.IService
         IPagedList<BillingTransaction> GetPageBillingTransaction(int pageNumber, int pageSize, BillingSearchParams searchParams = null);
         BillingTransaction GetTransactionById(Guid id);
         BillingTransaction UpdateUserBalance(UpdateUserBalance data);
-        BillingTransaction AddUserTransaction(BillingTransactionType type, decimal cashAmount, string description, string userId, string adminUserId = null);
+        BillingTransaction AddUserTransaction(BillingTransaction transaction);
     }
 }
