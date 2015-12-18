@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
@@ -31,16 +32,38 @@ namespace Crytex.Service.Service
             return tariff;
         }
 
-        public Tariff GetTariffByVirtualization(TypeVirtualization virtualization, OperatingSystemFamily osFamily)
+
+        public List<Tariff> GetTariffs()
+        {
+            List<Tariff> myTariffs = new List<Tariff>();
+            var tariffsByOperatingSystem = this._tariffInfoRepo.GetAll().GroupBy(x => x.OperatingSystem);
+            foreach (var tariffByoperatingSystem in tariffsByOperatingSystem)
+            {
+                var tariffsByVirtualization = tariffByoperatingSystem.GroupBy(x => x.Virtualization);
+                foreach (var tariffByVirtualization in tariffsByVirtualization)
+                {
+                    var tariffByDate = tariffByVirtualization.FirstOrDefault(t => t.CreateDate == tariffByVirtualization.Select(t2 => t2.CreateDate).Max());
+                    if (tariffByDate != null)
+                    {
+                        myTariffs.Add(tariffByDate);
+                    }
+                }
+            }
+            return myTariffs;
+        } 
+
+
+        public Tariff GetTariffByType(TypeVirtualization virtualization, OperatingSystemFamily osFamily)
+
         {
             var tariff = this._tariffInfoRepo.GetAll()
-                .Where(t => t.Virtualization == virtualization);
+                .Where(t => t.Virtualization == virtualization && t.OperatingSystem == osFamily);
 
             var tariffByDate = tariff.FirstOrDefault(t => t.CreateDate == tariff.Select(t2=>t2.CreateDate).Max());
 
             if (tariffByDate == null)
             {
-                throw new InvalidIdentifierException(string.Format("Tariff with virtualization={0} doesnt exist.", virtualization));
+                throw new InvalidIdentifierException(string.Format("Tariff with virtualization={0} and operatingSystem={1} doesnt exist.", virtualization, osFamily));
             }
             
             return tariffByDate;
@@ -48,6 +71,7 @@ namespace Crytex.Service.Service
 
         public Tariff CreateTariff(Tariff createTariff)
         {
+            createTariff.CreateDate = DateTime.UtcNow;
             this._tariffInfoRepo.Add(createTariff);
             this._unitOfWork.Commit();
 
@@ -63,7 +87,7 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException(string.Format("Tariff width Id={0} doesn't exists", updateTariff.Id));
             }
 
-            tariff.UpdateDate = DateTime.Now;
+            tariff.UpdateDate = DateTime.UtcNow;
             tariff.HDD1 = updateTariff.HDD1;
             tariff.SSD1 = updateTariff.SSD1;
             tariff.RAM512 = updateTariff.RAM512;
@@ -74,14 +98,16 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public decimal CalculateTotalPrice(int processor, int HDD, int SSD, int RAM512, double load10Percent, Tariff tariff)
+
+        public decimal CalculateTotalPrice(int processor, int HDD, int SSD, int RAM512, int load10Percent, Tariff tariff)
+
         {
-            double totalPrice = processor * tariff.Processor1 +
+            decimal totalPrice = processor * tariff.Processor1 +
                                 HDD * tariff.HDD1 +
                                 SSD * tariff.SSD1 +
                                 RAM512 * tariff.RAM512 +
                                 load10Percent * tariff.Load10Percent;
-            return (decimal)totalPrice; // TODO: убрать каст после исправления модели в бд
+            return totalPrice;
         }
     }
 }

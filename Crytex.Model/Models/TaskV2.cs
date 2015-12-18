@@ -40,6 +40,7 @@ namespace Crytex.Model.Models
         VmWare = 1
     }
 
+
     public enum StatusTask
     {
         Start = 0,

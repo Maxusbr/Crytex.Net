@@ -95,7 +95,7 @@ namespace Crytex.Service.Service
     
             var page = new PageInfo(pageNumber, pageSize);
        
-            var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.CreateDate);            
+            var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.CreateDate);
             return list;
         }
 
