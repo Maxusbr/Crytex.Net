@@ -68,6 +68,7 @@ namespace Crytex.Service.Service
 
         public Tariff CreateTariff(Tariff createTariff)
         {
+            createTariff.CreateDate = DateTime.UtcNow;
             this._tariffInfoRepo.Add(createTariff);
             this._unitOfWork.Commit();
 
@@ -83,7 +84,7 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException(string.Format("Tariff width Id={0} doesn't exists", updateTariff.Id));
             }
 
-            tariff.UpdateDate = DateTime.Now;
+            tariff.UpdateDate = DateTime.UtcNow;
             tariff.HDD1 = updateTariff.HDD1;
             tariff.SSD1 = updateTariff.SSD1;
             tariff.RAM512 = updateTariff.RAM512;
