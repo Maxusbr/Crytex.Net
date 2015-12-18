@@ -15,8 +15,11 @@ namespace Crytex.Model.Models
 
         [ForeignKey("VmId")]
         public UserVm Vm { get; set; }
+
         [ForeignKey("GameServerConfigurationId")]
+
         public GameServerConfiguration GameServerConfiguration { get; set; }
+
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 

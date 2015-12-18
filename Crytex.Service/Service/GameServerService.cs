@@ -58,7 +58,7 @@ namespace Crytex.Service.Service
 
         public virtual GameServer GetById(Guid guid)
         {
-            var server = this._gameServerRepository.GetById(guid);
+            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.Vm);
             
             if(server == null)
             {
@@ -73,12 +73,12 @@ namespace Crytex.Service.Service
             var pageInfo = new PageInfo(pageNumber, pageSize);
             Expression<Func<GameServer, bool>> where = x => true;
 
-            if(userId != null)
+            if (userId != null)
             {
                 where = where.And(x => x.UserId == userId);
             }
 
-            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id);
+            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.User, x=>x.Vm);
 
             return pagedList;
         }
