@@ -11,6 +11,7 @@ using Crytex.Core;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Notifications;
 using EmailResultStatus = Crytex.Model.Enums.EmailResultStatus;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Notification
 {
@@ -117,6 +118,31 @@ namespace Crytex.Notification
                 report.AppendLine(result + " emails: " + resultSendings.Count(x => x.Value.Status == result));
             report.AppendLine("Not sent emails: " + (emails.Count - resultSendings.Count));
             LoggerCrytex.Logger.Info(report);
+        }
+
+        public void SendMachinePoweredOffEmail(string userId)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.SubscriptionNeedsPayment, null, null, DateTime.UtcNow);
+        }
+
+        public void SendSubscriptionEndWarningEmail(string userId, int daysToEnd)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            List<KeyValuePair<string, string>> bodyParams = new List<KeyValuePair<string, string>>();
+            bodyParams.Add(new KeyValuePair<string, string>("daysToEnd", daysToEnd.ToString()));
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.SubscriptionEndWarning, null, bodyParams, DateTime.UtcNow);
+        }
+
+        public void SendSubscriptionDeletionWarningEmail(string userId, int daysToDeletion)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            List<KeyValuePair<string, string>> bodyParams = new List<KeyValuePair<string, string>>();
+            bodyParams.Add(new KeyValuePair<string, string>("daysToDeletion", daysToDeletion.ToString()));
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.SubscriptionDeletionWarning, null, bodyParams, DateTime.UtcNow);
         }
     }
 }

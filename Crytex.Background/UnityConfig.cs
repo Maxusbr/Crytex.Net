@@ -34,6 +34,7 @@ namespace Crytex.Background
                 unityContainer.RegisterType<ISchedulerJobs, SchedulerJobs>();
                 unityContainer.RegisterType<IJobFactory, UnityJobFactory>();
                 unityContainer.RegisterType<IAppConfig, BackgroundConfig>();
+                unityContainer.RegisterType<IBackgroundConfig, BackgroundConfig>();
                 unityContainer.RegisterType<IHyperVMonitorFactory, FakeHyperVMonitorFactory>();
                 unityContainer.RegisterType<IVmWareMonitorFactory, FakeVmWareMonitorFactory>();
 

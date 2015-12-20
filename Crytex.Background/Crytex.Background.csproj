@@ -114,6 +114,10 @@
     <Compile Include="Tasks\HyperVSynchronizationJob.cs" />
     <Compile Include="Tasks\MonitoringVmWareJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\ActiveSubscriptionVmJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\SubscriptionVmWarningsJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\WaiForDeletionSubscriptionVmJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\WaitFotPaymentSubscriptionVmJob.cs" />
     <Compile Include="Tasks\TaskExecutorUpdateJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />

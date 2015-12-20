@@ -89,7 +89,7 @@ namespace Crytex.Model.Models
     }
 
     [Serializable]
-    public class RemoveVmOptions : ConfigVmOptions
+    public class RemoveVmOptions : BaseOptions
     {
         public Guid VmId { get; set; }
     }

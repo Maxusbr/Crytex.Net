@@ -20,7 +20,7 @@ namespace Crytex.Service.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public Tariff GetTariffById(Guid id)
+        public Tariff GetTariffById(int id)
         {
             var tariff = this._tariffInfoRepo.GetById(id);
 
@@ -56,6 +56,7 @@ namespace Crytex.Service.Service
         public Tariff GetTariffByType(TypeVirtualization virtualization, OperatingSystemFamily osFamily)
 
         {
+            var tariffs = this._tariffInfoRepo.GetAll();
             var tariff = this._tariffInfoRepo.GetAll()
                 .Where(t => t.Virtualization == virtualization && t.OperatingSystem == osFamily);
 
@@ -80,7 +81,7 @@ namespace Crytex.Service.Service
 
         public void UpdateTariff(Tariff updateTariff)
         {
-            var tariff = this._tariffInfoRepo.GetById(updateTariff.Id);
+            var tariff = this.GetTariffById(updateTariff.Id);
 
             if (tariff == null)
             {
