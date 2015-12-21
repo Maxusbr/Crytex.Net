@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Model.Models;
@@ -20,14 +21,26 @@ namespace Crytex.Web.Areas.Admin
         /// Получение тарифа по типу виртуализации
         /// </summary>
         /// <param name="virtualization"></param>
+        /// <param name="operatingSystem"></param>
         /// <returns></returns>
         // GET: api/Admin/AdminTariff/0
-        [ResponseType(typeof(TariffViewModel))]
-        public IHttpActionResult Get(TypeVirtualization virtualization, OperatingSystemFamily osFamily)
+        [ResponseType(typeof (TariffViewModel))]
+
+        public IHttpActionResult Get(TypeVirtualization? virtualization = null,
+            OperatingSystemFamily? operatingSystem = null)
         {
-            var tariff = _tariffInfoService.GetTariffByVirtualization(virtualization, osFamily);
-            var viewTariff = AutoMapper.Mapper.Map<TariffViewModel>(tariff);           
-            return Ok(viewTariff);
+            if (virtualization != null)
+            {
+                var tariff = _tariffInfoService.GetTariffByType(virtualization.Value, operatingSystem.Value);
+                var viewTariff = AutoMapper.Mapper.Map<TariffViewModel>(tariff);
+                return Ok(viewTariff);
+            }
+            else
+            {
+                var tariffs = _tariffInfoService.GetTariffs();
+                var viewTariffs = AutoMapper.Mapper.Map<List<Tariff>, List<TariffViewModel>>(tariffs);
+                return Ok(viewTariffs);
+            }
         }
 
         /// <summary>
@@ -41,8 +54,6 @@ namespace Crytex.Web.Areas.Admin
             if (!ModelState.IsValid || tariff == null)
                 return BadRequest(ModelState);
 
-            tariff.CreateDate = DateTime.UtcNow;
-            
             var modelTariff = AutoMapper.Mapper.Map<Tariff>(tariff);
 
             var newTariff = _tariffInfoService.CreateTariff(modelTariff);
@@ -60,8 +71,6 @@ namespace Crytex.Web.Areas.Admin
         {
             if (!ModelState.IsValid || tariff == null)
                 return BadRequest(ModelState);
-
-            tariff.UpdateDate = DateTime.UtcNow;
 
             var modelTariff = AutoMapper.Mapper.Map<Tariff>(tariff);
 
@@ -81,8 +90,10 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         // GET: api/Admin/AdminTariff/Total
         [Route("api/Admin/AdminTariff/Total")]
+
         [ResponseType(typeof(double))]
-        public IHttpActionResult GetTotalPrice(int processor, int HDD, int SSD, int RAM512, double load10Percent, Guid tariffId)
+        public IHttpActionResult GetTotalPrice(int processor, int HDD, int SSD, int RAM512, int load10Percent, Guid tariffId)
+
         {
             var tariff = _tariffInfoService.GetTariffById(tariffId);
             decimal totalPrice = _tariffInfoService.CalculateTotalPrice(processor, HDD, SSD, RAM512, load10Percent, tariff);            

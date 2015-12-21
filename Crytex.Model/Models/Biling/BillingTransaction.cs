@@ -19,8 +19,16 @@ namespace Crytex.Model.Models.Biling
         public ApplicationUser User { get; set; }
         [ForeignKey("AdminUserId")]
         public ApplicationUser AdminUser { get; set; }
+
         [ForeignKey("SubscriptionVmId")]
-        public SubscriptionVm SubscriptionVm { get; set; }
+        public virtual SubscriptionVm SubscriptionVm { get; set; }
+
+
+        public Guid? GameServerId { get; set; }
+
+        [ForeignKey("GameServerId")]
+        public virtual GameServer GameServer { get; set; }
+
     }
 
     public enum BillingTransactionType

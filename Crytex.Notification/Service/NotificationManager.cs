@@ -1,6 +1,7 @@
 ﻿using System;
 using Crytex.Service.IService;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using Crytex.Model.Enums;
@@ -18,14 +19,22 @@ namespace Crytex.Notification
         private IEmailSender _emailSender { get; }
         private IEmailInfoService _emailInfoService { get; }
         private ISignalRSender _signalRSender { get; }
-        
+        private IEmailTemplateService _emailTemplateService;
+        private IApplicationUserService _applicationUserService;
+
+
 
         public NotificationManager(IEmailSender emailSender,
-            IEmailInfoService emailInfoService, ISignalRSender signalRSender)
+            IEmailInfoService emailInfoService, 
+            ISignalRSender signalRSender,
+            IEmailTemplateService emailTemplateService,
+            IApplicationUserService applicationUserService)
         {
             _emailSender = emailSender;
             _emailInfoService = emailInfoService;
             _signalRSender = signalRSender;
+            _emailTemplateService = emailTemplateService;
+            _applicationUserService = applicationUserService;
         }
 
         public void SendToUserNotification(string userId, Object message)
@@ -58,6 +67,33 @@ namespace Crytex.Notification
             var email = _emailInfoService.SaveEmail(@from, to, emailTemplateType, true, subjectParams, bodyParams, dateSending);
             var resultSending = await _emailSender.SendEmail(email);
             _emailInfoService.MarkEmailAsSent(email.Id, (EmailResultStatus)resultSending.Value.Status, resultSending.Value.RejectReason);
+        }
+
+        public async Task SendEmailUserByTask(string userId, TypeTask typeTask)
+        {
+            EmailTemplateType? emailType = null;
+
+            if (typeTask == TypeTask.UpdateVm)
+            {
+                emailType = EmailTemplateType.UpdateVm;
+            }
+            if (typeTask == TypeTask.CreateVm)
+            {
+                emailType = EmailTemplateType.CreateVm;
+            }
+
+            if (emailType != null)
+            {
+                var template = _emailTemplateService.GetTemplateByType(emailType.Value);
+                var user = this._applicationUserService.GetUserById(userId);
+
+                if (template != null)
+                {
+                    var parameters = template.ParameterNamesList.Select(key => new KeyValuePair<string, string>(key, key)).ToList();
+                    var from = ConfigurationManager.AppSettings["Email"];
+                    await SendEmailImmediately(from, user.Email, template.EmailTemplateType, parameters, parameters, DateTime.UtcNow);
+                }
+            }
         }
 
         public async Task HandleQueueInDB()

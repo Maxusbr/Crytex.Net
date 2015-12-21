@@ -19,7 +19,8 @@ namespace Crytex.Web.Mappings
         {
             Mapper.CreateMap<HelpDeskRequestViewModel, HelpDeskRequest>()
                 .ForMember(req => req.FileDescriptors, opt => opt.MapFrom(s => s.FileDescriptorParams != null ? s.FileDescriptorParams.Select(p => new FileDescriptor {Id = p.Id, Name = p.Name, Path = p.Path}) : new FileDescriptor[0]));
-            Mapper.CreateMap<OperatingSystemEditViewModel, OperatingSystem>();
+            Mapper.CreateMap<OperatingSystemEditViewModel, OperatingSystem>()
+                .ForMember(dest => dest.ImageFileDescriptor, opt =>opt.MapFrom(source => new FileDescriptor {Path = source.ImagePath, Id = source.ImageFileId.Value}));
             Mapper.CreateMap<ServerTemplateEditViewModel, ServerTemplate>();
             Mapper.CreateMap<SystemCenterVirtualManagerViewModel, SystemCenterVirtualManager>();
             Mapper.CreateMap<ApplicationUserViewModel, ApplicationUser>();

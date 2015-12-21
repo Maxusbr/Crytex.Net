@@ -2,11 +2,13 @@
 using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using Crytex.Model.Models.Notifications;
 using Crytex.Notification;
 using Crytex.Notification.Models;
 using System.Linq;
 using Crytex.Core;
+using Crytex.Model.Enums;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -19,11 +21,15 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IVmWareVCenterService _vmWareVCenterService;
         private IHyperVHostService _vmHyperVHostCenterService;
         private IVmBackupService _vmBackupService;
+        private ITriggerService _triggerService;
+        
+        
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
             IOperatingSystemsService operatingSystemService, IHyperVHostService vmHyperVHostCenterService,
-            IVmBackupService vmBackupService)
+            IVmBackupService vmBackupService,
+            ITriggerService triggerService)
         {
             this._handlerFactory = new TaskHandlerFactory(operatingSystemService);
             this._taskService = taskService;
@@ -32,6 +38,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._vmWareVCenterService = vmWareVCenterService;
             this._vmHyperVHostCenterService = vmHyperVHostCenterService;
             this._vmBackupService = vmBackupService;
+            this._triggerService = triggerService;
         }
 
         public IEnumerable<ITaskHandler> GetTaskHandlers(TypeVirtualization virtualizationType)
@@ -66,10 +73,10 @@ namespace Crytex.ExecutorTask.TaskHandler
                 handler.ProcessingFinished += this.ProcessingFinishedEventHandler;
 
                 handlerList.Add(handler);
-            }
+                }
 
             return handlerList;
-        }
+            }
 
         private VmWareVCenter GetVmWareVCenterForTask(TaskV2 task)
         {
@@ -190,6 +197,12 @@ namespace Crytex.ExecutorTask.TaskHandler
             {
                 LoggerCrytex.Logger.Error("Ошибка отправки сообщения " + ex);
             }
+
+            var standartTigger = this._triggerService.GetUserTrigger(taskEntity.UserId, TriggerType.EndTask, Convert.ToDouble(taskEntity.TypeTask));
+            if (standartTigger != null)
+            {
+                _notificationManager.SendEmailUserByTask(taskEntity.UserId, taskEntity.TypeTask);
+            }   
         }
 
         private void ProcessingStartedEventHandler(object sender, TaskV2 task)

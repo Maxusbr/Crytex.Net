@@ -67,6 +67,9 @@ namespace Crytex.Service.Service
             var newTask = this._taskService.CreateTask(createTask, createVmOptions);
 
             // Create new subscription
+
+            var os = this._operatingSystemService.GetById(options.OperatingSystemId);
+            var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
             var subscritionDateEnd = DateTime.UtcNow.AddMonths(options.SubscriptionsMonthCount);
             var newSubscription = new SubscriptionVm
             {

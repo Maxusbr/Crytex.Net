@@ -14,15 +14,17 @@ namespace Crytex.Web.Areas.Admin
 {
     public class AdminUserController : AdminCrytexController
     {
-        public AdminUserController(IApplicationUserService applicationUserService, ITaskV2Service taskService, IBilingService billingService)
+        public AdminUserController(IApplicationUserService applicationUserService, ITaskV2Service taskService, IBilingService billingService, ITriggerService triggerService)
         {
             _applicationUserService = applicationUserService;
             _taskService = taskService;
+			_triggerService = triggerService;
             _billingService = billingService;
         }
 
         private IApplicationUserService _applicationUserService { get; }
         private ITaskV2Service _taskService { get; set; }
+		private  ITriggerService _triggerService { get; set; }
         private IBilingService _billingService { get; set; }
 
         /// <summary>
@@ -95,7 +97,8 @@ namespace Crytex.Web.Areas.Admin
                 UserType = model.UserType,
                 Country = model.Country,
                 ContactPerson = model.ContactPerson,
-                Payer = model.Payer
+                Payer = model.Payer,
+				RegisterDate = DateTime.UtcNow
             };
 
             var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
@@ -104,6 +107,8 @@ namespace Crytex.Web.Areas.Admin
                 AddErrors(creationResult);
                 return BadRequest(this.ModelState);
             }
+
+            _triggerService.InitStandartTriggersForUser(newUser.Id);
 
             return Created(Url.Link("DefaultApiAdmin", new { controller = "AdminUser", id = newUser.Id }), new { id = newUser.Id });
         }
@@ -176,7 +181,7 @@ namespace Crytex.Web.Areas.Admin
         {
             _applicationUserService.DeleteUser(id);
             _taskService.StopAllUserMachines(id);
-
+            
             return Ok();
         }
 

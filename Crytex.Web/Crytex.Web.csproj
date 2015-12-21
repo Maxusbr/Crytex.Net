@@ -277,6 +277,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminOperatingSystemController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhoneCallRequestController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminDiscountController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminTriggerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminRegionController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminServerTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSnapShotVmController.cs" />
@@ -347,6 +348,7 @@
     <Compile Include="Models\JsonModels\HyperVHostResourceViewModel.cs" />
     <Compile Include="Models\JsonModels\HyperVHostViewModel.cs" />
     <Compile Include="Models\JsonModels\SystemCenterVirtualManagerViewModel.cs" />
+    <Compile Include="Models\JsonModels\TriggerViewModel.cs" />
     <Compile Include="Models\JsonModels\UpdateEmailTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentView.cs" />
     <Compile Include="Models\JsonModels\EmailTemplateViewModel.cs" />

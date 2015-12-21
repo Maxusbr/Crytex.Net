@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Model.Models
 {
-    public class GameServer : BaseEntity
+    public class GameServer : GuidBaseEntity
     {
         public ServerPaymentType PaymentType { get; set; }
         public Guid VmId { get; set; }
@@ -17,6 +19,8 @@ namespace Crytex.Model.Models
         public GameServerConfiguration GameServerConfiguration { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
+
+        public virtual ICollection<BillingTransaction> BillingTransaction { get; set; }
     }
 
     public enum ServerPaymentType
