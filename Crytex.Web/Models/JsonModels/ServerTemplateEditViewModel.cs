@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Crytex.Model.Models;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -20,5 +21,7 @@ namespace Crytex.Web.Models.JsonModels
         public int ImageFileId { get; set; }
         [Required]
         public int OperatingSystemId { get; set; }
+        public string UserId { get; set; }
+        public TypeServer TypeServerTemplate { get; set; }
     }
 }

@@ -13,6 +13,7 @@ namespace Crytex.Model.Models
         public Int32 ImageFileId { get; set; }
         public Int32 OperatingSystemId { get; set; }
         public string UserId { get; set; }
+        public TypeServer TypeServerTemplate { get; set; }
 
 
         [ForeignKey("ImageFileId")]
@@ -21,5 +22,12 @@ namespace Crytex.Model.Models
         public OperatingSystem OperatingSystem { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
+    }
+
+    public enum TypeServer
+    {
+        GameServer = 0,
+        SystemServer,
+        UserServer
     }
 }

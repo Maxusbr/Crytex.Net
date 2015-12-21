@@ -72,6 +72,7 @@ namespace Crytex.Service.Service
             template.HardDriveSize = updatedTemplate.HardDriveSize;
             template.CoreCount = updatedTemplate.CoreCount;
             template.Name = updatedTemplate.Name;
+            template.TypeServerTemplate = updatedTemplate.TypeServerTemplate;
 
             this._serverTemplateRepo.Update(template);
             this._unitOfWork.Commit();
