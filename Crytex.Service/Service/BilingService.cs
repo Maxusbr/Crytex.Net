@@ -119,6 +119,12 @@ namespace Crytex.Service.Service
                 {
                     saveFailed = false;
                     var userCash = user.Balance + cashAmount;
+
+                    if(userCash < 0)
+                    {
+                        throw new TransactionFailedException("Not enough money. Transaction failed.");
+                    }
+
                     user.Balance = userCash;
                     this._applicationUserRepository.Update(user);
                     this._unitOfWork.Commit();
@@ -138,6 +144,14 @@ namespace Crytex.Service.Service
             }
 
             return transaction;
+        }
+
+        public void UpdateTransactionSubscriptionId(Guid transactionId, Guid subscriptionId)
+        {
+            var transaction = this.GetTransactionById(transactionId);
+            transaction.SubscriptionVmId = subscriptionId;
+            this._billingTransactionRepo.Update(transaction);
+            this._unitOfWork.Commit();
         }
 
         protected ApplicationUser GetUserById(string id)

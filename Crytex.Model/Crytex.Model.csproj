@@ -85,6 +85,7 @@
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
     <Compile Include="Exceptions\SecurityException.cs" />
     <Compile Include="Exceptions\TaskOperationException.cs" />
+    <Compile Include="Exceptions\TransactionFailedException.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
