@@ -6,7 +6,7 @@ namespace Crytex.Service.IService
 {
     public interface ITariffInfoService
     {
-        Tariff GetTariffById(Guid id);
+        Tariff GetTariffById(int id);
 
         List<Tariff> GetTariffs();
         Tariff GetTariffByType(TypeVirtualization virtualization, OperatingSystemFamily operatingSystem);

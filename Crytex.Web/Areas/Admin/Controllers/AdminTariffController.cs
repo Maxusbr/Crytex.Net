@@ -92,7 +92,7 @@ namespace Crytex.Web.Areas.Admin
         [Route("api/Admin/AdminTariff/Total")]
 
         [ResponseType(typeof(double))]
-        public IHttpActionResult GetTotalPrice(int processor, int HDD, int SSD, int RAM512, int load10Percent, Guid tariffId)
+        public IHttpActionResult GetTotalPrice(int processor, int HDD, int SSD, int RAM512, int load10Percent, int tariffId)
 
         {
             var tariff = _tariffInfoService.GetTariffById(tariffId);

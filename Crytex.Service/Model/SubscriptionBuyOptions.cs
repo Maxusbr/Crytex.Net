@@ -5,7 +5,7 @@ namespace Crytex.Service.Model
 {
     public class SubscriptionBuyOptions
     {
-        public bool AutoDetection { get; set; }
+        public bool AutoProlongation { get; set; }
         public int Cpu { get; set; }
         public int Hdd { get; set; }
         public int OperatingSystemId { get; set; }

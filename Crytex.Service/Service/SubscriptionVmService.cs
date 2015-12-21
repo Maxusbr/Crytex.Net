@@ -10,6 +10,7 @@ using PagedList;
 using System.Linq.Expressions;
 using Crytex.Service.Extension;
 using Crytex.Model.Exceptions;
+using System.Collections.Generic;
 
 namespace Crytex.Service.Service
 {
@@ -71,12 +72,13 @@ namespace Crytex.Service.Service
             var newSubscription = new SubscriptionVm
             {
                 Id = newTask.GetOptions<CreateVmOptions>().UserVmId,
-                AutoDetection = options.AutoDetection,
+                AutoProlongation = options.AutoProlongation,
                 DateCreate = DateTime.UtcNow,
                 DateEnd = subscritionDateEnd,
                 UserId = options.UserId,
                 SubscriptionType = options.SubscriptionType,
-                TariffId = tariff.Id
+                TariffId = tariff.Id,
+                Status = SubscriptionVmStatus.Active
             };
             this._subscriptionVmRepository.Add(newSubscription);
             this._unitOfWork.Commit();
@@ -89,7 +91,7 @@ namespace Crytex.Service.Service
 
         public virtual SubscriptionVm GetById(Guid guid)
         {
-            var sub = this._subscriptionVmRepository.GetById(guid);
+            var sub = this._subscriptionVmRepository.Get(s => s.Id == guid, s => s.UserVm, s => s.User);
 
             if(sub == null)
             {
@@ -135,6 +137,108 @@ namespace Crytex.Service.Service
             var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate);
 
             return pagedList;
+        }
+
+        public IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type)
+        {
+            var subs = this._subscriptionVmRepository.GetMany(s => s.Status == status && s.SubscriptionType == type);
+
+            return subs;
+        }
+
+        public void UpdateSubscriptionStatus(Guid subId, SubscriptionVmStatus status, DateTime? subEndDate = null)
+        {
+            var sub = this.GetById(subId);
+            sub.Status = status;
+            if(subEndDate != null)
+            {
+                sub.DateEnd = subEndDate.Value;
+            }
+            this._subscriptionVmRepository.Update(sub);
+            this._unitOfWork.Commit();
+        }
+
+        public void AutoProlongateSubscription(Guid subId)
+        {
+            var sub = this.GetById(subId);
+
+            var tariff = this._tariffInfoService.GetTariffById(sub.TariffId);
+            var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(sub.UserVm.CoreCount, sub.UserVm.HardDriveSize,
+                0, sub.UserVm.RamCount, 0, tariff); // TODO: SDD параметр 0. loadPer10Percent = 0
+
+            var transaction = new BillingTransaction
+            {
+                SubscriptionVmId = sub.Id,
+                CashAmount = -tariffMonthPrice,
+                TransactionType = BillingTransactionType.OneTimeDebiting,
+                SubscriptionVmMonthCount = 1,
+                UserId = sub.UserId,
+            };
+
+            try
+            {
+                this._billingService.AddUserTransaction(transaction);
+                var newSubEndDate = sub.DateEnd.AddMonths(1);
+                this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.Active, newSubEndDate);
+            }
+            catch (TransactionFailedException)
+            {
+                this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.WaitForPayment);
+            }
+        }
+
+        public void PrepareSubscriptionForDeletion(Guid subId)
+        {
+            var sub = this.GetById(subId);
+
+            // Create changeStatus task
+            var removeVmOptions = new ChangeStatusOptions
+            {
+                VmId = sub.UserVm.Id,
+                TypeChangeStatus = TypeChangeStatus.PowerOf
+            };
+            var deleteTask = new TaskV2
+            {
+                Virtualization = sub.UserVm.VirtualizationType,
+                UserId = sub.UserId,
+                TypeTask = TypeTask.ChangeStatus
+            };
+            this._taskService.CreateTask(deleteTask, removeVmOptions);
+
+            // Change subscription status to WaitForDeletion
+            sub.Status = SubscriptionVmStatus.WaitForDeletion;
+            this._subscriptionVmRepository.Update(sub);
+            this._unitOfWork.Commit();
+        }
+
+        public void DeleteSubscription(Guid subId)
+        {
+            var sub = this.GetById(subId);
+
+            // Create removeVm task
+            var removeVmOptions = new RemoveVmOptions
+            {
+                VmId = sub.UserVm.Id
+            };
+            var deleteTask = new TaskV2
+            {
+                Virtualization = sub.UserVm.VirtualizationType,
+                UserId = sub.UserId,
+                TypeTask = TypeTask.RemoveVm
+            };
+            this._taskService.CreateTask(deleteTask, removeVmOptions);
+
+            // Change subscription status to WaitForDeletion
+            sub.Status = SubscriptionVmStatus.Deleted;
+            this._subscriptionVmRepository.Update(sub);
+            this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<SubscriptionVm> GetAllFixedSubscriptions()
+        {
+            var subs = this._subscriptionVmRepository.GetAll(s => s.SubscriptionType == SubscriptionType.Fixed);
+
+            return subs;
         }
     }
 }

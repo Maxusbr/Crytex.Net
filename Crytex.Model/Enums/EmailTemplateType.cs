@@ -2,10 +2,13 @@
 {
     public enum EmailTemplateType
     {
-        Registration,
-        ChangePassword,
-        ChangeProfile,
-        CreateVm,
-        UpdateVm
+        Registration = 0,
+        ChangePassword = 1,
+        ChangeProfile = 2,
+        CreateVm = 3,
+        UpdateVm = 4,
+        SubscriptionNeedsPayment = 5,
+        SubscriptionEndWarning = 6,
+        SubscriptionDeletionWarning = 7
     }
 }

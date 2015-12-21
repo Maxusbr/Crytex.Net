@@ -14,6 +14,7 @@ namespace Crytex.Background
     using Scheduler;
     using System.Collections.Generic;
     using Tasks;
+    using Tasks.SubscriptionVm;
 
     public static class Program
     {
@@ -62,7 +63,8 @@ namespace Crytex.Background
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
             //scheduler.TriggerJob(emai);
 
-            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
+            //scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
+            scheduler.ScheduleJob<StaticSubscriptionVmWarningsJob>("task wait for payment subs", "1/30 * * * * ?");
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
             //scheduler.ScheduleJob<NetTrafficCounterUpdateJob>("net traffic", "0 */15 * * * ?");
 

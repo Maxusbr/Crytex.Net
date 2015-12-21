@@ -14,7 +14,8 @@ namespace Crytex.Model.Models.Biling
         public Int32 TariffId { get; set; }
         public string UserId { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
-        public bool AutoDetection { get; set; }
+        public bool AutoProlongation { get; set; }
+        public SubscriptionVmStatus Status { get; set; }
 
         [ForeignKey("TariffId")]
         public Tariff Tariff { get; set; }
@@ -31,5 +32,13 @@ namespace Crytex.Model.Models.Biling
     {
         Usage = 0,
         Fixed = 1
+    }
+
+    public enum SubscriptionVmStatus
+    {
+        WaitForPayment = 0,
+        Active = 1,
+        WaitForDeletion = 2,
+        Deleted = 3
     }
 }

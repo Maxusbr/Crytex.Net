@@ -151,15 +151,38 @@ namespace Crytex.Data.Migrations
                 }
 
                 ///////////////////////////////////
-                var emailtemplate = new EmailTemplate
+                var regApproveEmailtemplate = new EmailTemplate
                 {
                     Body = @"Подтвердите вашу учетную запись, щелкнув <a href=""{callbackUrl}"">здесь</a>",
                     EmailTemplateType = EmailTemplateType.Registration,
                     ParameterNames = @"[""callbackUrl""]",
                     Subject = "Подтверждение учетной записи"
                 };
-                context.EmailTemplates.Add(emailtemplate);
+                var subscriptionNeedsPaymentEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Подписка требует оплаты",
+                    EmailTemplateType = EmailTemplateType.SubscriptionNeedsPayment,
+                    Body = "Ваша подписка на виртуальную машину требует оплаты. Пожалуйста внесите платёж. Машина отключена"
+                };
+                var subscriptionEndWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Срок подписки истекает",
+                    EmailTemplateType = EmailTemplateType.SubscriptionEndWarning,
+                    Body = "Ваша подписка на виртуальную машину истекает через {daysToEnd} дня",
+                    ParameterNames = @"[""daysToEnd""]"
+                };
+                var subscriptionDeletionWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Ваша подписка будет удалена",
+                    EmailTemplateType = EmailTemplateType.SubscriptionDeletionWarning,
+                    Body = "Ваша подписка на виртуальную машину буден удаоена через {daysToDeletion} дня",
+                    ParameterNames = @"[""daysToDeletion""]"
+                };
 
+                context.EmailTemplates.Add(regApproveEmailtemplate);
+                context.EmailTemplates.Add(subscriptionNeedsPaymentEmailTemplate);
+                context.EmailTemplates.Add(subscriptionEndWarningEmailTemplate);
+                context.EmailTemplates.Add(subscriptionDeletionWarningEmailTemplate);
                 ///////////////////////////////////
 
                 for (int i = 1; i < 6; i++)
