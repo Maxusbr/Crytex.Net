@@ -23,7 +23,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
 
         public void Execute(IJobExecutionContext context)
         {
-            var subs = this._subscriptionService.GetAllSubscriptions();
+            var subs = this._subscriptionService.GetAllFixedSubscriptions();
             var subscriptionEndWarnPeriod = this._config.GetSubscriptionVmEndWarnPeriod();
             var deletionPeriod = this._config.GetSubscriptionVmWaitForDeletionActionPeriod();
             var currentDate = DateTime.UtcNow;

@@ -7,12 +7,12 @@ using Crytex.Service.Model;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
-    public class ActiveSubscriptionVmJob : IJob
+    public class ActiveStaticSubscriptionVmJob : IJob
     {
         private readonly IBilingService _billingService;
         private readonly ISubscriptionVmService _subscriptionService;
 
-        public ActiveSubscriptionVmJob(ISubscriptionVmService subscriptionService, IBilingService billingService)
+        public ActiveStaticSubscriptionVmJob(ISubscriptionVmService subscriptionService, IBilingService billingService)
         {
             this._subscriptionService = subscriptionService;
             this._billingService = billingService;
@@ -20,7 +20,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
 
         public void Execute(IJobExecutionContext context)
         {
-            var subscriptions = this._subscriptionService.GetSubscriptionsByStatus(SubscriptionVmStatus.Active);
+            var subscriptions = this._subscriptionService.GetSubscriptionsByStatusAndType(SubscriptionVmStatus.Active, SubscriptionType.Fixed);
             var currentDate = DateTime.UtcNow;
 
             var outdatedSubs = subscriptions.Where(s => s.DateEnd < currentDate);

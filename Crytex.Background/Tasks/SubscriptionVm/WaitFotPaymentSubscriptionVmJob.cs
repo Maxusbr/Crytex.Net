@@ -27,7 +27,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
         public void Execute(IJobExecutionContext context)
         {
             Console.WriteLine("Wait for payment sub job");
-            var subs = this._subscriptionService.GetSubscriptionsByStatus(SubscriptionVmStatus.WaitForPayment);
+            var subs = this._subscriptionService.GetSubscriptionsByStatusAndType(SubscriptionVmStatus.WaitForPayment, SubscriptionType.Fixed);
             var currentDate = DateTime.UtcNow;
             var emailPeriod = this._config.GetSubscriptionVmWaitForPaymentActionPeriod();
 

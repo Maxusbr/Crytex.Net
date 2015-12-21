@@ -139,9 +139,9 @@ namespace Crytex.Service.Service
             return pagedList;
         }
 
-        public IEnumerable<SubscriptionVm> GetSubscriptionsByStatus(SubscriptionVmStatus status)
+        public IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type)
         {
-            var subs = this._subscriptionVmRepository.GetMany(s => s.Status == status);
+            var subs = this._subscriptionVmRepository.GetMany(s => s.Status == status && s.SubscriptionType == type);
 
             return subs;
         }
@@ -234,9 +234,9 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<SubscriptionVm> GetAllSubscriptions()
+        public IEnumerable<SubscriptionVm> GetAllFixedSubscriptions()
         {
-            var subs = this._subscriptionVmRepository.GetAll();
+            var subs = this._subscriptionVmRepository.GetAll(s => s.SubscriptionType == SubscriptionType.Fixed);
 
             return subs;
         }

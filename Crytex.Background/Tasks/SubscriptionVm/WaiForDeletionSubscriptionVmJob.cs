@@ -20,7 +20,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
 
         public void Execute(IJobExecutionContext context)
         {
-            var subs = this._subscriptionService.GetSubscriptionsByStatus(SubscriptionVmStatus.WaitForDeletion);
+            var subs = this._subscriptionService.GetSubscriptionsByStatusAndType(SubscriptionVmStatus.WaitForDeletion, SubscriptionType.Fixed);
             var emailPeriod = this._config.GetSubscriptionVmWaitForDeletionActionPeriod();
             var currentDate = DateTime.UtcNow;
             var actionRequiredSubs = subs.Where(sub => (currentDate - sub.DateEnd).Days >= emailPeriod);
