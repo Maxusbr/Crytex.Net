@@ -72,7 +72,10 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
             Mapper.CreateMap<VmBackup, VmBackupViewModel>();
             Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
-            Mapper.CreateMap<GameServer, GameServerViewModel>();
+            Mapper.CreateMap<GameServer, GameServerViewModel>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
+                .ForMember(x => x.Name, opt => opt.MapFrom(source => source.Vm.Name))
+                .ForMember(x => x.VmName, opt => opt.MapFrom(source => source.Vm.Name));
             Mapper.CreateMap<SubscriptionVm, SubscriptionVmViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
