@@ -175,9 +175,16 @@ namespace Crytex.Service.Service
                 UserId = sub.UserId,
             };
 
-            this._billingService.AddUserTransaction(transaction); // TODO: добавить обработку ситуации когда не хватает денег
-            var newSubEndDate = sub.DateEnd.AddMonths(1);
-            this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.Active, newSubEndDate);
+            try
+            {
+                this._billingService.AddUserTransaction(transaction);
+                var newSubEndDate = sub.DateEnd.AddMonths(1);
+                this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.Active, newSubEndDate);
+            }
+            catch (TransactionFailedException)
+            {
+                this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.WaitForPayment);
+            }
         }
 
         public void PrepareSubscriptionForDeletion(Guid subId)
