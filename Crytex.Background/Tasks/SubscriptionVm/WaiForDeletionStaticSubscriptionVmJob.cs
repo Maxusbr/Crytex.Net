@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
-    public class WaiForDeletionSubscriptionVmJob : IJob
+    public class WaiForDeletionStaticSubscriptionVmJob : IJob
     {
         private readonly IBackgroundConfig _config;
         private readonly ISubscriptionVmService _subscriptionService;
 
-        public WaiForDeletionSubscriptionVmJob(ISubscriptionVmService subscriptionService, IBackgroundConfig config)
+        public WaiForDeletionStaticSubscriptionVmJob(ISubscriptionVmService subscriptionService, IBackgroundConfig config)
         {
             this._subscriptionService = subscriptionService;
             this._config = config;

@@ -7,13 +7,13 @@ using Crytex.Model.Models.Biling;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
-    public class SubscriptionVmWarningsJob : IJob
+    public class StaticSubscriptionVmWarningsJob : IJob
     {
         private readonly IBackgroundConfig _config;
         private readonly INotificationManager _notificationManager;
         private readonly ISubscriptionVmService _subscriptionService;
 
-        public SubscriptionVmWarningsJob(ISubscriptionVmService subscriptionService, IBackgroundConfig config, 
+        public StaticSubscriptionVmWarningsJob(ISubscriptionVmService subscriptionService, IBackgroundConfig config, 
             INotificationManager notificationManager)
         {
             this._subscriptionService = subscriptionService;

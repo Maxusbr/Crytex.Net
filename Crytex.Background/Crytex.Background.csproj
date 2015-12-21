@@ -114,9 +114,9 @@
     <Compile Include="Tasks\MonitoringVmWareJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\ActiveStaticSubscriptionVmJob.cs" />
-    <Compile Include="Tasks\SubscriptionVm\SubscriptionVmWarningsJob.cs" />
-    <Compile Include="Tasks\SubscriptionVm\WaiForDeletionSubscriptionVmJob.cs" />
-    <Compile Include="Tasks\SubscriptionVm\WaitFotPaymentSubscriptionVmJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\StaticSubscriptionVmWarningsJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\WaiForDeletionStaticSubscriptionVmJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\WaitFotPaymentStaticSubscriptionVmJob.cs" />
     <Compile Include="Tasks\TaskExecutorUpdateJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />

@@ -8,14 +8,14 @@ using Crytex.Notification;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
-    public class WaitFotPaymentSubscriptionVmJob : IJob
+    public class WaitFotPaymentStaticSubscriptionVmJob : IJob
     {
         private readonly IBackgroundConfig _config;
         private readonly INotificationManager _notificationManager;
         private readonly ISubscriptionVmService _subscriptionService;
         private readonly ITaskV2Service _taskService;
 
-        public WaitFotPaymentSubscriptionVmJob(ISubscriptionVmService subscriptionService, ITaskV2Service taskService,
+        public WaitFotPaymentStaticSubscriptionVmJob(ISubscriptionVmService subscriptionService, ITaskV2Service taskService,
             IBackgroundConfig config, INotificationManager notificationManager)
         {
             this._subscriptionService = subscriptionService;
