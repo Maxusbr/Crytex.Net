@@ -64,6 +64,16 @@ namespace Crytex.Service.Service
                 {
                     where = where.And(x => x.Date <= searchParams.DateTo);
                 }
+
+                if (searchParams.SubscriptionVmId != null && searchParams.SubscriptionVmId != Guid.Empty)
+                {
+                    where = where.And(x => x.SubscriptionVmId == searchParams.SubscriptionVmId);
+                }
+
+                if (searchParams.SubscriptionGameServerId != null && searchParams.SubscriptionGameServerId != Guid.Empty)
+                {
+                    where = where.And(x => x.GameServerId == searchParams.SubscriptionGameServerId);
+                }
             }
 
             var transactionList = this._billingTransactionRepo.GetPage(page, where, x => x.Id);

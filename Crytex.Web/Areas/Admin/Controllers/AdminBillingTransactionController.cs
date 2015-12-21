@@ -52,7 +52,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
             else
             {
                 transactions = _billingService.GetPageBillingTransaction(pageNumber, pageSize);
-            }           
+            }
 
             var viewTransactions = AutoMapper.Mapper.Map<PageModel<BillingViewModel>>(transactions);
             return Ok(viewTransactions);

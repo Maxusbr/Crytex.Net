@@ -16,6 +16,7 @@ namespace Crytex.Web.Models.JsonModels
 
     public class AdminBillingSearchParamsViewModel : BillingSearchParamsViewModel
     {
-       
+        public Guid? SubscriptionVmId { get; set; }
+        public Guid? SubscriptionGameServerId { get; set; }
     }
 }
