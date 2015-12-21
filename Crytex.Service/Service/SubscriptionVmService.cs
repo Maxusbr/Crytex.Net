@@ -37,7 +37,7 @@ namespace Crytex.Service.Service
         {
             // Calculate subscription price, add a billiing transaction and update user balance
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
-            var tariff = this._tariffInfoService.GetTariffByVirtualization(options.Virtualization, os.Family);
+            var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
             var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
                 options.SDD, options.Ram, 0, tariff); // TODO: SDD параметр пока участвует только в билинге. параметр load10percent пока 0
             var transactionCashAmount = tariffMonthPrice * options.SubscriptionsMonthCount;
@@ -67,9 +67,6 @@ namespace Crytex.Service.Service
             var newTask = this._taskService.CreateTask(createTask, createVmOptions);
 
             // Create new subscription
-
-            var os = this._operatingSystemService.GetById(options.OperatingSystemId);
-            var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
             var subscritionDateEnd = DateTime.UtcNow.AddMonths(options.SubscriptionsMonthCount);
             var newSubscription = new SubscriptionVm
             {
