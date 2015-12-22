@@ -134,7 +134,7 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate);
+            var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate, false, x=>x.User);
 
             return pagedList;
         }

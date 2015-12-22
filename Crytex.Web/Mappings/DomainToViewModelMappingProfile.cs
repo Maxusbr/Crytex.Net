@@ -76,7 +76,9 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
                 .ForMember(x => x.Name, opt => opt.MapFrom(source => source.Vm.Name))
                 .ForMember(x => x.VmName, opt => opt.MapFrom(source => source.Vm.Name));
-            Mapper.CreateMap<SubscriptionVm, SubscriptionVmViewModel>();
+            Mapper.CreateMap<SubscriptionVm, SubscriptionVmViewModel>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
+                .ForMember(x => x.UserVmName, opt => opt.MapFrom(source => source.UserVm.Name));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
