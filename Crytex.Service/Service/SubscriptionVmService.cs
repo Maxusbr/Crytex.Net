@@ -183,20 +183,31 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public void AutoProlongateSubscription(Guid subId)
+        public void AutoProlongateFixedSubscription(Guid subId)
+        {
+            this.ProlongateFixedSubscriptionInner(subId, 1, BillingTransactionType.AutomaticDebiting);
+        }
+
+        public void ProlongateFixedSubscription(Guid subId, int monthCount)
+        {
+            this.ProlongateFixedSubscriptionInner(subId, monthCount, BillingTransactionType.OneTimeDebiting);
+        }
+
+        private void ProlongateFixedSubscriptionInner(Guid subId, int monthCount, BillingTransactionType transactionType)
         {
             var sub = this.GetById(subId);
 
             var tariff = this._tariffInfoService.GetTariffById(sub.TariffId);
             var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(sub.UserVm.CoreCount, sub.UserVm.HardDriveSize,
                 0, sub.UserVm.RamCount, 0, tariff); // TODO: SDD параметр 0. loadPer10Percent = 0
+            var totalPrice = tariffMonthPrice * monthCount;
 
             var transaction = new BillingTransaction
             {
                 SubscriptionVmId = sub.Id,
-                CashAmount = -tariffMonthPrice,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
-                SubscriptionVmMonthCount = 1,
+                CashAmount = -totalPrice,
+                TransactionType = transactionType,
+                SubscriptionVmMonthCount = monthCount,
                 UserId = sub.UserId,
             };
 
@@ -214,12 +225,12 @@ namespace Crytex.Service.Service
                     CoreCount = sub.UserVm.CoreCount,
                     HardDriveSize = sub.UserVm.HardDriveSize,
                     RamCount = sub.UserVm.RamCount,
-                    MonthCount = 1
+                    MonthCount = monthCount
                 };
                 this._fixedSubscriptionPaymentRepo.Add(subPayment);
                 this._unitOfWork.Commit();
 
-                var newSubEndDate = sub.DateEnd.AddMonths(1);
+                var newSubEndDate = sub.DateEnd.AddMonths(monthCount);
                 this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.Active, newSubEndDate);
             }
             catch (TransactionFailedException)
