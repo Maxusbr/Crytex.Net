@@ -77,6 +77,11 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Name, opt => opt.MapFrom(source => source.Vm.Name))
                 .ForMember(x => x.VmName, opt => opt.MapFrom(source => source.Vm.Name));
             Mapper.CreateMap<SubscriptionVm, SubscriptionVmViewModel>();
+            Mapper.CreateMap<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(s => s.SubscriptionVm.User.UserName))
+                .ForMember(x => x.UserId, opt => opt.MapFrom(s => s.SubscriptionVm.UserId))
+                .ForMember(x => x.UserVmId, opt => opt.MapFrom(s => s.SubscriptionVm.UserVm.Id))
+                .ForMember(x => x.UserVmName, opt => opt.MapFrom(s => s.SubscriptionVm.UserVm.Name));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -96,6 +101,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UserLoginLogEntry, UserLoginLogEntryModel>();
             this.MapPagedList<GameServer, GameServerViewModel>();
             this.MapPagedList<SubscriptionVm, SubscriptionVmViewModel>();
+            this.MapPagedList<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()
