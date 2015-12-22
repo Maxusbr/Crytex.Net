@@ -53,6 +53,7 @@
     <Compile Include="IRepository\IEmailInfoRepository.cs" />
     <Compile Include="IRepository\IEmailTemplateRepository.cs" />
     <Compile Include="IRepository\IFileDescriptorRepository.cs" />
+    <Compile Include="IRepository\IFixedSubscriptionPaymentRepository.cs" />
     <Compile Include="IRepository\IGameServerConfigurationRepository.cs" />
     <Compile Include="IRepository\IGameServerRepository.cs" />
     <Compile Include="IRepository\IHelpDeskRequestCommentRepository.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Repository\EmailInfoRepository.cs" />
     <Compile Include="Repository\EmailTemplateRepository.cs" />
     <Compile Include="Repository\FileDescriptorRepository.cs" />
+    <Compile Include="Repository\FixedSubscriptionPaymentRepository.cs" />
     <Compile Include="Repository\GameServerConfigurationRepository.cs" />
     <Compile Include="Repository\GameServerRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestCommentRepository.cs" />

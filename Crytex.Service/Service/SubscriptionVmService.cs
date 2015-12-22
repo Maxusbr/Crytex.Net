@@ -24,10 +24,11 @@ namespace Crytex.Service.Service
         private readonly ITariffInfoService _tariffInfoService;
         private readonly IOperatingSystemsService _operatingSystemService;
         private readonly IUsageSubscriptionPaymentRepository _usageSubscriptionPaymentRepo;
+        private readonly IFixedSubscriptionPaymentRepository _fixedSubscriptionPaymentRepo;
 
         public SubscriptionVmService(IUnitOfWork unitOfWork, ISubscriptionVmRepository subscriptionVmRepository, ITaskV2Service taskService,
             IBilingService billingService, ITariffInfoService tariffInfoService, IOperatingSystemsService operatingSystemService,
-            IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo)
+            IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo, IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepo)
         {
             this._unitOfWork = unitOfWork;
             this._subscriptionVmRepository = subscriptionVmRepository;
@@ -36,6 +37,7 @@ namespace Crytex.Service.Service
             this._tariffInfoService = tariffInfoService;
             this._operatingSystemService = operatingSystemService;
             this._usageSubscriptionPaymentRepo = usageSubscriptionPaymentRepo;
+            this._fixedSubscriptionPaymentRepo = fixedSubscriptionPaymentRepo;
         }
 
         public SubscriptionVm BuySubscription(SubscriptionBuyOptions options)
@@ -74,8 +76,6 @@ namespace Crytex.Service.Service
             // Create new subscription
             var subscritionDateEnd = DateTime.UtcNow.AddMonths(options.SubscriptionsMonthCount);
             var date = DateTime.Now;
-            var trimmedDate = new DateTime(
-                date.Ticks % TimeSpan.TicksPerHour != 0 ? date.AddHours(1).Ticks - date.Ticks % TimeSpan.TicksPerHour : date.Ticks);
             var newSubscription = new SubscriptionVm
             {
                 Id = newTask.GetOptions<CreateVmOptions>().UserVmId,
@@ -89,6 +89,22 @@ namespace Crytex.Service.Service
                 LastUsageBillingTransactionDate = DateTime.UtcNow.TrimToGraterHour()
             };
             this._subscriptionVmRepository.Add(newSubscription);
+            this._unitOfWork.Commit();
+
+            // Add new sub payment
+            var subscriptionPayment = new FixedSubscriptionPayment
+            {
+                BillingTransactionId = newTransaction.Id,
+                MonthCount = options.SubscriptionsMonthCount,
+                Date = DateTime.UtcNow,
+                SubscriptionVmId = newSubscription.Id,
+                CoreCount = options.Cpu,
+                HardDriveSize = options.Hdd,
+                RamCount = options.Ram,
+                Amount = newTransaction.CashAmount,
+                TariffId = newSubscription.TariffId
+            };
+            this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
             this._unitOfWork.Commit();
 
             // Update SubscriptionVmId
@@ -186,7 +202,23 @@ namespace Crytex.Service.Service
 
             try
             {
-                this._billingService.AddUserTransaction(transaction);
+                var newTransaction = this._billingService.AddUserTransaction(transaction);
+
+                var subPayment = new FixedSubscriptionPayment
+                {
+                    Amount = newTransaction.CashAmount,
+                    BillingTransactionId = newTransaction.Id,
+                    SubscriptionVmId = sub.Id,
+                    TariffId = sub.TariffId,
+                    Date = DateTime.UtcNow,
+                    CoreCount = sub.UserVm.CoreCount,
+                    HardDriveSize = sub.UserVm.HardDriveSize,
+                    RamCount = sub.UserVm.RamCount,
+                    MonthCount = 1
+                };
+                this._fixedSubscriptionPaymentRepo.Add(subPayment);
+                this._unitOfWork.Commit();
+
                 var newSubEndDate = sub.DateEnd.AddMonths(1);
                 this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.Active, newSubEndDate);
             }
