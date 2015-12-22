@@ -8,6 +8,7 @@ using Crytex.Notification;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
+    [DisallowConcurrentExecution]
     public class WaitFotPaymentStaticSubscriptionVmJob : IJob
     {
         private readonly IBackgroundConfig _config;

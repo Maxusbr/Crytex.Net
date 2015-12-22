@@ -7,6 +7,7 @@ using Crytex.Service.Model;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
+    [DisallowConcurrentExecution]
     public class ActiveStaticSubscriptionVmJob : IJob
     {
         private readonly IBilingService _billingService;

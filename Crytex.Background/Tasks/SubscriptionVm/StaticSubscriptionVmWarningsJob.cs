@@ -7,6 +7,7 @@ using Crytex.Model.Models.Biling;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
+    [DisallowConcurrentExecution]
     public class StaticSubscriptionVmWarningsJob : IJob
     {
         private readonly IBackgroundConfig _config;

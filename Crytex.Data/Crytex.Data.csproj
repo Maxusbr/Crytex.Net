@@ -76,6 +76,7 @@
     <Compile Include="IRepository\ITariffInfoRepository.cs" />
     <Compile Include="IRepository\IRegionRepository.cs" />
     <Compile Include="IRepository\ITaskV2Repository.cs" />
+    <Compile Include="IRepository\IUsageSubscriptionPaymentRepository.cs" />
     <Compile Include="IRepository\IUserLoginLogEntryRepository.cs" />
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="IRepository\IVmBackupRepository.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Repository\TariffInfoRepository.cs" />
     <Compile Include="Repository\TaskV2Repository.cs" />
     <Compile Include="Repository\SnapshotVmRepository.cs" />
+    <Compile Include="Repository\UsageSubscriptionPaymentRepository.cs" />
     <Compile Include="Repository\UserLoginLogEntryRepository.cs" />
     <Compile Include="Repository\UserVmRepository.cs" />
     <Compile Include="Repository\DiscountRepository.cs" />

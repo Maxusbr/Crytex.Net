@@ -15,7 +15,9 @@ namespace Crytex.Service.Service.SecureService
 
         public SecuredSubscriptionVmService(ISubscriptionVmRepository subVmRepo, IUnitOfWork unitOfWork, ITaskV2Service taskService,
             IBilingService billingService, ITariffInfoService tariffInfoService, IOperatingSystemsService operatingSystemService,
-            IIdentity userIdentity) : base(unitOfWork, subVmRepo, taskService, billingService, tariffInfoService, operatingSystemService)
+            IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo, IIdentity userIdentity) 
+                    : base(unitOfWork, subVmRepo, taskService, billingService, tariffInfoService, operatingSystemService,
+                          usageSubscriptionPaymentRepo)
         {
             this._userIdentity = userIdentity;
         }
