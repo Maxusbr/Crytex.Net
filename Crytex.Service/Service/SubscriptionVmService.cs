@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using Crytex.Service.Extension;
 using Crytex.Model.Exceptions;
 using System.Collections.Generic;
+using Crytex.Core.Extension;
 
 namespace Crytex.Service.Service
 {
@@ -22,9 +23,11 @@ namespace Crytex.Service.Service
         private readonly IBilingService _billingService;
         private readonly ITariffInfoService _tariffInfoService;
         private readonly IOperatingSystemsService _operatingSystemService;
+        private readonly IUsageSubscriptionPaymentRepository _usageSubscriptionPaymentRepo;
 
         public SubscriptionVmService(IUnitOfWork unitOfWork, ISubscriptionVmRepository subscriptionVmRepository, ITaskV2Service taskService,
-            IBilingService billingService, ITariffInfoService tariffInfoService, IOperatingSystemsService operatingSystemService)
+            IBilingService billingService, ITariffInfoService tariffInfoService, IOperatingSystemsService operatingSystemService,
+            IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo)
         {
             this._unitOfWork = unitOfWork;
             this._subscriptionVmRepository = subscriptionVmRepository;
@@ -32,6 +35,7 @@ namespace Crytex.Service.Service
             this._billingService = billingService;
             this._tariffInfoService = tariffInfoService;
             this._operatingSystemService = operatingSystemService;
+            this._usageSubscriptionPaymentRepo = usageSubscriptionPaymentRepo;
         }
 
         public SubscriptionVm BuySubscription(SubscriptionBuyOptions options)
@@ -69,6 +73,9 @@ namespace Crytex.Service.Service
 
             // Create new subscription
             var subscritionDateEnd = DateTime.UtcNow.AddMonths(options.SubscriptionsMonthCount);
+            var date = DateTime.Now;
+            var trimmedDate = new DateTime(
+                date.Ticks % TimeSpan.TicksPerHour != 0 ? date.AddHours(1).Ticks - date.Ticks % TimeSpan.TicksPerHour : date.Ticks);
             var newSubscription = new SubscriptionVm
             {
                 Id = newTask.GetOptions<CreateVmOptions>().UserVmId,
@@ -78,7 +85,8 @@ namespace Crytex.Service.Service
                 UserId = options.UserId,
                 SubscriptionType = options.SubscriptionType,
                 TariffId = tariff.Id,
-                Status = SubscriptionVmStatus.Active
+                Status = SubscriptionVmStatus.Active,
+                LastUsageBillingTransactionDate = DateTime.UtcNow.TrimToGraterHour()
             };
             this._subscriptionVmRepository.Add(newSubscription);
             this._unitOfWork.Commit();
@@ -141,7 +149,8 @@ namespace Crytex.Service.Service
 
         public IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type)
         {
-            var subs = this._subscriptionVmRepository.GetMany(s => s.Status == status && s.SubscriptionType == type);
+            var subs = this._subscriptionVmRepository.GetMany(s => s.Status == status && s.SubscriptionType == type
+                && s.UserVm.Status != StatusVM.Creating && s.UserVm.Status != StatusVM.Error);
 
             return subs;
         }
@@ -239,6 +248,77 @@ namespace Crytex.Service.Service
             var subs = this._subscriptionVmRepository.GetAll(s => s.SubscriptionType == SubscriptionType.Fixed);
 
             return subs;
+        }
+
+        public void UpdateUsageSubscriptionBalance(Guid subId)
+        {
+            var sub = this.GetById(subId);
+            var subTariff = this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subVm = sub.UserVm;
+
+            // Calculate usage hour price
+            decimal hourPrice;
+            if (subVm.Status == StatusVM.Enable)
+            {
+                hourPrice = this._tariffInfoService.CalculateTotalPrice(subVm.CoreCount,
+                    subVm.HardDriveSize, 0, subVm.RamCount, 0, subTariff) / (30 * 24);
+            }
+            else if(subVm.Status == StatusVM.Disable)
+            {
+                hourPrice = this._tariffInfoService.CalculateTotalPrice(0, subVm.HardDriveSize,
+                    0, 0, 0, subTariff) / (30 * 24);
+            }
+            else
+            {
+                throw new ApplicationException($"Machine status during updating usage-type vm subscription is {subVm.Status}");
+            }
+
+            // Calculate hour count for payment
+            var currentTime = DateTime.UtcNow;
+            var intHours = (currentTime - sub.LastUsageBillingTransactionDate.Value).Hours;
+            
+            // Create transaction on each hour
+            for(int i = 0; i < intHours; i++)
+            {
+                var hourTransaction = new BillingTransaction
+                {
+                    TransactionType = BillingTransactionType.AutomaticDebiting,
+                    CashAmount = -hourPrice,
+                    UserId = sub.UserId,
+                    Description = "Hourly debiting for usage-type vm subscription",
+                    SubscriptionVmId = sub.UserVm.Id
+                };
+
+                var newPayment = new UsageSubscriptionPayment
+                {
+                    SubscriptionVmId = sub.Id,
+                    TariffId = subTariff.Id,
+                    Amount = hourPrice,
+                    Date = currentTime,
+                    RamCount = subVm.RamCount,
+                    CoreCount = subVm.CoreCount,
+                    HardDriveSize = subVm.HardDriveSize
+                };
+
+                try
+                {
+                    var newTransaction = this._billingService.AddUserTransaction(hourTransaction);
+
+                    newPayment.BillingTransactionId = newTransaction.Id;
+                    newPayment.Paid = true;
+                }
+                catch (TransactionFailedException)
+                {
+                    newPayment.BillingTransactionId = null;
+                    newPayment.Paid = false;
+                }
+
+                sub.LastUsageBillingTransactionDate += TimeSpan.FromHours(1);
+                this._subscriptionVmRepository.Update(sub);
+
+                this._usageSubscriptionPaymentRepo.Add(newPayment);
+                this._unitOfWork.Commit();
+            }
         }
     }
 }

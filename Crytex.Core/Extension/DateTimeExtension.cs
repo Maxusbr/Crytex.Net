@@ -12,5 +12,13 @@ namespace Crytex.Core.Extension
         {
             return new DateTime(date.Ticks - date.Ticks % roundTicks);
         }
+
+        public static DateTime TrimToGraterHour(this DateTime date)
+        {
+            var trimmedDate = new DateTime(
+                date.Ticks % TimeSpan.TicksPerHour != 0 ? date.AddHours(1).Ticks - date.Ticks % TimeSpan.TicksPerHour : date.Ticks);
+
+            return trimmedDate;
+        }
     }
 }

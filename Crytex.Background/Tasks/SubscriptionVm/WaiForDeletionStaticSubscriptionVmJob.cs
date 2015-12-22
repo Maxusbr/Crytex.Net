@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace Crytex.Background.Tasks.SubscriptionVm
 {
+    [DisallowConcurrentExecution]
     public class WaiForDeletionStaticSubscriptionVmJob : IJob
     {
         private readonly IBackgroundConfig _config;

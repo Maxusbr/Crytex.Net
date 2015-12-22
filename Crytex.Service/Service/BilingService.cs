@@ -119,7 +119,6 @@ namespace Crytex.Service.Service
                 SubscriptionVmId = subscriptionId,
                 SubscriptionVmMonthCount = subscriptionMonthCount
             };
-            user.BillingTransactions.Add(transaction);
 
             bool saveFailed = false;
             var tryCount = 3;
@@ -135,6 +134,7 @@ namespace Crytex.Service.Service
                         throw new TransactionFailedException("Not enough money. Transaction failed.");
                     }
 
+                    user.BillingTransactions.Add(transaction);
                     user.Balance = userCash;
                     this._applicationUserRepository.Update(user);
                     this._unitOfWork.Commit();

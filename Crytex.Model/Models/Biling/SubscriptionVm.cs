@@ -16,6 +16,7 @@ namespace Crytex.Model.Models.Biling
         public SubscriptionType SubscriptionType { get; set; }
         public bool AutoProlongation { get; set; }
         public SubscriptionVmStatus Status { get; set; }
+        public DateTime? LastUsageBillingTransactionDate { get; set; }
 
         [ForeignKey("TariffId")]
         public Tariff Tariff { get; set; }

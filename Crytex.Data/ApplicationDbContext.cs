@@ -34,12 +34,11 @@ namespace Crytex.Data
             modelBuilder.Entity<IdentityUserRole>().HasKey(r => new { r.RoleId, r.UserId });
             
             modelBuilder.Entity<OperatingSystem>()
-    .HasRequired(t => t.ImageFileDescriptor).WithMany().HasForeignKey(system => system.ImageFileId)
-   
-    .WillCascadeOnDelete(false);
-
-
-           
+                .HasRequired(t => t.ImageFileDescriptor).WithMany().HasForeignKey(system => system.ImageFileId)
+                .WillCascadeOnDelete(false);
+            modelBuilder.Entity<UsageSubscriptionPayment>()
+                 .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
+                 .WillCascadeOnDelete(false);
         }
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }
@@ -75,5 +74,6 @@ namespace Crytex.Data
         public DbSet<GameServer> GameServers { get; set; }
         public DbSet<GameServerConfiguration> GameServerConfigurations { get; set; }
         public DbSet<VmIpAddress> VmIpAddresses { get; set; }
+        public DbSet<UsageSubscriptionPayment> UsageSubscriptionPayments { get; set; }
     }
 }
