@@ -30,7 +30,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
             {
                 if (sub.AutoProlongation)
                 {
-                    this._subscriptionService.AutoProlongateSubscription(sub.Id);
+                    this._subscriptionService.AutoProlongateFixedSubscription(sub.Id);
                 }
                 else
                 {

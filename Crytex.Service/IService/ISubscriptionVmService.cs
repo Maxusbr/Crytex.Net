@@ -16,7 +16,8 @@ namespace Crytex.Service.IService
         void UpdateSubscriptionStatus(Guid subId, SubscriptionVmStatus status, DateTime? endDate = null);
         IEnumerable<SubscriptionVm> GetAllFixedSubscriptions();
         void UpdateUsageSubscriptionBalance(Guid subId);
-        void AutoProlongateSubscription(Guid subId);
+        void ProlongateFixedSubscription(Guid subId, int monthCount);
+        void AutoProlongateFixedSubscription(Guid subId);
         void PrepareSubscriptionForDeletion(Guid subId);
         void DeleteSubscription(Guid subId);
     }

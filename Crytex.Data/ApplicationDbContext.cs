@@ -39,6 +39,9 @@ namespace Crytex.Data
             modelBuilder.Entity<UsageSubscriptionPayment>()
                  .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
                  .WillCascadeOnDelete(false);
+            modelBuilder.Entity<FixedSubscriptionPayment>()
+                 .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
+                 .WillCascadeOnDelete(false);
         }
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }
@@ -75,5 +78,6 @@ namespace Crytex.Data
         public DbSet<GameServerConfiguration> GameServerConfigurations { get; set; }
         public DbSet<VmIpAddress> VmIpAddresses { get; set; }
         public DbSet<UsageSubscriptionPayment> UsageSubscriptionPayments { get; set; }
+        public DbSet<FixedSubscriptionPayment> FixedSubscriptionPayments { get; set; }
     }
 }
