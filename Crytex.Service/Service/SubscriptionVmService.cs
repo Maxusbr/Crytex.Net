@@ -125,6 +125,40 @@ namespace Crytex.Service.Service
             return sub;
         }
 
+        public IPagedList<UsageSubscriptionPayment> GetPageUsageSubscriptionPayment(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null)
+        {
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+
+            Expression<Func<UsageSubscriptionPayment, bool>> where = x => x.SubscriptionVm.SubscriptionType == SubscriptionType.Usage;
+
+            if (searchParams != null)
+            {
+                if (userId != null)
+                {
+                    where = where.And(x => x.SubscriptionVm.UserId == userId);
+                }
+
+                if (searchParams.FromDate != null)
+                {
+                    where = where.And(x => x.Date >= searchParams.FromDate);
+                }
+
+                if (searchParams.ToDate != null)
+                {
+                    where = where.And(x => x.Date <= searchParams.ToDate);
+                }
+
+                if (searchParams.SubscriptionVmId != null)
+                {
+                    where = where.And(x => x.SubscriptionVmId == searchParams.SubscriptionVmId);
+                }
+            }
+
+            var pagedList = this._usageSubscriptionPaymentRepo.GetPage(pageInfo, where, s => s.Date, false, s => s.SubscriptionVm, s => s.BillingTransaction, s => s.Tariff);
+
+            return pagedList;
+        }
+
         public IPagedList<SubscriptionVm> GetPage(int pageNumber, int pageSize, string userId = null, SubscriptionVmSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
