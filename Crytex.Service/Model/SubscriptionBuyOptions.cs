@@ -14,6 +14,8 @@ namespace Crytex.Service.Model
         public int SubscriptionsMonthCount { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
         public string UserId { get; set; }
+        public string AdminUserId { get; set; }
+        public bool BoughtByAdmin { get; set; }
         public TypeVirtualization Virtualization { get; set; }
     }
 }

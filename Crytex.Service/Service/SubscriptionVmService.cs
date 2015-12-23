@@ -42,22 +42,124 @@ namespace Crytex.Service.Service
 
         public SubscriptionVm BuySubscription(SubscriptionBuyOptions options)
         {
+            SubscriptionVm newSubscription = null;
+
+            switch (options.SubscriptionType)
+            {
+                case SubscriptionType.Fixed:
+                    newSubscription = this.BuyFixedSubscription(options);
+                    break;
+                case SubscriptionType.Usage:
+                    newSubscription = this.BuyUsageSubscription(options);
+                    break;
+            }
+
+            return newSubscription;
+        }
+
+        private SubscriptionVm BuyFixedSubscription(SubscriptionBuyOptions options)
+        {
             // Calculate subscription price, add a billiing transaction and update user balance
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
-            var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
+            decimal transactionCashAmount;
+            if (!options.BoughtByAdmin)
+            {
+                var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
                 options.SDD, options.Ram, 0, tariff); // TODO: SDD параметр пока участвует только в билинге. параметр load10percent пока 0
-            var transactionCashAmount = tariffMonthPrice * options.SubscriptionsMonthCount;
+                transactionCashAmount = tariffMonthPrice * options.SubscriptionsMonthCount;
+            }
+            else
+            {
+                transactionCashAmount = 0;
+            }
+            
             var transaction = new BillingTransaction
             {
                 CashAmount = -transactionCashAmount,
                 TransactionType = BillingTransactionType.OneTimeDebiting,
                 SubscriptionVmMonthCount = options.SubscriptionsMonthCount,
-                UserId = options.UserId
+                UserId = options.UserId,
+                AdminUserId = options.AdminUserId
             };
             var newTransaction = this._billingService.AddUserTransaction(transaction);
 
-            // Create task and new vm with ITaskV2service
+            // Create task and new vm
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
+            
+            // Add new sub payment
+            var subscriptionPayment = new FixedSubscriptionPayment
+            {
+                BillingTransactionId = newTransaction.Id,
+                MonthCount = options.SubscriptionsMonthCount,
+                Date = DateTime.UtcNow,
+                SubscriptionVmId = newSubscription.Id,
+                CoreCount = options.Cpu,
+                HardDriveSize = options.Hdd,
+                RamCount = options.Ram,
+                Amount = newTransaction.CashAmount,
+                TariffId = newSubscription.TariffId
+            };
+            this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
+            this._unitOfWork.Commit();
+
+            // Update SubscriptionVmId
+            this._billingService.UpdateTransactionSubscriptionId(newTransaction.Id, newSubscription.Id);
+
+            return newSubscription;
+        }
+
+        private SubscriptionVm BuyUsageSubscription(SubscriptionBuyOptions options)
+        {
+            // Calculate subscription hour price, add a billiing transaction and update user balance
+            var os = this._operatingSystemService.GetById(options.OperatingSystemId);
+            var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
+
+            decimal tariffHourPrice;
+            if (!options.BoughtByAdmin)
+            {
+                tariffHourPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
+                options.SDD, options.Ram, 0, tariff) / (30 * 24); // TODO: SDD параметр пока участвует только в билинге. параметр load10percent пока 0
+            }
+            else
+            {
+                tariffHourPrice = 0;
+            }
+
+            var transaction = new BillingTransaction
+            {
+                CashAmount = -tariffHourPrice,
+                TransactionType = BillingTransactionType.OneTimeDebiting,
+                UserId = options.UserId,
+                AdminUserId = options.AdminUserId
+            };
+            var newTransaction = this._billingService.AddUserTransaction(transaction);
+            
+            // Create task and new vm with
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
+
+            var subscriptionPayment = new UsageSubscriptionPayment
+            {
+                BillingTransactionId = newTransaction.Id,
+                Date = DateTime.UtcNow,
+                SubscriptionVmId = newSubscription.Id,
+                CoreCount = options.Cpu,
+                HardDriveSize = options.Hdd,
+                RamCount = options.Ram,
+                Amount = newTransaction.CashAmount,
+                TariffId = newSubscription.TariffId
+            };
+            this._usageSubscriptionPaymentRepo.Add(subscriptionPayment);
+            this._unitOfWork.Commit();
+
+            // Update SubscriptionVmId
+            this._billingService.UpdateTransactionSubscriptionId(newTransaction.Id, newSubscription.Id);
+
+            return newSubscription;
+        }
+
+        private SubscriptionVm PrepareNewSubscription(SubscriptionBuyOptions options, Tariff tariff)
+        {
             var createVmOptions = new CreateVmOptions
             {
                 Cpu = options.Cpu,
@@ -90,25 +192,6 @@ namespace Crytex.Service.Service
             };
             this._subscriptionVmRepository.Add(newSubscription);
             this._unitOfWork.Commit();
-
-            // Add new sub payment
-            var subscriptionPayment = new FixedSubscriptionPayment
-            {
-                BillingTransactionId = newTransaction.Id,
-                MonthCount = options.SubscriptionsMonthCount,
-                Date = DateTime.UtcNow,
-                SubscriptionVmId = newSubscription.Id,
-                CoreCount = options.Cpu,
-                HardDriveSize = options.Hdd,
-                RamCount = options.Ram,
-                Amount = newTransaction.CashAmount,
-                TariffId = newSubscription.TariffId
-            };
-            this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
-            this._unitOfWork.Commit();
-
-            // Update SubscriptionVmId
-            this._billingService.UpdateTransactionSubscriptionId(newTransaction.Id, newSubscription.Id);
 
             return newSubscription;
         }
