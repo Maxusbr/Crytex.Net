@@ -67,6 +67,8 @@ namespace Crytex.Service
             container.RegisterType<IGameServerService, GameServerService>();
             container.RegisterType<IGameServerConfigurationRepository, GameServerConfigurationRepository>();
             container.RegisterType<IUsageSubscriptionPaymentRepository, UsageSubscriptionPaymentRepository>();
+            container.RegisterType<IFixedSubscriptionPaymentRepository, FixedSubscriptionPaymentRepository>();
+            container.RegisterType<IFixedSubscriptionPaymentService, FixedSubscriptionPaymentService>();
 
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");
@@ -77,6 +79,7 @@ namespace Crytex.Service
             container.RegisterType<IVmBackupService, SecureVmBackupService>("Secured");
             container.RegisterType<IGameServerService, SecureGameServerService>("Secured");
             container.RegisterType<ISubscriptionVmService, SecuredSubscriptionVmService>("Secured");
+            container.RegisterType<IFixedSubscriptionPaymentService, SecureFixedSubscriptionPaymentService>("Secured");
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();

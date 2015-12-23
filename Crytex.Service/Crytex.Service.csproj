@@ -90,6 +90,7 @@
     <Compile Include="IService\IBilingService.cs" />
     <Compile Include="IService\IEmailTemplateService.cs" />
     <Compile Include="IService\IFileService.cs" />
+    <Compile Include="IService\IFixedSubscriptionPaymentService.cs" />
     <Compile Include="IService\IGameServerService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
+    <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
@@ -139,6 +141,7 @@
     <Compile Include="Service\EmailInfoService.cs" />
     <Compile Include="Service\EmailTemplateService.cs" />
     <Compile Include="Service\FileService.cs" />
+    <Compile Include="Service\FixedSubscriptionPaymentService.cs" />
     <Compile Include="Service\GameServerService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\LogService.cs" />
@@ -147,6 +150,7 @@
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
     <Compile Include="Service\SecureService\SecuredSubscriptionVmService.cs" />
+    <Compile Include="Service\SecureService\SecureFixedSubscriptionPaymentService.cs" />
     <Compile Include="Service\SecureService\SecureGameServerService.cs" />
     <Compile Include="Service\SecureService\SecureHelpDeskRequestService.cs" />
     <Compile Include="Service\SecureService\SecurePaymentService.cs" />
