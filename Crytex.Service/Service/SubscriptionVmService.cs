@@ -159,7 +159,7 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var pagedList = this._usageSubscriptionPaymentRepo.GetPage(pageInfo, where, s => s.Date, false, s => s.SubscriptionVm, s => s.SubscriptionVm.UserVm);
+            var pagedList = this._usageSubscriptionPaymentRepo.GetPage(pageInfo, where, s => s.Date, false, s => s.SubscriptionVm, s => s.SubscriptionVm.UserVm, s => s.SubscriptionVm.User);
 
             return pagedList;
         }
