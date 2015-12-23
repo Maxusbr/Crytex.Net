@@ -1,4 +1,5 @@
 ﻿using Crytex.ExecutorTask.TaskHandler;
+using Crytex.Service.IService;
 using Microsoft.Practices.Unity;
 using System.Collections.Generic;
 using System.Threading;
@@ -11,11 +12,13 @@ namespace Crytex.ExecutorTask
         private ITaskHandlerManager _vmWareTaskHandlerManager;
         private TaskQueueManager _vmWareTaskQueueManager = new TaskQueueManager();
         private TaskQueueManager _hyperVTaskQueueManager = new TaskQueueManager();
+        private readonly ITaskV2Service _taskService;
 
-        public TaskManager(IUnityContainer unityContainer)
+        public TaskManager(IUnityContainer unityContainer, ITaskV2Service taskService)
         {
             this._hyperVTaskHandlerManager = unityContainer.Resolve<ITaskHandlerManager>();
             this._vmWareTaskHandlerManager = unityContainer.Resolve<ITaskHandlerManager>();
+            this._taskService = taskService;
         }
 
         public void RunTasks()
@@ -37,6 +40,7 @@ namespace Crytex.ExecutorTask
         {
             foreach (var handler in handlers)
             {
+                this._taskService.UpdateTaskStatus(handler.TaskEntity.Id, Model.Models.StatusTask.Queued);
                 queueManager.AddToQueue(handler);
             }
         }

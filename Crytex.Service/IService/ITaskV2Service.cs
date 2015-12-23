@@ -23,7 +23,7 @@ namespace Crytex.Service.IService
         void UpdateTask(TaskV2 updateTask);
         void RemoveTask(Guid id);
         IEnumerable<TaskV2> GetPendingTasks(TypeVirtualization virtualizationType);
-        void UpdateTaskStatus(Guid id, StatusTask status, DateTime? date, string errorMessage = null);
+        void UpdateTaskStatus(Guid id, StatusTask status, DateTime? date = null, string errorMessage = null);
         void StopAllUserMachines(string userId);
     }
 }
