@@ -12,6 +12,8 @@ namespace Crytex.Model.Models.Biling
         public int RamCount { get; set; }
         public int HardDriveSize { get; set; }
         public int TariffId { get; set; }
+        public DateTime DateEnd { get; set; }
+        public DateTime DateStart { get; set; }
         public Guid SubscriptionVmId { get; set; }
         public Guid BillingTransactionId { get; set; }
 

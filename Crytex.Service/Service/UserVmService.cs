@@ -186,5 +186,13 @@ namespace Crytex.Service.Service
             this._userVmRepo.Update(userVm);
             this._unitOfWork.Commit();
         }
+
+        public void MarkAsDeleted(Guid vmId)
+        {
+            var vm = this.GetVmById(vmId);
+            vm.Status = StatusVM.Deleted;
+            this._userVmRepo.Update(vm);
+            this._unitOfWork.Commit();
+        }
     }
 }

@@ -83,6 +83,8 @@
     <Compile Include="Exceptions\CreateVmException.cs" />
     <Compile Include="Exceptions\DbUpdateApplicationException.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
+    <Compile Include="Exceptions\InvalidOperationApplicationException.cs" />
+    <Compile Include="Exceptions\OperationNotSupportedException.cs" />
     <Compile Include="Exceptions\SecurityException.cs" />
     <Compile Include="Exceptions\TaskOperationException.cs" />
     <Compile Include="Exceptions\TransactionFailedException.cs" />

@@ -73,5 +73,35 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return this.Ok(new { Id = newSubscription.Id });
         }
+
+        /// <summary>
+        /// Продление подписки
+        /// </summary>
+        [HttpPut]
+        public IHttpActionResult Put(SubscriptionProlongateOptionsViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var prolongateOptions = Mapper.Map<SubscriptionProlongateOptions>(model);
+            prolongateOptions.ProlongatedByAdmin = false;
+            this._subscriptionVmService.ProlongateFixedSubscription(prolongateOptions);
+
+            return this.Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Delete(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+                return this.BadRequest("Invalid Guid format");
+
+            this._subscriptionVmService.DeleteSubscription(guid);
+
+            return Ok();
+        }
     }
 }

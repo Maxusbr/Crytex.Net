@@ -345,6 +345,7 @@
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
     <Compile Include="Models\JsonModels\StatisticViewModel.cs" />
     <Compile Include="Models\JsonModels\SubscriptionBuyOptionsViewModel.cs" />
+    <Compile Include="Models\JsonModels\SubscriptionProlongateOptionsViewModel.cs" />
     <Compile Include="Models\JsonModels\SubscriptionVmViewModel.cs" />
     <Compile Include="Models\JsonModels\TariffViewModel.cs" />
     <Compile Include="Models\JsonModels\TaskV2SearchParamsViewModel.cs" />

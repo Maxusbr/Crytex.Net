@@ -188,6 +188,11 @@ namespace Crytex.ExecutorTask.TaskHandler
 
                 this._vmBackupService.Create(newBackupDbEntity);
             }
+            else if(taskEntity.TypeTask == TypeTask.RemoveVm)
+            {
+                var options = taskEntity.GetOptions<RemoveVmOptions>();
+                this._userVmService.MarkAsDeleted(options.VmId);
+            }
 
             try
             {

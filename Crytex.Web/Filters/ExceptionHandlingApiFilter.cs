@@ -14,15 +14,17 @@ namespace Crytex.Web.Filters
         {
             LoggerCrytex.SetUserId(context.ActionContext?.ControllerContext?.RequestContext?.Principal?.Identity?.GetUserId());
 
-            if(context.Exception is ApplicationException){
-                if(context.Exception is ValidationException){
+            if (context.Exception is ApplicationException) {
+                if (context.Exception is ValidationException) {
                     context.ActionContext.ModelState.AddModelError("ValidationError", context.Exception.Message);
                     context.Response = context.Request.CreateErrorResponse(HttpStatusCode.BadRequest, context.ActionContext.ModelState);
                     return;
                 }
-                if(context.Exception is TaskOperationException 
-                    || context.Exception is DbUpdateApplicationException 
-                    || context.Exception is TransactionFailedException)
+                if (context.Exception is TaskOperationException
+                    || context.Exception is DbUpdateApplicationException
+                    || context.Exception is TransactionFailedException
+                    || context.Exception is OperationNotSupportedException
+                    || context.Exception is InvalidOperationApplicationException)
                 {
                     context.Response = context.Request.CreateResponse(HttpStatusCode.Conflict, new {errorMessage = context.Exception.Message});
                     return;

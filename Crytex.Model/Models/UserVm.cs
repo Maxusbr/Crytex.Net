@@ -44,6 +44,7 @@ namespace Crytex.Model.Models
         Enable = 0,
         Disable = 1,
         Error = 2,
-        Creating = 3
+        Creating = 3,
+        Deleted = 4
     }
 }

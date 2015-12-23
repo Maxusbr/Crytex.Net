@@ -26,7 +26,7 @@ namespace Crytex.Web.Models.JsonModels
         public TypeVirtualization? Virtualization { get; set; }
     }
 
-    public class SubscriptionBuyOptionsAdminViewModel
+    public class SubscriptionBuyOptionsAdminViewModel : SubscriptionBuyOptionsUserViewModel
     {
         [Required]
         public string UserId { get; set; }
