@@ -11,16 +11,16 @@ namespace Crytex.Web.Models.JsonModels
     {
         public Guid Id { get; set; }
         public Guid SubscriptionVmId { get; set; }
-        public Guid? BillingTransactionId { get; set; }
+        public int TariffId { get; set; }
+        public string UserId { get; set; }
+        public Guid UserVmId { get; set; }
+        public string UserVmName { get; set; }
+        public string UserName { get; set; }
         public bool Paid { get; set; }
         public DateTime Date { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }
         public int HardDriveSize { get; set; }
-        public int TariffId { get; set; }
         public decimal Amount { get; set; }
-        public SubscriptionVm SubscriptionVm { get; set; }
-        public BillingTransaction BillingTransaction { get; set; }
-        public Tariff Tariff { get; set; }
     }
 }

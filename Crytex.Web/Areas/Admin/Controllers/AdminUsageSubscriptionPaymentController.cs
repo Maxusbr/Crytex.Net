@@ -2,11 +2,12 @@
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
+using System.Web.Http.Description;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
 
-namespace Crytex.Web.Areas.Admin.Controllers
+namespace Crytex.Web.Areas.Admin
 {
     public class AdminUsageSubscriptionPaymentController : AdminCrytexController
     {
@@ -25,8 +26,9 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="userId"></param>
         ///<param name="searchParams"></param>
         /// <returns></returns>
-        // GET: api/Trigger
-        public IHttpActionResult Get(int pageNumber, int pageSize, UsageSubscriptionPaymentSearchParams searchParams, string userId = null)
+        // GET: api/AdminUsageSubscriptionPaymentController
+        [ResponseType(typeof(PageModel<UsageSubscriptionPaymentView>))]
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]UsageSubscriptionPaymentSearchParams searchParams, string userId = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be equal or grater than 1");

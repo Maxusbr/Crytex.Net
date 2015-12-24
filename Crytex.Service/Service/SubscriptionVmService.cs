@@ -152,9 +152,14 @@ namespace Crytex.Service.Service
                 {
                     where = where.And(x => x.SubscriptionVmId == searchParams.SubscriptionVmId);
                 }
+
+                if (searchParams.TypeVirtualization != null)
+                {
+                    where = where.And(x => x.SubscriptionVm.UserVm.VirtualizationType == searchParams.TypeVirtualization);
+                }
             }
 
-            var pagedList = this._usageSubscriptionPaymentRepo.GetPage(pageInfo, where, s => s.Date, false, s => s.SubscriptionVm, s => s.BillingTransaction, s => s.Tariff);
+            var pagedList = this._usageSubscriptionPaymentRepo.GetPage(pageInfo, where, s => s.Date, false, s => s.SubscriptionVm, s => s.SubscriptionVm.UserVm, s => s.SubscriptionVm.User);
 
             return pagedList;
         }
