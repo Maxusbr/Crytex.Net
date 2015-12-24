@@ -47,7 +47,8 @@ namespace Crytex.Model.Models
         Pending = 1,
         Processing = 2,
         End = 3,
-        EndWithErrors = 4
+        EndWithErrors = 4,
+        Queued = 5
     }
 
     public enum TypeTask 

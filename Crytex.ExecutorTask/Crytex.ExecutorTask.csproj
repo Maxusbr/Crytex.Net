@@ -75,7 +75,6 @@
     <Compile Include="TaskHandler\HyperV\HyperVUpdateVmTaskHandler.cs" />
     <Compile Include="TaskHandler\HyperV\IHyperVControl.cs" />
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
-    <Compile Include="TaskHandler\PendingTaskHandlerBox.cs" />
     <Compile Include="TaskHandler\TaskHandlerManager.cs" />
     <Compile Include="TaskHandler\ITaskHandler.cs" />
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />

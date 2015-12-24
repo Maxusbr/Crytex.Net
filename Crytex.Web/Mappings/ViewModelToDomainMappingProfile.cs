@@ -36,6 +36,9 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<AdminBillingSearchParamsViewModel, BillingSearchParams>();
             Mapper.CreateMap<DiscountViewModel, Discount>();
             Mapper.CreateMap<GameServerViewModel, GameServer>();
+            Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>();
+            Mapper.CreateMap<SubscriptionBuyOptionsUserViewModel, SubscriptionBuyOptions>();
+            Mapper.CreateMap<SubscriptionProlongateOptionsViewModel, SubscriptionProlongateOptions>();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using Crytex.Model.Models.Biling;
+﻿using AutoMapper;
+using Crytex.Model.Models.Biling;
 using Crytex.Service.IService;
+using Crytex.Service.Model;
 using Crytex.Service.Models;
 using Crytex.Web.Models;
 using Crytex.Web.Models.JsonModels;
@@ -54,6 +56,57 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             var viewTransactions = AutoMapper.Mapper.Map<PageModel<SubscriptionVmViewModel>>(subscriptions);
             return Ok(viewTransactions);
+        }
+
+        /// <summary>
+        /// Покупка подписки админом для пользователя
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult Post(SubscriptionBuyOptionsAdminViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var buyOptions = Mapper.Map<SubscriptionBuyOptions>(model);
+            buyOptions.BoughtByAdmin = true;
+            buyOptions.AdminUserId = this.CrytexContext.UserInfoProvider.GetUserId();
+            var newSubscription = this._subscriptionVmService.BuySubscription(buyOptions);
+
+            return this.Ok(new { Id = newSubscription.Id });
+        }
+
+        /// <summary>
+        /// Продление подписки админом для пользователя
+        /// </summary>
+        [HttpPut]
+        public IHttpActionResult Put(SubscriptionProlongateOptionsViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var prolongateOptions = Mapper.Map<SubscriptionProlongateOptions>(model);
+            prolongateOptions.ProlongatedByAdmin = true;
+            prolongateOptions.AdminUserId = this.CrytexContext.UserInfoProvider.GetUserId();
+            this._subscriptionVmService.ProlongateFixedSubscription(prolongateOptions);
+
+            return this.Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Delete(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+                return this.BadRequest("Invalid Guid format");
+
+            this._subscriptionVmService.DeleteSubscription(guid);
+
+            return Ok();
         }
     }
 }

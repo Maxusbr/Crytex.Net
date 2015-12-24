@@ -130,6 +130,7 @@
     <Compile Include="Model\StatisticType.cs" />
     <Compile Include="Model\SearchEmailParams.cs" />
     <Compile Include="Model\SubscriptionBuyOptions.cs" />
+    <Compile Include="Model\SubscriptionProlongateOptions.cs" />
     <Compile Include="Model\SubscriptionVmSearchParams.cs" />
     <Compile Include="Model\TaskV2SearchParams.cs" />
     <Compile Include="Model\UpdateUserBalance.cs" />

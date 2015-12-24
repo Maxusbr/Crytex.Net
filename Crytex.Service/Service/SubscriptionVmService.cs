@@ -12,6 +12,7 @@ using Crytex.Service.Extension;
 using Crytex.Model.Exceptions;
 using System.Collections.Generic;
 using Crytex.Core.Extension;
+using System.Linq;
 
 namespace Crytex.Service.Service
 {
@@ -42,22 +43,126 @@ namespace Crytex.Service.Service
 
         public SubscriptionVm BuySubscription(SubscriptionBuyOptions options)
         {
+            SubscriptionVm newSubscription = null;
+
+            switch (options.SubscriptionType)
+            {
+                case SubscriptionType.Fixed:
+                    newSubscription = this.BuyFixedSubscription(options);
+                    break;
+                case SubscriptionType.Usage:
+                    newSubscription = this.BuyUsageSubscription(options);
+                    break;
+            }
+
+            return newSubscription;
+        }
+
+        private SubscriptionVm BuyFixedSubscription(SubscriptionBuyOptions options)
+        {
             // Calculate subscription price, add a billiing transaction and update user balance
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
-            var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
+            decimal transactionCashAmount;
+            if (!options.BoughtByAdmin)
+            {
+                var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
                 options.SDD, options.Ram, 0, tariff); // TODO: SDD параметр пока участвует только в билинге. параметр load10percent пока 0
-            var transactionCashAmount = tariffMonthPrice * options.SubscriptionsMonthCount;
+                transactionCashAmount = tariffMonthPrice * options.SubscriptionsMonthCount;
+            }
+            else
+            {
+                transactionCashAmount = 0;
+            }
+            
             var transaction = new BillingTransaction
             {
                 CashAmount = -transactionCashAmount,
                 TransactionType = BillingTransactionType.OneTimeDebiting,
                 SubscriptionVmMonthCount = options.SubscriptionsMonthCount,
-                UserId = options.UserId
+                UserId = options.UserId,
+                AdminUserId = options.AdminUserId
             };
             var newTransaction = this._billingService.AddUserTransaction(transaction);
 
-            // Create task and new vm with ITaskV2service
+            // Create task and new vm
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
+            
+            // Add new sub payment
+            var subscriptionPayment = new FixedSubscriptionPayment
+            {
+                BillingTransactionId = newTransaction.Id,
+                MonthCount = options.SubscriptionsMonthCount,
+                Date = DateTime.UtcNow,
+                DateStart = newSubscription.DateCreate,
+                DateEnd = newSubscription.DateEnd,
+                SubscriptionVmId = newSubscription.Id,
+                CoreCount = options.Cpu,
+                HardDriveSize = options.Hdd,
+                RamCount = options.Ram,
+                Amount = transactionCashAmount,
+                TariffId = newSubscription.TariffId
+            };
+            this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
+            this._unitOfWork.Commit();
+
+            // Update SubscriptionVmId
+            this._billingService.UpdateTransactionSubscriptionId(newTransaction.Id, newSubscription.Id);
+
+            return newSubscription;
+        }
+
+        private SubscriptionVm BuyUsageSubscription(SubscriptionBuyOptions options)
+        {
+            // Calculate subscription hour price, add a billiing transaction and update user balance
+            var os = this._operatingSystemService.GetById(options.OperatingSystemId);
+            var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
+
+            decimal tariffHourPrice;
+            if (!options.BoughtByAdmin)
+            {
+                tariffHourPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
+                options.SDD, options.Ram, 0, tariff) / (30 * 24); // TODO: SDD параметр пока участвует только в билинге. параметр load10percent пока 0
+            }
+            else
+            {
+                tariffHourPrice = 0;
+            }
+
+            var transaction = new BillingTransaction
+            {
+                CashAmount = -tariffHourPrice,
+                TransactionType = BillingTransactionType.OneTimeDebiting,
+                UserId = options.UserId,
+                AdminUserId = options.AdminUserId
+            };
+            var newTransaction = this._billingService.AddUserTransaction(transaction);
+            
+            // Create task and new vm with
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
+
+            var subscriptionPayment = new UsageSubscriptionPayment
+            {
+                BillingTransactionId = newTransaction.Id,
+                Date = DateTime.UtcNow,
+                SubscriptionVmId = newSubscription.Id,
+                CoreCount = options.Cpu,
+                HardDriveSize = options.Hdd,
+                RamCount = options.Ram,
+                Amount = tariffHourPrice,
+                TariffId = newSubscription.TariffId
+            };
+            this._usageSubscriptionPaymentRepo.Add(subscriptionPayment);
+            this._unitOfWork.Commit();
+
+            // Update SubscriptionVmId
+            this._billingService.UpdateTransactionSubscriptionId(newTransaction.Id, newSubscription.Id);
+
+            return newSubscription;
+        }
+
+        private SubscriptionVm PrepareNewSubscription(SubscriptionBuyOptions options, Tariff tariff)
+        {
             var createVmOptions = new CreateVmOptions
             {
                 Cpu = options.Cpu,
@@ -90,25 +195,6 @@ namespace Crytex.Service.Service
             };
             this._subscriptionVmRepository.Add(newSubscription);
             this._unitOfWork.Commit();
-
-            // Add new sub payment
-            var subscriptionPayment = new FixedSubscriptionPayment
-            {
-                BillingTransactionId = newTransaction.Id,
-                MonthCount = options.SubscriptionsMonthCount,
-                Date = DateTime.UtcNow,
-                SubscriptionVmId = newSubscription.Id,
-                CoreCount = options.Cpu,
-                HardDriveSize = options.Hdd,
-                RamCount = options.Ram,
-                Amount = newTransaction.CashAmount,
-                TariffId = newSubscription.TariffId
-            };
-            this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
-            this._unitOfWork.Commit();
-
-            // Update SubscriptionVmId
-            this._billingService.UpdateTransactionSubscriptionId(newTransaction.Id, newSubscription.Id);
 
             return newSubscription;
         }
@@ -224,22 +310,39 @@ namespace Crytex.Service.Service
 
         public void AutoProlongateFixedSubscription(Guid subId)
         {
-            this.ProlongateFixedSubscriptionInner(subId, 1, BillingTransactionType.AutomaticDebiting);
+            try
+            {
+                this.ProlongateFixedSubscriptionInner(subId, 1, BillingTransactionType.AutomaticDebiting);
+            }
+            catch (TransactionFailedException)
+            {
+                this.UpdateSubscriptionStatus(subId, SubscriptionVmStatus.WaitForPayment);
+            }
         }
 
-        public void ProlongateFixedSubscription(Guid subId, int monthCount)
+        public void ProlongateFixedSubscription(SubscriptionProlongateOptions options)
         {
-            this.ProlongateFixedSubscriptionInner(subId, monthCount, BillingTransactionType.OneTimeDebiting);
+            this.ProlongateFixedSubscriptionInner(options.SubscriptionVmId.Value, options.MonthCount.Value,
+                BillingTransactionType.OneTimeDebiting, options.ProlongatedByAdmin, options.AdminUserId);
         }
 
-        private void ProlongateFixedSubscriptionInner(Guid subId, int monthCount, BillingTransactionType transactionType)
+        private void ProlongateFixedSubscriptionInner(Guid subId, int monthCount, BillingTransactionType transactionType,
+            bool forFree = false, string adminUserId = null)
         {
             var sub = this.GetById(subId);
+            if(sub.SubscriptionType != SubscriptionType.Fixed)
+            {
+                throw new OperationNotSupportedException($"Cannot prolongate subscription of type {sub.SubscriptionType}");
+            }
 
-            var tariff = this._tariffInfoService.GetTariffById(sub.TariffId);
-            var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(sub.UserVm.CoreCount, sub.UserVm.HardDriveSize,
-                0, sub.UserVm.RamCount, 0, tariff); // TODO: SDD параметр 0. loadPer10Percent = 0
-            var totalPrice = tariffMonthPrice * monthCount;
+            decimal totalPrice = 0;
+            if (!forFree)
+            {
+                var tariff = this._tariffInfoService.GetTariffById(sub.TariffId);
+                var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(sub.UserVm.CoreCount, sub.UserVm.HardDriveSize,
+                    0, sub.UserVm.RamCount, 0, tariff); // TODO: SDD параметр 0. loadPer10Percent = 0
+                totalPrice = tariffMonthPrice * monthCount;
+            }
 
             var transaction = new BillingTransaction
             {
@@ -248,34 +351,30 @@ namespace Crytex.Service.Service
                 TransactionType = transactionType,
                 SubscriptionVmMonthCount = monthCount,
                 UserId = sub.UserId,
+                AdminUserId = adminUserId
             };
 
-            try
-            {
-                var newTransaction = this._billingService.AddUserTransaction(transaction);
+            var newTransaction = this._billingService.AddUserTransaction(transaction);
 
-                var subPayment = new FixedSubscriptionPayment
-                {
-                    Amount = newTransaction.CashAmount,
-                    BillingTransactionId = newTransaction.Id,
-                    SubscriptionVmId = sub.Id,
-                    TariffId = sub.TariffId,
-                    Date = DateTime.UtcNow,
-                    CoreCount = sub.UserVm.CoreCount,
-                    HardDriveSize = sub.UserVm.HardDriveSize,
-                    RamCount = sub.UserVm.RamCount,
-                    MonthCount = monthCount
-                };
-                this._fixedSubscriptionPaymentRepo.Add(subPayment);
-                this._unitOfWork.Commit();
-
-                var newSubEndDate = sub.DateEnd.AddMonths(monthCount);
-                this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.Active, newSubEndDate);
-            }
-            catch (TransactionFailedException)
+            var subPayment = new FixedSubscriptionPayment
             {
-                this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.WaitForPayment);
-            }
+                Amount = totalPrice,
+                BillingTransactionId = newTransaction.Id,
+                SubscriptionVmId = sub.Id,
+                TariffId = sub.TariffId,
+                Date = DateTime.UtcNow,
+                DateStart = sub.DateEnd.AddTicks(1),
+                DateEnd = sub.DateEnd.AddMonths(monthCount),
+                CoreCount = sub.UserVm.CoreCount,
+                HardDriveSize = sub.UserVm.HardDriveSize,
+                RamCount = sub.UserVm.RamCount,
+                MonthCount = monthCount
+            };
+            this._fixedSubscriptionPaymentRepo.Add(subPayment);
+            this._unitOfWork.Commit();
+
+            var newSubEndDate = sub.DateEnd.AddMonths(monthCount);
+            this.UpdateSubscriptionStatus(sub.Id, SubscriptionVmStatus.Active, newSubEndDate);
         }
 
         public void PrepareSubscriptionForDeletion(Guid subId)
@@ -306,6 +405,11 @@ namespace Crytex.Service.Service
         {
             var sub = this.GetById(subId);
 
+            if(sub.Status == SubscriptionVmStatus.Deleted)
+            {
+                throw new InvalidOperationApplicationException("Subscription is already deleted");
+            }
+
             // Create removeVm task
             var removeVmOptions = new RemoveVmOptions
             {
@@ -323,6 +427,40 @@ namespace Crytex.Service.Service
             sub.Status = SubscriptionVmStatus.Deleted;
             this._subscriptionVmRepository.Update(sub);
             this._unitOfWork.Commit();
+
+            //Return money
+            if(sub.SubscriptionType == SubscriptionType.Fixed && sub.DateEnd > DateTime.UtcNow)
+            {
+                var payments = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id);
+
+                // Find all unspended payments and current payment
+                // All unspended payments which are not "active" yet (it's startdate is grater than now) will be returned completely
+                var futurePayments = payments.Where(p => p.DateStart > DateTime.UtcNow);
+                // Find current payment (it's startdate is less and enddate is grater than now)
+                // This payment will be returned partially
+                var currentPayment = payments.SingleOrDefault(p => p.DateStart <= DateTime.UtcNow && p.DateEnd > DateTime.UtcNow);
+
+                decimal sumToReturn = 0;
+                sumToReturn = futurePayments.Sum(p => p.Amount);
+                if(currentPayment != null)
+                {
+                    // Calculate part of current payment to return
+                    var totalDays = (currentPayment.DateEnd - currentPayment.DateStart).Days;
+                    var pastDays = (DateTime.UtcNow - currentPayment.DateStart).Days;
+                    var futureDays = totalDays - pastDays;
+                    sumToReturn += (currentPayment.Amount / totalDays) * futureDays;
+                }
+
+                var transaction = new BillingTransaction
+                {
+                    SubscriptionVmId = sub.Id,
+                    CashAmount = sumToReturn,
+                    TransactionType = BillingTransactionType.Crediting,
+                    UserId = sub.UserId,
+                    Description = "Return money for deleted subscription"
+                };
+                this._billingService.AddUserTransaction(transaction);
+            }
         }
 
         public IEnumerable<SubscriptionVm> GetAllFixedSubscriptions()
