@@ -26,7 +26,7 @@ namespace Crytex.Service.Service.SecureService
             var userId = this._userIdentity.GetUserId();
             if (searchParams.SubscriptionVmId != null)
             {
-                var sub = this._subscriptionVmRepository.GetById(searchParams.SubscriptionVmId.Value);
+                var sub = this._subscriptionVmRepository.GetById(searchParams.SubscriptionVmId);
                 if(sub.UserId != userId)
                 {
                     throw new SecurityException($"Access denied for SubscriptionVm with id={searchParams.SubscriptionVmId}");
