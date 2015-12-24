@@ -125,6 +125,7 @@
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
     <Compile Include="Model\SearchPaymentParams.cs" />
+    <Compile Include="Model\SubscriptionVmStatisticModel.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\StatisticSummary.cs" />
     <Compile Include="Model\StatisticType.cs" />
