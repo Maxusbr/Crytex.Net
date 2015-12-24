@@ -1,4 +1,5 @@
 ﻿using System;
+using Crytex.Model.Models;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -17,5 +18,7 @@ namespace Crytex.Web.Models.JsonModels
         public int TariffId { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
+        public TypeVirtualization Virtualization { get; set; }
+        public OperatingSystemFamily OperatingSystem { get; set; }
     }
 }

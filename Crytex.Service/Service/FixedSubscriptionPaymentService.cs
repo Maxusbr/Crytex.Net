@@ -6,6 +6,7 @@ using PagedList;
 using System;
 using Crytex.Data.Infrastructure;
 using System.Linq.Expressions;
+using Crytex.Model.Exceptions;
 using Crytex.Service.Extension;
 
 namespace Crytex.Service.Service
@@ -19,29 +20,50 @@ namespace Crytex.Service.Service
             this._paymentRepo = paymentRepo;
         }
 
-        public virtual IPagedList<FixedSubscriptionPayment> GetPage(int pageNumber, int pageSize, FixedSubscriptionPaymentSearchParams searchParams)
+        public virtual IPagedList<FixedSubscriptionPayment> GetPage(int pageNumber, int pageSize, FixedSubscriptionPaymentSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
             Expression<Func<FixedSubscriptionPayment, bool>> where = x => true;
 
-            if(searchParams.From != null)
+            if (searchParams != null)
             {
-                where = where.And(x => x.Date >= searchParams.From);
-            }
-            if(searchParams.To != null)
-            {
-                where = where.And(x => x.Date <= searchParams.To);
-            }
-            if(searchParams.SubscriptionVmId != null)
-            {
-                where = where.And(x => x.SubscriptionVmId == searchParams.SubscriptionVmId);
-            }
-            if(searchParams.UserId != null)
-            {
-                where = where.And(x => x.SubscriptionVm.UserId == searchParams.UserId);
+                Guid SubscriptionVmId = Guid.Empty;
+                if (searchParams.SubscriptionVmId != null)
+                {
+                    if (!Guid.TryParse(searchParams.SubscriptionVmId, out SubscriptionVmId))
+                    {
+                        throw new InvalidIdentifierException(string.Format("Invalid Guid format for {0}", searchParams.SubscriptionVmId));
+                    }
+                }
+
+                if (searchParams.DateFrom != null)
+                {
+                    where = where.And(x => x.Date >= searchParams.DateFrom);
+                }
+                if (searchParams.DateTo != null)
+                {
+                    where = where.And(x => x.Date <= searchParams.DateTo);
+                }
+                if (searchParams.OperatingSystem != null)
+                {
+                    where = where.And(x => x.Tariff.OperatingSystem == searchParams.OperatingSystem);
+                }
+                if (searchParams.Virtualization != null)
+                {
+                    where = where.And(x => x.Tariff.Virtualization == searchParams.Virtualization);
+                }
+                if (SubscriptionVmId != Guid.Empty)
+                {
+                    where = where.And(x => x.SubscriptionVmId == SubscriptionVmId);
+                }
+                if (searchParams.UserId != null)
+                {
+                    where = where.And(x => x.SubscriptionVm.UserId == searchParams.UserId);
+                }
             }
 
-            var pagedList = this._paymentRepo.GetPage(pageInfo, where, x => x.Date, false, s => s.SubscriptionVm, s => s.SubscriptionVm.UserVm);
+            var pagedList = this._paymentRepo.GetPage(pageInfo, where, x => x.Date, false, s => s.SubscriptionVm,
+                s => s.SubscriptionVm.UserVm, s => s.SubscriptionVm.User, s => s.Tariff);
 
             return pagedList;
         }

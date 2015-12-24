@@ -1,8 +1,11 @@
 ﻿using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
-using System;
+using System.Collections.Generic;
 using System.Web.Http;
+using System.Web.Http.Description;
+using Crytex.Model.Models.Biling;
+using PagedList;
 
 namespace Crytex.Web.Areas.Admin.Controllers
 {
@@ -15,33 +18,34 @@ namespace Crytex.Web.Areas.Admin.Controllers
             this._paymentService = paymentService;
         }
 
+        /// <summary>
+        /// Получение списка FixedSubscriptionPaymentViewModel
+        /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchParams"></param>
+        /// <returns></returns>
+        // GET: Admin/AdminFixedSubscriptionPayment
+        [ResponseType(typeof(PageModel<TaskV2ViewModel>))]
         [HttpGet]
-        public IHttpActionResult Get(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null, string userId = null,
-            string subscriptionVmId = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri] AdminFixedSubscriptionPaymentSearchParamViewModel searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be grater or equal to 1");
 
-            var searchParams = new FixedSubscriptionPaymentSearchParams
-            {
-                From = from,
-                To = to,
-                UserId = userId
-            };
+            IPagedList<FixedSubscriptionPayment> fixedSubscriptionPayments = new PagedList<FixedSubscriptionPayment>(new List<FixedSubscriptionPayment>(), pageNumber, pageSize);
 
-            Guid subGuid;
-            if(subscriptionVmId != null)
+            if (searchParams != null)
             {
-                if (!Guid.TryParse(subscriptionVmId, out subGuid))
-                {
-                    this.ModelState.AddModelError("id", "Invalid Guid format");
-                    return BadRequest(ModelState);
-                }
-                searchParams.SubscriptionVmId = subGuid;
+                var fixedSubscriptionPaymentParams = AutoMapper.Mapper.Map<FixedSubscriptionPaymentSearchParams>(searchParams);
+                fixedSubscriptionPayments = _paymentService.GetPage(pageNumber, pageSize, fixedSubscriptionPaymentParams);
+            }
+            else
+            {
+                fixedSubscriptionPayments = _paymentService.GetPage(pageNumber, pageSize);
             }
 
-            var pagedList = this._paymentService.GetPage(pageNumber, pageSize, searchParams);
-            var pageModel = AutoMapper.Mapper.Map<PageModel<FixedSubscriptionPaymentViewModel>> (pagedList);
+            var pageModel = AutoMapper.Mapper.Map<PageModel<FixedSubscriptionPaymentViewModel>> (fixedSubscriptionPayments);
 
             return this.Ok(pageModel);
         }

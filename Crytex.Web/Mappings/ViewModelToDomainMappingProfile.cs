@@ -29,6 +29,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<ServerTemplateEditViewModel,ServerTemplate>();
             Mapper.CreateMap<VmWareVCenterViewModel, VmWareVCenter>();
             Mapper.CreateMap<UserVmSearchParamsViewModel, UserVmSearchParams>();
+            Mapper.CreateMap<AdminFixedSubscriptionPaymentSearchParamViewModel, FixedSubscriptionPaymentSearchParams>();
+            Mapper.CreateMap<FixedSubscriptionPaymentSearchParamViewModel, FixedSubscriptionPaymentSearchParams>();
             Mapper.CreateMap<TaskV2SearchParamsViewModel, TaskV2SearchParams>();
             Mapper.CreateMap<AdminApplicationUserSearchParamsViewModel, ApplicationUserSearchParams>();
             Mapper.CreateMap<PhoneCallRequestViewModel, PhoneCallRequest>();

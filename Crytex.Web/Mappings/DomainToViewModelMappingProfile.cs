@@ -82,6 +82,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(s => s.SubscriptionVm.User.UserName))
                 .ForMember(x => x.UserId, opt => opt.MapFrom(s => s.SubscriptionVm.UserId))
+                .ForMember(x => x.Virtualization, opt => opt.MapFrom(s => s.Tariff.Virtualization))
+                .ForMember(x => x.OperatingSystem, opt => opt.MapFrom(s => s.Tariff.OperatingSystem))
                 .ForMember(x => x.UserVmId, opt => opt.MapFrom(s => s.SubscriptionVm.UserVm.Id))
                 .ForMember(x => x.UserVmName, opt => opt.MapFrom(s => s.SubscriptionVm.UserVm.Name));
             Mapper.CreateMap<UsageSubscriptionPayment, UsageSubscriptionPaymentView>()
