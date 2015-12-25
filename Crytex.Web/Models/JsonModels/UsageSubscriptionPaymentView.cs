@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Crytex.Model.Models;
-using Crytex.Model.Models.Biling;
 
 namespace Crytex.Web.Models.JsonModels
 {

@@ -11,8 +11,10 @@ using System.Linq.Expressions;
 using Crytex.Service.Extension;
 using Crytex.Model.Exceptions;
 using System.Collections.Generic;
+using System.Globalization;
 using Crytex.Core.Extension;
 using System.Linq;
+using Crytex.Model.Enums;
 
 namespace Crytex.Service.Service
 {
@@ -245,9 +247,72 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var pagedList = this._usageSubscriptionPaymentRepo.GetPage(pageInfo, where, s => s.Date, false, s => s.SubscriptionVm, s => s.SubscriptionVm.UserVm, s => s.SubscriptionVm.User);
+            var pagedList = this._usageSubscriptionPaymentRepo
+                .GetPage(pageInfo, where, s => s.Date, false, s => s.SubscriptionVm, s => s.SubscriptionVm.UserVm,
+                    s => s.SubscriptionVm.User);
 
             return pagedList;
+        }
+
+        public IPagedList<UsageSubscriptionPaymentContainer> GetPageUsageSubscriptionPaymentByPeriod(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null)
+        {
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+
+            Expression<Func<UsageSubscriptionPayment, bool>> where = x => x.SubscriptionVm.SubscriptionType == SubscriptionType.Usage;
+
+            if (searchParams != null)
+            {
+                if (userId != null)
+                {
+                    where = where.And(x => x.SubscriptionVm.UserId == userId);
+                }
+
+                if (searchParams.FromDate != null)
+                {
+                    where = where.And(x => x.Date >= searchParams.FromDate);
+                }
+
+                if (searchParams.ToDate != null)
+                {
+                    where = where.And(x => x.Date <= searchParams.ToDate);
+                }
+
+                if (searchParams.SubscriptionVmId != null)
+                {
+                    where = where.And(x => x.SubscriptionVmId == searchParams.SubscriptionVmId);
+                }
+
+                if (searchParams.TypeVirtualization != null)
+                {
+                    where = where.And(x => x.SubscriptionVm.UserVm.VirtualizationType == searchParams.TypeVirtualization);
+                }
+            }
+
+            var allPayments = this._usageSubscriptionPaymentRepo.GetMany(where, s => s.SubscriptionVm,
+                s => s.SubscriptionVm.UserVm, s => s.SubscriptionVm.User);
+
+            IEnumerable<UsageSubscriptionPaymentContainer> paymentGroups;
+
+            if (searchParams.PeriodType == CountingPeriodType.Day)
+            {
+                paymentGroups = allPayments.GroupBy(s => new { s.Date.Year, s.Date.Month, s.Date.Day },
+                (key, ss) => new UsageSubscriptionPaymentContainer() { Date = new DateTime(key.Year, key.Month, key.Day), UsageSubscriptionPayment = ss })
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                return new StaticPagedList<UsageSubscriptionPaymentContainer>(paymentGroups.ToList(), pageNumber, pageSize, paymentGroups.Count());
+
+            } else if (searchParams.PeriodType == CountingPeriodType.Month)
+            {
+                paymentGroups = allPayments.GroupBy(s => new { s.Date.Year, s.Date.Month},
+                (key, ss) => new UsageSubscriptionPaymentContainer() { Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(key.Month), UsageSubscriptionPayment = ss })
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize);
+                return new StaticPagedList<UsageSubscriptionPaymentContainer>(paymentGroups.ToList(), pageNumber, pageSize, paymentGroups.Count());
+            }
+
+            paymentGroups = allPayments.GroupBy(s => new { s.Date.Year, s.Date.Month, s.Date.Day },
+                (key, ss) => new UsageSubscriptionPaymentContainer() { Date = new DateTime(key.Year, key.Month, key.Day), UsageSubscriptionPayment = ss })
+                .Skip((pageNumber - 1) * pageSize).Take(pageSize);
+            return new StaticPagedList<UsageSubscriptionPaymentContainer>(paymentGroups.ToList(), pageNumber, pageSize, paymentGroups.Count());
+
         }
 
         public IPagedList<SubscriptionVm> GetPage(int pageNumber, int pageSize, string userId = null, SubscriptionVmSearchParams searchParams = null)

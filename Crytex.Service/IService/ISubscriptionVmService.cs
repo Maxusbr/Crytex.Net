@@ -4,6 +4,7 @@ using Crytex.Service.Model;
 using PagedList;
 using Crytex.Service.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crytex.Service.IService
 {
@@ -12,6 +13,7 @@ namespace Crytex.Service.IService
         SubscriptionVm BuySubscription(SubscriptionBuyOptions options);
         SubscriptionVm GetById(Guid guid);
         IPagedList<UsageSubscriptionPayment> GetPageUsageSubscriptionPayment(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null);
+        IPagedList<UsageSubscriptionPaymentContainer> GetPageUsageSubscriptionPaymentByPeriod(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null);
         IPagedList<SubscriptionVm> GetPage(int pageNumber, int pageSize, string userId = null, SubscriptionVmSearchParams searchParams = null);
         IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type);
         void UpdateSubscriptionStatus(Guid subId, SubscriptionVmStatus status, DateTime? endDate = null);

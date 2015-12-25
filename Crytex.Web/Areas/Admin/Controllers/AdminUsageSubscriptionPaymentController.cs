@@ -27,16 +27,28 @@ namespace Crytex.Web.Areas.Admin
         ///<param name="searchParams"></param>
         /// <returns></returns>
         // GET: api/AdminUsageSubscriptionPaymentController
-        [ResponseType(typeof(PageModel<UsageSubscriptionPaymentView>))]
+        //[ResponseType(typeof(PageModel<UsageSubscriptionPaymentView>))]
         public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]UsageSubscriptionPaymentSearchParams searchParams, string userId = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be equal or grater than 1");
 
-            var page = this._subscriptionVmService.GetPageUsageSubscriptionPayment(pageNumber, pageSize, userId, searchParams);
-            var pageModel = AutoMapper.Mapper.Map<PageModel<UsageSubscriptionPaymentView>>(page);
+            if (searchParams != null && searchParams.PeriodType != null)
+            {
+                var page = this._subscriptionVmService.GetPageUsageSubscriptionPaymentByPeriod(pageNumber, pageSize, userId, searchParams);
+                var pageModel = AutoMapper.Mapper.Map<PageModel<UsageSubscriptionPaymentByPeriodView>>(page);
+                return this.Ok(pageModel);
+            }
+            else
+            {
+                var page = this._subscriptionVmService.GetPageUsageSubscriptionPayment(pageNumber, pageSize, userId, searchParams);
+                var pageModel = AutoMapper.Mapper.Map<PageModel<UsageSubscriptionPaymentView>>(page);
+                return this.Ok(pageModel);
+            }
 
-            return this.Ok(pageModel);
+            return this.Ok();
         }
+
+        
     }
 }
