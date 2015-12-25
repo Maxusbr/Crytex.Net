@@ -20,6 +20,7 @@ namespace Crytex.Web.Areas.User.Controllers
         private ApplicationUserManager _userManager;
         private NotificationManager _notificationManager { get; set; }
 
+        [HttpPost]
         public IHttpActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
@@ -40,6 +41,7 @@ namespace Crytex.Web.Areas.User.Controllers
             return this.Conflict();
         }
 
+        [HttpPost]
         public IHttpActionResult SendEmailAgain(string userId)
         {
             if (userId != null)
@@ -54,6 +56,7 @@ namespace Crytex.Web.Areas.User.Controllers
             return this.Conflict();
         }
 
+        [HttpPost]
         public IHttpActionResult ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
@@ -73,6 +76,7 @@ namespace Crytex.Web.Areas.User.Controllers
             }
         }
 
+        [HttpPost]
         public IHttpActionResult UpdateUserInfo(string userId, FullUserInfoViewModel model)
         {
             if (ModelState.IsValid)
@@ -99,6 +103,43 @@ namespace Crytex.Web.Areas.User.Controllers
             }
 
             return this.Conflict();
+        }
+
+        [HttpPost]
+        public IHttpActionResult AddPhoneNumber(AddPhoneNumberViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                // Generate the token 
+                var code = UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number).Result;
+                var message = new IdentityMessage
+                {
+                    Destination = model.Number,
+                    Body = "Your security code is: " + code
+                };
+                // Send token
+                UserManager.SmsService.SendAsync(message).Wait();
+
+                return this.Ok();
+            }
+
+            return this.BadRequest(this.ModelState);
+        }
+
+        [HttpPost]
+        public IHttpActionResult VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
+        {
+            if (this.ModelState.IsValid)
+            {
+                var result = UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code).Result;
+                if (result.Succeeded)
+                {
+                    return this.Ok();
+                }
+                ModelState.AddModelError("", "Failed to verify phone");
+            }
+
+            return this.BadRequest(this.ModelState);
         }
 
         private void SendConfirmationEmailForUser(ApplicationUser user)
