@@ -69,7 +69,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
             {
                 return this.BadRequest(this.ModelState);
             }
-
+            if (model.SubscriptionType == SubscriptionType.Fixed && (model.AutoProlongation == null || model.SubscriptionsMonthCount == null))
+            {
+                return this.BadRequest();
+            }
             var buyOptions = Mapper.Map<SubscriptionBuyOptions>(model);
             buyOptions.BoughtByAdmin = true;
             buyOptions.AdminUserId = this.CrytexContext.UserInfoProvider.GetUserId();

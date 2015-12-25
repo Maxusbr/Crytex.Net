@@ -7,19 +7,15 @@ namespace Crytex.Web.Models.JsonModels
     public class SubscriptionBuyOptionsUserViewModel
     {
         [Required]
-        public bool? AutoProlongation { get; set; }
-        [Required]
         public int? Cpu { get; set; }
-        [Required]
-        public int? Hdd { get; set; }
         [Required]
         public int? OperatingSystemId { get; set; }
         [Required]
         public int? Ram { get; set; }
-        [Required]
-        public int? SDD { get; set; }
-        [Required]
+        public int? SSD { get; set; }
+        public int? Hdd { get; set; }
         public int? SubscriptionsMonthCount { get; set; }
+        public bool? AutoProlongation { get; set; }
         [Required]
         public SubscriptionType? SubscriptionType { get; set; }
         [Required]
