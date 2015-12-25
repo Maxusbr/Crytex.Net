@@ -35,6 +35,7 @@ namespace Crytex.Web
         public ApplicationUserManager(IUserStore<ApplicationUser> store)
             : base(store)
         {
+            this.SmsService = new SmsService();
         } 
 
     public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 

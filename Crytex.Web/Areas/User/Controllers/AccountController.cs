@@ -1,211 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Http;
-using System.Web.Http.Controllers;
-using System.Web.Http.Results;
-using System.Web.Mvc;
-using Crytex.Model.Enums;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
-using Microsoft.Owin.Security;
+﻿using Crytex.Model.Enums;
 using Crytex.Model.Models;
 using Crytex.Notification;
 using Crytex.Web.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
+using System;
+using System.Collections.Generic;
+using System.Web;
+using System.Web.Http;
+using System.Web.Http.Routing;
+using System.Web.Routing;
 
-namespace Crytex.Web.Controllers
+namespace Crytex.Web.Areas.User.Controllers
 {
-    [System.Web.Mvc.Authorize]
-    public class AccountController : Controller
+    public class AccountController : UserCrytexController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private NotificationManager _notificationManager { get; set; }
 
-
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, NotificationManager notificationManager )
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _notificationManager = notificationManager;
-        }
-
-       
-        //
-        // GET: /Account/Login
-        [System.Web.Mvc.AllowAnonymous]
-        public ActionResult Login(string returnUrl)
-        {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
-        }
-
-        //
-        // POST: /Account/Login
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<HttpStatusCode> Login(LoginViewModel model, string returnUrl)
-        {
-            if (!ModelState.IsValid)
-            {
-                return HttpStatusCode.Conflict;
-            }
-
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user != null)
-            {
-                if (!await _userManager.IsEmailConfirmedAsync(user.Id))
-                {
-                    ModelState.AddModelError("", "You need to confirm your email.");
-                    return HttpStatusCode.Conflict;
-                }
-            }
-            
-            // Сбои при входе не приводят к блокированию учетной записи
-            // Чтобы ошибки при вводе пароля инициировали блокирование учетной записи, замените на shouldLockout: true
-            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return HttpStatusCode.OK;
-                default:
-                    ModelState.AddModelError("", "Неудачная попытка входа.");
-                    return HttpStatusCode.Conflict;
-            }
-        }
-
-        //
-        // GET: /Account/VerifyCode
-        [System.Web.Mvc.AllowAnonymous]
-        public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
-        {
-            // Требовать предварительный вход пользователя с помощью имени пользователя и пароля или внешнего имени входа
-            if (!await _signInManager.HasBeenVerifiedAsync())
-            {
-                return View("Error");
-            }
-            return View(new VerifyCodeViewModel { Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        }
-
-        //
-        // POST: /Account/VerifyCode
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> VerifyCode(VerifyCodeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-
-            // Приведенный ниже код защищает от атак методом подбора, направленных на двухфакторные коды. 
-            // Если пользователь введет неправильные коды за указанное время, его учетная запись 
-            // будет заблокирована на заданный период. 
-            // Параметры блокирования учетных записей можно настроить в IdentityConfig
-            var result = await _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(model.ReturnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.Failure:
-                default:
-                    ModelState.AddModelError("", "Неправильный код.");
-                    return View(model);
-            }
-        }
-
-        //
-        // GET: /Account/Register
-        [System.Web.Mvc.AllowAnonymous]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/Register
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<HttpStatusCode> Register(RegisterViewModel model)
+        [HttpPost]
+        public IHttpActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email, RegisterDate = DateTime.Now };
-                var result = await _userManager.CreateAsync(user, model.Password);
+                var result = _userManager.CreateAsync(user, model.Password).Result;
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+                    this.SendConfirmationEmailForUser(user);
 
-                    var provider = new DpapiDataProtectionProvider("TestWebAPI");
-                    _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
-
-                    var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    var mailParams = new List<KeyValuePair<string, string>>();
-                    mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl));
-
-                    await _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
-                        mailParams, DateTime.Now);
-
-                    return HttpStatusCode.OK;
+                    return this.Ok();
                 }
+
                 AddErrors(result);
             }
 
             // Появление этого сообщения означает наличие ошибки; повторное отображение формы
-            return HttpStatusCode.Conflict;
+            return this.Conflict();
         }
 
-        //
-        // GET: /Account/SendEmailAgain
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<HttpStatusCode> SendEmailAgain(string userId)
+        [HttpPost]
+        public IHttpActionResult SendEmailAgain(string userId)
         {
             if (userId != null)
             {
                 var user = _userManager.FindById(userId);
-                var provider = new DpapiDataProtectionProvider("TestWebAPI");
-                _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
 
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                this.SendConfirmationEmailForUser(user);
 
-                var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                var mailParams = new List<KeyValuePair<string, string>>();
-                mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl));
-
-                await _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
-                    mailParams, DateTime.Now);
-
-                return HttpStatusCode.OK;
+                return this.Ok();
             }
 
-            return HttpStatusCode.Conflict;
+            return this.Conflict();
         }
 
-        //
-        // GET: /Account/UpdateUserInfo
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public async Task<HttpStatusCode> UpdateUserInfo(string userId, FullUserInfoViewModel model)
+        [HttpPost]
+        public IHttpActionResult ConfirmEmail(string userId, string code)
+        {
+            if (userId == null || code == null)
+            {
+                return this.Conflict();
+            }
+            var provider = new DpapiDataProtectionProvider("TestWebAPI");
+            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+            var result = _userManager.ConfirmEmailAsync(userId, code).Result;
+            if (result.Succeeded)
+            {
+                return this.Ok();
+            }
+            else
+            {
+                return this.Conflict();
+            }
+        }
+
+        [HttpPost]
+        public IHttpActionResult UpdateUserInfo(string userId, FullUserInfoViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -221,288 +93,70 @@ namespace Crytex.Web.Controllers
                     user.Country = model.Country;
                 }
 
-                var result = await _userManager.UpdateAsync(user);
+                var result = _userManager.UpdateAsync(user).Result;
 
                 if (!result.Succeeded)
                 {
                     AddErrors(result);
                 }
-                return HttpStatusCode.OK;
+                return this.Ok();
             }
 
-            return HttpStatusCode.Conflict;
+            return this.Conflict();
         }
 
-        //
-        // GET: /Account/ConfirmEmail
-        [System.Web.Mvc.AllowAnonymous]
-        public async Task<HttpStatusCode> ConfirmEmail(string userId, string code)
+        [HttpPost]
+        public IHttpActionResult AddPhoneNumber(AddPhoneNumberViewModel model)
         {
-            if (userId == null || code == null)
+            if (this.ModelState.IsValid)
             {
-                return HttpStatusCode.Conflict;
-            }
-            var provider = new DpapiDataProtectionProvider("TestWebAPI");
-            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-            var result = await _userManager.ConfirmEmailAsync(userId, code);
-            if (result.Succeeded)
-            {
-                return HttpStatusCode.OK;
-            }
-            else
-            {
-                return HttpStatusCode.Conflict;
-            }
-        }
-
-        //
-        // GET: /Account/ForgotPassword
-        [System.Web.Mvc.AllowAnonymous]
-        public ActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/ForgotPassword
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByNameAsync(model.Email);
-                if (user == null || !(await _userManager.IsEmailConfirmedAsync(user.Id)))
+                // Generate the token 
+                var code = UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number).Result;
+                var message = new IdentityMessage
                 {
-                    // Не показывать, что пользователь не существует или не подтвержден
-                    return View("ForgotPasswordConfirmation");
-                }
+                    Destination = model.Number,
+                    Body = "Your security code is: " + code
+                };
+                // Send token
+                UserManager.SmsService.SendAsync(message).Wait();
 
-                // Дополнительные сведения о том, как включить подтверждение учетной записи и сброс пароля, см. по адресу: http://go.microsoft.com/fwlink/?LinkID=320771
-                // Отправка сообщения электронной почты с этой ссылкой
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Сброс пароля", "Сбросьте ваш пароль, щелкнув <a href=\"" + callbackUrl + "\">здесь</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                return this.Ok();
             }
 
-            // Появление этого сообщения означает наличие ошибки; повторное отображение формы
-            return View(model);
+            return this.BadRequest(this.ModelState);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
-        [System.Web.Mvc.AllowAnonymous]
-        public ActionResult ForgotPasswordConfirmation()
+        [HttpPost]
+        public IHttpActionResult VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
-            return View();
-        }
-
-        //
-        // GET: /Account/ResetPassword
-        [System.Web.Mvc.AllowAnonymous]
-        public ActionResult ResetPassword(string code)
-        {
-            return code == null ? View("Error") : View();
-        }
-
-        //
-        // POST: /Account/ResetPassword
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
+            if (this.ModelState.IsValid)
             {
-                return View(model);
-            }
-            var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
-                // Не показывать, что пользователь не существует
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            var result = await _userManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("ResetPasswordConfirmation", "Account");
-            }
-            AddErrors(result);
-            return View();
-        }
-
-        //
-        // GET: /Account/ResetPasswordConfirmation
-        [System.Web.Mvc.AllowAnonymous]
-        public ActionResult ResetPasswordConfirmation()
-        {
-            return View();
-        }
-
-        //
-        // POST: /Account/ExternalLogin
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ExternalLogin(string provider, string returnUrl)
-        {
-            // Запрос перенаправления к внешнему поставщику входа
-            return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
-        }
-
-        //
-        // GET: /Account/SendCode
-        [System.Web.Mvc.AllowAnonymous]
-        public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
-        {
-            var userId = await _signInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
-            {
-                return View("Error");
-            }
-            var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(userId);
-            var factorOptions = userFactors.Select(purpose => new SelectListItem { Text = purpose, Value = purpose }).ToList();
-            return View(new SendCodeViewModel { Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe });
-        }
-
-        //
-        // POST: /Account/SendCode
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> SendCode(SendCodeViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
-
-            // Создание и отправка маркера
-            if (!await _signInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
-            {
-                return View("Error");
-            }
-            return RedirectToAction("VerifyCode", new { Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe });
-        }
-
-        //
-        // GET: /Account/ExternalLoginCallback
-        [System.Web.Mvc.AllowAnonymous]
-        public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
-        {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
-            if (loginInfo == null)
-            {
-                return RedirectToAction("Login");
-            }
-
-            // Выполнение входа пользователя посредством данного внешнего поставщика входа, если у пользователя уже есть имя входа
-            var result = await _signInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
-            switch (result)
-            {
-                case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = false });
-                case SignInStatus.Failure:
-                default:
-                    // Если у пользователя нет учетной записи, то ему предлагается создать ее
-                    ViewBag.ReturnUrl = returnUrl;
-                    ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
-                    return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
-            }
-        }
-
-        //
-        // POST: /Account/ExternalLoginConfirmation
-        [System.Web.Mvc.HttpPost]
-        [System.Web.Mvc.AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl)
-        {
-            if (User.Identity.IsAuthenticated)
-            {
-                return RedirectToAction("Index", "Manage");
-            }
-
-            if (ModelState.IsValid)
-            {
-                // Получение сведений о пользователе от внешнего поставщика входа
-                var info = await AuthenticationManager.GetExternalLoginInfoAsync();
-                if (info == null)
-                {
-                    return View("ExternalLoginFailure");
-                }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user);
+                var result = UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code).Result;
                 if (result.Succeeded)
                 {
-                    result = await _userManager.AddLoginAsync(user.Id, info.Login);
-                    if (result.Succeeded)
-                    {
-                        await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
-                        return RedirectToLocal(returnUrl);
-                    }
+                    return this.Ok();
                 }
-                AddErrors(result);
+                ModelState.AddModelError("", "Failed to verify phone");
             }
 
-            ViewBag.ReturnUrl = returnUrl;
-            return View(model);
+            return this.BadRequest(this.ModelState);
         }
 
-        //
-        // POST: /Account/LogOff
-        [System.Web.Mvc.HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult LogOff()
+        private void SendConfirmationEmailForUser(ApplicationUser user)
         {
-            AuthenticationManager.SignOut();
-            return RedirectToAction("Index", "Home");
-        }
+            _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).Wait();
 
-        //
-        // GET: /Account/ExternalLoginFailure
-        [System.Web.Mvc.AllowAnonymous]
-        public ActionResult ExternalLoginFailure()
-        {
-            return View();
-        }
+            var provider = new DpapiDataProtectionProvider("TestWebAPI");
+            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
+            var code = _userManager.GenerateEmailConfirmationTokenAsync(user.Id).Result;
 
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
+            var callbackUrl = new Uri(Url.Link("ConfirmEmailRoute", new { userId = user.Id, code = code }));
+            var mailParams = new List<KeyValuePair<string, string>>();
+            mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl.ToString()));
 
-            base.Dispose(disposing);
-        }
-
-        #region Вспомогательные приложения
-        // Используется для защиты от XSRF-атак при добавлении внешних имен входа
-        private const string XsrfKey = "XsrfId";
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
+            _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
+                mailParams, DateTime.Now).Wait();
         }
 
         private void AddErrors(IdentityResult result)
@@ -512,44 +166,5 @@ namespace Crytex.Web.Controllers
                 ModelState.AddModelError("", error);
             }
         }
-
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
-        }
-
-        internal class ChallengeResult : HttpUnauthorizedResult
-        {
-            public ChallengeResult(string provider, string redirectUri)
-                : this(provider, redirectUri, null)
-            {
-            }
-
-            public ChallengeResult(string provider, string redirectUri, string userId)
-            {
-                LoginProvider = provider;
-                RedirectUri = redirectUri;
-                UserId = userId;
-            }
-
-            public string LoginProvider { get; set; }
-            public string RedirectUri { get; set; }
-            public string UserId { get; set; }
-
-            public override void ExecuteResult(ControllerContext context)
-            {
-                var properties = new AuthenticationProperties { RedirectUri = RedirectUri };
-                if (UserId != null)
-                {
-                    properties.Dictionary[XsrfKey] = UserId;
-                }
-                context.HttpContext.GetOwinContext().Authentication.Challenge(properties, LoginProvider);
-            }
-        }
-        #endregion
     }
 }
