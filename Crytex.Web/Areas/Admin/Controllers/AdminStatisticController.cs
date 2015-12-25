@@ -63,6 +63,22 @@ namespace Crytex.Web.Areas.Admin
         }
 
         /// <summary>
+        /// Получение Statistic SubscriptionVm
+        /// </summary>
+        // GET: api/Admin/AdminStatistic/method/subscriptionVm
+        [ResponseType(typeof(SubscriptionVmStatisticModel))]
+        [Route("api/Admin/AdminStatistic/method/subscriptionVm")]
+        public IHttpActionResult GetSubscriptionVm(bool today = false)
+        {
+            var statisticSubscribe = new SubscriptionVmStatisticModel();
+
+            if (today) statisticSubscribe = _statisticService.GetNumberSubscriptionVmsToday();
+            else statisticSubscribe = _statisticService.GetNumberSubscriptionVms();
+
+            return Ok(statisticSubscribe);
+        }
+
+        /// <summary>
         /// Получение Statistic по id
         /// </summary>
         /// <param name="id"></param>

@@ -16,5 +16,7 @@ namespace Crytex.Service.IService
         void UpdateStatistic(Statistic updatedStatistic);
         void DeleteStatisticById(int id);
         void CalculateStatistic(TypeStatistic type);
+        SubscriptionVmStatisticModel GetNumberSubscriptionVms();
+        SubscriptionVmStatisticModel GetNumberSubscriptionVmsToday();
     }
 }
