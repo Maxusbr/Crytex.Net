@@ -11,5 +11,6 @@ namespace Crytex.Service.Model
         public Guid? SubscriptionVmId { get; set; }
         public TypeVirtualization? TypeVirtualization { get; set; }
         public CountingPeriodType? PeriodType { get; set; }
+        public UsageSubscriptionPaymentGroupingTypes? GroupingType { get; set; }
     }
 }

@@ -370,6 +370,7 @@
     <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
     <Compile Include="Models\JsonModels\UsageSubscriptionPaymentByPeriodView.cs" />
+    <Compile Include="Models\JsonModels\UsageSubscriptionPaymentGroupByVmView.cs" />
     <Compile Include="Models\JsonModels\UsageSubscriptionPaymentView.cs" />
     <Compile Include="Models\JsonModels\UserLoginLogEntryModel.cs" />
     <Compile Include="Models\JsonModels\UserVmSearchParamsViewModel.cs" />
