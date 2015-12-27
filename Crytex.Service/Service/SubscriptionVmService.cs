@@ -168,7 +168,8 @@ namespace Crytex.Service.Service
                 Cpu = options.Cpu,
                 Hdd = options.Hdd,
                 Ram = options.Ram,
-                OperatingSystemId = options.OperatingSystemId
+                OperatingSystemId = options.OperatingSystemId,
+                Name = options.VmName
             };
             var createTask = new TaskV2
             {
@@ -188,6 +189,7 @@ namespace Crytex.Service.Service
                 DateCreate = DateTime.UtcNow,
                 DateEnd = subscritionDateEnd,
                 UserId = options.UserId,
+                VmName = options.VmName,
                 SubscriptionType = options.SubscriptionType,
                 TariffId = tariff.Id,
                 Status = SubscriptionVmStatus.Active,
@@ -294,6 +296,24 @@ namespace Crytex.Service.Service
                 && s.UserVm.Status != StatusVM.Creating && s.UserVm.Status != StatusVM.Error);
 
             return subs;
+        }
+
+        public void UpdateSubscriptionData(SubscriptionUpdateOptions model)
+        {
+            var subscription = this._subscriptionVmRepository.GetById(model.Id);
+
+            if (subscription == null)
+            {
+                throw new InvalidIdentifierException(string.Format("SubscriptionVm with Id={0} doesn't exists", model.Id));
+            }
+            if (subscription.SubscriptionType == SubscriptionType.Fixed)
+            {
+                subscription.AutoProlongation = (model.AutoProlongation) ? true : false;
+            }
+            subscription.UserVm = null;
+            subscription.VmName = model.VmName;
+            this._subscriptionVmRepository.Update(subscription);
+            this._unitOfWork.Commit();
         }
 
         public void UpdateSubscriptionStatus(Guid subId, SubscriptionVmStatus status, DateTime? subEndDate = null)

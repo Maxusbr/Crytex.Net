@@ -8,6 +8,7 @@ using Crytex.Web.Models.JsonModels;
 using PagedList;
 using System;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace Crytex.Web.Areas.Admin.Controllers
 {
@@ -96,6 +97,23 @@ namespace Crytex.Web.Areas.Admin.Controllers
             prolongateOptions.ProlongatedByAdmin = true;
             prolongateOptions.AdminUserId = this.CrytexContext.UserInfoProvider.GetUserId();
             this._subscriptionVmService.ProlongateFixedSubscription(prolongateOptions);
+
+            return this.Ok();
+        }
+
+        /// <summary>
+        /// Обновление подписки админом для пользователя
+        /// </summary>
+        [ResponseType(typeof(SubscriptionUpdateOptions))]
+        [Route("api/AdminSubscriptionVm/UpdateSubscription"), HttpPost()]
+        public IHttpActionResult UpdateSubscription(SubscriptionUpdateOptions model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            this._subscriptionVmService.UpdateSubscriptionData(model);
 
             return this.Ok();
         }

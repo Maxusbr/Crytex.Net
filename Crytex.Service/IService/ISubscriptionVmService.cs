@@ -16,6 +16,7 @@ namespace Crytex.Service.IService
         IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type);
         void UpdateSubscriptionStatus(Guid subId, SubscriptionVmStatus status, DateTime? endDate = null);
         IEnumerable<SubscriptionVm> GetAllFixedSubscriptions();
+        void UpdateSubscriptionData(SubscriptionUpdateOptions model);
         void UpdateUsageSubscriptionBalance(Guid subId);
         void ProlongateFixedSubscription(SubscriptionProlongateOptions options);
         void AutoProlongateFixedSubscription(Guid subId);
