@@ -8,7 +8,7 @@ namespace Crytex.Service.Model
     public class SubscriptionUpdateOptions
     {
         public Guid Id { get; set; }
-        public string VmName { get; set; }
+        public string Name { get; set; }
         public bool AutoProlongation { get; set; }
     }
 }

@@ -189,7 +189,7 @@ namespace Crytex.Service.Service
                 DateCreate = DateTime.UtcNow,
                 DateEnd = subscritionDateEnd,
                 UserId = options.UserId,
-                VmName = options.VmName,
+                Name = options.VmName,
                 SubscriptionType = options.SubscriptionType,
                 TariffId = tariff.Id,
                 Status = SubscriptionVmStatus.Active,
@@ -300,18 +300,14 @@ namespace Crytex.Service.Service
 
         public void UpdateSubscriptionData(SubscriptionUpdateOptions model)
         {
-            var subscription = this._subscriptionVmRepository.GetById(model.Id);
+            var subscription = this.GetById(model.Id);
 
-            if (subscription == null)
-            {
-                throw new InvalidIdentifierException(string.Format("SubscriptionVm with Id={0} doesn't exists", model.Id));
-            }
             if (subscription.SubscriptionType == SubscriptionType.Fixed)
             {
-                subscription.AutoProlongation = (model.AutoProlongation) ? true : false;
+                subscription.AutoProlongation = model.AutoProlongation;
             }
-            subscription.UserVm = null;
-            subscription.VmName = model.VmName;
+
+            subscription.Name = model.Name;
             this._subscriptionVmRepository.Update(subscription);
             this._unitOfWork.Commit();
         }

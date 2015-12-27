@@ -11,7 +11,7 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public int? OperatingSystemId { get; set; }
         [Required]
-        public string VmName { get; set; }
+        public string Name { get; set; }
         [Required]
         public int? Ram { get; set; }
         public int? SSD { get; set; }
