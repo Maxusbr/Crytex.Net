@@ -326,7 +326,7 @@ namespace Crytex.Data.Migrations
                         Description = "Description",
                         CoreCount = 2,
                         RamCount = 512,
-                        HardDriveSize = 50000,
+                        HardDriveSize = 500,
                         ImageFileId = image.Id,
                         OperatingSystemId = operations[target].Id,
                     };
@@ -419,6 +419,206 @@ namespace Crytex.Data.Migrations
                     };
                     context.PhoneCallRequests.Add(call);
                 }
+
+                var allTarifs = context.Tariffs.ToList();
+                for (int i = 0; i < 4; i++)
+                {
+                    var tariff = new Tariff
+                    {
+                        Virtualization = (i < 2) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
+                        OperatingSystem = (i == 0 || i == 2) ? OperatingSystemFamily.Ubuntu : OperatingSystemFamily.Windows2012,
+                        Processor1 = 10,
+                        RAM512 = 2048,
+                        HDD1 = 300,
+                        SSD1 = 300,
+                        Load10Percent = 1,
+                        CreateDate = DateTime.UtcNow
+                    };
+                    
+                    if (allTarifs.All(t => t.Virtualization != tariff.Virtualization && t.OperatingSystem != tariff.OperatingSystem))
+                        context.Tariffs.Add(tariff);
+                }
+                context.Commit();
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var iterUser = (i + 1 < 6) ? i + 1 : 5;
+                    var createVmOptions = new CreateVmOptions
+                    {
+                        Cpu = 2,
+                        Hdd = 300,
+                        Ram = 2048,
+                        OperatingSystemId = operations[0].Id,
+                        Name = "Машина #" + i,
+                        UserVmId = Guid.NewGuid()
+                    };
+
+                    var user = allUsers.First(u => u.UserName == "User" + iterUser);
+
+                    var createTask = new TaskV2
+                    {
+                        TypeTask = TypeTask.CreateVm,
+                        Virtualization = (i < 5) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
+                        UserId = user.Id,
+                        Id = Guid.NewGuid(),
+                        CreatedAt = DateTime.UtcNow,
+                        StatusTask = StatusTask.Pending,
+                    };
+                    createTask.SaveOptions<CreateVmOptions>(createVmOptions);
+
+                    context.TaskV2.Add(createTask);
+
+                    var newVm = new UserVm
+                    {
+                        Id = createVmOptions.UserVmId,
+                        CoreCount = createVmOptions.Cpu,
+                        HardDriveSize = createVmOptions.Hdd,
+                        RamCount = createVmOptions.Ram,
+                        VirtualizationType = createTask.Virtualization,
+                        Name = createVmOptions.Name,
+                        OperatingSystemId = createVmOptions.OperatingSystemId,
+                        Status = StatusVM.Creating,
+                        UserId = createTask.UserId
+                    };
+
+                    context.UserVms.Add(newVm);
+
+                    var tariff = context.Tariffs.First(t => t.Virtualization == createTask.Virtualization && t.OperatingSystem == OperatingSystemFamily.Windows2012);
+
+                    // Create new subscription
+                    var subscritionDateEnd = DateTime.UtcNow.AddMonths(5);
+                    var date = DateTime.Now;
+
+                    var newSubscription = new SubscriptionVm
+                    {
+                        Id = createVmOptions.UserVmId,
+                        AutoProlongation = (i < 5),
+                        DateCreate = DateTime.UtcNow,
+                        DateEnd = subscritionDateEnd,
+                        UserId = user.Id,
+                        Name = createVmOptions.Name,
+                        SubscriptionType = (i < 5) ? SubscriptionType.Fixed : SubscriptionType.Usage,
+                        TariffId = tariff.Id,
+                        Status = SubscriptionVmStatus.Active,
+                        LastUsageBillingTransactionDate = subscritionDateEnd,
+                        UserVm = newVm
+                    };
+                    context.SubscriptionVms.Add(newSubscription);
+
+                }
+
+                context.Commit();
+
+                for (int i = 0; i < 5; i++)
+                {
+                    var emailInfo = new EmailInfo
+                    {
+                        DateSending = DateTime.UtcNow,
+                        From = "test@email.com",
+                        To = "Crytex",
+                        IsProcessed = true,
+                        Reason = "Test",
+                        SubjectParams = "",
+                        BodyParams = "",
+                        EmailTemplateType = EmailTemplateType.Registration,
+                        EmailResultStatus = EmailResultStatus.Sent
+                    };
+
+                    context.EmailInfos.Add(emailInfo);
+                }
+
+                var template = serverTemplates[0].Id;
+                var gameServerConfig = context.GameServerConfigurations.FirstOrDefault(
+                    g => g.ServerTemplateId == template);
+
+                if (gameServerConfig == null)
+                {
+                    gameServerConfig = new GameServerConfiguration
+                    {
+                        ServerTemplateId = serverTemplates[0].Id,
+                    };
+                    context.GameServerConfigurations.Add(gameServerConfig);
+                }
+
+
+                var gameServer = new GameServer
+                {
+                    PaymentType = ServerPaymentType.Slot,
+                    VmId = allMachine[0].Id,
+                    SlotCount = 5,
+                    GameServerConfigurationId = gameServerConfig.Id,
+                    UserId = allUsers[0].Id
+                };
+                context.GameServers.Add(gameServer);
+
+
+                var fixedSubscriptions =
+                    context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Fixed).ToList();
+                foreach (var fixedSub in fixedSubscriptions)
+                {
+                    var adminUser = allUsers.First(u => u.UserName == "AdminUser" + 1);
+                    var transaction = new BillingTransaction
+                    {
+                        Id = Guid.NewGuid(),
+                        CashAmount = -2000,
+                        TransactionType = BillingTransactionType.OneTimeDebiting,
+                        SubscriptionVmMonthCount = 10,
+                        UserId = fixedSub.UserId,
+                        AdminUserId = adminUser.Id,
+                        SubscriptionVmId = fixedSub.Id,
+                        Description = "test",
+                        Date = DateTime.UtcNow
+                    };
+
+                    var fixedPaymentSubscription = new FixedSubscriptionPayment
+                    {
+                        Date = DateTime.UtcNow,
+                        DateStart = DateTime.UtcNow,
+                        DateEnd = DateTime.UtcNow.AddHours(5),
+                        Amount = 2000,
+                        MonthCount = 10,
+                        CoreCount = 2,
+                        RamCount = 2048,
+                        HardDriveSize = 300,
+                        TariffId = allTarifs[0].Id,
+                        BillingTransactionId = transaction.Id,
+                        SubscriptionVmId = fixedSub.Id,
+                    };
+                    context.BillingTransactions.Add(transaction);
+                    context.FixedSubscriptionPayments.Add(fixedPaymentSubscription);
+                };
+
+                var usageSubscriptions = context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Usage).ToList();
+                foreach (var usageSub in usageSubscriptions)
+                {
+                    var adminUser = allUsers.First(u => u.UserName == "AdminUser" + 1);
+                    var transaction = new BillingTransaction
+                    {
+                        Id = Guid.NewGuid(),
+                        CashAmount = -2000,
+                        TransactionType = BillingTransactionType.OneTimeDebiting,
+                        UserId = usageSub.UserId,
+                        AdminUserId = adminUser.Id,
+                        SubscriptionVmId = usageSub.Id,
+                        Description = "test",
+                        Date = DateTime.UtcNow
+                    };
+
+                    var usagePaymentSubscription = new UsageSubscriptionPayment
+                    {
+                        Date = DateTime.UtcNow,
+                        Amount = 2000,
+                        Paid = false,
+                        CoreCount = 2,
+                        RamCount = 2048,
+                        HardDriveSize = 300,
+                        TariffId = allTarifs[0].Id,
+                        BillingTransactionId = transaction.Id,
+                        SubscriptionVmId = usageSub.Id,
+                    };
+                    context.BillingTransactions.Add(transaction);
+                    context.UsageSubscriptionPayments.Add(usagePaymentSubscription);
+                };
             }
 
             context.Commit();
