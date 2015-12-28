@@ -36,7 +36,8 @@ namespace Crytex.Service.Service
                 Cpu = operatingSystem.MinCoreCount,
                 Hdd = operatingSystem.MinHardDriveSize,
                 Ram = operatingSystem.MinRamCount,
-                OperatingSystemId = operatingSystem.Id
+                OperatingSystemId = operatingSystem.Id,
+                Name = "Game server"
             };
             var newTask = new TaskV2
             {

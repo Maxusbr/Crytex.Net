@@ -42,22 +42,21 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
                 this._vmWareProvider.StartMachine(machineName, true);
 
                 var oldPassword = os.DefaultAdminPassword;
+                var adminUserName = os.DefaultAdminName;
                 var scriptBuilder = new StringBuilder();
                 switch (os.Family)
                 {
                     case OperatingSystemFamily.Windows2012:
-                        var userName = "Administrator";
                         scriptBuilder.AppendLine("$Computername = $env:COMPUTERNAME");
                         scriptBuilder.AppendLine("$user = \"Administrator\"");
                         scriptBuilder.AppendLine("$user = [adsi]\"WinNT://$ComputerName/$user,user\"");
                         scriptBuilder.AppendLine("$pass = \""+newPassword+"\"");
                         scriptBuilder.AppendLine("$user.SetPassword($pass)");
-                        this._vmWareProvider.RunPowerShellScript(machineName, userName, oldPassword, scriptBuilder.ToString());
+                        this._vmWareProvider.RunPowerShellScript(machineName, adminUserName, oldPassword, scriptBuilder.ToString());
                         break;
                     case OperatingSystemFamily.Ubuntu:
-                        userName = "administrator";
                         scriptBuilder.AppendFormat("echo -e \"{0}\\n{1}\\n{1}\" | passwd", oldPassword, newPassword);
-                        this._vmWareProvider.RunLinuxShellScript(machineName, userName, oldPassword, scriptBuilder.ToString());
+                        this._vmWareProvider.RunLinuxShellScript(machineName, adminUserName, oldPassword, scriptBuilder.ToString());
                         break;
                 }
                 result.IpAddresses = this._vmWareProvider.GetMachineByName(machineName).NetworkInfo;

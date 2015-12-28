@@ -178,11 +178,19 @@ namespace Crytex.Data.Migrations
                     Body = "Ваша подписка на виртуальную машину буден удаоена через {daysToDeletion} дня",
                     ParameterNames = @"[""daysToDeletion""]"
                 };
+                var createVmCredsEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Ваша машина была создана",
+                    EmailTemplateType = EmailTemplateType.CreateVmCredentials,
+                    Body = "Ваша машина {vmName} создана для доступа используйте имя пользователя {osUserName} и пароль {osUserPassword}",
+                    ParameterNames = @"[""vmName"", ""osUserName"", ""osUserPassword""]"
+                };
 
                 context.EmailTemplates.Add(regApproveEmailtemplate);
                 context.EmailTemplates.Add(subscriptionNeedsPaymentEmailTemplate);
                 context.EmailTemplates.Add(subscriptionEndWarningEmailTemplate);
                 context.EmailTemplates.Add(subscriptionDeletionWarningEmailTemplate);
+                context.EmailTemplates.Add(createVmCredsEmailTemplate);
                 ///////////////////////////////////
 
                 for (int i = 1; i < 6; i++)
@@ -301,6 +309,7 @@ namespace Crytex.Data.Migrations
                         ServerTemplateName = "ServerTemplateName",
                         Family = (OperatingSystemFamily)i,
                         DefaultAdminPassword = "Password123",
+                        DefaultAdminName = "Administrator",
                         MinCoreCount = 2,
                         MinHardDriveSize = 50000,
                         MinRamCount = 512

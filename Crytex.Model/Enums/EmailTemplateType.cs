@@ -9,6 +9,7 @@
         UpdateVm = 4,
         SubscriptionNeedsPayment = 5,
         SubscriptionEndWarning = 6,
-        SubscriptionDeletionWarning = 7
+        SubscriptionDeletionWarning = 7,
+        CreateVmCredentials = 8
     }
 }

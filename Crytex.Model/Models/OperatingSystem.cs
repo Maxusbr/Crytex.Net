@@ -19,6 +19,7 @@ namespace Crytex.Model.Models
         /// Дефолтный пароль для входа в гостевую систему виртуальной машины
         /// </summary>
         public string DefaultAdminPassword { get; set; }
+        public string DefaultAdminName { get; set; }
         public OperatingSystemFamily Family { get; set; }
         public int MinCoreCount { get; set; }
         public int MinHardDriveSize { get; set; }
