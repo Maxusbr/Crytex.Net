@@ -9,6 +9,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Cryptography;
 using Crytex.Core.Extension;
+using Crytex.Model.Models.Biling;
 using Crytex.Service.Extension;
 using Crytex.Service.Model;
 using PagedList;
@@ -23,24 +24,55 @@ namespace Crytex.Service.Service
         private IUserVmRepository _userVmRepository;
         private IApplicationUserRepository _applicationUserRepository;
         private ITaskV2Repository _taskV2Repository;
+        private ISubscriptionVmRepository _subscriptionVmRepository;
 
         public StatisticService(IUnitOfWork unitOfWork, 
             IStatisticRepository statisticRepository, 
             IUserVmRepository userVmRepository,
             IApplicationUserRepository applicationUserRepository,
-            ITaskV2Repository taskV2Repository)
+            ITaskV2Repository taskV2Repository,
+            ISubscriptionVmRepository subscriptionVmRepository)
         {
             this._unitOfWork = unitOfWork;
             this._statisticRepository = statisticRepository;
             this._userVmRepository = userVmRepository;
             this._applicationUserRepository = applicationUserRepository;
             this._taskV2Repository = taskV2Repository;
+            this._subscriptionVmRepository = subscriptionVmRepository;
         }
 
         public IEnumerable<Statistic> GetAllStatistics()
         {
             var statistic = this._statisticRepository.GetAll();
             return statistic;
+        }
+
+        public SubscriptionVmStatisticModel GetNumberSubscriptionVms()
+        {
+            var today = DateTime.UtcNow.TrimDate(TimeSpan.TicksPerDay);
+
+            var count = new SubscriptionVmStatisticModel
+            {
+                NumberAllSubscriptionVm = this._subscriptionVmRepository.CountSubscriptionVm(s => s.DateEnd >= today),
+                NumberFixedSubscriptionVm = this._subscriptionVmRepository.CountSubscriptionVm( s => s.DateEnd >= today && s.SubscriptionType == SubscriptionType.Fixed),
+                NumberUsageSubscriptionVm = this._subscriptionVmRepository.CountSubscriptionVm(s => s.DateEnd >= today && s.SubscriptionType == SubscriptionType.Usage)
+            };
+
+            return count;
+        }
+
+        public SubscriptionVmStatisticModel GetNumberSubscriptionVmsToday()
+        {
+            var today = DateTime.UtcNow.TrimDate(TimeSpan.TicksPerDay);
+
+            var count = new SubscriptionVmStatisticModel
+            {
+                NumberAllSubscriptionVm = this._subscriptionVmRepository.CountSubscriptionVm(s => s.DateCreate >= today),
+                NumberFixedSubscriptionVm = this._subscriptionVmRepository.CountSubscriptionVm(s => s.DateCreate >= today && s.SubscriptionType == SubscriptionType.Fixed),
+                NumberUsageSubscriptionVm = this._subscriptionVmRepository.CountSubscriptionVm(s => s.DateCreate >= today && s.SubscriptionType == SubscriptionType.Usage)
+            };
+
+            return count;
         }
 
         public StatisticSummary GetSummary()

@@ -295,6 +295,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminVmBackupController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSubscriptionVmController.cs" />
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
+    <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\UsageSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\GameServerController.cs" />
@@ -309,8 +310,7 @@
     <Compile Include="Auth\OauthTokenQuery.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
     <Compile Include="Auth\SimpleRefreshTokenProvider.cs" />
-    <Compile Include="Areas\User\Controllers\AccountController.cs" />
-    <Compile Include="Controllers\Api\AccountController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Api\CrytexApiController.cs" />
     <Compile Include="Areas\User\Controllers\HelpDeskRequestController.cs" />
     <Compile Include="Controllers\Api\MessageController.cs" />

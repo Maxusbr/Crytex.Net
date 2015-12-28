@@ -118,6 +118,11 @@ namespace Crytex.Web.Auth
                 context.SetError("user_blocked", "This user account is blocked", user.Id);
                 return;
             }
+            if (!user.EmailConfirmed)
+            {
+                context.SetError("user_email_not_confirmed", "User's email is not confirmed", user.Id);
+                return;
+            }
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
