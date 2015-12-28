@@ -144,5 +144,16 @@ namespace Crytex.Notification
             bodyParams.Add(new KeyValuePair<string, string>("daysToDeletion", daysToDeletion.ToString()));
             this.SendEmailImmediately(from, user.Email, EmailTemplateType.SubscriptionDeletionWarning, null, bodyParams, DateTime.UtcNow);
         }
+
+        public void SendNewVmCreationEndEmail(string userId, string vmName, string osUserName, string osUserPassword)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            List<KeyValuePair<string, string>> bodyParams = new List<KeyValuePair<string, string>>();
+            bodyParams.Add(new KeyValuePair<string, string>("vmName", vmName));
+            bodyParams.Add(new KeyValuePair<string, string>("osUserName", osUserName));
+            bodyParams.Add(new KeyValuePair<string, string>("osUserPassword", osUserPassword));
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.CreateVmCredentials, null, bodyParams, DateTime.UtcNow);
+        }
     }
 }

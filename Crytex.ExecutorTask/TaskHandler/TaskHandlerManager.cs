@@ -161,6 +161,9 @@ namespace Crytex.ExecutorTask.TaskHandler
                 }
 
                 this._taskService.UpdateTask(taskEntity);
+
+                var userVm = this._userVmService.GetVmById(createTaskExecResult.TaskEntity.GetOptions<CreateVmOptions>().UserVmId);
+                this._notificationManager.SendNewVmCreationEndEmail(taskEntity.UserId, userVm.Name, userVm.OperatingSystem.DefaultAdminName, userVm.OperatingSystemPassword);
             }
             else if (taskEntity.TypeTask == TypeTask.UpdateVm)
             {
