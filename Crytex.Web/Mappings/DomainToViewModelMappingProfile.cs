@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Crytex.Core.Service;
 using Crytex.Model.Models;
@@ -7,6 +8,7 @@ using Crytex.Web.Models.JsonModels;
 using PagedList;
 using Crytex.Web.Models.ViewModels;
 using Crytex.Model.Models.Notifications;
+using Crytex.Service.Model;
 using Crytex.Web.Models;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
@@ -91,6 +93,13 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.UserId, opt => opt.MapFrom(s => s.SubscriptionVm.UserId))
                 .ForMember(x => x.UserVmId, opt => opt.MapFrom(s => s.SubscriptionVm.UserVm.Id));
 
+            Mapper.CreateMap<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>()
+                .ForMember(x => x.Subscriptions, opt => opt.MapFrom(s => Mapper.Map<IEnumerable<UsageSubscriptionPaymentByPeriodView>>(s.Subscriptions)));
+
+            Mapper.CreateMap<UsageSubscriptionPaymentContainer, UsageSubscriptionPaymentByPeriodView>()
+                .ForMember(x => x.Date, opt => opt.MapFrom(s => s.Date))
+                .ForMember(x => x.UsageSubscriptionPayment, opt => opt.MapFrom(s => Mapper.Map<IEnumerable<UsageSubscriptionPaymentView>>(s.UsageSubscriptionPayment)));
+
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
@@ -111,6 +120,8 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<SubscriptionVm, SubscriptionVmViewModel>();
             this.MapPagedList<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>();
             this.MapPagedList<UsageSubscriptionPayment, UsageSubscriptionPaymentView>();
+            this.MapPagedList<UsageSubscriptionPaymentContainer, UsageSubscriptionPaymentByPeriodView>();
+            this.MapPagedList<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>();
         }
 
         protected void MapPagedList<TSource, TDest>()

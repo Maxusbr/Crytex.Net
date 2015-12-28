@@ -127,6 +127,8 @@
     <Compile Include="Model\SearchPaymentParams.cs" />
     <Compile Include="Model\SubscriptionUpdateOptions.cs" />
     <Compile Include="Model\SubscriptionVmStatisticModel.cs" />
+    <Compile Include="Model\UsageSubscriptionPaymentContainer.cs" />
+    <Compile Include="Model\UsageSubscriptionPaymentGroupByVmContainer.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\StatisticSummary.cs" />
     <Compile Include="Model\StatisticType.cs" />
