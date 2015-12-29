@@ -41,6 +41,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>();
             Mapper.CreateMap<SubscriptionBuyOptionsUserViewModel, SubscriptionBuyOptions>();
             Mapper.CreateMap<SubscriptionProlongateOptionsViewModel, SubscriptionProlongateOptions>();
+            Mapper.CreateMap<MachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
         }
     }
 }

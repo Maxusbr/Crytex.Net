@@ -175,7 +175,7 @@ namespace Crytex.Service.Service
                 case TypeChangeStatus.Reload:
                     userVm.Status = StatusVM.Enable;
                     break;
-                case TypeChangeStatus.PowerOf:
+                case TypeChangeStatus.PowerOff:
                     userVm.Status = StatusVM.Disable;
                     break;
                 case TypeChangeStatus.Stop:

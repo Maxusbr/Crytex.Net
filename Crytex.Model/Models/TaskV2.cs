@@ -113,7 +113,7 @@ namespace Crytex.Model.Models
         Start,
         Stop,
         Reload,
-        PowerOf
+        PowerOff
     }
 
     public enum ResourceType

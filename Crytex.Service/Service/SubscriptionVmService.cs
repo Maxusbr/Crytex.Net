@@ -476,7 +476,7 @@ namespace Crytex.Service.Service
             var removeVmOptions = new ChangeStatusOptions
             {
                 VmId = sub.UserVm.Id,
-                TypeChangeStatus = TypeChangeStatus.PowerOf
+                TypeChangeStatus = TypeChangeStatus.PowerOff
             };
             var deleteTask = new TaskV2
             {
@@ -630,6 +630,91 @@ namespace Crytex.Service.Service
                 this._usageSubscriptionPaymentRepo.Add(newPayment);
                 this._unitOfWork.Commit();
             }
+        }
+
+        public void StartSubscriptionMachine(Guid subsciptionId)
+        {
+            this.ChangeSubscrioptionMachineStatus(subsciptionId, TypeChangeStatus.Start);
+        }
+
+        public void StopSubscriptionMachine(Guid subsciptionId)
+        {
+            this.ChangeSubscrioptionMachineStatus(subsciptionId, TypeChangeStatus.Stop);
+        }
+
+        public void PowerOffSubscriptionMachine(Guid subsciptionId)
+        {
+            this.ChangeSubscrioptionMachineStatus(subsciptionId, TypeChangeStatus.PowerOff);
+        }
+
+        public void ResetSubscriptionMachine(Guid subsciptionId)
+        {
+            this.ChangeSubscrioptionMachineStatus(subsciptionId, TypeChangeStatus.Reload);
+        }
+
+        private void ChangeSubscrioptionMachineStatus(Guid subscriptionId, TypeChangeStatus status)
+        {
+            var sub = this.GetById(subscriptionId);
+
+            if (sub.Status != SubscriptionVmStatus.Active)
+            {
+                throw new InvalidOperationApplicationException("Cannot start subscription's vm. Subscription status is not Active");
+            }
+            else
+            {
+                var taskOptions = new ChangeStatusOptions
+                {
+                    TypeChangeStatus = status,
+                    VmId = sub.UserVm.Id
+                };
+                var task = new TaskV2
+                {
+                    TypeTask = TypeTask.ChangeStatus,
+                    Virtualization = sub.UserVm.VirtualizationType,
+                    UserId = sub.UserId
+                };
+
+                this._taskService.CreateTask(task, taskOptions);
+            }
+        }
+
+        public void UpdateSubscriptionMachineConfig(Guid subscriptionId, UpdateMachineConfigOptions options)
+        {
+            var sub = this.GetById(subscriptionId);
+
+            switch (sub.SubscriptionType)
+            {
+                case SubscriptionType.Fixed:
+                    this.UpdateFixedSubMachineConfig(sub, options);
+                    break;
+                case SubscriptionType.Usage:
+                    this.UpdateUsageSubMachineConfig(sub, options);
+                    break;
+            }
+        }
+
+        private void UpdateUsageSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
+        {
+            var updateTask = new TaskV2
+            {
+                TypeTask = TypeTask.UpdateVm,
+                UserId = sub.UserId,
+                Virtualization = sub.UserVm.VirtualizationType
+            };
+            var taskUpdateOptions = new UpdateVmOptions
+            {
+                Cpu = options.Cpu ?? sub.UserVm.CoreCount,
+                Hdd = options.Hdd ?? sub.UserVm.HardDriveSize,
+                Ram = options.Ram ?? sub.UserVm.RamCount,
+                Name = sub.UserVm.Name,
+                VmId = sub.UserVm.Id
+            };
+            this._taskService.CreateTask(updateTask, taskUpdateOptions);
+        }
+
+        private void UpdateFixedSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
+        {
+            throw new NotImplementedException();
         }
     }
 }
