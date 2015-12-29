@@ -129,5 +129,67 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             return Ok();
         }
+
+        [HttpPost]
+        public IHttpActionResult StartMachine(string subscriptionId)
+        {
+            Guid guid;
+            if (!Guid.TryParse(subscriptionId, out guid))
+                return this.BadRequest("Invalid Guid format");
+
+            this._subscriptionVmService.StartSubscriptionMachine(guid);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult StopMachine(string subscriptionId)
+        {
+            Guid guid;
+            if (!Guid.TryParse(subscriptionId, out guid))
+                return this.BadRequest("Invalid Guid format");
+
+            this._subscriptionVmService.StopSubscriptionMachine(guid);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult PowerOffMachine(string subscriptionId)
+        {
+            Guid guid;
+            if (!Guid.TryParse(subscriptionId, out guid))
+                return this.BadRequest("Invalid Guid format");
+
+            this._subscriptionVmService.PowerOffSubscriptionMachine(guid);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult ResetMachine(string subscriptionId)
+        {
+            Guid guid;
+            if (!Guid.TryParse(subscriptionId, out guid))
+                return this.BadRequest("Invalid Guid format");
+
+            this._subscriptionVmService.ResetSubscriptionMachine(guid);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult UpdateMachineConfiguration(MachineConfigUpdateViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var serviceOptions = Mapper.Map<UpdateMachineConfigOptions>(model);
+            this._subscriptionVmService.UpdateSubscriptionMachineConfig(model.SubscriptionId.Value, serviceOptions);
+
+            return Ok();
+        }
     }
 }

@@ -24,5 +24,10 @@ namespace Crytex.Service.IService
         void AutoProlongateFixedSubscription(Guid subId);
         void PrepareSubscriptionForDeletion(Guid subId);
         void DeleteSubscription(Guid subId);
+        void StartSubscriptionMachine(Guid subsciptionId);
+        void StopSubscriptionMachine(Guid subsciptionId);
+        void PowerOffSubscriptionMachine(Guid subsciptionId);
+        void ResetSubscriptionMachine(Guid subsciptionId);
+        void UpdateSubscriptionMachineConfig(Guid subscriptionId, UpdateMachineConfigOptions options);
     }
 }

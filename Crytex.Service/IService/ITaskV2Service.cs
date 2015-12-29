@@ -19,7 +19,7 @@ namespace Crytex.Service.IService
         /// <summary>
         /// Создаёт новую задачу в системе и, если необходимо, связанные с ней сущности в базе данных
         /// </summary>
-        TaskV2 CreateTask<T>(TaskV2 createTask, T options) where T: BaseOptions;
+        TaskV2 CreateTask<T>(TaskV2 task, T options) where T: BaseOptions;
         void UpdateTask(TaskV2 updateTask);
         void RemoveTask(Guid id);
         IEnumerable<TaskV2> GetPendingTasks(TypeVirtualization virtualizationType);
