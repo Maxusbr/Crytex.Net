@@ -14,5 +14,7 @@ namespace Crytex.Web.Models.JsonModels
         public string UserName { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
         public bool AutoProlongation { get; set; }
-    }
+        public int OperatingSystemId { get; set; }
+        public UserVmViewModel UserVm{ get; set; }
+}
 }
