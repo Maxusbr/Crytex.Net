@@ -5,6 +5,7 @@ using Quartz;
 
 namespace Crytex.Background.Tasks
 {
+    [DisallowConcurrentExecution]
     public class EmailSendJob:IJob
     {
         public EmailSendJob(INotificationManager notificationManager)
