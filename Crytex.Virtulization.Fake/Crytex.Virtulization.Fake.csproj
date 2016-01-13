@@ -41,13 +41,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FakeProvider.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="FakeVMachine.cs" />
+    <Compile Include="FakeVmSummary.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\crytex.virtualization.base\Crytex.Virtualization\Crytex.Virtualization.Base.csproj">
       <Project>{0C16DD67-E3EB-4B88-AAEC-6784DCFDA318}</Project>
       <Name>Crytex.Virtualization.Base</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
