@@ -17,6 +17,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
             try
             {
+                this.VirtualizationProvider.ConnectToServer();
                 var vm = this.VirtualizationProvider.GetMachinesByName(vmName);
 
                 switch (options.TypeChangeStatus)
