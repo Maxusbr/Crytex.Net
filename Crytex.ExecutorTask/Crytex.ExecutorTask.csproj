@@ -79,6 +79,8 @@
     <Compile Include="TaskHandler\ITaskHandler.cs" />
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />
     <Compile Include="TaskHandler\TaskHandlerFactory.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\BaseNewTaskHandler.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\ChangeVmStateTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\BaseVmWareTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\CreateVmResult.cs" />
     <Compile Include="TaskHandler\VmWare\FakeVmWareControl.cs" />
@@ -95,6 +97,10 @@
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\crytex.virtualization.base\Crytex.Virtualization\Crytex.Virtualization.Base.csproj">
+      <Project>{0c16dd67-e3eb-4b88-aaec-6784dcfda318}</Project>
+      <Name>Crytex.Virtualization.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
       <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
       <Name>HyperVRemote</Name>
@@ -122,6 +128,10 @@
     <ProjectReference Include="..\Crytex.Service\Crytex.Service.csproj">
       <Project>{fc3571db-2d14-4280-8f07-31599f2a7d5b}</Project>
       <Name>Crytex.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Crytex.Virtulization.Fake\Crytex.Virtulization.Fake.csproj">
+      <Project>{223a78c7-4b5d-4b67-a135-61930b1d5645}</Project>
+      <Name>Crytex.Virtulization.Fake</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
