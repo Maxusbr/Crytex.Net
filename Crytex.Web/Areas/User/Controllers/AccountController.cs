@@ -11,6 +11,8 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Http.Routing;
 using System.Web.Routing;
+using Crytex.Service.Model;
+using Crytex.Service.Service;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -18,7 +20,17 @@ namespace Crytex.Web.Areas.User.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private NotificationManager _notificationManager { get; set; }
+        private OAuthService _oauthService;
+        private INotificationManager _notificationManager { get; set; }
+
+        public AccountController(ApplicationUserManager userManager, OAuthService oauthService, INotificationManager notificationManager, ApplicationSignInManager applicationSignInManager)
+        {
+            _userManager = userManager;
+            _oauthService = oauthService;
+            _signInManager = applicationSignInManager;
+            _notificationManager = notificationManager;
+        }
+
 
         [HttpPost]
         public IHttpActionResult Register(RegisterViewModel model)
@@ -140,6 +152,21 @@ namespace Crytex.Web.Areas.User.Controllers
             }
 
             return this.BadRequest(this.ModelState);
+        }
+
+        [HttpPost]
+        [Authorize]
+     
+        public IHttpActionResult RemoveRefreshToken(RemoveRefreshTokenParams model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _oauthService.RemoveRefreshToken(model);
+
+            return Ok("Refresh token was successfuly removed.");
         }
 
         private void SendConfirmationEmailForUser(ApplicationUser user)

@@ -126,7 +126,13 @@ namespace Crytex.Web.Auth
 
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
-            identity.AddClaim(new Claim(ClaimTypes.Role, "user"));
+            var roles = await _applicationUserManager.GetRolesAsync(user.Id);
+            foreach (var role in roles)
+            {
+               
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+         
             identity.AddClaim(new Claim("sub", context.UserName));
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
 
