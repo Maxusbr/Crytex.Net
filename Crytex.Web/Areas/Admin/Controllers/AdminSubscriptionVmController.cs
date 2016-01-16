@@ -105,7 +105,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <summary>
         /// Обновление подписки админом для пользователя
         /// </summary>
-        [Route("api/AdminSubscriptionVm/UpdateSubscription"), HttpPost()]
+        [HttpPost]
         public IHttpActionResult UpdateSubscription(SubscriptionUpdateOptions model)
         {
             if (!this.ModelState.IsValid)
@@ -133,7 +133,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <summary>
         /// Обновление статуса машины
         /// </summary>
-        [Route("api/AdminSubscriptionVm/UpdateMachineStatus"), HttpPost()]
+        [HttpPost]
         public IHttpActionResult UpdateMachineStatus([FromBody]UpdateMachineStatusOptions model)
         {
             Guid guid;
@@ -164,7 +164,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <summary>
         /// Обновление характеристик машины
         /// </summary>
-        [Route("api/AdminSubscriptionVm/UpdateMachineConfiguration"), HttpPost()]
+        [HttpPost]
         public IHttpActionResult UpdateMachineConfiguration(MachineConfigUpdateViewModel model)
         {
             if (!this.ModelState.IsValid)
