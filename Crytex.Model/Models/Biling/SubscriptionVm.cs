@@ -18,6 +18,10 @@ namespace Crytex.Model.Models.Biling
         public bool AutoProlongation { get; set; }
         public SubscriptionVmStatus Status { get; set; }
         public DateTime? LastUsageBillingTransactionDate { get; set; }
+        /// <summary>
+        /// Кол-во дней, на протяжении которых будут храниться ежедневные автоматические бэкапы
+        /// </summary>
+        public int DailyBackupStorePeriodDays { get; set; }
 
         [ForeignKey("TariffId")]
         public Tariff Tariff { get; set; }

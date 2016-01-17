@@ -7,6 +7,7 @@ using PagedList;
 using Crytex.Data.Infrastructure;
 using System.Linq.Expressions;
 using Crytex.Service.Extension;
+using System.Collections.Generic;
 
 namespace Crytex.Service.Service
 {
@@ -37,6 +38,13 @@ namespace Crytex.Service.Service
             }
 
             return backup;
+        }
+
+        public IEnumerable<VmBackup> GetByVmId(Guid id)
+        {
+            var backups = this._backupRepository.GetMany(x => x.VmId == id);
+
+            return backups;
         }
 
         public virtual IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null, Guid? vmId = null)

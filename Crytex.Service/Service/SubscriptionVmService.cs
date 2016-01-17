@@ -28,10 +28,12 @@ namespace Crytex.Service.Service
         private readonly IOperatingSystemsService _operatingSystemService;
         private readonly IUsageSubscriptionPaymentRepository _usageSubscriptionPaymentRepo;
         private readonly IFixedSubscriptionPaymentRepository _fixedSubscriptionPaymentRepo;
+        private readonly ISubscriptionBackupPaymentRepository _backupPaymentRepo;
 
         public SubscriptionVmService(IUnitOfWork unitOfWork, ISubscriptionVmRepository subscriptionVmRepository, ITaskV2Service taskService,
             IBilingService billingService, ITariffInfoService tariffInfoService, IOperatingSystemsService operatingSystemService,
-            IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo, IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepo)
+            IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo, IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepo,
+            ISubscriptionBackupPaymentRepository backupPaymentRepo)
         {
             this._unitOfWork = unitOfWork;
             this._subscriptionVmRepository = subscriptionVmRepository;
@@ -41,6 +43,7 @@ namespace Crytex.Service.Service
             this._operatingSystemService = operatingSystemService;
             this._usageSubscriptionPaymentRepo = usageSubscriptionPaymentRepo;
             this._fixedSubscriptionPaymentRepo = fixedSubscriptionPaymentRepo;
+            this._backupPaymentRepo = backupPaymentRepo;
         }
 
         public SubscriptionVm BuySubscription(SubscriptionBuyOptions options)
@@ -65,27 +68,30 @@ namespace Crytex.Service.Service
             // Calculate subscription price, add a billiing transaction and update user balance
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
-            decimal transactionCashAmount;
+            decimal transactionCashAmount = 0;
+            decimal backupTransactionCashAmount = 0;
+            var backupPaymentRequired = options.DailyBackupStorePeriodDays > 1;
             if (!options.BoughtByAdmin)
             {
                 var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
                 options.SDD, options.Ram, 0, tariff); // TODO: SDD параметр пока участвует только в билинге. параметр load10percent пока 0
                 transactionCashAmount = tariffMonthPrice * options.SubscriptionsMonthCount;
-            }
-            else
-            {
-                transactionCashAmount = 0;
+
+                if (backupPaymentRequired)
+                {
+                    backupTransactionCashAmount = this._tariffInfoService.CalculateBackupPrice(options.Hdd, options.SDD, options.DailyBackupStorePeriodDays - 1, tariff);
+                }
             }
             
-            var transaction = new BillingTransaction
+            var subsciptionVmTransaction = new BillingTransaction
             {
-                CashAmount = -transactionCashAmount,
+                CashAmount = -(transactionCashAmount + backupTransactionCashAmount),
                 TransactionType = BillingTransactionType.OneTimeDebiting,
                 SubscriptionVmMonthCount = options.SubscriptionsMonthCount,
                 UserId = options.UserId,
                 AdminUserId = options.AdminUserId
             };
-            var newTransaction = this._billingService.AddUserTransaction(transaction);
+            subsciptionVmTransaction = this._billingService.AddUserTransaction(subsciptionVmTransaction);
 
             // Create task and new vm
             var newSubscription = this.PrepareNewSubscription(options, tariff);
@@ -93,7 +99,7 @@ namespace Crytex.Service.Service
             // Add new sub payment
             var subscriptionPayment = new FixedSubscriptionPayment
             {
-                BillingTransactionId = newTransaction.Id,
+                BillingTransactionId = subsciptionVmTransaction.Id,
                 MonthCount = options.SubscriptionsMonthCount,
                 Date = DateTime.UtcNow,
                 DateStart = newSubscription.DateCreate,
@@ -108,8 +114,21 @@ namespace Crytex.Service.Service
             this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
             this._unitOfWork.Commit();
 
+            // Add new sub backup payment
+            var subscriptionBackupPayment = new SubscriptionVmBackupPayment
+            {
+                BillingTransactionId = subsciptionVmTransaction.Id,
+                Date = DateTime.UtcNow,
+                SubscriptionVmId = newSubscription.Id,
+                Amount = backupTransactionCashAmount,
+                TariffId = newSubscription.TariffId,
+                DaysPeriod = options.DailyBackupStorePeriodDays
+            };
+            this._backupPaymentRepo.Add(subscriptionBackupPayment);
+            this._unitOfWork.Commit();
+
             // Update SubscriptionVmId
-            this._billingService.UpdateTransactionSubscriptionId(newTransaction.Id, newSubscription.Id);
+            this._billingService.UpdateTransactionSubscriptionId(subsciptionVmTransaction.Id, newSubscription.Id);
 
             return newSubscription;
         }
@@ -195,7 +214,8 @@ namespace Crytex.Service.Service
                 SubscriptionType = options.SubscriptionType,
                 TariffId = tariff.Id,
                 Status = SubscriptionVmStatus.Active,
-                LastUsageBillingTransactionDate = DateTime.UtcNow.TrimToGraterHour()
+                LastUsageBillingTransactionDate = DateTime.UtcNow.TrimToGraterHour(),
+                DailyBackupStorePeriodDays = options.DailyBackupStorePeriodDays
             };
             this._subscriptionVmRepository.Add(newSubscription);
             this._unitOfWork.Commit();
@@ -213,6 +233,13 @@ namespace Crytex.Service.Service
             }
 
             return sub;
+        }
+
+        public IEnumerable<SubscriptionVm> GetAllByStatus(SubscriptionVmStatus status)
+        {
+            var subs = this._subscriptionVmRepository.GetMany(x => x.Status == status);
+
+            return subs;
         }
 
         public IPagedList<UsageSubscriptionPayment> GetPageUsageSubscriptionPayment(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null)

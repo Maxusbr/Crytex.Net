@@ -110,5 +110,12 @@ namespace Crytex.Service.Service
                                 load10Percent * tariff.Load10Percent;
             return totalPrice;
         }
+
+        public decimal CalculateBackupPrice(int hdd, int sdd, int days, Tariff tariff)
+        {
+            decimal price = ((hdd + sdd) / 1024) * days * tariff.BackupStoringGb;
+
+            return price;
+        }
     }
 }

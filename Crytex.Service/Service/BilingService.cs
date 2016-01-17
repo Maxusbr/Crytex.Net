@@ -92,6 +92,44 @@ namespace Crytex.Service.Service
             return newTransaction;
         }
 
+        public void RevertUserTransaction(Guid transactionId)
+        {
+            var transaction = this._billingTransactionRepo.Get(x => x.Id == transactionId, x => x.User);
+
+            bool saveFailed = false;
+            var tryCount = 3;
+            for (int i = 0; i < tryCount; i++)
+            {
+                try
+                {
+                    saveFailed = false;
+                    var userCash = transaction.User.Balance - transaction.CashAmount;
+
+                    if (userCash < 0)
+                    {
+                        throw new TransactionFailedException("Negative user balance is not allowed");
+                    }
+
+                    transaction.User.Balance = userCash;
+                    this._applicationUserRepository.Update(transaction.User);
+                    this._billingTransactionRepo.Delete(transaction);
+                    this._unitOfWork.Commit();
+
+                    break;
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    saveFailed = true;
+                    ex.Entries.Single().Reload();
+                }
+            }
+
+            if (saveFailed)
+            {
+                throw new DbUpdateApplicationException($"Cannot update user balance because of concurrent update requests. Transaction creating is aborted");
+            }
+        }
+
         public BillingTransaction UpdateUserBalance(UpdateUserBalance data)
         {
             var transactionType = (data.Amount > 0) ? BillingTransactionType.ReplenishmentFromAdmin : BillingTransactionType.WithdrawByAdmin;
@@ -175,5 +213,6 @@ namespace Crytex.Service.Service
 
             return user;
         }
+
     }
 }
