@@ -122,7 +122,8 @@ namespace Crytex.Service.Service
                 SubscriptionVmId = newSubscription.Id,
                 Amount = backupTransactionCashAmount,
                 TariffId = newSubscription.TariffId,
-                DaysPeriod = options.DailyBackupStorePeriodDays
+                DaysPeriod = options.DailyBackupStorePeriodDays,
+                Paid = true
             };
             this._backupPaymentRepo.Add(subscriptionBackupPayment);
             this._unitOfWork.Commit();
@@ -596,6 +597,8 @@ namespace Crytex.Service.Service
 
             // Calculate usage hour price
             decimal hourPrice;
+            decimal backupHourPrice = 
+                this._tariffInfoService.CalculateBackupPrice(subVm.HardDriveSize, 0, sub.DailyBackupStorePeriodDays, subTariff) / (30 * 24);
             if (subVm.Status == StatusVM.Enable)
             {
                 hourPrice = this._tariffInfoService.CalculateTotalPrice(subVm.CoreCount,
@@ -621,13 +624,13 @@ namespace Crytex.Service.Service
                 var hourTransaction = new BillingTransaction
                 {
                     TransactionType = BillingTransactionType.AutomaticDebiting,
-                    CashAmount = -hourPrice,
+                    CashAmount = -(hourPrice + backupHourPrice),
                     UserId = sub.UserId,
                     Description = "Hourly debiting for usage-type vm subscription",
                     SubscriptionVmId = sub.UserVm.Id
                 };
 
-                var newPayment = new UsageSubscriptionPayment
+                var newSubscriptionPayment = new UsageSubscriptionPayment
                 {
                     SubscriptionVmId = sub.Id,
                     TariffId = subTariff.Id,
@@ -637,24 +640,38 @@ namespace Crytex.Service.Service
                     CoreCount = subVm.CoreCount,
                     HardDriveSize = subVm.HardDriveSize
                 };
+                var newBackupPayment = new SubscriptionVmBackupPayment
+                {
+                    Amount = backupHourPrice,
+                    Date = currentTime,
+                    DaysPeriod = sub.DailyBackupStorePeriodDays,
+                    SubscriptionVmId = sub.Id,
+                    TariffId = subTariff.Id
+                };
 
                 try
                 {
                     var newTransaction = this._billingService.AddUserTransaction(hourTransaction);
 
-                    newPayment.BillingTransactionId = newTransaction.Id;
-                    newPayment.Paid = true;
+                    newSubscriptionPayment.BillingTransactionId = newTransaction.Id;
+                    newBackupPayment.BillingTransactionId = newTransaction.Id;
+                    newSubscriptionPayment.Paid = true;
+                    newBackupPayment.Paid = true;
                 }
                 catch (TransactionFailedException)
                 {
-                    newPayment.BillingTransactionId = null;
-                    newPayment.Paid = false;
+                    newSubscriptionPayment.BillingTransactionId = null;
+                    newSubscriptionPayment.Paid = false;
+                    newBackupPayment.BillingTransactionId = null;
+                    newBackupPayment.Paid = false;
                 }
 
                 sub.LastUsageBillingTransactionDate += TimeSpan.FromHours(1);
                 this._subscriptionVmRepository.Update(sub);
 
-                this._usageSubscriptionPaymentRepo.Add(newPayment);
+                this._usageSubscriptionPaymentRepo.Add(newSubscriptionPayment);
+                this._backupPaymentRepo.Add(newBackupPayment);
+
                 this._unitOfWork.Commit();
             }
         }
