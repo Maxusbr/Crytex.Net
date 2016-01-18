@@ -1,21 +1,16 @@
 ﻿using System;
 using Crytex.Virtualization.Base;
 using Crytex.Virtualization.Base.InfoAboutVM;
-using Crytex.Virtualization.Base.VMModify;
-using System.Collections.Generic;
 
-namespace Crytex.Virtulization.Fake
+namespace Crytex.Virtualization.Fake
 {
     public class FakeVMachine : IVMachine
     {
         private FakeVmSummary _summary;
 
-        public FakeVMachine(VMModifySpecification vmSpec)
+        public FakeVMachine()
         {
-            this._summary = new FakeVmSummary
-            {
-                BaseInformation = new BaseInfo(vmSpec.MachineName, "", "", "")
-            };
+
         }
 
         public BaseInfo BaseInformation
@@ -28,9 +23,35 @@ namespace Crytex.Virtulization.Fake
 
         public GuestOSState GuestOSState { get; private set; }
 
+        public long Memory
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public INetworkInformation Networks
         {
             get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int NumCPU
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
             {
                 throw new NotImplementedException();
             }
@@ -54,22 +75,42 @@ namespace Crytex.Virtulization.Fake
             }
         }
 
-        public ReturnedRezultes CloneMachine(string newMachineName)
-        {
-            throw new NotImplementedException();
-        }
-
         public ReturnedRezultes CloneMachine(string newMachineName, object specification)
         {
             throw new NotImplementedException();
         }
 
-        public ReturnedRezultes CloneMachine(string newPath, VMModifySpecification ModSpec)
+        public ReturnedRezultes CloneMachine(string newPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes CreateBackup(string backupName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes DeleteBackup(string backupName)
         {
             throw new NotImplementedException();
         }
 
         public ReturnedRezultes DeleteMachine()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes GetHardwareSpecification()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes Modify()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes Reboot()
         {
             throw new NotImplementedException();
         }

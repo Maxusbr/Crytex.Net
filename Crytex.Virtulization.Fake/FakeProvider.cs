@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Crytex.Virtualization.Base;
-using Crytex.Virtualization.Base.VMModify;
 
-namespace Crytex.Virtulization.Fake
+namespace Crytex.Virtualization.Fake
 {
     public class FakeProvider: IProviderVM
     {
@@ -19,11 +18,7 @@ namespace Crytex.Virtulization.Fake
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    var vmSpec = new VMModifySpecification
-                    {
-                        MachineName = $"AutomaticFakeMachine{i}"
-                    };
-                    _staticMachines.Add(new FakeVMachine(vmSpec));
+                    _staticMachines.Add(new FakeVMachine());
                 }
             }
         }
@@ -31,6 +26,19 @@ namespace Crytex.Virtulization.Fake
         private bool _isConntected = false;
 
         public ProviderVirtualization CurrentProvider { get; }
+
+        public object providerObj
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public FakeProvider(ProviderVirtualization virtualizaionType)
         {
@@ -70,15 +78,25 @@ namespace Crytex.Virtulization.Fake
             throw new NotImplementedException();
         }
 
-        public ReturnedRezultes CreateMachine(VMModifySpecification spec)
+        public ReturnedRezultes CreateMachine()
         {
             this.ThrowExceptionIfNotConnnected();
 
-            var newFakeMachine = new FakeVMachine(spec);
+            var newFakeMachine = new FakeVMachine();
 
             FakeProvider._staticMachines.Add(newFakeMachine);
 
             return new ReturnedRezultes();
+        }
+
+        public IVMachine EmptyMachine(string machineName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes CreateMachine(IVMachine EmptyMachine)
+        {
+            throw new NotImplementedException();
         }
 
         #region Private methods
@@ -89,6 +107,7 @@ namespace Crytex.Virtulization.Fake
                 throw new ApplicationException("You must first connect to server before using provider");
             }
         }
+
         #endregion
     }
 }

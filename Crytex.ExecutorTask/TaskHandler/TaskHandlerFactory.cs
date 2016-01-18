@@ -2,7 +2,7 @@
 using Crytex.ExecutorTask.TaskHandler.VmWare;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using Crytex.Virtulization.Fake;
+using Crytex.Virtualization.Fake;
 using HyperVRemote;
 using HyperVRemote.Source.Implementation;
 using System;
@@ -107,12 +107,18 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetBackupVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            throw new NotImplementedException();
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var handler = new BackupVmTaskHandler(task, provider, vCenter.Id);
+
+            return handler;
         }
 
         private BaseNewTaskHandler GetBackupVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            throw new NotImplementedException();
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var handler = new BackupVmTaskHandler(task, provider, host.Id);
+
+            return handler;
         }
 
         private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)
