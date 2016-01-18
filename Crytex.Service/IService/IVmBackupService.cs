@@ -9,7 +9,8 @@ namespace Crytex.Service.IService
     {
         VmBackup GetById(Guid guid);
         IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null, Guid? vmId = null);
-        void Create(VmBackup newBackupDbEntity);
+        VmBackup Create(VmBackup newBackupDbEntity);
         IEnumerable<VmBackup> GetByVmId(Guid id);
+        void DeleteBackup(Guid vmBackupId);
     }
 }

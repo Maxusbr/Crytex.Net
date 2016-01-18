@@ -22,9 +22,22 @@ namespace Crytex.Service.Service
             this._unitOfWork = unitOfWork;
         }
 
-        public void Create(VmBackup newBackupDbEntity)
+        public VmBackup Create(VmBackup newBackupDbEntity)
         {
+            newBackupDbEntity.DateCreated = DateTime.UtcNow;
+            newBackupDbEntity.Status = VmBackupStatus.Creting;
+
             this._backupRepository.Add(newBackupDbEntity);
+            this._unitOfWork.Commit();
+
+            return newBackupDbEntity;
+        }
+
+        public void DeleteBackup(Guid vmBackupId)
+        {
+            var backup = this._backupRepository.GetById(vmBackupId);
+            backup.Status = VmBackupStatus.Deleted;
+            this._backupRepository.Update(backup);
             this._unitOfWork.Commit();
         }
 
