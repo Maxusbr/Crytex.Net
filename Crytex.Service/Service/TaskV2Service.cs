@@ -100,7 +100,7 @@ namespace Crytex.Service.Service
             if(task.TypeTask == TypeTask.DeleteBackup)
             {
                 var deleteBackuptOptions = task.GetOptions<BackupOptions>();
-                this._vmBackupService.DeleteBackup(deleteBackuptOptions.VmBackupId);
+                this._vmBackupService.MarkBackupAsDeleted(deleteBackuptOptions.VmBackupId);
             }
         }
 

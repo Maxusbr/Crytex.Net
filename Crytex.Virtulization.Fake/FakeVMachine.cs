@@ -87,12 +87,12 @@ namespace Crytex.Virtualization.Fake
 
         public ReturnedRezultes CreateBackup(string backupName)
         {
-            throw new NotImplementedException();
+            return new ReturnedRezultes();
         }
 
         public ReturnedRezultes DeleteBackup(string backupName)
         {
-            throw new NotImplementedException();
+            return new ReturnedRezultes();
         }
 
         public ReturnedRezultes DeleteMachine()

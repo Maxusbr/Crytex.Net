@@ -28,7 +28,8 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
                 {TypeTask.ChangeStatus, this.GetChangeVmStatusTaskHandler},
                 {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler},
-                {TypeTask.Backup, this.GetBackupVmTaskHandler }
+                {TypeTask.Backup, this.GetBackupVmTaskHandler },
+                {TypeTask.DeleteBackup, this.GetDeleteBackupTaskHandler }
             };
 
             this._vmWareTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, VmWareVCenter, ITaskHandler>>
@@ -37,10 +38,10 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.UpdateVm, this.GetUpdateVmTaskHandler},
                 {TypeTask.ChangeStatus, this.GetChangeVmStatusTaskHandler},
                 {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler},
-                {TypeTask.Backup, this.GetBackupVmTaskHandler }
+                {TypeTask.Backup, this.GetBackupVmTaskHandler },
+                {TypeTask.DeleteBackup, this.GetDeleteBackupTaskHandler }
             };
         }
-
 
         public ITaskHandler GetHyperVHandler(TaskV2 task, HyperVHost hyperVHost)
         {
@@ -117,6 +118,23 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
             var handler = new BackupVmTaskHandler(task, provider, host.Id);
+
+            return handler;
+        }
+
+
+        private ITaskHandler GetDeleteBackupTaskHandler(TaskV2 task, HyperVHost host)
+        {
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var handler = new DeleteVmBackupTaskHandler(task, provider, host.Id);
+
+            return handler;
+        }
+
+        private ITaskHandler GetDeleteBackupTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        {
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var handler = new DeleteVmBackupTaskHandler(task, provider, vCenter.Id);
 
             return handler;
         }

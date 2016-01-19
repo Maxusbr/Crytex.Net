@@ -33,11 +33,18 @@ namespace Crytex.Service.Service
             return newBackupDbEntity;
         }
 
-        public void DeleteBackup(Guid vmBackupId)
+        public void MarkBackupAsDeleted(Guid vmBackupId)
         {
             var backup = this._backupRepository.GetById(vmBackupId);
             backup.Status = VmBackupStatus.Deleted;
             this._backupRepository.Update(backup);
+            this._unitOfWork.Commit();
+        }
+
+        public void DeleteBackupDbEntity(Guid backupGuid)
+        {
+            var backup = this._backupRepository.GetById(backupGuid);
+            this._backupRepository.Delete(backup);
             this._unitOfWork.Commit();
         }
 
@@ -79,6 +86,15 @@ namespace Crytex.Service.Service
             var page = this.GetPage(pageNumber, pageSize, where);
 
             return page;
+        }
+
+        public void UpdateBackupStatus(Guid backupGuid, VmBackupStatus status)
+        {
+            var backup = this._backupRepository.GetById(backupGuid);
+            backup.Status = status;
+
+            this._backupRepository.Update(backup);
+            this._unitOfWork.Commit();
         }
 
         protected IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, Expression<Func<VmBackup, bool>> where)

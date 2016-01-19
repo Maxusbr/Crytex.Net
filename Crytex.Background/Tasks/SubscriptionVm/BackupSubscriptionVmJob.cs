@@ -44,7 +44,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                     };
                     var backupTaskOptions = new BackupOptions
                     {
-                        BackupName = Guid.NewGuid().ToString(),
+                        BackupName = "Automatic backup",
                         VmId = sub.UserVm.Id
                     };
 
@@ -52,7 +52,8 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                 }
 
                 // Delete outdated backups
-                var outdatedBackups = subVmBackups.Where(b => DateTime.UtcNow.Day - b.DateCreated.Day > sub.DailyBackupStorePeriodDays);
+                var outdatedBackups = subVmBackups.Where(b => DateTime.UtcNow.Day - b.DateCreated.Day > sub.DailyBackupStorePeriodDays
+                    && b.Status == VmBackupStatus.Active);
                 foreach(var backup in outdatedBackups)
                 {
                     // delete backup

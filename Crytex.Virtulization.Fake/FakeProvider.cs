@@ -68,7 +68,8 @@ namespace Crytex.Virtualization.Fake
         {
             this.ThrowExceptionIfNotConnnected();
 
-            return FakeProvider._staticMachines.FirstOrDefault(m => m.BaseInformation.Name == machineName);
+            //return FakeProvider._staticMachines.FirstOrDefault(m => m.BaseInformation.Name == machineName);
+            return new FakeVMachine();
         }
 
         public ReturnedRezultes GetNetworkSwithes()
@@ -102,7 +103,7 @@ namespace Crytex.Virtualization.Fake
         #region Private methods
         public void ThrowExceptionIfNotConnnected()
         {
-            if (this._isConntected)
+            if (!this._isConntected)
             {
                 throw new ApplicationException("You must first connect to server before using provider");
             }

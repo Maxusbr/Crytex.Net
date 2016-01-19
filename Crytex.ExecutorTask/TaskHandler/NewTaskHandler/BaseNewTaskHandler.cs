@@ -21,6 +21,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             this.TaskEntity = task;
             this.VirtualizationServerEnitityId = virtualizationServerEntityId;
+            this.VirtualizationProvider = virtualizationProvider;
         }
 
         public TaskExecutionResult Execute()
