@@ -70,6 +70,7 @@ namespace Crytex.Service
             container.RegisterType<IFixedSubscriptionPaymentRepository, FixedSubscriptionPaymentRepository>();
             container.RegisterType<IFixedSubscriptionPaymentService, FixedSubscriptionPaymentService>();
             container.RegisterType<IStatisticRepository, StatisticRepository>();
+            container.RegisterType<ISubscriptionBackupPaymentRepository, SubscriptionBackupPaymentRepository>();
 
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");

@@ -11,6 +11,7 @@ namespace Crytex.Service.IService
         BillingTransaction GetTransactionById(Guid id);
         BillingTransaction UpdateUserBalance(UpdateUserBalance data);
         BillingTransaction AddUserTransaction(BillingTransaction transaction);
+        void RevertUserTransaction(Guid transactionId);
         void UpdateTransactionSubscriptionId(Guid transactionId, Guid subscriptionId);
     }
 }

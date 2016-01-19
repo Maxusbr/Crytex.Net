@@ -10,13 +10,11 @@ namespace Crytex.Background.Tasks.SubscriptionVm
     [DisallowConcurrentExecution]
     public class ActiveStaticSubscriptionVmJob : IJob
     {
-        private readonly IBilingService _billingService;
         private readonly ISubscriptionVmService _subscriptionService;
 
-        public ActiveStaticSubscriptionVmJob(ISubscriptionVmService subscriptionService, IBilingService billingService)
+        public ActiveStaticSubscriptionVmJob(ISubscriptionVmService subscriptionService)
         {
             this._subscriptionService = subscriptionService;
-            this._billingService = billingService;
         }
 
         public void Execute(IJobExecutionContext context)

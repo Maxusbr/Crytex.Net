@@ -11,6 +11,7 @@ namespace Crytex.Model.Models
         public decimal HDD1 { get; set; }
         public decimal SSD1 { get; set; }
         public decimal Load10Percent { get; set; }
+        public decimal BackupStoringGb { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime? UpdateDate { get; set; }        
     }

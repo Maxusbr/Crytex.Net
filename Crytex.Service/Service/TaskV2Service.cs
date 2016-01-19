@@ -18,13 +18,16 @@ namespace Crytex.Service.Service
         private ITaskV2Repository _taskV2Repo;
         private IUnitOfWork _unitOfWork;
         private readonly IUserVmRepository _userVmRepository;
+        private readonly IVmBackupService _vmBackupService;
 
-        public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmRepository userVmRepo, IUnitOfWork unitOfWork)
+        public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmRepository userVmRepo, IUnitOfWork unitOfWork,
+            IVmBackupService vmBackupService)
         {
             this._taskV2Repo = taskV2Repo;
             this._userVmRepository = userVmRepo;
             this._unitOfWork = unitOfWork;
             this._userVmRepository = userVmRepo;
+            this._vmBackupService = vmBackupService;
         }
 
         public virtual TaskV2 GetTaskById(Guid id)
@@ -53,6 +56,16 @@ namespace Crytex.Service.Service
             task.CreatedAt = DateTime.UtcNow;
             task.StatusTask = StatusTask.Pending;
 
+            this.CreateOrRemoveTaskRelatedDbEntities(task);
+
+            this._taskV2Repo.Add(task);
+            this._unitOfWork.Commit();
+
+            return task;
+        }
+
+        private void CreateOrRemoveTaskRelatedDbEntities(TaskV2 task)
+        {
             if (task.TypeTask == TypeTask.CreateVm)
             {
                 var createOptions = task.GetOptions<CreateVmOptions>();
@@ -72,11 +85,23 @@ namespace Crytex.Service.Service
                 task.SaveOptions(createOptions);
                 this._userVmRepository.Add(newVm);
             }
-
-            this._taskV2Repo.Add(task);
-            this._unitOfWork.Commit();
-
-            return task;
+            if(task.TypeTask == TypeTask.Backup)
+            {
+                var backupOptions = task.GetOptions<BackupOptions>();
+                var newBackup = new VmBackup
+                {
+                    Name = backupOptions.BackupName,
+                    VmId = backupOptions.VmId
+                };
+                var vmBackup = this._vmBackupService.Create(newBackup);
+                backupOptions.VmBackupId = vmBackup.Id;
+                task.SaveOptions(backupOptions);
+            }
+            if(task.TypeTask == TypeTask.DeleteBackup)
+            {
+                var deleteBackuptOptions = task.GetOptions<BackupOptions>();
+                this._vmBackupService.DeleteBackup(deleteBackuptOptions.VmBackupId);
+            }
         }
 
         public IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TaskV2SearchParams searchParams = null)
