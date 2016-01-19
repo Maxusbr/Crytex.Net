@@ -38,8 +38,10 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<AdminBillingSearchParamsViewModel, BillingSearchParams>();
             Mapper.CreateMap<DiscountViewModel, Discount>();
             Mapper.CreateMap<GameServerViewModel, GameServer>();
-            Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>();
-            Mapper.CreateMap<SubscriptionBuyOptionsUserViewModel, SubscriptionBuyOptions>();
+            Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>()
+                .ForMember(dest => dest.DailyBackupStorePeriodDays, opt => opt.MapFrom(source => source.DailyBackupStorePeriodDays == null ? 1 : source.DailyBackupStorePeriodDays.Value));
+            Mapper.CreateMap<SubscriptionBuyOptionsUserViewModel, SubscriptionBuyOptions>()
+                .ForMember(dest => dest.DailyBackupStorePeriodDays, opt => opt.MapFrom(source => source.DailyBackupStorePeriodDays == null ? 1 : source.DailyBackupStorePeriodDays.Value));
             Mapper.CreateMap<SubscriptionProlongateOptionsViewModel, SubscriptionProlongateOptions>();
             Mapper.CreateMap<MachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
         }
