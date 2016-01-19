@@ -11,6 +11,8 @@ namespace Crytex.Service.IService
         IPagedList<VmBackup> GetPage(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null, Guid? vmId = null);
         VmBackup Create(VmBackup newBackupDbEntity);
         IEnumerable<VmBackup> GetByVmId(Guid id);
-        void DeleteBackup(Guid vmBackupId);
+        void MarkBackupAsDeleted(Guid vmBackupId);
+        void UpdateBackupStatus(Guid backupGuid, VmBackupStatus status);
+        void DeleteBackupDbEntity(Guid backupGuid);
     }
 }

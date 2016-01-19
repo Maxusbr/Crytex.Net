@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Crytex.Virtualization.Base;
 using Crytex.Virtualization.Base.InfoAboutVM;
 
-namespace Crytex.Virtulization.Fake
+namespace Crytex.Virtualization.Fake
 {
     public class FakeVmSummary : ISummary
     {
@@ -46,7 +46,33 @@ namespace Crytex.Virtulization.Fake
             }
         }
 
+        public long Memory
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public List<NetworkInfo> Networks
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public int NumCPU
         {
             get
             {

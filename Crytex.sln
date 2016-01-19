@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Web", "Crytex.Web\Crytex.Web.csproj", "{18B19F4A-6FEE-4C6D-A819-8308049853EF}"
 EndProject
@@ -37,7 +37,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HyperVRemote", "..\hyper-v-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VmWareRemote", "..\vmware-virtualization\VmWareRemote\VmWareRemote\VmWareRemote.csproj", "{F2A280DF-098C-474A-9476-253996729571}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Virtulization.Fake", "Crytex.Virtulization.Fake\Crytex.Virtulization.Fake.csproj", "{223A78C7-4B5D-4B67-A135-61930B1D5645}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Virtualization.Fake", "Crytex.Virtulization.Fake\Crytex.Virtualization.Fake.csproj", "{223A78C7-4B5D-4B67-A135-61930B1D5645}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Virtualization.Base", "..\crytex.virtualization.base\Crytex.Virtualization\Crytex.Virtualization.Base.csproj", "{0C16DD67-E3EB-4B88-AAEC-6784DCFDA318}"
 EndProject

@@ -75,6 +75,8 @@
     <Compile Include="TaskHandler\HyperV\HyperVUpdateVmTaskHandler.cs" />
     <Compile Include="TaskHandler\HyperV\IHyperVControl.cs" />
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\BackupVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\DeleteVmBackupTaskHandler.cs" />
     <Compile Include="TaskHandler\TaskHandlerManager.cs" />
     <Compile Include="TaskHandler\ITaskHandler.cs" />
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />
@@ -129,9 +131,9 @@
       <Project>{fc3571db-2d14-4280-8f07-31599f2a7d5b}</Project>
       <Name>Crytex.Service</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Crytex.Virtulization.Fake\Crytex.Virtulization.Fake.csproj">
+    <ProjectReference Include="..\Crytex.Virtulization.Fake\Crytex.Virtualization.Fake.csproj">
       <Project>{223a78c7-4b5d-4b67-a135-61930b1d5645}</Project>
-      <Name>Crytex.Virtulization.Fake</Name>
+      <Name>Crytex.Virtualization.Fake</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
