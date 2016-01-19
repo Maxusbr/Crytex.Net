@@ -270,6 +270,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminEmailTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFileController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFixedSubscriptionPaymentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUsageSubscriptionPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestCommentController.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
+    <Compile Include="Areas\User\Controllers\NewsController.cs" />
     <Compile Include="Areas\User\Controllers\UsageSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\GameServerController.cs" />
     <Compile Include="Areas\User\Controllers\LoginLogEntryController.cs" />
@@ -344,6 +346,7 @@
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\MachineConfigUpdateViewModel.cs" />
+    <Compile Include="Models\JsonModels\NewsViewModel.cs" />
     <Compile Include="Models\JsonModels\PhoneCallRequestViewModels.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
