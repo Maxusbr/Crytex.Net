@@ -190,15 +190,15 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        [Route("api/AdminUser/UpdateBalance"), HttpPost()]
+      
         public IHttpActionResult UpdateBalance([FromBody]UpdateUserBalance data)
         {
             if (data.Amount == 0)
                 return BadRequest("amount can't be 0");
 
-            var billingTransaction = _billingService.UpdateUserBalance(data);
+            _billingService.UpdateUserBalance(data);
 
-            return Ok(billingTransaction);
+            return Ok();
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace Crytex.Web.Areas.Admin
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        [Route("api/AdminUser/UpdateState"), HttpPost()]
+       
         public IHttpActionResult UpdateState([FromBody] UpdateUserState data)
         {
             _applicationUserService.UpdateStateUser(data);

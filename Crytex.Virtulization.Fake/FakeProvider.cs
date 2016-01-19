@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Crytex.Virtualization.Base;
 using Crytex.Virtualization.Base.VMModify;
 
@@ -10,35 +8,87 @@ namespace Crytex.Virtulization.Fake
 {
     public class FakeProvider: IProviderVM
     {
+        private static List<FakeVMachine> _staticMachines;
+        private readonly static bool _createFakeEntries;
+        static FakeProvider()
+        {
+            var createFakeMachines = 
+            _staticMachines = new List<FakeVMachine>();
+
+            if (FakeProvider._createFakeEntries)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    var vmSpec = new VMModifySpecification
+                    {
+                        MachineName = $"AutomaticFakeMachine{i}"
+                    };
+                    _staticMachines.Add(new FakeVMachine(vmSpec));
+                }
+            }
+        }
+
+        private bool _isConntected = false;
+
         public ProviderVirtualization CurrentProvider { get; }
+
+        public FakeProvider(ProviderVirtualization virtualizaionType)
+        {
+            this.CurrentProvider = virtualizaionType;
+        }
+
         public ReturnedRezultes ConnectToServer()
         {
-            throw new NotImplementedException();
+            this._isConntected = true;
+            var results = new ReturnedRezultes(false, null, 0);
+            return results;
         }
 
         public void Disconnect()
         {
-            throw new NotImplementedException();
+            this._isConntected = false;
         }
 
         public List<IVMachine> GetAllMachines()
         {
-            throw new NotImplementedException();
+            this.ThrowExceptionIfNotConnnected();
+
+            return FakeProvider._staticMachines.ConvertAll<IVMachine>(x => (IVMachine)x);
         }
 
         public IVMachine GetMachinesByName(string machineName)
         {
-            throw new NotImplementedException();
+            this.ThrowExceptionIfNotConnnected();
+
+            return FakeProvider._staticMachines.FirstOrDefault(m => m.BaseInformation.Name == machineName);
         }
 
         public ReturnedRezultes GetNetworkSwithes()
         {
+            this.ThrowExceptionIfNotConnnected();
+
             throw new NotImplementedException();
         }
 
         public ReturnedRezultes CreateMachine(VMModifySpecification spec)
         {
-            throw new NotImplementedException();
+            this.ThrowExceptionIfNotConnnected();
+
+            var newFakeMachine = new FakeVMachine(spec);
+
+            FakeProvider._staticMachines.Add(newFakeMachine);
+
+            return new ReturnedRezultes();
         }
+
+        #region Private methods
+        public void ThrowExceptionIfNotConnnected()
+        {
+            if (this._isConntected)
+            {
+                throw new ApplicationException("You must first connect to server before using provider");
+            }
+        }
+        #endregion
     }
 }

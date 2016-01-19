@@ -1,7 +1,14 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
 using Crytex.Model.Models;
 
-public class UpdateMachineStatusOptions
+namespace Crytex.Web.Models.JsonModels
 {
-    public TypeChangeStatus Status { get; set; }
-    public string SubscriptionId { get; set; }
+    public class UpdateMachineStatusOptions
+    {
+        public string SubscriptionId { get; set; }
+        public TypeChangeStatus Status { get; set; }
+    }
 }
