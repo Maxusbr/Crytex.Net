@@ -12,6 +12,8 @@ namespace Crytex.Model.Models
         public int SlotCount { get; set; }
         public int GameServerConfigurationId { get; set; }
         public string UserId { get; set; }
+        public DateTime CreateDate { get; set; }
+        public DateTime DateExpire { get; set; }
 
         [ForeignKey("VmId")]
         public UserVm Vm { get; set; }

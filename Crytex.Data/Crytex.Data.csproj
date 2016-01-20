@@ -64,6 +64,7 @@
     <Compile Include="IRepository\INetTrafficCounterRepository.cs" />
     <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
     <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
+    <Compile Include="IRepository\IPaymentGameServerRepository.cs" />
     <Compile Include="IRepository\IPhoneCallRequestRepository.cs" />
     <Compile Include="IRepository\ISubscriptionBackupPaymentRepository.cs" />
     <Compile Include="IRepository\ITriggerRepository.cs" />
@@ -104,6 +105,7 @@
     <Compile Include="Repository\OAuthClientApplicationRepository.cs" />
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
+    <Compile Include="Repository\PaymentGameServerRepository.cs" />
     <Compile Include="Repository\PhoneCallRequestRepository.cs" />
     <Compile Include="Repository\StatisticRepository.cs" />
     <Compile Include="Repository\SubscriptionBackupPaymentRepository.cs" />

@@ -6,7 +6,9 @@ using Crytex.Data.Infrastructure;
 using Crytex.Model.Exceptions;
 using PagedList;
 using System.Linq.Expressions;
+using Crytex.Model.Models.Biling;
 using Crytex.Service.Extension;
+using Crytex.Service.Model;
 
 namespace Crytex.Service.Service
 {
@@ -15,15 +17,20 @@ namespace Crytex.Service.Service
         private readonly IGameServerConfigurationRepository _gameServerConfRepository;
         private readonly IGameServerRepository _gameServerRepository;
         private readonly ITaskV2Service _taskService;
+        private readonly IBilingService _billingService;
+        private readonly IPaymentGameServerRepository _paymentGameServerRepository;
         private readonly IUnitOfWork _unitOfWork;
 
         public GameServerService(IGameServerRepository gameServerRepository, ITaskV2Service taskService,
-            IGameServerConfigurationRepository gameServerConfRepository, IUnitOfWork unitOfWork)
+            IGameServerConfigurationRepository gameServerConfRepository, IBilingService billingService,
+            IPaymentGameServerRepository paymentGameServerRepository, IUnitOfWork unitOfWork)
         {
             this._gameServerRepository = gameServerRepository;
             this._taskService = taskService;
             this._gameServerConfRepository = gameServerConfRepository;
             this._unitOfWork = unitOfWork;
+            _paymentGameServerRepository = paymentGameServerRepository;
+            _billingService = billingService;
         }
 
         public GameServer CreateServer(GameServer server)
@@ -60,8 +67,8 @@ namespace Crytex.Service.Service
         public virtual GameServer GetById(Guid guid)
         {
             var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.Vm);
-            
-            if(server == null)
+
+            if (server == null)
             {
                 throw new InvalidIdentifierException($"GameServer with id={guid} doesn't exist");
             }
@@ -79,9 +86,71 @@ namespace Crytex.Service.Service
                 where = where.And(x => x.UserId == userId);
             }
 
-            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.User, x=>x.Vm);
+            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.User, x => x.Vm);
 
             return pagedList;
+        }
+
+        public GameServer BuyGameServer(GameServer server, BuyGameServerOption options)
+        {
+            // Create new GameServer
+            server.CreateDate = DateTime.UtcNow;
+            server.DateExpire = server.CreateDate.AddMonths(options.ExpireMonthCount);
+
+            server = CreateServer(server);
+            decimal amount = 0;
+            switch (options.PaymentType)
+            {
+                case ServerPaymentType.Slot:
+                    amount = this.BuySlotServer(server, options);
+                    break;
+                case ServerPaymentType.Configuration:
+                    amount = this.BuyConfigurationServer(server, options);
+                    break;
+            }
+
+            var gameServerVmTransaction = new BillingTransaction
+            {
+                CashAmount = -amount,
+                TransactionType = BillingTransactionType.OneTimeDebiting,
+                SubscriptionVmMonthCount = options.ExpireMonthCount,
+                UserId = options.UserId
+            };
+            gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
+
+            var gameServerPayment = new PaymentGameServer
+            {
+                BillingTransactionId = gameServerVmTransaction.Id,
+                Date = server.CreateDate,
+                DateEnd = server.DateExpire,
+                VmId = server.Id,
+                CoreCount = options.Cpu,
+                RamCount = options.Ram,
+                CashAmount = amount,
+                UserId = server.UserId,
+                SlotCount = options.SlotCount,
+                PaymentType = options.PaymentType
+            };
+            this._paymentGameServerRepository.Add(gameServerPayment);
+            this._unitOfWork.Commit();
+
+            return server;
+        }
+
+        private decimal BuySlotServer(GameServer server, BuyGameServerOption options)
+        {
+            var themplate = server.GameServerConfiguration;
+            var total = themplate.Slot * options.SlotCount;
+
+            return total;
+        }
+
+        private decimal BuyConfigurationServer(GameServer server, BuyGameServerOption options)
+        {
+            var themplate = server.GameServerConfiguration;
+            var total = themplate.Processor1 * options.Cpu + themplate.RAM512 * options.Ram;
+
+            return total;
         }
     }
 }

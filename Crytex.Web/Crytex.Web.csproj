@@ -342,6 +342,7 @@
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
+    <Compile Include="Models\JsonModels\PaymentGameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\MachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\PhoneCallRequestViewModels.cs" />
