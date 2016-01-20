@@ -105,6 +105,9 @@ namespace Crytex.Web.Areas.User
                 case TypeTask.Backup:
                     taskOptionsValid = IsValidOptions<BackupOptions>(task.Options);
                     break;
+                case TypeTask.CreateSnapshot:
+                    taskOptionsValid = IsValidOptions<CreateSnapshotOptions>(task.Options);
+                    break;
                 default:
                     throw new ApplicationException(string.Format("Unknown task type: {0}", task.TypeTask.ToString()));
             }

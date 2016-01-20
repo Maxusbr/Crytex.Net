@@ -130,5 +130,10 @@ namespace Crytex.Virtualization.Fake
 
             return new ReturnedRezultes();
         }
+
+        public ReturnedRezultes CreateSnapshot(string snapshotServerName)
+        {
+            return new ReturnedRezultes();
+        }
     }
 }

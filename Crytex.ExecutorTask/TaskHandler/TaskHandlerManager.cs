@@ -22,14 +22,12 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IHyperVHostService _vmHyperVHostCenterService;
         private IVmBackupService _vmBackupService;
         private ITriggerService _triggerService;
-        
-        
+        private readonly ISnapshotVmService _snapshotVmService;
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
             IOperatingSystemsService operatingSystemService, IHyperVHostService vmHyperVHostCenterService,
-            IVmBackupService vmBackupService,
-            ITriggerService triggerService)
+            IVmBackupService vmBackupService, ITriggerService triggerService, ISnapshotVmService snapshotVmService)
         {
             this._handlerFactory = new TaskHandlerFactory(operatingSystemService);
             this._taskService = taskService;
@@ -39,6 +37,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._vmHyperVHostCenterService = vmHyperVHostCenterService;
             this._vmBackupService = vmBackupService;
             this._triggerService = triggerService;
+            this._snapshotVmService = snapshotVmService;
         }
 
         public IEnumerable<ITaskHandler> GetTaskHandlers(TypeVirtualization virtualizationType)
@@ -177,7 +176,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
                     this._vmBackupService.UpdateBackupStatus(backupExecResult.BackupGuid, VmBackupStatus.Active);
                 }
-                else if(taskEntity.TypeTask == TypeTask.DeleteBackup)
+                else if (taskEntity.TypeTask == TypeTask.DeleteBackup)
                 {
                     var backupExecResult = (BackupTaskExecutionResult)execResult;
 
@@ -187,6 +186,11 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {
                     var options = taskEntity.GetOptions<RemoveVmOptions>();
                     this._userVmService.MarkAsDeleted(options.VmId);
+                }
+                else if (taskEntity.TypeTask == TypeTask.CreateSnapshot)
+                {
+                    var createSnapshotResult = (CreateSnapshotExecutionResult)execResult;
+                    this._snapshotVmService.ChangeSnapshotStatus(createSnapshotResult.SnapshotGuid, SnapshotStatus.Active);
                 }
             }
             else

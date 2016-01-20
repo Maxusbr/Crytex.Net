@@ -19,6 +19,32 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
+        public void ChangeSnapshotStatus(Guid snapshotGuid, SnapshotStatus newStatus)
+        {
+            var snapshot = this._snapshotVmRepository.GetById(snapshotGuid);
+
+            if(snapshot.Status == SnapshotStatus.Creating && newStatus == SnapshotStatus.Active)
+            {
+                snapshot.Date = DateTime.UtcNow;
+            }
+
+            snapshot.Status = newStatus;
+
+            this._snapshotVmRepository.Update(snapshot);
+            this._unitOfWork.Commit();
+        }
+
+        public SnapshotVm Create(SnapshotVm newSnapShot)
+        {
+            newSnapShot.Date = DateTime.UtcNow;
+            newSnapShot.Status = SnapshotStatus.Creating;
+
+            this._snapshotVmRepository.Add(newSnapShot);
+            this._unitOfWork.Commit();
+
+            return newSnapShot;
+        }
+
         public IPagedList<SnapshotVm> GetAllByVmId(Guid VmId, int pageNumber, int pageSize)
         {
             var page = new PageInfo(pageNumber, pageSize);

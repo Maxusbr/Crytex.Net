@@ -58,7 +58,8 @@ namespace Crytex.Model.Models
         ChangeStatus = 2,
         RemoveVm = 3,
         Backup = 4,
-        DeleteBackup = 5
+        DeleteBackup = 5,
+        CreateSnapshot = 6
     }
 
     [Serializable]
@@ -109,6 +110,14 @@ namespace Crytex.Model.Models
         public string BackupName { get; set; }
         public Guid VmId { get; set; }
         public Guid VmBackupId { get; set; }
+    }
+
+    [Serializable]
+    public class CreateSnapshotOptions : BaseOptions
+    {
+        public Guid SnapshotId { get; set; }
+        public Guid VmId { get; set; }
+        public string Name { get; set; }
     }
 
     [Serializable]

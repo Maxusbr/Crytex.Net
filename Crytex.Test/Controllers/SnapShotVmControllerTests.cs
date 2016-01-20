@@ -91,9 +91,9 @@ namespace Crytex.Test.Controllers
             Guid VmID = Guid.NewGuid();
             var snapShotVmRequests = new List<SnapshotVm>()
             {
-                new SnapshotVm() {Id = 1, VmId = VmID},
-                new SnapshotVm() {Id = 2, VmId = VmID},
-                new SnapshotVm() {Id = 3, VmId = VmID},
+                new SnapshotVm() {Id = Guid.NewGuid(), VmId = VmID},
+                new SnapshotVm() {Id = Guid.NewGuid(), VmId = VmID},
+                new SnapshotVm() {Id = Guid.NewGuid(), VmId = VmID},
             };
 
             var VM = new UserVm

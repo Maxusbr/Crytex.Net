@@ -19,15 +19,17 @@ namespace Crytex.Service.Service
         private IUnitOfWork _unitOfWork;
         private readonly IUserVmRepository _userVmRepository;
         private readonly IVmBackupService _vmBackupService;
+        private readonly ISnapshotVmService _snapshotService;
 
         public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmRepository userVmRepo, IUnitOfWork unitOfWork,
-            IVmBackupService vmBackupService)
+            IVmBackupService vmBackupService, ISnapshotVmService snapshotService)
         {
             this._taskV2Repo = taskV2Repo;
             this._userVmRepository = userVmRepo;
             this._unitOfWork = unitOfWork;
             this._userVmRepository = userVmRepo;
             this._vmBackupService = vmBackupService;
+            this._snapshotService = snapshotService;
         }
 
         public virtual TaskV2 GetTaskById(Guid id)
@@ -101,6 +103,18 @@ namespace Crytex.Service.Service
             {
                 var deleteBackuptOptions = task.GetOptions<BackupOptions>();
                 this._vmBackupService.MarkBackupAsDeleted(deleteBackuptOptions.VmBackupId);
+            }
+            if(task.TypeTask == TypeTask.CreateSnapshot)
+            {
+                var createSnapshotOptions = task.GetOptions<CreateSnapshotOptions>();
+                var newSnapShot = new SnapshotVm
+                {
+                    VmId = createSnapshotOptions.VmId,
+                    Name = createSnapshotOptions.Name
+                };
+                var snapShot = this._snapshotService.Create(newSnapShot);
+                createSnapshotOptions.SnapshotId = snapShot.Id;
+                task.SaveOptions(createSnapshotOptions);
             }
         }
 
