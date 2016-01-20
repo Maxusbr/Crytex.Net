@@ -63,6 +63,36 @@ namespace Crytex.Service.Service
 
             return server;
         }
+        public GameServer CreateServer(GameServer server, BuyGameServerOption options)
+        {
+            var gameServerConf = this._gameServerConfRepository.Get(conf => conf.Id == server.GameServerConfigurationId, conf => conf.ServerTemplate.OperatingSystem);
+            var operatingSystem = gameServerConf.ServerTemplate.OperatingSystem;
+
+            var taskOptions = new CreateVmOptions
+            {
+                Cpu = options.SlotCount > 0 ? options.SlotCount * operatingSystem.MinCoreCount : options.Cpu,
+                Hdd = operatingSystem.MinHardDriveSize,
+                Ram = options.SlotCount > 0 ? options.SlotCount * operatingSystem.MinRamCount :options.Ram,
+                OperatingSystemId = operatingSystem.Id,
+                Name = "Game server"
+            };
+            var newTask = new TaskV2
+            {
+                StatusTask = StatusTask.Pending,
+                TypeTask = TypeTask.CreateVm,
+                UserId = server.UserId,
+                Virtualization = TypeVirtualization.HyperV
+            };
+
+            newTask = this._taskService.CreateTask<CreateVmOptions>(newTask, taskOptions);
+            server.VmId = newTask.GetOptions<CreateVmOptions>().UserVmId;
+
+            this._gameServerRepository.Add(server);
+
+            this._unitOfWork.Commit();
+
+            return server;
+        }
 
         public virtual GameServer GetById(Guid guid)
         {
@@ -97,7 +127,7 @@ namespace Crytex.Service.Service
             server.CreateDate = DateTime.UtcNow;
             server.DateExpire = server.CreateDate.AddMonths(options.ExpireMonthCount);
 
-            server = CreateServer(server);
+            server = CreateServer(server, options);
             decimal amount = 0;
             switch (options.PaymentType)
             {
