@@ -95,6 +95,7 @@
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
+    <Compile Include="IService\INewsService.cs" />
     <Compile Include="IService\ITriggerService.cs" />
     <Compile Include="IService\IUserLoginLogService.cs" />
     <Compile Include="IService\IOAuthService.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\NetTrafficCounterService.cs" />
+    <Compile Include="Service\NewsService.cs" />
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />

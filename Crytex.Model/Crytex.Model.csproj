@@ -109,6 +109,7 @@
     <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\NetTrafficCounter.cs" />
+    <Compile Include="Models\News.cs" />
     <Compile Include="Models\Notifications\EmailInfo.cs" />
     <Compile Include="Models\Notifications\EmailTemplate.cs" />
     <Compile Include="Models\OAuthClientApplication.cs" />
