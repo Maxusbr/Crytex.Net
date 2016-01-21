@@ -190,7 +190,12 @@ namespace Crytex.ExecutorTask.TaskHandler
                 else if (taskEntity.TypeTask == TypeTask.CreateSnapshot)
                 {
                     var createSnapshotResult = (CreateSnapshotExecutionResult)execResult;
-                    this._snapshotVmService.ChangeSnapshotStatus(createSnapshotResult.SnapshotGuid, SnapshotStatus.Active);
+                    this._snapshotVmService.ActivateNewlyCreatedSnapshot(createSnapshotResult.SnapshotGuid);
+                }
+                else if(taskEntity.TypeTask == TypeTask.DeleteSnapshot)
+                {
+                    var taskOptions = taskEntity.GetOptions<DeleteSnapshotOptions>();
+                    this._snapshotVmService.DeleteSnapshot(taskOptions.SnapshotId, taskOptions.DeleteWithChildrens);
                 }
             }
             else

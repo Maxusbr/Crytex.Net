@@ -22,6 +22,7 @@ namespace Crytex.Model.Models
         public Guid? VmWareCenterId { get; set; }
         public string OperatingSystemPassword { get; set; }
         public DateTime? CreateDate { get; set; }
+        public Guid? CurrentSnapshotId { get; set; }
 
         [ForeignKey("OperatingSystemId")]
         public OperatingSystem OperatingSystem { get; set; }
@@ -31,11 +32,15 @@ namespace Crytex.Model.Models
         public HyperVHost HyperVHost { get; set; }
         [ForeignKey("VmWareCenterId")]
         public VmWareVCenter VmWareCenter { get; set; }
+        [ForeignKey("CurrentSnapshotId")]
+        public SnapshotVm CurrentSnapshot { get; set; }
 
         public virtual SubscriptionVm SubscriptionVm { get; set; }
 
         [InverseProperty("Vm")]
         public ICollection<VmIpAddress> IpAdresses { get; set; }
+        [InverseProperty("Vm")]
+        public ICollection<SnapshotVm> Snapshots { get; set; }
     }
 
 

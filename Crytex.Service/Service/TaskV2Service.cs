@@ -116,6 +116,14 @@ namespace Crytex.Service.Service
                 createSnapshotOptions.SnapshotId = snapShot.Id;
                 task.SaveOptions(createSnapshotOptions);
             }
+            if(task.TypeTask == TypeTask.DeleteSnapshot)
+            {
+                var deleteSnapshotOptions = task.GetOptions<DeleteSnapshotOptions>();
+                var snapshot = this._snapshotService.GetById(deleteSnapshotOptions.SnapshotId);
+                this._snapshotService.PrepareSnapshotForDeletion(deleteSnapshotOptions.SnapshotId, deleteSnapshotOptions.DeleteWithChildrens);
+                deleteSnapshotOptions.VmId = snapshot.Id;
+                task.SaveOptions(deleteSnapshotOptions);
+            }
         }
 
         public IPagedList<TaskV2> GetPageTasks(int pageNumber, int pageSize, TaskV2SearchParams searchParams = null)

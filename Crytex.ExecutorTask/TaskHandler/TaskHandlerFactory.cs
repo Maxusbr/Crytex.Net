@@ -30,7 +30,8 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler},
                 {TypeTask.Backup, this.GetBackupVmTaskHandler },
                 {TypeTask.DeleteBackup, this.GetDeleteBackupTaskHandler },
-                {TypeTask.CreateSnapshot, this.GetCreateSnapshotTaskHandler }
+                {TypeTask.CreateSnapshot, this.GetCreateSnapshotTaskHandler },
+                {TypeTask.DeleteSnapshot, this.GetDeleteSnapshotTaskHandler }
             };
 
             this._vmWareTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, VmWareVCenter, ITaskHandler>>
@@ -41,10 +42,10 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.RemoveVm, this.GetRemoveVmTaskHandler},
                 {TypeTask.Backup, this.GetBackupVmTaskHandler },
                 {TypeTask.DeleteBackup, this.GetDeleteBackupTaskHandler },
-                {TypeTask.CreateSnapshot, this.GetCreateSnapshotTaskHandler }
+                {TypeTask.CreateSnapshot, this.GetCreateSnapshotTaskHandler },
+                {TypeTask.DeleteSnapshot, this.GetDeleteSnapshotTaskHandler }
             };
         }
-
 
         public ITaskHandler GetHyperVHandler(TaskV2 task, HyperVHost hyperVHost)
         {
@@ -153,6 +154,21 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
             var handler = new CreateSnapshotTaskHandler(task, provider, vCenter.Id);
+
+            return handler;
+        }
+        private ITaskHandler GetDeleteSnapshotTaskHandler(TaskV2 task, HyperVHost host)
+        {
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var handler = new DeleteSnapshotTaskHandler(task, provider, host.Id);
+
+            return handler;
+        }
+
+        private ITaskHandler GetDeleteSnapshotTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        {
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var handler = new DeleteSnapshotTaskHandler(task, provider, vCenter.Id);
 
             return handler;
         }

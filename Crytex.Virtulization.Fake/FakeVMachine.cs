@@ -135,5 +135,10 @@ namespace Crytex.Virtualization.Fake
         {
             return new ReturnedRezultes();
         }
+
+        public ReturnedRezultes DeleteSnapshot(string snapshotServerName, bool deleteWithChildrens)
+        {
+            return new ReturnedRezultes();
+        }
     }
 }

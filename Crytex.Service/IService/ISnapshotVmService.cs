@@ -9,6 +9,12 @@ namespace Crytex.Service.IService
     {
         IPagedList<SnapshotVm> GetAllByVmId(Guid VmId, int pageNumber, int pageSize);
         SnapshotVm Create(SnapshotVm newSnapShot);
-        void ChangeSnapshotStatus(Guid snapshotGuid, SnapshotStatus newStatus);
+        /// <summary>
+        /// Обвновляет текущий снепшот машины и родительский снепшот для снепшота с указанным Id
+        /// </summary>
+        void ActivateNewlyCreatedSnapshot(Guid snapshotId);
+        void PrepareSnapshotForDeletion(Guid snapshotId, bool deleteWithChildrens);
+        SnapshotVm GetById(Guid snapshotId);
+        void DeleteSnapshot(Guid snapshotId, bool deleteWithChildrens);
     }
 }

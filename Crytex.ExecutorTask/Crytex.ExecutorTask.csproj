@@ -77,6 +77,7 @@
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\BackupVmTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\CreateSnapshotTaskHandler.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\DeleteSnapshotTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\DeleteVmBackupTaskHandler.cs" />
     <Compile Include="TaskHandler\TaskHandlerManager.cs" />
     <Compile Include="TaskHandler\ITaskHandler.cs" />

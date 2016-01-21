@@ -4,18 +4,18 @@ using Crytex.Virtualization.Base;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
-    internal class CreateSnapshotTaskHandler : BaseNewTaskHandler
+    internal class DeleteSnapshotTaskHandler : BaseNewTaskHandler
     {
-        public CreateSnapshotTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
+        public DeleteSnapshotTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
             : base(task, virtualizationProvider, virtualizationServerEntityId)
         {
         }
 
         protected override TaskExecutionResult ExecuteLogic()
         {
-            Console.WriteLine("Snapshot creating task");
-            var result = new CreateSnapshotExecutionResult();
-            var options = this.TaskEntity.GetOptions<CreateSnapshotOptions>();
+            Console.WriteLine("Snapshot deleting task");
+            var result = new TaskExecutionResult();
+            var options = this.TaskEntity.GetOptions<DeleteSnapshotOptions>();
             var vmName = options.VmId.ToString();
 
             try
@@ -24,14 +24,13 @@ namespace Crytex.ExecutorTask.TaskHandler
                 var vm = this.VirtualizationProvider.GetMachinesByName(vmName);
 
                 var snapshotServerName = options.SnapshotId.ToString();
-                var createSnapshotResult = vm.CreateSnapshot(snapshotServerName);
+                var deleteSnapshotResult = vm.DeleteSnapshot(snapshotServerName, options.DeleteWithChildrens);
 
-                if (createSnapshotResult.IsError)
+                if (deleteSnapshotResult.IsError)
                 {
-                    throw new ApplicationException(createSnapshotResult.ErrorMessage);
+                    throw new ApplicationException(deleteSnapshotResult.ErrorMessage);
                 }
 
-                result.SnapshotGuid = options.SnapshotId;
                 result.Success = true;
             }
             catch (Exception e)

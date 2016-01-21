@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models;
@@ -19,16 +17,16 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
-        public void ChangeSnapshotStatus(Guid snapshotGuid, SnapshotStatus newStatus)
+        public void ActivateNewlyCreatedSnapshot(Guid snapshotGuid)
         {
-            var snapshot = this._snapshotVmRepository.GetById(snapshotGuid);
+            var snapshot = this.GetById(snapshotGuid);
+            var vm = snapshot.Vm;
 
-            if(snapshot.Status == SnapshotStatus.Creating && newStatus == SnapshotStatus.Active)
-            {
-                snapshot.Date = DateTime.UtcNow;
-            }
+            snapshot.Date = DateTime.UtcNow;
 
-            snapshot.Status = newStatus;
+            snapshot.Status = SnapshotStatus.Active;
+            snapshot.ParentSnapshotId = vm.CurrentSnapshotId;
+            vm.CurrentSnapshotId = snapshot.Id;
 
             this._snapshotVmRepository.Update(snapshot);
             this._unitOfWork.Commit();
@@ -51,6 +49,95 @@ namespace Crytex.Service.Service
             var snapshots = _snapshotVmRepository.GetPage(page, s => s.VmId == VmId && s.Validation, s=>s.Date);
 
             return snapshots;
+        }
+
+        public SnapshotVm GetById(Guid snapshotId)
+        {
+            var snapshot = this._snapshotVmRepository.Get(ss => ss.Id == snapshotId, ss => ss.Vm);
+
+            return snapshot;
+        }
+
+        public void PrepareSnapshotForDeletion(Guid snapshotId, bool deleteWithChildrens)
+        {
+            var targetSnapshot = this.GetById(snapshotId);
+            var childSnapshots = this._snapshotVmRepository.GetMany(ss => ss.ParentSnapshotId == snapshotId);
+
+            // If deleteWithChildrens is false - simply change child snapshots ParenSnapshotId pointer to target snapshot's ParenSnapshotId
+            // Also change vm's current snapshot to target snapshot parent
+            if (!deleteWithChildrens)
+            {
+                if (targetSnapshot.Vm.CurrentSnapshotId == snapshotId)
+                {
+                    targetSnapshot.Vm.CurrentSnapshotId = targetSnapshot.ParentSnapshotId;
+                }
+
+                targetSnapshot.Status = SnapshotStatus.WaitForDeletion;
+                this._snapshotVmRepository.Update(targetSnapshot);
+
+                foreach (var child in childSnapshots)
+                {
+                    child.ParentSnapshotId = targetSnapshot.ParentSnapshotId;
+                    this._snapshotVmRepository.Update(child);
+                }
+            }
+            // If deleteWithChildrens is true - mark all snapshots in branch as WaitForDeletion. 
+            // Also change vm's current snapshot if it was found in deleted branch
+            else
+            {
+                var isVmCurrentSnapIn = this.ChangeBranchSnapshotsStatus(targetSnapshot, SnapshotStatus.WaitForDeletion);
+                if (isVmCurrentSnapIn)
+                {
+                    targetSnapshot.Vm.CurrentSnapshotId = targetSnapshot.ParentSnapshotId;
+                }
+            }
+
+            this._snapshotVmRepository.Update(targetSnapshot);
+            this._unitOfWork.Commit();
+        }
+
+        public void DeleteSnapshot(Guid snapshotId, bool deleteWithChildrens)
+        {
+            var targetSnapshot = this.GetById(snapshotId);
+
+            if (!deleteWithChildrens)
+            {
+                targetSnapshot.Status = SnapshotStatus.Deleted;
+                this._snapshotVmRepository.Update(targetSnapshot);
+            }
+            // If deleteWithChildrens is true - mark all snapshots in branch as Deleted. 
+            else
+            {
+                this.ChangeBranchSnapshotsStatus(targetSnapshot, SnapshotStatus.Deleted);
+            }
+
+            this._snapshotVmRepository.Update(targetSnapshot);
+            this._unitOfWork.Commit();
+        }
+
+        // Change all snapshots statuses in snapshot branch. Return true if vm's current snapshot was found in branch
+        private bool ChangeBranchSnapshotsStatus(SnapshotVm snapshot, SnapshotStatus newStatus)
+        {
+            var isVmCurrentSnapInBranch = false;
+            snapshot.Status = newStatus;
+            this._snapshotVmRepository.Update(snapshot);
+
+            if(snapshot.Vm.CurrentSnapshotId == snapshot.Id)
+            {
+                isVmCurrentSnapInBranch = true;
+            }
+
+            var childSnapshots = this._snapshotVmRepository.GetMany(ss => ss.ParentSnapshotId == snapshot.Id, ss => ss.Vm);
+            foreach(var child in childSnapshots)
+            {
+                var isVmCurrentSnapInChildBranch = this.ChangeBranchSnapshotsStatus(child, newStatus);
+                if (!isVmCurrentSnapInChildBranch)
+                {
+                    isVmCurrentSnapInBranch = true;
+                }
+            }
+
+            return isVmCurrentSnapInBranch;
         }
     }
 }

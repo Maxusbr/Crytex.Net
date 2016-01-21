@@ -15,9 +15,12 @@ namespace Crytex.Model.Models
 
         public Guid VmId { get; set; }
         public SnapshotStatus Status { get; set; }
+        public Guid? ParentSnapshotId { get; set; }
 
         [ForeignKey("VmId")]
         public UserVm Vm { get; set; }
+        [ForeignKey("ParentSnapshotId")]
+        public SnapshotVm ParentSnapshot { get; set; }
 
         public bool Validation { get; set; }
     }
@@ -26,6 +29,7 @@ namespace Crytex.Model.Models
     {
         Creating = 0,
         Active = 1,
-        Deleted = 2
+        WaitForDeletion = 2,
+        Deleted = 3
     }
 }
