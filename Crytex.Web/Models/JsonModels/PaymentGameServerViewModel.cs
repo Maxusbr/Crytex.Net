@@ -2,21 +2,23 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
+using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 
-namespace Crytex.Model.Models.Biling
+namespace Crytex.Web.Models.JsonModels
 {
-    public class PaymentGameServer: Payment
+    public class PaymentGameServerViewModel
     {
         public Guid GameServerId { get; set; }
+        public String GameServerName { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }
         public int SlotCount { get; set; }
         public ServerPaymentType PaymentType { get; set; }
         public Guid? BillingTransactionId { get; set; }
-        [ForeignKey("BillingTransactionId")]
-        public virtual BillingTransaction BillingTransaction { get; set; }
+        public DateTime Date { get; set; }
+        public decimal Amount { get; set; }
         public int MonthCount { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
 using PagedList;
 
@@ -15,5 +16,7 @@ namespace Crytex.Service.IService
         IPagedList<GameServer> GetPage(int pageNumber, int pageSize, string userId = null);
 
         GameServer BuyGameServer(GameServer server, BuyGameServerOption option);
+
+        IPagedList<PaymentGameServer> GetPage(int pageNumber, int pageSize, SearchPaymentGameServerParams filter = null);
     }
 }

@@ -143,7 +143,6 @@ namespace Crytex.Service.Service
             {
                 CashAmount = -amount,
                 TransactionType = BillingTransactionType.OneTimeDebiting,
-                SubscriptionVmMonthCount = options.ExpireMonthCount,
                 UserId = options.UserId
             };
             gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
@@ -153,18 +152,45 @@ namespace Crytex.Service.Service
                 BillingTransactionId = gameServerVmTransaction.Id,
                 Date = server.CreateDate,
                 DateEnd = server.DateExpire,
-                VmId = server.Id,
+                GameServerId = server.Id,
                 CoreCount = options.Cpu,
                 RamCount = options.Ram,
                 CashAmount = amount,
                 UserId = server.UserId,
                 SlotCount = options.SlotCount,
-                PaymentType = options.PaymentType
+                PaymentType = options.PaymentType,
+                MonthCount = options.ExpireMonthCount
             };
             this._paymentGameServerRepository.Add(gameServerPayment);
             this._unitOfWork.Commit();
 
             return server;
+        }
+
+        public IPagedList<PaymentGameServer> GetPage(int pageNumber, int pageSize, SearchPaymentGameServerParams filter = null)
+        {
+            Expression<Func<PaymentGameServer, bool>> where = x => true;
+
+            if (filter != null)
+            {
+                if (!string.IsNullOrEmpty(filter.UserId))
+                {
+                    where = where.And(p => p.UserId == filter.UserId);
+                }
+
+                if (filter.FromDate != null && filter.ToDate != null)
+                {
+                    where = where.And(x => x.Date >= filter.FromDate && x.Date <= filter.ToDate);
+                }
+                if (!string.IsNullOrEmpty(filter.ServerId))
+                {
+                    where = where.And(x => x.GameServerId.ToString() == filter.ServerId);
+                }
+            }
+
+            var page = this._paymentGameServerRepository.GetPage(new PageInfo(pageNumber, pageSize), where, (x => x.Date), true, x => x.User);
+
+            return page;
         }
 
         private decimal BuySlotServer(GameServer server, BuyGameServerOption options)
