@@ -70,11 +70,11 @@ namespace Crytex.Service.Service
 
             var taskOptions = new CreateVmOptions
             {
-                Cpu = options.SlotCount > 0 ? options.SlotCount * operatingSystem.MinCoreCount : options.Cpu,
+                Cpu = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinCoreCount : options.Cpu,
                 Hdd = operatingSystem.MinHardDriveSize,
-                Ram = options.SlotCount > 0 ? options.SlotCount * operatingSystem.MinRamCount :options.Ram,
+                Ram = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinRamCount :options.Ram,
                 OperatingSystemId = operatingSystem.Id,
-                Name = "Game server"
+                Name = server.Name
             };
             var newTask = new TaskV2
             {

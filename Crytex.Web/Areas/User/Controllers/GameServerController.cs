@@ -68,7 +68,7 @@ namespace Crytex.Web.Areas.User.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public IHttpActionResult Buy(PaymentGameServerViewModel model)
+        public IHttpActionResult Buy(GameServerViewModel model)
         {
             if (!ModelState.IsValid)
             {
