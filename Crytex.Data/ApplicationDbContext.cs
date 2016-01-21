@@ -84,5 +84,6 @@ namespace Crytex.Data
         public DbSet<FixedSubscriptionPayment> FixedSubscriptionPayments { get; set; }
         public DbSet<SubscriptionVmBackupPayment> SubscriptionVmBackupPayments { get; set; }
         public DbSet<News> Newses { get; set; }
+        public DbSet<PaymentGameServer> PaymentGameServers { get; set; }
     }
 }

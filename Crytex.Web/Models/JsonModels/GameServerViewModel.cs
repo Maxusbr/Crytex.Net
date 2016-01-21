@@ -26,5 +26,8 @@ namespace Crytex.Web.Models.JsonModels
         public Guid VmId { get; set; }
 
         public string VmName { get; set; }
+        public int Cpu { get; set; }
+        public int Ram { get; set; }
+        public int ExpireMonthCount { get; set; }
     }
 }
