@@ -111,6 +111,9 @@ namespace Crytex.Web.Areas.User
                 case TypeTask.DeleteSnapshot:
                     taskOptionsValid = IsValidOptions<DeleteSnapshotOptions>(task.Options);
                     break;
+                case TypeTask.LoadSnapshot:
+                    taskOptionsValid = IsValidOptions<LoadSnapshotOptions>(task.Options);
+                    break;
                 default:
                     throw new ApplicationException(string.Format("Unknown task type: {0}", task.TypeTask.ToString()));
             }

@@ -121,8 +121,6 @@ namespace Crytex.Service.Service
                 var deleteSnapshotOptions = task.GetOptions<DeleteSnapshotOptions>();
                 var snapshot = this._snapshotService.GetById(deleteSnapshotOptions.SnapshotId);
                 this._snapshotService.PrepareSnapshotForDeletion(deleteSnapshotOptions.SnapshotId, deleteSnapshotOptions.DeleteWithChildrens);
-                deleteSnapshotOptions.VmId = snapshot.Id;
-                task.SaveOptions(deleteSnapshotOptions);
             }
         }
 

@@ -60,7 +60,8 @@ namespace Crytex.Model.Models
         Backup = 4,
         DeleteBackup = 5,
         CreateSnapshot = 6,
-        DeleteSnapshot = 7
+        DeleteSnapshot = 7,
+        LoadSnapshot = 8
     }
 
     [Serializable]
@@ -126,6 +127,13 @@ namespace Crytex.Model.Models
     {
         public Guid SnapshotId { get; set; }
         public bool DeleteWithChildrens { get; set; }
+        public Guid VmId { get; set; }
+    }
+
+    [Serializable]
+    public class LoadSnapshotOptions : BaseOptions
+    {
+        public Guid SnapshotId { get; set; }
         public Guid VmId { get; set; }
     }
 

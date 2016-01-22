@@ -4,6 +4,7 @@ using Crytex.Data.IRepository;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using PagedList;
+using Crytex.Model.Exceptions;
 
 namespace Crytex.Service.Service
 {
@@ -54,6 +55,11 @@ namespace Crytex.Service.Service
         public SnapshotVm GetById(Guid snapshotId)
         {
             var snapshot = this._snapshotVmRepository.Get(ss => ss.Id == snapshotId, ss => ss.Vm);
+
+            if(snapshot == null)
+            {
+                throw new InvalidIdentifierException(string.Format("SnapshotVm with Id={0} doesn't exists", snapshotId));
+            }
 
             return snapshot;
         }
@@ -138,6 +144,14 @@ namespace Crytex.Service.Service
             }
 
             return isVmCurrentSnapInBranch;
+        }
+
+        public void SetLoadedSnapshotActive(Guid snapshotId)
+        {
+            var snapshot = this.GetById(snapshotId);
+            snapshot.Vm.CurrentSnapshotId = snapshot.Id;
+            this._snapshotVmRepository.Update(snapshot);
+            this._unitOfWork.Commit();
         }
     }
 }

@@ -16,5 +16,6 @@ namespace Crytex.Service.IService
         void PrepareSnapshotForDeletion(Guid snapshotId, bool deleteWithChildrens);
         SnapshotVm GetById(Guid snapshotId);
         void DeleteSnapshot(Guid snapshotId, bool deleteWithChildrens);
+        void SetLoadedSnapshotActive(Guid snapshotId);
     }
 }

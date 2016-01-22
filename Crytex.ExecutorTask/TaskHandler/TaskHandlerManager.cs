@@ -29,7 +29,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             IOperatingSystemsService operatingSystemService, IHyperVHostService vmHyperVHostCenterService,
             IVmBackupService vmBackupService, ITriggerService triggerService, ISnapshotVmService snapshotVmService)
         {
-            this._handlerFactory = new TaskHandlerFactory(operatingSystemService);
+            this._handlerFactory = new TaskHandlerFactory(operatingSystemService, snapshotVmService);
             this._taskService = taskService;
             this._userVmService = userVmService;
             this._notificationManager = notificationManager;
@@ -196,6 +196,11 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {
                     var taskOptions = taskEntity.GetOptions<DeleteSnapshotOptions>();
                     this._snapshotVmService.DeleteSnapshot(taskOptions.SnapshotId, taskOptions.DeleteWithChildrens);
+                }
+                else if(taskEntity.TypeTask == TypeTask.LoadSnapshot)
+                {
+                    var taskOptions = taskEntity.GetOptions<LoadSnapshotOptions>();
+                    this._snapshotVmService.SetLoadedSnapshotActive(taskOptions.SnapshotId);
                 }
             }
             else
