@@ -4,6 +4,7 @@ using Crytex.Web.Models.JsonModels;
 using Microsoft.Practices.Unity;
 using System;
 using System.Web.Http;
+using Crytex.Service.Model;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -59,6 +60,28 @@ namespace Crytex.Web.Areas.User.Controllers
             server = this._gameServerService.CreateServer(server);
 
             return this.Ok(new { id = server.Id});
+        }
+
+        /// <summary>
+        /// покупка игровых машин
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult Buy(GameServerViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var server = AutoMapper.Mapper.Map<GameServer>(model);
+            var options = AutoMapper.Mapper.Map<BuyGameServerOption>(model);
+            server.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
+
+            server = this._gameServerService.BuyGameServer(server, options);
+
+            return this.Ok(new { id = server.Id });
         }
     }
 }

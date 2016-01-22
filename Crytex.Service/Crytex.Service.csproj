@@ -120,11 +120,13 @@
     <Compile Include="IService\IVmWareVCenterService.cs" />
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
+    <Compile Include="Model\BuyGameServerOption.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
+    <Compile Include="Model\SearchPaymentGameServerParams.cs" />
     <Compile Include="Model\SearchPaymentParams.cs" />
     <Compile Include="Model\SubscriptionUpdateOptions.cs" />
     <Compile Include="Model\SubscriptionVmStatisticModel.cs" />

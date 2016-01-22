@@ -97,6 +97,7 @@
     <Compile Include="Models\Biling\FixedSubscriptionPayment.cs" />
     <Compile Include="Models\Biling\Payment.cs" />
     <Compile Include="Models\Biling\PaymentBase.cs" />
+    <Compile Include="Models\Biling\PaymentGameServer.cs" />
     <Compile Include="Models\Biling\SubscriptionVmBackupPayment.cs" />
     <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\FileDescriptor.cs" />

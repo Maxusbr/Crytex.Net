@@ -73,6 +73,7 @@ namespace Crytex.Service
             container.RegisterType<ISubscriptionBackupPaymentRepository, SubscriptionBackupPaymentRepository>();
             container.RegisterType<INewsRepository, NewsRepository>();
             container.RegisterType<INewsService, NewsService>();
+            container.RegisterType<IPaymentGameServerRepository, PaymentGameServerRepository>();
 
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");
