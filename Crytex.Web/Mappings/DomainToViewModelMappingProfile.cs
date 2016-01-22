@@ -101,6 +101,8 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Date, opt => opt.MapFrom(s => s.Date))
                 .ForMember(x => x.UsageSubscriptionPayment, opt => opt.MapFrom(s => Mapper.Map<IEnumerable<UsageSubscriptionPaymentView>>(s.UsageSubscriptionPayment)));
 
+            Mapper.CreateMap<PaymentGameServer, PaymentGameServerViewModel>();
+
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
@@ -123,6 +125,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UsageSubscriptionPayment, UsageSubscriptionPaymentView>();
             this.MapPagedList<UsageSubscriptionPaymentContainer, UsageSubscriptionPaymentByPeriodView>();
             this.MapPagedList<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>();
+            this.MapPagedList<PaymentGameServer, PaymentGameServerViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()
