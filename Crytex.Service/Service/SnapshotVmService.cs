@@ -5,6 +5,7 @@ using Crytex.Model.Models;
 using Crytex.Service.IService;
 using PagedList;
 using Crytex.Model.Exceptions;
+using System.Collections.Generic;
 
 namespace Crytex.Service.Service
 {
@@ -35,6 +36,16 @@ namespace Crytex.Service.Service
 
         public SnapshotVm Create(SnapshotVm newSnapShot)
         {
+            var vmSnapCount = this._snapshotVmRepository
+                .GetMany(ss => ss.VmId == newSnapShot.VmId && (ss.Status == SnapshotStatus.Active || ss.Status == SnapshotStatus.Creating))
+                .Count;
+
+            var vmSnapLimit = 6; // TODO: move this to configuration
+            if(vmSnapCount >= vmSnapLimit)
+            {
+                throw new TaskOperationException("Cannot create new snapshot because of vm snapshot limit.");
+            }
+
             newSnapShot.Date = DateTime.UtcNow;
             newSnapShot.Status = SnapshotStatus.Creating;
 
@@ -152,6 +163,13 @@ namespace Crytex.Service.Service
             snapshot.Vm.CurrentSnapshotId = snapshot.Id;
             this._snapshotVmRepository.Update(snapshot);
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<SnapshotVm> GetAllActive()
+        {
+            var snaps = this._snapshotVmRepository.GetMany(ss => ss.Status == SnapshotStatus.Active);
+
+            return snaps;
         }
     }
 }

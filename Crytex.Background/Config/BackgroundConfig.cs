@@ -19,5 +19,10 @@ namespace Crytex.Background.Config
         {
             return this.GetValue<int>("SubscriptionVmWaitForPaymentActionPeriod");
         }
+
+        public int GetSnapshotStoringDaysPeriod()
+        {
+            return this.GetValue<int>("SnapshotStoringDaysPeriod");
+        }
     }
 }

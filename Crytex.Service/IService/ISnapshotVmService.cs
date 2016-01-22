@@ -13,6 +13,7 @@ namespace Crytex.Service.IService
         /// Обвновляет текущий снепшот машины и родительский снепшот для снепшота с указанным Id
         /// </summary>
         void ActivateNewlyCreatedSnapshot(Guid snapshotId);
+        IEnumerable<SnapshotVm> GetAllActive();
         void PrepareSnapshotForDeletion(Guid snapshotId, bool deleteWithChildrens);
         SnapshotVm GetById(Guid snapshotId);
         void DeleteSnapshot(Guid snapshotId, bool deleteWithChildrens);
