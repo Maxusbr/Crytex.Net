@@ -104,7 +104,8 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<PaymentGameServer, PaymentGameServerViewModel>()
                 .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.CashAmount));
-
+            Mapper.CreateMap<News, NewsViewModel>()
+                            .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
