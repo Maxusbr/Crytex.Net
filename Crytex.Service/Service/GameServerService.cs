@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Data.IRepository;
@@ -96,7 +97,7 @@ namespace Crytex.Service.Service
 
         public virtual GameServer GetById(Guid guid)
         {
-            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.Vm);
+            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.Vm, x => x.GameServerConfiguration);
 
             if (server == null)
             {
@@ -159,7 +160,8 @@ namespace Crytex.Service.Service
                 UserId = server.UserId,
                 SlotCount = options.SlotCount,
                 PaymentType = options.PaymentType,
-                MonthCount = options.ExpireMonthCount
+                MonthCount = options.ExpireMonthCount,
+                Status = GameServerStatus.Active
             };
             this._paymentGameServerRepository.Add(gameServerPayment);
             this._unitOfWork.Commit();
@@ -207,6 +209,105 @@ namespace Crytex.Service.Service
             var total = themplate.Processor1 * options.Cpu + themplate.RAM512 * options.Ram;
 
             return total;
+        }
+
+        public IEnumerable<PaymentGameServer> GetAllGameServers()
+        {
+            var subs = this._paymentGameServerRepository.GetAll();
+            return subs;
+        }
+
+        public IEnumerable<PaymentGameServer> GetGameServerByStatus(GameServerStatus status)
+        {
+            var subs = this._paymentGameServerRepository.GetMany(s => s.Status == status, s => s.User);
+            return subs;
+        }
+        private PaymentGameServer GetGameServerById(Guid guid)
+        {
+            var srv = _paymentGameServerRepository.Get(x => x.GameServerId == guid, x => x.User);
+            if (srv == null)
+            {
+                throw new InvalidIdentifierException($"Game server with id={guid.ToString()} doesn't exist");
+            }
+            return srv;
+        }
+
+        public void AutoProlongateGameServer(Guid guid)
+        {
+            try
+            {
+                ProlongateGameServer(guid, 1, BillingTransactionType.AutomaticDebiting);
+            }
+            catch (TransactionFailedException)
+            {
+                UpdateStatusServer(guid, GameServerStatus.WaitForPayment);
+            }
+        }
+
+        private void ProlongateGameServer(Guid guid, int monthCount, BillingTransactionType transactionType)
+        {
+            var server = GetById(guid);
+            var gameServerPayment = GetGameServerById(guid);
+            decimal amount = 0;
+            switch (gameServerPayment.PaymentType)
+            {
+                case ServerPaymentType.Slot:
+                    amount = BuySlotServer(server, new BuyGameServerOption { SlotCount = gameServerPayment.SlotCount});
+                    break;
+                case ServerPaymentType.Configuration:
+                    amount = BuyConfigurationServer(server, 
+                        new BuyGameServerOption { Ram = gameServerPayment.RamCount, Cpu = gameServerPayment.CoreCount});
+                    break;
+            }
+
+            var gameServerVmTransaction = new BillingTransaction
+            {
+                CashAmount = -amount,
+                TransactionType = transactionType, 
+                GameServerId = guid, 
+                UserId = server.UserId, GameServer = server
+            };
+            gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
+            server.DateExpire = server.DateExpire.AddMonths(monthCount);
+            _gameServerRepository.Update(server);
+
+            gameServerPayment.MonthCount = monthCount;
+            gameServerPayment.DateEnd = server.DateExpire;
+            gameServerPayment.CashAmount = amount;
+            gameServerPayment.BillingTransaction = gameServerVmTransaction;
+            gameServerPayment.BillingTransactionId = gameServerVmTransaction.Id;
+
+            _paymentGameServerRepository.Update(gameServerPayment);
+            _unitOfWork.Commit();
+        }
+
+        public void UpdateStatusServer(Guid guid, GameServerStatus status)
+        {
+            var gameserv = GetGameServerById(guid);
+            gameserv.Status = status;
+            _paymentGameServerRepository.Update(gameserv);
+            _unitOfWork.Commit();
+        }
+
+        public void DeleteGameServer(Guid guid)
+        {
+            var srv = GetById(guid);
+            var removeVmOptions = new RemoveVmOptions
+            {
+                VmId = srv.Vm.Id
+            };
+            var deleteTask = new TaskV2
+            {
+                Virtualization = srv.Vm.VirtualizationType,
+                UserId = srv.UserId,
+                TypeTask = TypeTask.RemoveVm
+            };
+            this._taskService.CreateTask(deleteTask, removeVmOptions);
+
+            var gameserv = GetGameServerById(guid);
+            gameserv.Status = GameServerStatus.Deleted;
+            _paymentGameServerRepository.Update(gameserv);
+            _unitOfWork.Commit();
         }
     }
 }

@@ -18,5 +18,15 @@ namespace Crytex.Model.Models.Biling
         [ForeignKey("BillingTransactionId")]
         public virtual BillingTransaction BillingTransaction { get; set; }
         public int MonthCount { get; set; }
+
+        public GameServerStatus Status { get; set; }
+        public bool AutoProlongation { get; set; }
+    }
+
+    public enum GameServerStatus
+    {
+        WaitForPayment = 0,
+        Active = 1,
+        Deleted = 2
     }
 }

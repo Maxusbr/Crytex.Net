@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
@@ -18,5 +20,11 @@ namespace Crytex.Service.IService
         GameServer BuyGameServer(GameServer server, BuyGameServerOption option);
 
         IPagedList<PaymentGameServer> GetPage(int pageNumber, int pageSize, SearchPaymentGameServerParams filter = null);
+
+        IEnumerable<PaymentGameServer> GetGameServerByStatus(GameServerStatus status);
+        void UpdateStatusServer(Guid gameServerId, GameServerStatus waitForPayment);
+        void DeleteGameServer(Guid gameServerId);
+        IEnumerable<PaymentGameServer>  GetAllGameServers();
+        void AutoProlongateGameServer(Guid gameServerId);
     }
 }
