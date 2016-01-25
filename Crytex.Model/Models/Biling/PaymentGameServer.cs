@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -7,8 +8,19 @@ using System.Threading.Tasks;
 
 namespace Crytex.Model.Models.Biling
 {
-    public class PaymentGameServer: Payment
+    public class PaymentGameServer
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Guid { get; set; }
+        public DateTime Date { get; set; }
+        public DateTime? DateEnd { get; set; }
+        public decimal CashAmount { get; set; }
+        public string UserId { get; set; }
+        public PaymentSystemType PaymentSystem { get; set; }
+        public bool Success { get; set; }
+        [ForeignKey("UserId")]
+        public ApplicationUser User { get; set; }
         public Guid GameServerId { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }

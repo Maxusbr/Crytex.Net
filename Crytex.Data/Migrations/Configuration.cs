@@ -24,7 +24,7 @@ namespace Crytex.Data.Migrations
             AutomaticMigrationDataLossAllowed = true;
             CreateFakeEntries = true;
         }
-        protected  override void Seed(ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
 
             if (!context.OAuthClientApplications.Any())
@@ -467,7 +467,7 @@ namespace Crytex.Data.Migrations
                         Load10Percent = 1,
                         CreateDate = DateTime.UtcNow
                     };
-                    
+
                     if (allTarifs.All(t => t.Virtualization != tariff.Virtualization && t.OperatingSystem != tariff.OperatingSystem))
                         context.Tariffs.Add(tariff);
                 }
@@ -559,7 +559,7 @@ namespace Crytex.Data.Migrations
 
                     context.EmailInfos.Add(emailInfo);
                 }
-
+                context.Commit();
                 var template = serverTemplates[0].Id;
                 var gameServerConfig = context.GameServerConfigurations.FirstOrDefault(
                     g => g.ServerTemplateId == template);
@@ -573,18 +573,20 @@ namespace Crytex.Data.Migrations
                     context.GameServerConfigurations.Add(gameServerConfig);
                 }
 
-
+                context.Commit();
                 var gameServer = new GameServer
                 {
                     PaymentType = ServerPaymentType.Slot,
                     VmId = allMachine[0].Id,
                     SlotCount = 5,
                     GameServerConfigurationId = gameServerConfig.Id,
-                    UserId = allUsers[0].Id
+                    UserId = allUsers[0].Id,
+                    CreateDate = DateTime.UtcNow,
+                    DateExpire = DateTime.UtcNow.AddMonths(1)
                 };
                 context.GameServers.Add(gameServer);
 
-
+                context.Commit();
                 var fixedSubscriptions =
                     context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Fixed).ToList();
                 foreach (var fixedSub in fixedSubscriptions)
@@ -620,7 +622,7 @@ namespace Crytex.Data.Migrations
                     context.BillingTransactions.Add(transaction);
                     context.FixedSubscriptionPayments.Add(fixedPaymentSubscription);
                 };
-
+                context.Commit();
                 var usageSubscriptions = context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Usage).ToList();
                 foreach (var usageSub in usageSubscriptions)
                 {
