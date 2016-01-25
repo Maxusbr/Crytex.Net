@@ -1,4 +1,5 @@
-﻿using Crytex.Core.AppConfig;
+﻿using System;
+using Crytex.Core.AppConfig;
 
 namespace Crytex.Core.Service
 {
@@ -9,5 +10,6 @@ namespace Crytex.Core.Service
         string GetDocumentFileSavePath();
         int GetBigImageSize();
         int GetSmallImageSize();
+        String GetClientAddress();
     }
 }

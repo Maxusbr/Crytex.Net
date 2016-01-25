@@ -86,6 +86,7 @@ namespace Crytex.Data.Migrations
                 {
                     roleManager.Create(new IdentityRole { Name = "Admin" });
                     roleManager.Create(new IdentityRole { Name = "Support" });
+                    roleManager.Create(new IdentityRole { Name = "FirstStepRegister" });
                     roleManager.Create(new IdentityRole { Name = "User" });
                 }
 
@@ -556,7 +557,9 @@ namespace Crytex.Data.Migrations
                     VmId = allMachine[0].Id,
                     SlotCount = 5,
                     GameServerConfigurationId = gameServerConfig.Id,
-                    UserId = allUsers[0].Id
+                    UserId = allUsers[0].Id,
+                        CreateDate = DateTime.UtcNow,
+                    DateExpire = DateTime.UtcNow.AddMonths(1),
                 };
                 context.GameServers.Add(gameServer);
 
@@ -659,7 +662,7 @@ namespace Crytex.Data.Migrations
             newFilePath += @"\small_" + nameFile;
 
             string currentFilePath = rootFolder + @"\" + nameFile;
-            File.Copy(currentFilePath, newFilePath, true);
+            //File.Copy(currentFilePath, newFilePath, true);
 
             return nameFile;
         }

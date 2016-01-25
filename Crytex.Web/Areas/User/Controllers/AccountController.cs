@@ -7,16 +7,18 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Routing;
 using System.Web.Routing;
 using Crytex.Service.Model;
 using Crytex.Service.Service;
+using Crytex.Web.Controllers.Api;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
-    public class AccountController : UserCrytexController
+    public class AccountController : CrytexApiController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -33,17 +35,29 @@ namespace Crytex.Web.Areas.User.Controllers
 
 
         [HttpPost]
-        public IHttpActionResult Register(RegisterViewModel model)
+        public async Task<IHttpActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, RegisterDate = DateTime.Now };
-                var result = _userManager.CreateAsync(user, model.Password).Result;
+                var user = new ApplicationUser { UserName = model.email, Email = model.email, RegisterDate = DateTime.Now };
+                var result = await _userManager.CreateAsync(user, model.password);
+
                 if (result.Succeeded)
                 {
-                    this.SendConfirmationEmailForUser(user);
 
-                    return this.Ok();
+                    await this.SendConfirmationEmailForUser(user);
+
+
+                    var addRoleResult = await _userManager.AddToRoleAsync(user.Id, "FirstStepRegister");
+                    if (addRoleResult.Succeeded)
+                    {
+                        return this.Ok();
+                    }
+                    else
+                    {
+                        return InternalServerError();
+                    }
+
                 }
 
                 AddErrors(result);
@@ -69,15 +83,15 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult ConfirmEmail(string userId, string code)
+        public async Task<IHttpActionResult> ConfirmEmail(ConfirmEmailModel confirmEmail)
         {
-            if (userId == null || code == null)
+            if (confirmEmail.userId == null || confirmEmail.code == null)
             {
                 return this.Conflict();
             }
             var provider = new DpapiDataProtectionProvider("TestWebAPI");
             _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-            var result = _userManager.ConfirmEmailAsync(userId, code).Result;
+            var result = await _userManager.ConfirmEmailAsync(confirmEmail.userId, confirmEmail.code);
             if (result.Succeeded)
             {
                 return this.Ok();
@@ -87,6 +101,13 @@ namespace Crytex.Web.Areas.User.Controllers
                 return this.Conflict();
             }
         }
+
+        public class ConfirmEmailModel
+        {
+            public string userId { get; set; }
+            public string code { get; set; }
+        }
+
 
         [HttpPost]
         public IHttpActionResult UpdateUserInfo(string userId, FullUserInfoViewModel model)
@@ -156,7 +177,7 @@ namespace Crytex.Web.Areas.User.Controllers
 
         [HttpPost]
         [Authorize]
-     
+
         public IHttpActionResult RemoveRefreshToken(RemoveRefreshTokenParams model)
         {
             if (!ModelState.IsValid)
@@ -169,21 +190,20 @@ namespace Crytex.Web.Areas.User.Controllers
             return Ok("Refresh token was successfuly removed.");
         }
 
-        private void SendConfirmationEmailForUser(ApplicationUser user)
+        private async Task SendConfirmationEmailForUser(ApplicationUser user)
         {
-            _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).Wait();
 
             var provider = new DpapiDataProtectionProvider("TestWebAPI");
             _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
 
-            var code = _userManager.GenerateEmailConfirmationTokenAsync(user.Id).Result;
-
-            var callbackUrl = new Uri(Url.Link("ConfirmEmailRoute", new { userId = user.Id, code = code }));
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            
+            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}//account//verify?userId={user.Id}&&code={code}";
             var mailParams = new List<KeyValuePair<string, string>>();
-            mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl.ToString()));
+            mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl));
 
-            _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
-                mailParams, DateTime.Now).Wait();
+            await _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
+               mailParams, DateTime.Now);
         }
 
         private void AddErrors(IdentityResult result)
