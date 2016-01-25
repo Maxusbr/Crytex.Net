@@ -32,7 +32,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 // TODO: нужен метод для запуска скриптов на гостевой ОС
                 //var newPassword = System.Web.Security.Membership.GeneratePassword(6, 0); 
 
-                this.VirtualizationProvider.ConnectToServer();
+                this.ConnectProvider();
 
                 var vmToClone = this.VirtualizationProvider.GetMachinesByName(os.ServerTemplateName);
                 vmToClone.CloneMachine(machineName);
@@ -41,7 +41,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 //modify hardware
                 newVm.NumCPU = createTaskOptions.Cpu;
                 newVm.Memory = createTaskOptions.Ram;
-                newVm.VirtualDrives.Drives.First().ResizeDisk(createTaskOptions.Hdd);
+                newVm.VirtualDrives.Drives.First().ResizeDisk(createTaskOptions.HddGB);
                 newVm.Modify();
 
                 newVm.Start(true);

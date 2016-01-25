@@ -45,5 +45,14 @@ namespace Crytex.ExecutorTask.TaskHandler
 
             return taskResult;
         }
+
+        protected void ConnectProvider()
+        {
+            var connectiontResult = this.VirtualizationProvider.ConnectToServer();
+            if (connectiontResult.IsError)
+            {
+                throw new ApplicationException(connectiontResult.ErrorMessage);
+            }
+        }
     }
 }

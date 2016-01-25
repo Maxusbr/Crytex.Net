@@ -20,14 +20,18 @@ namespace Crytex.ExecutorTask.TaskHandler
             {
                 var updateVmTaskOptions = this.TaskEntity.GetOptions<UpdateVmOptions>();
 
-                this.VirtualizationProvider.ConnectToServer();
+                this.ConnectProvider();
 
                 var vm = this.VirtualizationProvider.GetMachinesByName(updateVmTaskOptions.VmId.ToString());
 
                 vm.NumCPU = updateVmTaskOptions.Cpu;
                 vm.Memory = updateVmTaskOptions.Ram;
-                vm.VirtualDrives.Drives.First().ResizeDisk(updateVmTaskOptions.Hdd);
-                vm.Modify();
+                vm.VirtualDrives.Drives.First().ResizeDisk(updateVmTaskOptions.HddGB);
+                var modifyResult = vm.Modify();
+                if (modifyResult.IsError)
+                {
+                    throw new ApplicationException(modifyResult.ErrorMessage);
+                }
 
                 taskExecutionResult.Success = true;
             }
