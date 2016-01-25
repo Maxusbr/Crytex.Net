@@ -2,7 +2,7 @@
 using Crytex.Service.IService;
 using Microsoft.Practices.Unity;
 using System.Collections.Generic;
-using System.Threading;
+using System.Linq;
 
 namespace Crytex.ExecutorTask
 {
@@ -38,6 +38,7 @@ namespace Crytex.ExecutorTask
 
         private void AddHandlersToQueue(IEnumerable<ITaskHandler> handlers, TaskQueueManager queueManager)
         {
+            handlers = handlers.OrderBy(h => h.TaskEntity.CreatedAt); // important!
             foreach (var handler in handlers)
             {
                 this._taskService.UpdateTaskStatus(handler.TaskEntity.Id, Model.Models.StatusTask.Queued);
