@@ -25,6 +25,13 @@ namespace Crytex.Service.IService
         void UpdateStatusServer(Guid gameServerId, GameServerStatus waitForPayment);
         void DeleteGameServer(Guid gameServerId);
         IEnumerable<PaymentGameServer>  GetAllGameServers();
+        void UpdateGameServer(Guid serverId, GameServerConfigOptions options);
         void AutoProlongateGameServer(Guid gameServerId);
+
+        void StartGameServer(Guid serverId);
+        void StopGameServer(Guid serverId);
+        void PowerOffGameServer(Guid serverId);
+        void ResetGameServer(Guid serverId);
+        
     }
 }

@@ -346,6 +346,7 @@
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
+    <Compile Include="Models\JsonModels\GameServerConfigViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\MachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\NewsViewModel.cs" />
@@ -376,6 +377,7 @@
     <Compile Include="Models\JsonModels\PageModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateEditViewModel.cs" />
     <Compile Include="Models\JsonModels\ServerTemplateViewModel.cs" />
+    <Compile Include="Models\JsonModels\UpdateGameServerOptions.cs" />
     <Compile Include="Models\JsonModels\UpdateMachineStatusOptions.cs" />
     <Compile Include="Models\JsonModels\UsageSubscriptionPaymentByPeriodView.cs" />
     <Compile Include="Models\JsonModels\UsageSubscriptionPaymentGroupByVmView.cs" />

@@ -7,6 +7,7 @@ using Crytex.Data.Infrastructure;
 using Crytex.Model.Exceptions;
 using PagedList;
 using System.Linq.Expressions;
+using Crytex.Model.Enums;
 using Crytex.Model.Models.Biling;
 using Crytex.Service.Extension;
 using Crytex.Service.Model;
@@ -73,7 +74,7 @@ namespace Crytex.Service.Service
             {
                 Cpu = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinCoreCount : options.Cpu,
                 Hdd = operatingSystem.MinHardDriveSize,
-                Ram = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinRamCount :options.Ram,
+                Ram = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinRamCount : options.Ram,
                 OperatingSystemId = operatingSystem.Id,
                 Name = server.Name
             };
@@ -232,6 +233,43 @@ namespace Crytex.Service.Service
             return srv;
         }
 
+        public void UpdateGameServer(Guid serverId, GameServerConfigOptions options)
+        {
+            switch (options.UpdateType)
+            {
+                case GameServerUpdateType.Configuration:
+                    UpdateNameGameServerConfiguration(serverId, options);
+                    break;
+                case GameServerUpdateType.EnableAutoProlongation:
+                    EnableProlongateGameServer(serverId, options.AutoProlongation);
+                    break;
+                case GameServerUpdateType.Prolongation:
+                    ProlongateGameServerMonth(serverId, options.MonthCount);
+                    break;
+            }
+        }
+
+        private void UpdateNameGameServerConfiguration(Guid gameServerId, GameServerConfigOptions options)
+        {
+            var srv = GetById(gameServerId);
+            srv.Name = options.ServerName;
+            _gameServerRepository.Update(srv);
+            _unitOfWork.Commit();
+        }
+
+        private void EnableProlongateGameServer(Guid gameServerId, bool autoProlongation)
+        {
+            var gamesrv = GetGameServerById(gameServerId);
+            gamesrv.AutoProlongation = autoProlongation;
+            _paymentGameServerRepository.Update(gamesrv);
+            _unitOfWork.Commit();
+        }
+
+        private void ProlongateGameServerMonth(Guid gameServerId, int monthCount)
+        {
+            ProlongateGameServer(gameServerId, monthCount, BillingTransactionType.AutomaticDebiting);
+        }
+
         public void AutoProlongateGameServer(Guid guid)
         {
             try
@@ -252,20 +290,21 @@ namespace Crytex.Service.Service
             switch (gameServerPayment.PaymentType)
             {
                 case ServerPaymentType.Slot:
-                    amount = BuySlotServer(server, new BuyGameServerOption { SlotCount = gameServerPayment.SlotCount});
+                    amount = BuySlotServer(server, new BuyGameServerOption { SlotCount = gameServerPayment.SlotCount });
                     break;
                 case ServerPaymentType.Configuration:
-                    amount = BuyConfigurationServer(server, 
-                        new BuyGameServerOption { Ram = gameServerPayment.RamCount, Cpu = gameServerPayment.CoreCount});
+                    amount = BuyConfigurationServer(server,
+                        new BuyGameServerOption { Ram = gameServerPayment.RamCount, Cpu = gameServerPayment.CoreCount });
                     break;
             }
-
+            var totalPrice = amount * monthCount;
             var gameServerVmTransaction = new BillingTransaction
             {
-                CashAmount = -amount,
-                TransactionType = transactionType, 
-                GameServerId = guid, 
-                UserId = server.UserId, GameServer = server
+                CashAmount = -totalPrice,
+                TransactionType = transactionType,
+                GameServerId = guid,
+                UserId = server.UserId,
+                GameServer = server
             };
             gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
             server.DateExpire = server.DateExpire.AddMonths(monthCount);
@@ -273,7 +312,7 @@ namespace Crytex.Service.Service
 
             gameServerPayment.MonthCount = monthCount;
             gameServerPayment.DateEnd = server.DateExpire;
-            gameServerPayment.CashAmount = amount;
+            gameServerPayment.CashAmount = totalPrice;
             gameServerPayment.BillingTransaction = gameServerVmTransaction;
             gameServerPayment.BillingTransactionId = gameServerVmTransaction.Id;
 
@@ -308,6 +347,53 @@ namespace Crytex.Service.Service
             gameserv.Status = GameServerStatus.Deleted;
             _paymentGameServerRepository.Update(gameserv);
             _unitOfWork.Commit();
+        }
+
+        public void StartGameServer(Guid serverId)
+        {
+            ChangeGameServerMachineState(serverId, TypeChangeStatus.Start);
+        }
+
+        public void StopGameServer(Guid serverId)
+        {
+            ChangeGameServerMachineState(serverId, TypeChangeStatus.Stop);
+        }
+
+        public void PowerOffGameServer(Guid serverId)
+        {
+            ChangeGameServerMachineState(serverId, TypeChangeStatus.PowerOff);
+        }
+
+        public void ResetGameServer(Guid serverId)
+        {
+            ChangeGameServerMachineState(serverId, TypeChangeStatus.Reload);
+        }
+
+        private void ChangeGameServerMachineState(Guid serverId, TypeChangeStatus status)
+        {
+
+            var gameserv = GetGameServerById(serverId);
+            if (gameserv.Status != GameServerStatus.Active)
+            {
+                throw new InvalidOperationApplicationException("Cannot start GameServer. GameServer status is not Active");
+            }
+            else
+            {
+                var srv = GetById(serverId);
+                var taskOptions = new ChangeStatusOptions
+                {
+                    TypeChangeStatus = status,
+                    VmId = srv.Vm.Id
+                };
+                var task = new TaskV2
+                {
+                    TypeTask = TypeTask.ChangeStatus,
+                    Virtualization = srv.Vm.VirtualizationType,
+                    UserId = srv.UserId
+                };
+
+                this._taskService.CreateTask(task, taskOptions);
+            }
         }
     }
 }
