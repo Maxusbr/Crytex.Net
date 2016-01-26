@@ -49,6 +49,9 @@ namespace Crytex.Data
             modelBuilder.Entity<SubscriptionVmBackupPayment>()
                  .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
                  .WillCascadeOnDelete(false);
+            modelBuilder.Entity<GameServerConfiguration>()
+                 .HasRequired(t => t.ServerTemplate).WithMany().HasForeignKey(t => t.ServerTemplateId)
+                 .WillCascadeOnDelete(false);
         }
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }

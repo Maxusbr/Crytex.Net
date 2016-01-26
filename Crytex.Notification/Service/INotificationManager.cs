@@ -23,5 +23,8 @@ namespace Crytex.Notification
         void SendSubscriptionEndWarningEmail(string userId, int daysToEnd);
         void SendSubscriptionDeletionWarningEmail(string userId, int daysToDeletion);
         void SendNewVmCreationEndEmail(string userId, string vmName, string osUserName, string osUserPassword);
+        void SendGameServerPoweredOffEmail(string userId);
+        void SendGameServerEndWarningEmail(string userId, int daysToEnd);
+        void SendGameServerDeletionWarningEmail(string userId, int daysToDeletion);
     }
 }

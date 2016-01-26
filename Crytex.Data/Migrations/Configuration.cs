@@ -24,7 +24,7 @@ namespace Crytex.Data.Migrations
             AutomaticMigrationDataLossAllowed = true;
             CreateFakeEntries = true;
         }
-        protected  override void Seed(ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
 
             if (!context.OAuthClientApplications.Any())
@@ -176,7 +176,7 @@ namespace Crytex.Data.Migrations
                 {
                     Subject = "Ваша подписка будет удалена",
                     EmailTemplateType = EmailTemplateType.SubscriptionDeletionWarning,
-                    Body = "Ваша подписка на виртуальную машину буден удаоена через {daysToDeletion} дня",
+                    Body = "Ваша подписка на виртуальную машину будет удалена через {daysToDeletion} дня",
                     ParameterNames = @"[""daysToDeletion""]"
                 };
                 var createVmCredsEmailTemplate = new EmailTemplate
@@ -186,12 +186,36 @@ namespace Crytex.Data.Migrations
                     Body = "Ваша машина {vmName} создана для доступа используйте имя пользователя {osUserName} и пароль {osUserPassword}",
                     ParameterNames = @"[""vmName"", ""osUserName"", ""osUserPassword""]"
                 };
+                var gameserverEndWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Срок подписки истекает",
+                    EmailTemplateType = EmailTemplateType.GameServerEndWarning,
+                    Body = "Ваша подписка на виртуальную машину истекает через {daysToEnd} дня",
+                    ParameterNames = @"[""daysToEnd""]"
+                };
+                var gameserverNeedsPaymentEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Подписка требует оплаты",
+                    EmailTemplateType = EmailTemplateType.GameServerNeedsPayment,
+                    Body = "Ваша подписка на игровой сервер требует оплаты. Пожалуйста внесите платёж. Машина отключена"
+                };
+                var gameserverDeletionWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Ваша подписка будет удалена",
+                    EmailTemplateType = EmailTemplateType.GameServerDeletionWarning,
+                    Body = "Ваша подписка на игровой сервер будет удалена через {daysToDeletion} дня",
+                    ParameterNames = @"[""daysToDeletion""]"
+                };
 
                 context.EmailTemplates.Add(regApproveEmailtemplate);
                 context.EmailTemplates.Add(subscriptionNeedsPaymentEmailTemplate);
                 context.EmailTemplates.Add(subscriptionEndWarningEmailTemplate);
                 context.EmailTemplates.Add(subscriptionDeletionWarningEmailTemplate);
                 context.EmailTemplates.Add(createVmCredsEmailTemplate);
+                context.EmailTemplates.Add(gameserverEndWarningEmailTemplate);
+                context.EmailTemplates.Add(gameserverNeedsPaymentEmailTemplate);
+                context.EmailTemplates.Add(gameserverDeletionWarningEmailTemplate);
+
                 ///////////////////////////////////
 
                 for (int i = 1; i < 6; i++)
@@ -536,7 +560,7 @@ namespace Crytex.Data.Migrations
 
                     context.EmailInfos.Add(emailInfo);
                 }
-
+                context.Commit();
                 var template = serverTemplates[0].Id;
                 var gameServerConfig = context.GameServerConfigurations.FirstOrDefault(
                     g => g.ServerTemplateId == template);
@@ -550,7 +574,7 @@ namespace Crytex.Data.Migrations
                     context.GameServerConfigurations.Add(gameServerConfig);
                 }
 
-
+                context.Commit();
                 var gameServer = new GameServer
                 {
                     PaymentType = ServerPaymentType.Slot,
@@ -558,12 +582,12 @@ namespace Crytex.Data.Migrations
                     SlotCount = 5,
                     GameServerConfigurationId = gameServerConfig.Id,
                     UserId = allUsers[0].Id,
-                        CreateDate = DateTime.UtcNow,
-                    DateExpire = DateTime.UtcNow.AddMonths(1),
+                    CreateDate = DateTime.UtcNow,
+                    DateExpire = DateTime.UtcNow.AddMonths(1)
                 };
                 context.GameServers.Add(gameServer);
 
-
+                context.Commit();
                 var fixedSubscriptions =
                     context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Fixed).ToList();
                 foreach (var fixedSub in fixedSubscriptions)
@@ -599,7 +623,7 @@ namespace Crytex.Data.Migrations
                     context.BillingTransactions.Add(transaction);
                     context.FixedSubscriptionPayments.Add(fixedPaymentSubscription);
                 };
-
+                context.Commit();
                 var usageSubscriptions = context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Usage).ToList();
                 foreach (var usageSub in usageSubscriptions)
                 {
