@@ -7,15 +7,13 @@ namespace Crytex.Model.Models.WebHosting
     {
         public string UserName { get; set; }
         public string UserPassword { get; set; }
-        public WebDbType Type { get; set; }
+        public string DatabaseName { get; set; }
         public Guid WebHostingId { get; set; }
+        public Guid WebDatabaseServerId { get; set; }
 
         [ForeignKey("WebHostingId")]
         public WebHosting WebHosting { get; set; }
-    }
-
-    public enum WebDbType
-    {
-        MySql = 0
+        [ForeignKey("WebDatabaseServerId")]
+        public WebDatabaseServer DatabaseServer { get; set; }
     }
 }

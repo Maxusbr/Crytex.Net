@@ -7,9 +7,12 @@ namespace Crytex.Model.Models.WebHosting
     {
         public string UserName { get; set; }
         public string UserPassword { get; set; }
-        public Guid WebHostingId { get; set; }
+        public Guid WebHttpServerId { get; set; }
+        public Guid WebApplicationId { get; set; }
 
-        [ForeignKey("WebHostingId")]
-        public WebHosting WebHosting { get; set; }
+        [ForeignKey("WebHttpServerId")]
+        public WebHttpServer HttpServer { get; set; }
+        [ForeignKey("WebApplicationId")]
+        public WebHttpServer WebAppliaction { get; set; }
     }
 }

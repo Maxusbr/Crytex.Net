@@ -50,6 +50,9 @@ namespace Crytex.Data
             modelBuilder.Entity<SubscriptionVmBackupPayment>()
                  .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
                  .WillCascadeOnDelete(false);
+            modelBuilder.Entity<WebHostingFtpAccount>()
+                 .HasRequired(t => t.WebAppliaction).WithMany().HasForeignKey(t => t.WebApplicationId)
+                 .WillCascadeOnDelete(false);
         }
         public DbSet<Statistic> Statistics { get; set; }
         public DbSet<Message> Messages { get; set; }
@@ -95,5 +98,8 @@ namespace Crytex.Data
         public DbSet<WebHostingFtpAccount> WebHostingFtpAccounts { get; set; }
         public DbSet<WebHostingTariff> WebHostingTariffs { get; set; }
         public DbSet<WebHosting> WebHostings { get; set; }
+        public DbSet<HostedWebApplication> HostedWebApplications { get; set; }
+        public DbSet<WebDatabaseServer> WebDatabaseServers { get; set; }
+        public DbSet<WebHttpServer> WebHttpServers { get; set; }
     }
 }
