@@ -135,6 +135,11 @@
     <Compile Include="Models\VmIpAddress.cs" />
     <Compile Include="Models\VmWareHost.cs" />
     <Compile Include="Models\VmWareVCenter.cs" />
+    <Compile Include="Models\WebHosting\WebDatabase.cs" />
+    <Compile Include="Models\WebHosting\WebDomain.cs" />
+    <Compile Include="Models\WebHosting\WebHosting.cs" />
+    <Compile Include="Models\WebHosting\WebHostingFtpAccount.cs" />
+    <Compile Include="Models\WebHosting\WebHostingTariff.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

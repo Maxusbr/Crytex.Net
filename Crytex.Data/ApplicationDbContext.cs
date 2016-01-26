@@ -8,6 +8,7 @@ using Crytex.Model.Models.Biling;
 namespace Crytex.Data
 {
     using Crytex.Model.Models.Notifications;
+    using Model.Models.WebHosting;
 
     [DbConfigurationType(typeof(DbConfig))] 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -89,5 +90,10 @@ namespace Crytex.Data
         public DbSet<SubscriptionVmBackupPayment> SubscriptionVmBackupPayments { get; set; }
         public DbSet<News> Newses { get; set; }
         public DbSet<PaymentGameServer> PaymentGameServers { get; set; }
+        public DbSet<WebDomain> WebDomains { get; set; }
+        public DbSet<WebDatabase> WebDatabases { get; set; }
+        public DbSet<WebHostingFtpAccount> WebHostingFtpAccounts { get; set; }
+        public DbSet<WebHostingTariff> WebHostingTariffs { get; set; }
+        public DbSet<WebHosting> WebHostings { get; set; }
     }
 }
