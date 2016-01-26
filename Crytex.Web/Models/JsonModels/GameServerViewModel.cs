@@ -16,7 +16,6 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public ServerPaymentType? PaymentType { get; set; }
 
-        [Required]
         public int? SlotCount { get; set; }
 
         public Guid UserId { get; set; }

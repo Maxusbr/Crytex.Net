@@ -155,5 +155,30 @@ namespace Crytex.Notification
             bodyParams.Add(new KeyValuePair<string, string>("osUserPassword", osUserPassword));
             this.SendEmailImmediately(from, user.Email, EmailTemplateType.CreateVmCredentials, null, bodyParams, DateTime.UtcNow);
         }
+
+        public void SendGameServerPoweredOffEmail(string userId)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.GameServerNeedsPayment, null, null, DateTime.UtcNow);
+        }
+
+        public void SendGameServerEndWarningEmail(string userId, int daysToEnd)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            List<KeyValuePair<string, string>> bodyParams = new List<KeyValuePair<string, string>>();
+            bodyParams.Add(new KeyValuePair<string, string>("daysToEnd", daysToEnd.ToString()));
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.GameServerEndWarning, null, bodyParams, DateTime.UtcNow);
+        }
+
+        public void SendGameServerDeletionWarningEmail(string userId, int daysToDeletion)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            List<KeyValuePair<string, string>> bodyParams = new List<KeyValuePair<string, string>>();
+            bodyParams.Add(new KeyValuePair<string, string>("daysToDeletion", daysToDeletion.ToString()));
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.GameServerDeletionWarning, null, bodyParams, DateTime.UtcNow);
+        }
     }
 }
