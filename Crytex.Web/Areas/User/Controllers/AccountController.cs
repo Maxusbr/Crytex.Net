@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -68,13 +69,13 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult SendEmailAgain(string userId)
+        public async Task<IHttpActionResult> SendEmailAgain(string userId)
         {
             if (userId != null)
             {
                 var user = _userManager.FindById(userId);
 
-                this.SendConfirmationEmailForUser(user);
+                await this.SendConfirmationEmailForUser(user);
 
                 return this.Ok();
             }
@@ -91,7 +92,8 @@ namespace Crytex.Web.Areas.User.Controllers
             }
             var provider = new DpapiDataProtectionProvider("TestWebAPI");
             _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-            var result = await _userManager.ConfirmEmailAsync(confirmEmail.userId, confirmEmail.code);
+            var code = Base64ForUrlDecode(confirmEmail.code.Replace(" ","+"));
+            var result = await _userManager.ConfirmEmailAsync(confirmEmail.userId, code);
             if (result.Succeeded)
             {
                 return this.Ok();
@@ -198,7 +200,7 @@ namespace Crytex.Web.Areas.User.Controllers
 
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
             
-            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}//account//verify?userId={user.Id}&&code={code}";
+            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}//account//verify?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
             var mailParams = new List<KeyValuePair<string, string>>();
             mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl));
 
@@ -212,6 +214,19 @@ namespace Crytex.Web.Areas.User.Controllers
             {
                 ModelState.AddModelError("", error);
             }
+        }
+
+
+        public static string Base64ForUrlEncode(string str)
+        {
+            var encbuff = Encoding.UTF8.GetBytes(str);
+            return HttpServerUtility.UrlTokenEncode(encbuff);
+        }
+
+        public static string Base64ForUrlDecode(string str)
+        {
+            var decbuff = HttpServerUtility.UrlTokenDecode(str);
+            return decbuff != null ? Encoding.UTF8.GetString(decbuff) : null;
         }
     }
 }
