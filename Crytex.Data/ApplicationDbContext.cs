@@ -36,6 +36,10 @@ namespace Crytex.Data
             modelBuilder.Entity<OperatingSystem>()
                 .HasRequired(t => t.ImageFileDescriptor).WithMany().HasForeignKey(system => system.ImageFileId)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<GameServerConfiguration>()
+              .HasRequired(t => t.ServerTemplate).WithMany().HasForeignKey(system => system.ServerTemplateId)
+              .WillCascadeOnDelete(false);
             modelBuilder.Entity<UsageSubscriptionPayment>()
                  .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
                  .WillCascadeOnDelete(false);

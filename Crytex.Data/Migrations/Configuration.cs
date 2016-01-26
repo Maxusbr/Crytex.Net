@@ -86,6 +86,7 @@ namespace Crytex.Data.Migrations
                 {
                     roleManager.Create(new IdentityRole { Name = "Admin" });
                     roleManager.Create(new IdentityRole { Name = "Support" });
+                    roleManager.Create(new IdentityRole { Name = "FirstStepRegister" });
                     roleManager.Create(new IdentityRole { Name = "User" });
                 }
 
@@ -467,7 +468,7 @@ namespace Crytex.Data.Migrations
                         Load10Percent = 1,
                         CreateDate = DateTime.UtcNow
                     };
-
+                    
                     if (allTarifs.All(t => t.Virtualization != tariff.Virtualization && t.OperatingSystem != tariff.OperatingSystem))
                         context.Tariffs.Add(tariff);
                 }
@@ -685,7 +686,7 @@ namespace Crytex.Data.Migrations
             newFilePath += @"\small_" + nameFile;
 
             string currentFilePath = rootFolder + @"\" + nameFile;
-            File.Copy(currentFilePath, newFilePath, true);
+            //File.Copy(currentFilePath, newFilePath, true);
 
             return nameFile;
         }

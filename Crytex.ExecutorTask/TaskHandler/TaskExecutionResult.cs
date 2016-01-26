@@ -30,4 +30,9 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         public Guid BackupGuid { get; set; }
     }
+
+    public class CreateSnapshotExecutionResult : TaskExecutionResult
+    {
+        public Guid SnapshotGuid { get; set; }
+    }
 }

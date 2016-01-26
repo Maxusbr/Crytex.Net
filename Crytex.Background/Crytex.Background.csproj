@@ -118,6 +118,7 @@
     <Compile Include="Tasks\MonitoringJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\ActiveStaticSubscriptionVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\BackupSubscriptionVmJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\SnapshotVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\StaticSubscriptionVmWarningsJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\UsageSubscriptionVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\WaiForDeletionStaticSubscriptionVmJob.cs" />
