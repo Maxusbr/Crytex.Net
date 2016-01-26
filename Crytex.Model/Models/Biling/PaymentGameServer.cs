@@ -8,11 +8,8 @@ using System.Threading.Tasks;
 
 namespace Crytex.Model.Models.Biling
 {
-    public class PaymentGameServer
+    public class PaymentGameServer : GuidBaseEntity
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Guid { get; set; }
         public DateTime Date { get; set; }
         public DateTime? DateEnd { get; set; }
         public decimal CashAmount { get; set; }
