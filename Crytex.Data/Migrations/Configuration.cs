@@ -206,6 +206,13 @@ namespace Crytex.Data.Migrations
                     Body = "Ваша подписка на игровой сервер будет удалена через {daysToDeletion} дня",
                     ParameterNames = @"[""daysToDeletion""]"
                 };
+                var resetPasswordTemplate = new EmailTemplate
+                {
+                    Body = @"Для сброса пароля перейдите по ссылке <a href=""{callbackUrl}"">здесь</a>",
+                    EmailTemplateType = EmailTemplateType.ResetPassword,
+                    ParameterNames = @"[""callbackUrl""]",
+                    Subject = "Сброс пароля учетной записи"
+                };
 
                 context.EmailTemplates.Add(regApproveEmailtemplate);
                 context.EmailTemplates.Add(subscriptionNeedsPaymentEmailTemplate);
@@ -215,7 +222,7 @@ namespace Crytex.Data.Migrations
                 context.EmailTemplates.Add(gameserverEndWarningEmailTemplate);
                 context.EmailTemplates.Add(gameserverNeedsPaymentEmailTemplate);
                 context.EmailTemplates.Add(gameserverDeletionWarningEmailTemplate);
-
+                context.EmailTemplates.Add(resetPasswordTemplate);
                 ///////////////////////////////////
 
                 for (int i = 1; i < 6; i++)
