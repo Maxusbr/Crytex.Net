@@ -118,6 +118,7 @@
     <Compile Include="Models\OperatingSystem.cs" />
     <Compile Include="Models\OAuthRefreshToken.cs" />
     <Compile Include="Models\PhoneCallRequest.cs" />
+    <Compile Include="Models\PhysicalServer.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\ServerTemplate.cs" />
     <Compile Include="Models\SnapshotVm.cs" />

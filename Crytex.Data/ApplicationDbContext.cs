@@ -92,5 +92,10 @@ namespace Crytex.Data
         public DbSet<SubscriptionVmBackupPayment> SubscriptionVmBackupPayments { get; set; }
         public DbSet<News> Newses { get; set; }
         public DbSet<PaymentGameServer> PaymentGameServers { get; set; }
+
+        public DbSet<PhysicalServer> PhysicalServers { get; set; }
+        public DbSet<ServerOption> ServerOptions { get; set; }
+        public DbSet<OptionsPhysicalServer> OptionsPhysicalServers { get; set; }
+        public DbSet<AvailableOptionsPhysicalServer> AvailableOptionsPhysicalServers { get; set; }
     }
 }
