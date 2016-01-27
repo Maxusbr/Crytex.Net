@@ -311,6 +311,7 @@
     <Compile Include="Areas\User\Controllers\SubscriptionVmController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
     <Compile Include="Areas\User\Controllers\VmBackupController.cs" />
+    <Compile Include="Areas\User\Controllers\WebHostingController.cs" />
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
     <Compile Include="Auth\OauthTokenQuery.cs" />
     <Compile Include="Auth\SimpleAuthorizationServerProvider.cs" />
@@ -343,6 +344,7 @@
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingViewModel.cs" />
+    <Compile Include="Models\JsonModels\BuyWebHostingParams.cs" />
     <Compile Include="Models\JsonModels\DiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
@@ -387,6 +389,7 @@
     <Compile Include="Models\JsonModels\VmBackupViewModel.cs" />
     <Compile Include="Models\JsonModels\VmWareVCenterViewModel.cs" />
     <Compile Include="Models\JsonModels\WebHostingTariffViewModel.cs" />
+    <Compile Include="Models\JsonModels\WebHostingViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\JsonModels\SimpleApplicationUserViewModel.cs" />
     <Compile Include="Models\ViewModels\LogEntryViewModel.cs" />

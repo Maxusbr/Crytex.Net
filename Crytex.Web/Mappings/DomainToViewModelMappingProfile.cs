@@ -108,6 +108,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<News, NewsViewModel>()
                             .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<WebHostingTariff, WebHostingTariffViewModel>();
+            Mapper.CreateMap<WebHosting, WebHostingViewModel>()
+                .ForMember(x => x.TariffName, opt => opt.MapFrom(source => source.WebHostingTariff.Name));
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();

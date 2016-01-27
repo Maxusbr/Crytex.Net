@@ -118,6 +118,7 @@
     <Compile Include="IService\IHyperVHostService.cs" />
     <Compile Include="IService\IVmBackupService.cs" />
     <Compile Include="IService\IVmWareVCenterService.cs" />
+    <Compile Include="IService\IWebHostingService.cs" />
     <Compile Include="IService\IWebHostingTariffService.cs" />
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Service\HyperVHostService.cs" />
     <Compile Include="Service\VmBackupService.cs" />
     <Compile Include="Service\VmWareVCenterService.cs" />
+    <Compile Include="Service\WebHostingService.cs" />
     <Compile Include="Service\WebHostingTariffService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>

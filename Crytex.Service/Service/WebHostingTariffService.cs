@@ -1,11 +1,10 @@
 ﻿using Crytex.Data.IRepository;
 using Crytex.Model.Models.WebHosting;
 using Crytex.Service.IService;
-using System.Collections.Generic;
 using PagedList;
 using System;
 using Crytex.Data.Infrastructure;
-using System.Linq.Expressions;
+using Crytex.Model.Exceptions;
 
 namespace Crytex.Service.Service
 {
@@ -27,6 +26,18 @@ namespace Crytex.Service.Service
 
             this._webHostingTariffRepository.Add(tariff);
             this._unitOfWork.Commit();
+
+            return tariff;
+        }
+
+        public WebHostingTariff GetById(Guid id)
+        {
+            var tariff = this._webHostingTariffRepository.GetById(id);
+
+            if(tariff == null)
+            {
+                throw new InvalidIdentifierException($"WebHostingTariff with id={id.ToString()} doesn't exist");
+            }
 
             return tariff;
         }
