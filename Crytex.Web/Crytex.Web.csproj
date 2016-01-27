@@ -296,6 +296,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminVmBackupController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminSubscriptionVmController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminWebHostingTariffController.cs" />
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
@@ -385,6 +386,7 @@
     <Compile Include="Models\JsonModels\UserVmViewModel.cs" />
     <Compile Include="Models\JsonModels\VmBackupViewModel.cs" />
     <Compile Include="Models\JsonModels\VmWareVCenterViewModel.cs" />
+    <Compile Include="Models\JsonModels\WebHostingTariffViewModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\JsonModels\SimpleApplicationUserViewModel.cs" />
     <Compile Include="Models\ViewModels\LogEntryViewModel.cs" />

@@ -13,6 +13,7 @@ using Crytex.Web.Models;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
+using Crytex.Model.Models.WebHosting;
 
 namespace Crytex.Web.Mappings
 {
@@ -106,6 +107,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.CashAmount));
             Mapper.CreateMap<News, NewsViewModel>()
                             .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
+            Mapper.CreateMap<WebHostingTariff, WebHostingTariffViewModel>();
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
@@ -130,6 +132,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>();
             this.MapPagedList<News, NewsViewModel>();
             this.MapPagedList<PaymentGameServer, PaymentGameServerViewModel>();
+            this.MapPagedList<WebHostingTariff, WebHostingTariffViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()
