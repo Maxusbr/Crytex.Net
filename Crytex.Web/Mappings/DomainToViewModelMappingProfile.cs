@@ -107,6 +107,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<GameServerConfigOptions, GameServerConfigViewModel>();
             Mapper.CreateMap<News, NewsViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
+            Mapper.CreateMap<TestPeriodOptions, TestPeriodViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
