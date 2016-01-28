@@ -78,6 +78,7 @@ namespace Crytex.Service
             container.RegisterType<IWebHostingTariffService, WebHostingTariffService>();
             container.RegisterType<IWebHostingRepository, WebHostingRepository>();
             container.RegisterType<IWebHostingService, WebHostingService>();
+            container.RegisterType<IWebHostingPaymentRepository, WebHostingPaymentRepository>();
 
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");

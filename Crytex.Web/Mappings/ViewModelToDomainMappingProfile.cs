@@ -5,7 +5,7 @@ using Crytex.Model.Models;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using Crytex.Service.Model;
 using System.Linq;
-using Crytex.Model.Models.WebHosting;
+using Crytex.Model.Models.WebHostingModels;
 
 namespace Crytex.Web.Mappings
 {
@@ -46,6 +46,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<SubscriptionProlongateOptionsViewModel, SubscriptionProlongateOptions>();
             Mapper.CreateMap<MachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
             Mapper.CreateMap<WebHostingTariffViewModel, WebHostingTariff>();
+            Mapper.CreateMap<BuyWebHostingParamsModel, BuyWebHostingParams>();
         }
     }
 }

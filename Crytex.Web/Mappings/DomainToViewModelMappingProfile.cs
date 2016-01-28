@@ -13,7 +13,7 @@ using Crytex.Web.Models;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
-using Crytex.Model.Models.WebHosting;
+using Crytex.Model.Models.WebHostingModels;
 
 namespace Crytex.Web.Mappings
 {

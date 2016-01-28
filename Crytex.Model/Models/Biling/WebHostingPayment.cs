@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Crytex.Model.Models.WebHostingModels;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Crytex.Model.Models.WebHostingModels
+namespace Crytex.Model.Models.Biling
 {
-    public class WebDomain : GuidBaseEntity
+    public class WebHostingPayment : PaymentBase
     {
-        public string DomainName { get; set; }
         public Guid WebHostingId { get; set; }
+        public int MonthCount { get; set; }
 
         [ForeignKey("WebHostingId")]
         public WebHosting WebHosting { get; set; }

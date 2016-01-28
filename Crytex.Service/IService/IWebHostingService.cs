@@ -1,10 +1,10 @@
-﻿using Crytex.Model.Models.WebHosting;
-using System;
+﻿using Crytex.Model.Models.WebHostingModels;
+using Crytex.Service.Model;
 
 namespace Crytex.Service.IService
 {
     public interface IWebHostingService
     {
-        WebHosting BuyNewHosting(Guid hostingTariffId, string userId);
+        WebHosting BuyNewHosting(BuyWebHostingParams buyParams);
     }
 }

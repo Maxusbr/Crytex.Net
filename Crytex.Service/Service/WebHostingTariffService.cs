@@ -1,5 +1,5 @@
 ﻿using Crytex.Data.IRepository;
-using Crytex.Model.Models.WebHosting;
+using Crytex.Model.Models.WebHostingModels;
 using Crytex.Service.IService;
 using PagedList;
 using System;

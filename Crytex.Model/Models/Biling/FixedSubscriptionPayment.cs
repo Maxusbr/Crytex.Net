@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Crytex.Model.Models.Biling
 {
-    public class FixedSubscriptionPayment : PaymentBase
+    public class FixedSubscriptionPayment : SubscriptionPaymentBase
     {
-        public DateTime Date { get; set; }
-        public decimal Amount { get; set; }
         public int MonthCount { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }

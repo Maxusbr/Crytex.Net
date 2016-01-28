@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Crytex.Service.IService;
+using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
 using System;
 using System.Web.Http;
@@ -16,18 +17,24 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult BuyWebHosting(BuyWebHostingParams buyParams)
+        public IHttpActionResult BuyWebHosting(BuyWebHostingParamsModel buyParamsModel)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(this.ModelState);
             }
 
+            var buyParams = Mapper.Map<BuyWebHostingParams>(buyParamsModel);
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            var webHostingEntity = this._webHostingService.BuyNewHosting(buyParams.WebHostingTariffId, userId);
-            var model = Mapper.Map<WebHostingViewModel>(webHostingEntity);
+            buyParams.UserId = userId;
+            if(buyParamsModel.MonthCount <= 0)
+            {
+                buyParams.MonthCount = 1;
+            }
+            var webHostingEntity = this._webHostingService.BuyNewHosting(buyParams);
+            var outModel = Mapper.Map<WebHostingViewModel>(webHostingEntity);
 
-            return this.Ok(model);
+            return this.Ok(outModel);
         }
     }
 }

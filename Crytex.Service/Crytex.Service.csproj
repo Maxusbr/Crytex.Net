@@ -123,6 +123,7 @@
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
     <Compile Include="Model\BuyGameServerOption.cs" />
+    <Compile Include="Model\BuyWebHostingParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\GameServerConfigOptions.cs" />
