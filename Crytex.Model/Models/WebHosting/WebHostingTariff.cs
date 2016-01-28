@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Crytex.Model.Models.WebHosting
+namespace Crytex.Model.Models.WebHostingModels
 {
     public class WebHostingTariff : GuidBaseEntity
     {

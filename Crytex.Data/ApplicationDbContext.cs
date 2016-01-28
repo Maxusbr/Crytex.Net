@@ -6,7 +6,7 @@ using Crytex.Model.Models.Biling;
 namespace Crytex.Data
 {
     using Crytex.Model.Models.Notifications;
-    using Model.Models.WebHosting;
+    using Model.Models.WebHostingModels;
 
     [DbConfigurationType(typeof(DbConfig))] 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -102,5 +102,6 @@ namespace Crytex.Data
         public DbSet<HostedWebApplication> HostedWebApplications { get; set; }
         public DbSet<WebDatabaseServer> WebDatabaseServers { get; set; }
         public DbSet<WebHttpServer> WebHttpServers { get; set; }
+        public DbSet<WebHostingPayment> WebHostingPayments { get; set; }
     }
 }

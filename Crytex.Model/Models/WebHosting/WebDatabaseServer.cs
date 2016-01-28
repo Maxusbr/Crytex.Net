@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Crytex.Model.Models.WebHosting
+namespace Crytex.Model.Models.WebHostingModels
 {
     public class WebDatabaseServer : GuidBaseEntity
     {

@@ -93,6 +93,7 @@
     <Compile Include="IService\IFixedSubscriptionPaymentService.cs" />
     <Compile Include="IService\IGameServerService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
+    <Compile Include="IService\IHostedWebApplicationService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
     <Compile Include="IService\INewsService.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
     <Compile Include="Model\BuyGameServerOption.cs" />
+    <Compile Include="Model\BuyWebHostingParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\GameServerConfigOptions.cs" />
@@ -157,12 +159,14 @@
     <Compile Include="Service\FixedSubscriptionPaymentService.cs" />
     <Compile Include="Service\GameServerService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
+    <Compile Include="Service\HostedWebApplicationService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\NetTrafficCounterService.cs" />
     <Compile Include="Service\NewsService.cs" />
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
+    <Compile Include="Service\SecureService\SecuredHostedWebApplicationService.cs" />
     <Compile Include="Service\SecureService\SecuredSubscriptionVmService.cs" />
     <Compile Include="Service\SecureService\SecureFixedSubscriptionPaymentService.cs" />
     <Compile Include="Service\SecureService\SecureGameServerService.cs" />
@@ -172,6 +176,7 @@
     <Compile Include="Service\SecureService\SecureTaskV2Service.cs" />
     <Compile Include="Service\SecureService\SecureUserVmService.cs" />
     <Compile Include="Service\SecureService\SecureVmBackupService.cs" />
+    <Compile Include="Service\SecureService\SecureWebHostingService.cs" />
     <Compile Include="Service\StatisticService.cs" />
     <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\StateMachineService.cs" />

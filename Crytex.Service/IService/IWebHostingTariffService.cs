@@ -1,4 +1,4 @@
-﻿using Crytex.Model.Models.WebHosting;
+﻿using Crytex.Model.Models.WebHostingModels;
 using PagedList;
 using System;
 

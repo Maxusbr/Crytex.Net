@@ -34,13 +34,13 @@ namespace Crytex.Service.Service
 
         public virtual TaskV2 GetTaskById(Guid id)
         {
-            var vm = this._taskV2Repo.GetById(id);
-            if (vm == null)
+            var task = this._taskV2Repo.GetById(id);
+            if (task == null)
             {
-                throw new InvalidIdentifierException(string.Format("UserVm with id={0} doesnt exist.", id));
+                throw new InvalidIdentifierException(string.Format("Task with id={0} doesnt exist.", id));
             }
 
-            return vm;
+            return task;
         }
 
         public TaskV2 CreateTask<T>(TaskV2 task, T options) where T : BaseOptions

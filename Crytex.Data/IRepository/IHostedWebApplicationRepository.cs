@@ -3,7 +3,7 @@ using Crytex.Model.Models.WebHostingModels;
 
 namespace Crytex.Data.IRepository
 {
-    public interface IWebHostingTariffRepository : IRepository<WebHostingTariff>
+    public interface IHostedWebApplicationRepository : IRepository<HostedWebApplication>
     {
     }
 }

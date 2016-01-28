@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Crytex.Model.Models.WebHosting
+namespace Crytex.Model.Models.WebHostingModels
 {
     public class WebHosting : GuidBaseEntity
     {
+        public string Name { get; set; }
+        public bool AutoProlongation { get; set; }
+        public DateTime ExpireDate { get; set; }
         public int StorageSizeGB { get; set; }
         public Guid WebHostingTariffId { get; set; }
         public string UserId { get; set; }

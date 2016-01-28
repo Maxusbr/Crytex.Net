@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Crytex.Model.Models.WebHosting;
+using Crytex.Model.Models.WebHostingModels;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;

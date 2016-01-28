@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Web.Models.JsonModels
 {
-    public class BuyWebHostingParamsModel
+    public class WebHostingProlongateOptionsModel
     {
         [Required]
-        public Guid WebHostingTariffId { get; set; }
+        public Guid WebHostingId { get; set; }
         [Required]
-        public string Name { get; set; }
+        [Range(1, 12)]
         public int MonthCount { get; set; }
-        public bool AutoProlongation { get; set; }
     }
 }
