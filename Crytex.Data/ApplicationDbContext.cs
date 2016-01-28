@@ -1,6 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
@@ -52,6 +50,9 @@ namespace Crytex.Data
                  .WillCascadeOnDelete(false);
             modelBuilder.Entity<WebHostingFtpAccount>()
                  .HasRequired(t => t.WebAppliaction).WithMany().HasForeignKey(t => t.WebApplicationId)
+                 .WillCascadeOnDelete(false);
+            modelBuilder.Entity<GameServerConfiguration>()
+                 .HasRequired(t => t.ServerTemplate).WithMany().HasForeignKey(t => t.ServerTemplateId)
                  .WillCascadeOnDelete(false);
         }
         public DbSet<Statistic> Statistics { get; set; }

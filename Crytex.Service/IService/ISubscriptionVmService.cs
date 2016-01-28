@@ -30,5 +30,6 @@ namespace Crytex.Service.IService
         void PowerOffSubscriptionMachine(Guid subsciptionId);
         void ResetSubscriptionMachine(Guid subsciptionId);
         void UpdateSubscriptionMachineConfig(Guid subscriptionId, UpdateMachineConfigOptions options);
+        void AddTestPeriod(TestPeriodOptions options);
     }
 }

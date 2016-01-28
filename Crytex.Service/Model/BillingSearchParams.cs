@@ -10,5 +10,6 @@ namespace Crytex.Service.Model
         public int? BillingTransactionType { get; set; }
         public Guid? SubscriptionVmId { get; set; }
         public Guid? SubscriptionGameServerId { get; set; }
+        public int? SubscriptionVmMonthCount { get; set; }
     }
 }
