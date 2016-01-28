@@ -112,6 +112,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<WebHosting, WebHostingViewModel>()
                 .ForMember(x => x.TariffName, opt => opt.MapFrom(source => source.WebHostingTariff.Name));
             Mapper.CreateMap<TestPeriodOptions, TestPeriodViewModel>();
+            Mapper.CreateMap<WebHostingPayment, WebHostingPaymentViewModel>()
+                .ForMember(x => x.WebHostingName, opt => opt.MapFrom(s => s.WebHosting.Name));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -138,6 +140,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<News, NewsViewModel>();
             this.MapPagedList<PaymentGameServer, PaymentGameServerViewModel>();
             this.MapPagedList<WebHostingTariff, WebHostingTariffViewModel>();
+            this.MapPagedList<WebHostingPayment, WebHostingPaymentViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

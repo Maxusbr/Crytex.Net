@@ -90,6 +90,7 @@ namespace Crytex.Service
             container.RegisterType<IGameServerService, SecureGameServerService>("Secured");
             container.RegisterType<ISubscriptionVmService, SecuredSubscriptionVmService>("Secured");
             container.RegisterType<IFixedSubscriptionPaymentService, SecureFixedSubscriptionPaymentService>("Secured");
+            container.RegisterType<IWebHostingService, SecureWebHostingService>("Secured");
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();

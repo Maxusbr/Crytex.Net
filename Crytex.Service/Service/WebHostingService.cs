@@ -6,6 +6,10 @@ using Crytex.Data.IRepository;
 using Crytex.Data.Infrastructure;
 using Crytex.Model.Models;
 using Crytex.Service.Model;
+using PagedList;
+using System.Linq.Expressions;
+using Crytex.Service.Extension;
+using Crytex.Model.Exceptions;
 
 namespace Crytex.Service.Service
 {
@@ -28,6 +32,18 @@ namespace Crytex.Service.Service
             this._taskService = taskService;
             this._unitOfWork = unitOfWork;
             this._webHostingPaymentRepository = webHostingPaymentRepo;
+        }
+
+        public virtual WebHosting GetById(Guid webHostingId)
+        {
+            var hosting = this._webHostingRepository.Get(h => h.Id == webHostingId);
+
+            if(hosting == null)
+            {
+                throw new InvalidIdentifierException($"WebHosting with id={webHostingId.ToString()} doesnt exist.");
+            }
+
+            return hosting;
         }
 
         public WebHosting BuyNewHosting(BuyWebHostingParams buyParams)
@@ -59,6 +75,66 @@ namespace Crytex.Service.Service
             return newHosting;
         }
 
+        public void ProlongateWebHosting(Guid webHostingId, int monthCount)
+        {
+            if(monthCount <= 0)
+            {
+                throw new ArgumentException("MonthCount parameter must be grater than 0");
+            }
+
+            var webHosting = this.GetById(webHostingId);
+            var hostingTariff = this._webHostingTariffService.GetById(webHosting.WebHostingTariffId);
+            var totalPrice = hostingTariff.Price * monthCount;
+            var prolongateBillingTransaction = new BillingTransaction
+            {
+                CashAmount = -totalPrice,
+                TransactionType = BillingTransactionType.OneTimeDebiting,
+                UserId = webHosting.UserId,
+                Description = "Web Hosting prolongation"
+            };
+            prolongateBillingTransaction = this._billingService.AddUserTransaction(prolongateBillingTransaction);
+
+            var prolongateHostingPayment = new WebHostingPayment
+            {
+                Amount = -totalPrice,
+                BillingTransactionId = prolongateBillingTransaction.Id,
+                WebHostingId = webHosting.Id,
+                Date = DateTime.UtcNow,
+                MonthCount = monthCount
+            };
+            this._webHostingPaymentRepository.Add(prolongateHostingPayment);
+
+            webHosting.ExpireDate = webHosting.ExpireDate.AddMonths(monthCount);
+            this._webHostingRepository.Update(webHosting);
+            this._unitOfWork.Commit();
+        }
+
+        public IPagedList<WebHostingPayment> GetWebHostingPaymentsPaged(int pageNumber, int pageSize, string userId = null,
+            Guid? webHostingId = null)
+        {
+            if (pageNumber <= 0 || pageSize <= 0)
+            {
+                throw new ArgumentException("pageNumber and pageSize must be greater than zero");
+            }
+
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+
+            Expression<Func<WebHostingPayment, bool>> where = x => true;
+            if(userId != null)
+            {
+                where = where.And(x => x.BillingTransaction.UserId == userId);
+            }
+            if(webHostingId != null)
+            {
+                where = where.And(x => x.WebHostingId == webHostingId.Value);
+            }
+
+            var page = this._webHostingPaymentRepository.GetPage(pageInfo, where, p => p.Date, false,
+                p => p.WebHosting);
+
+            return page;
+        }
+
         private WebHosting PrepareNewHosting(BuyWebHostingParams buyParams, WebHostingTariff hostingTariff)
         {
             var task = new TaskV2
@@ -84,6 +160,23 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
 
             return hosting;
+        }
+
+        public void UpdateWebHosting(Guid webHostingId, string name = null, bool? autoProlongation = null)
+        {
+            var hosting = this.GetById(webHostingId);
+
+            if(name != null)
+            {
+                hosting.Name = name;
+            }
+            if(autoProlongation != null)
+            {
+                hosting.AutoProlongation = autoProlongation.Value;
+            }
+
+            this._webHostingRepository.Update(hosting);
+            this._unitOfWork.Commit();
         }
     }
 }

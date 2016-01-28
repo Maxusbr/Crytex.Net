@@ -36,5 +36,31 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return this.Ok(outModel);
         }
+
+        [HttpPost]
+        public IHttpActionResult ProlongateHosting(WebHostingProlongateOptionsModel prolongateOptionsModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            this._webHostingService.ProlongateWebHosting(prolongateOptionsModel.WebHostingId, prolongateOptionsModel.MonthCount);
+
+            return this.Ok();
+        }
+
+        [HttpPut]
+        public IHttpActionResult Put([FromUri]Guid id, [FromBody]WebHostingUpdateModel updateModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            this._webHostingService.UpdateWebHosting(id, updateModel.Name, updateModel.AutoProlongation);
+
+            return this.Ok();
+        }
     }
 }

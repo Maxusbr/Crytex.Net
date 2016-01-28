@@ -173,6 +173,7 @@
     <Compile Include="Service\SecureService\SecureTaskV2Service.cs" />
     <Compile Include="Service\SecureService\SecureUserVmService.cs" />
     <Compile Include="Service\SecureService\SecureVmBackupService.cs" />
+    <Compile Include="Service\SecureService\SecureWebHostingService.cs" />
     <Compile Include="Service\StatisticService.cs" />
     <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\StateMachineService.cs" />
