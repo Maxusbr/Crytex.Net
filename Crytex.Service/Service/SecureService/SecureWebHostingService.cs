@@ -15,10 +15,10 @@ namespace Crytex.Service.Service.SecureService
 
         public SecureWebHostingService(IWebHostingTariffService webHostingTariffService, IBilingService billingService,
             IWebHostingRepository webHostingRepository, ITaskV2Service taskService, IWebHostingPaymentRepository webHostingPaymentRepo,
-            IUnitOfWork unitOfWork, IIdentity identity)
+            IUnitOfWork unitOfWork, IIdentity userIdentity)
             : base(webHostingTariffService, billingService, webHostingRepository, taskService, webHostingPaymentRepo, unitOfWork)
         {
-            this._userIdentity = _userIdentity;
+            this._userIdentity = userIdentity;
         }
 
         public override WebHosting GetById(Guid webHostingId)

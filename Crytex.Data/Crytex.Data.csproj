@@ -85,6 +85,7 @@
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="IRepository\IVmBackupRepository.cs" />
     <Compile Include="IRepository\IVmWareVCenterRepository.cs" />
+    <Compile Include="IRepository\IHostedWebApplicationRepository.cs" />
     <Compile Include="IRepository\IWebHostingPaymentRepository.cs" />
     <Compile Include="IRepository\IWebHostingRepository.cs" />
     <Compile Include="IRepository\IWebHostingTariffRepository.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Repository\GameServerRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestCommentRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestRepository.cs" />
+    <Compile Include="Repository\HostedWebApplicationRepository.cs" />
     <Compile Include="Repository\HyperVHostRepository.cs" />
     <Compile Include="Repository\HyperVHostResourceRepository.cs" />
     <Compile Include="Repository\LogRepository.cs" />

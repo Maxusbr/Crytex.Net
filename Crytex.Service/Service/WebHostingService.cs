@@ -135,6 +135,23 @@ namespace Crytex.Service.Service
             return page;
         }
 
+        public void UpdateWebHosting(Guid webHostingId, string name = null, bool? autoProlongation = null)
+        {
+            var hosting = this.GetById(webHostingId);
+
+            if (name != null)
+            {
+                hosting.Name = name;
+            }
+            if (autoProlongation != null)
+            {
+                hosting.AutoProlongation = autoProlongation.Value;
+            }
+
+            this._webHostingRepository.Update(hosting);
+            this._unitOfWork.Commit();
+        }
+
         private WebHosting PrepareNewHosting(BuyWebHostingParams buyParams, WebHostingTariff hostingTariff)
         {
             var task = new TaskV2
@@ -160,23 +177,6 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
 
             return hosting;
-        }
-
-        public void UpdateWebHosting(Guid webHostingId, string name = null, bool? autoProlongation = null)
-        {
-            var hosting = this.GetById(webHostingId);
-
-            if(name != null)
-            {
-                hosting.Name = name;
-            }
-            if(autoProlongation != null)
-            {
-                hosting.AutoProlongation = autoProlongation.Value;
-            }
-
-            this._webHostingRepository.Update(hosting);
-            this._unitOfWork.Commit();
         }
     }
 }
