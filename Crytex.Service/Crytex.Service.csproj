@@ -140,6 +140,7 @@
     <Compile Include="Model\SubscriptionVmStatisticModel.cs" />
     <Compile Include="Model\TestPeriodOptions.cs" />
     <Compile Include="Model\UpdateMachineConfigOptions.cs" />
+    <Compile Include="Model\UpdatePhysicalServerParam.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentContainer.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentGroupByVmContainer.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentSearchParams.cs" />

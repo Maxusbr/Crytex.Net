@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Crytex.Service.Model
 {
-    public class BuyPhysicalServerParam
+    public class UpdatePhysicalServerParam
     {
-        public string UserId { get; set; }
-        public Guid PhysicalServerId { get; set; }
+        public Guid ServerId { get; set; }
+        public Guid? PhysicalServerId { get; set; }
         /// <summary>
         /// Список Id опций
         /// </summary>
         public IEnumerable<Guid> OptionIds { get; set; }
-        public int CountMonth { get; set; }
-        public decimal DiscountPrice { get; set; }
+        public int? CountMonth { get; set; }
+        public decimal? DiscountPrice { get; set; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Crytex.Data.Infrastructure;
@@ -8,6 +9,7 @@ using Crytex.Data.IRepository;
 using Crytex.Model.Enums;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
+using Crytex.Service.Extension;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using PagedList;
@@ -184,9 +186,44 @@ namespace Crytex.Service.Service
         /// Покупка физического сервера
         /// </summary>
         /// <param name="serverParam"></param>
-        public void BuyPhysicalServer(BuyPhysicalServerParam serverParam)
+        /// <returns></returns>
+        public BoughtPhysicalServer BuyPhysicalServer(BuyPhysicalServerParam serverParam)
         {
-            throw new NotImplementedException();
+            var serverConfig = _serverRepository.GetById(serverParam.PhysicalServerId);
+            if (serverConfig == null)
+            {
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverParam.PhysicalServerId} doesn't exist");
+            }
+            var server = new BoughtPhysicalServer
+            {
+                PhysicalServerId = serverConfig.Id,
+                CreateDate = DateTime.UtcNow,
+                Status = BoughtPhysicalServerStatus.Creting,
+                CountMonth = serverParam.CountMonth,
+                DiscountPrice = serverParam.DiscountPrice,
+                UserId = serverParam.UserId
+            };
+            _boughtServerRepository.Add(server);
+            _uniOfWork.Commit();
+
+            AddOptionToBoughtPhysicalServer(server.Id, serverParam.OptionIds);
+
+            return GetBoughtPhysicalServer(server.Id);
+        }
+
+        private void AddOptionToBoughtPhysicalServer(Guid serverId, IEnumerable<Guid> options)
+        {
+            foreach (var guid in options)
+            {
+                var option = _optionRepository.GetById(guid);
+                if (option == null)
+                {
+                    throw new InvalidIdentifierException($"PhysicalServerOption with id={guid} doesn't exist");
+                }
+                var boughtOption = new BoughtPhysicalServerOption { BoughtPhysicalServerId = serverId, OptionId = option.Id };
+                _boughtOptionRepository.Add(boughtOption);
+            }
+            _uniOfWork.Commit();
         }
 
         /// <summary>
@@ -206,19 +243,75 @@ namespace Crytex.Service.Service
             _uniOfWork.Commit();
         }
 
+        /// <summary>
+        /// Обновление конфигурации купленного физического сервера
+        /// </summary>
+        /// <param name="serverParam"></param>
+        /// <returns></returns>
+        public BoughtPhysicalServer UpdateBoughtPhysicalServer(UpdatePhysicalServerParam serverParam)
+        {
+            var server = _boughtServerRepository.Get(x => x.Id == serverParam.ServerId, x => x.ServerOption,
+                x => x.Server, x => x.User);
+            if (server == null)
+            {
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverParam.ServerId} doesn't exist");
+            }
+            if (serverParam.CountMonth != null)
+                server.CountMonth = (int)serverParam.CountMonth;
+            if (serverParam.PhysicalServerId != null)
+                server.PhysicalServerId = (Guid)serverParam.PhysicalServerId;
+            if (serverParam.DiscountPrice != null)
+                server.DiscountPrice = (decimal)serverParam.DiscountPrice;
+            if (serverParam.OptionIds != null)
+            {
+                _boughtOptionRepository.Delete(x => x.BoughtPhysicalServerId == server.Id);
+                AddOptionToBoughtPhysicalServer(server.Id, serverParam.OptionIds);
+            }
+
+            _boughtServerRepository.Update(server);
+            _uniOfWork.Commit();
+
+            return GetBoughtPhysicalServer(server.Id);
+        }
+
         public IPagedList<PhysicalServer> GetPagePhysicalServer(int pageNumber, int pageSize, PhysicalServerSearchParams searchParams)
         {
-            throw new NotImplementedException();
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+            Expression<Func<PhysicalServer, bool>> where = x => true;
+
+
+            var pagedList = _serverRepository.GetPage(pageInfo, where, x => x.Id, false);
+            foreach (var server in pagedList)
+            {
+                var options = _availableOptionRepository.GetMany(x => x.PhysicalServerId == server.Id, x => x.Option);
+                server.AvailableOptions = options.Where(o => o.IsDefault).ToList();
+            }
+            return pagedList;
         }
 
         public IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize, PhysicalServerOptionSearchParams searchParams)
         {
-            throw new NotImplementedException();
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+            Expression<Func<PhysicalServerOption, bool>> where = x => true;
+
+
+            var pagedList = _optionRepository.GetPage(pageInfo, where, x => x.Id, false);
+
+            return pagedList;
         }
 
         public IPagedList<BoughtPhysicalServer> GetPageBoughtPhysicalServer(int pageNumber, int pageSize, BoughtPhysicalServerSearchParams searchParams)
         {
-            throw new NotImplementedException();
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+            Expression<Func<BoughtPhysicalServer, bool>> where = x => true;
+
+
+            var pagedList = _boughtServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.Server, x => x.User);
+            foreach (var server in pagedList)
+                server.ServerOption = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
+                    x => x.Option, x => x.Server);
+
+            return pagedList;
         }
 
         /// <summary>
@@ -228,7 +321,17 @@ namespace Crytex.Service.Service
         /// <returns></returns>
         public PhysicalServer GetReadyPhysicalServer(Guid serverId)
         {
-            throw new NotImplementedException();
+            var server = _serverRepository.GetById(serverId);
+            if (server == null)
+            {
+                throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
+            }
+            server.AvailableOptions = new List<PhysicalServerOptionsAvailable>();
+            foreach (var option in _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option))
+                if(option.IsDefault || option.Option.Type == PhysicalServerOptionType.Hdd)
+                    server.AvailableOptions.Add(option);
+
+            return server;
         }
 
         /// <summary>
@@ -238,7 +341,14 @@ namespace Crytex.Service.Service
         /// <returns></returns>
         public PhysicalServer GetAviablePhysicalServer(Guid serverId)
         {
-            throw new NotImplementedException();
+            var server = _serverRepository.GetById(serverId);
+            if (server == null)
+            {
+                throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
+            }
+            server.AvailableOptions = _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option);
+
+            return server;
         }
 
         /// <summary>
@@ -248,7 +358,15 @@ namespace Crytex.Service.Service
         /// <returns></returns>
         public BoughtPhysicalServer GetBoughtPhysicalServer(Guid serverId)
         {
-            throw new NotImplementedException();
+            var server = _boughtServerRepository.Get(x => x.Id == serverId, x => x.Server, x => x.User);
+            if (server == null)
+            {
+                throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
+            }
+
+            server.ServerOption = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
+                x => x.Option, x => x.Server);
+            return server;
         }
     }
 }
