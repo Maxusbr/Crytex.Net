@@ -80,6 +80,7 @@ namespace Crytex.Service
             container.RegisterType<IPhysicalServerOptionRepository, PhysicalServerOptionRepository>();
             container.RegisterType<IPhysicalServerOptionsAvailableRepository, PhysicalServerOptionsAvailableRepository>();
             container.RegisterType<IPhysicalServerRepository, PhysicalServerRepository>();
+            container.RegisterType<IPhysicalServerService, PhysicalServerService>();
 
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");

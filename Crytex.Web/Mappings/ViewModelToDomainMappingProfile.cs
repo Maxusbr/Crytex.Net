@@ -1,4 +1,6 @@
 
+using System;
+using System.Collections.Generic;
 using AutoMapper;
 using Crytex.Web.Models.JsonModels;
 using Crytex.Model.Models;
@@ -44,6 +46,13 @@ namespace Crytex.Web.Mappings
                 .ForMember(dest => dest.DailyBackupStorePeriodDays, opt => opt.MapFrom(source => source.DailyBackupStorePeriodDays == null ? 1 : source.DailyBackupStorePeriodDays.Value));
             Mapper.CreateMap<SubscriptionProlongateOptionsViewModel, SubscriptionProlongateOptions>();
             Mapper.CreateMap<MachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
+
+            Mapper.CreateMap<PhysicalServerOptionViewModel, PhysicalServerOptionsParams>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => Guid.Parse(src.Id)));
+            Mapper.CreateMap<IEnumerable<PhysicalServerOptionViewModel>, IEnumerable<PhysicalServerOptionsParams>>()
+                .ForMember(x => x, opt => opt.MapFrom(src => Mapper.Map<IEnumerable<PhysicalServerOptionViewModel>>(src)));
+            Mapper.CreateMap<PhysicalServerViewModel, CreatePhysicalServerParam>()
+                .ForMember(dest => dest.ServerOptions, opt => opt.MapFrom(source => Mapper.Map<ICollection<PhysicalServerOptionsParams>>(source.Options)));
         }
     }
 }

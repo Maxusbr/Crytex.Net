@@ -272,6 +272,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminFixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentGameServerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUsageSubscriptionPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestCommentController.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\NewsController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentGameServerController.cs" />
+    <Compile Include="Areas\User\Controllers\PhysicalServerController.cs" />
     <Compile Include="Areas\User\Controllers\UsageSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\GameServerController.cs" />
     <Compile Include="Areas\User\Controllers\LoginLogEntryController.cs" />
@@ -342,6 +344,7 @@
     <Compile Include="Models\JsonModels\ApplicationUserViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingSearchParamsViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingViewModel.cs" />
+    <Compile Include="Models\JsonModels\BoughtPhysicalServerViewModel.cs" />
     <Compile Include="Models\JsonModels\DiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
@@ -352,6 +355,8 @@
     <Compile Include="Models\JsonModels\NewsViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentGameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\PhoneCallRequestViewModels.cs" />
+    <Compile Include="Models\JsonModels\PhysicalServerOptionViewModel.cs" />
+    <Compile Include="Models\JsonModels\PhysicalServerViewModel.cs" />
     <Compile Include="Models\JsonModels\RegionViewModel.cs" />
     <Compile Include="Models\JsonModels\SnapShotVmViewModel.cs" />
     <Compile Include="Models\JsonModels\StatisticViewModel.cs" />
@@ -473,9 +478,11 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\Admin\Views\AdminPaymentGameServer\" />
+    <Folder Include="Areas\Admin\Views\AdminPhysicalServer\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\User\Models\" />
     <Folder Include="Areas\User\Views\PaymentGameServer\" />
+    <Folder Include="Areas\User\Views\PhysicalServer\" />
     <Folder Include="Areas\User\Views\Shared\" />
   </ItemGroup>
   <ItemGroup>

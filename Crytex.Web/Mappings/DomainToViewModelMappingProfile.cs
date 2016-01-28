@@ -12,6 +12,7 @@ using Crytex.Service.Model;
 using Crytex.Web.Models;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
+using WebGrease.Css.Extensions;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.Web.Mappings
@@ -109,6 +110,22 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<TestPeriodOptions, TestPeriodViewModel>();
 
+            Mapper.CreateMap<PhysicalServerOption, PhysicalServerOptionViewModel>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+            Mapper.CreateMap<PhysicalServer, PhysicalServerViewModel>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(x => x.Options, opt => opt.MapFrom(source => Mapper.Map<ICollection<PhysicalServerOptionViewModel>>(source.AvailableOptions)));
+            Mapper.CreateMap<PhysicalServerOptionsAvailable, PhysicalServerOptionViewModel>()
+                .ForMember(x => x, opt => opt.MapFrom(source => Mapper.Map<PhysicalServerOptionViewModel>(source.Option)))
+                .ForMember(x => x.IsDefault, opt => opt.MapFrom(source => source.IsDefault));
+
+            Mapper.CreateMap<BoughtPhysicalServer, BoughtPhysicalServerViewModel>()
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()))
+                .ForMember(x => x.Server, opt => opt.MapFrom(source => Mapper.Map<PhysicalServerViewModel>(source.Server)))
+                .ForMember(x => x.Options, opt => opt.MapFrom(source => Mapper.Map<ICollection<PhysicalServerOptionViewModel>>(source.ServerOptions)));
+            Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>()
+                .ForMember(x => x, opt => opt.MapFrom(source => Mapper.Map<PhysicalServerOptionViewModel>(source.Option)));
+
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
             this.MapPagedList<ApplicationUser, SimpleApplicationUserViewModel>();
@@ -133,6 +150,10 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>();
             this.MapPagedList<News, NewsViewModel>();
             this.MapPagedList<PaymentGameServer, PaymentGameServerViewModel>();
+
+            this.MapPagedList<PhysicalServer, PhysicalServerViewModel>();
+            this.MapPagedList<PhysicalServerOption, PhysicalServerOptionViewModel>();
+            this.MapPagedList<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

@@ -9,7 +9,7 @@ namespace Crytex.Service.Model
 {
     public class PhysicalServerOptionsParams
     {
-        public Guid? OptionId { get; set; }
+        public Guid? Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }

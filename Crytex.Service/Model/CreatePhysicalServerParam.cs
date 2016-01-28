@@ -13,6 +13,6 @@ namespace Crytex.Service.Model
         public string Description { get; set; }
         public decimal Price { get; set; }
         public bool CalculatePrice { get; set; }
-        public IEnumerable<PhysicalServerOptionsParams> ServerOptions { get; set; }
+        public ICollection<PhysicalServerOptionsParams> ServerOptions { get; set; }
     }
 }

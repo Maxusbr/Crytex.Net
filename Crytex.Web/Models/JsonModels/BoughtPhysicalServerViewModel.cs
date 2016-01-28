@@ -3,30 +3,34 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 using Crytex.Model.Enums;
+using Crytex.Model.Models;
 
-namespace Crytex.Model.Models
+namespace Crytex.Web.Models.JsonModels
 {
-    public class BoughtPhysicalServer : GuidBaseEntity
+    public class BoughtPhysicalServerViewModel
     {
-        public Guid PhysicalServerId { get; set; }
+        public string Id { get; set; }
+        [Required]
+        public string PhysicalServerId { get; set; }
+        [Required]
         public string UserId { get; set; }
-        public DateTime CreateDate { get; set; }
+        [Required]
         public int CountMonth { get; set; }
         public decimal DiscountPrice { get; set; }
         public BoughtPhysicalServerStatus Status { get; set; }
+        /// <summary>
+        /// Конфигурация сервера
+        /// </summary>
         public string Config { get; set; }
 
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
         [ForeignKey("PhysicalServerId")]
-        public PhysicalServer Server { get; set; }
+        public PhysicalServerViewModel Server { get; set; }
 
-        public virtual ICollection<BoughtPhysicalServerOption> ServerOptions { get; set; }
+        public ICollection<PhysicalServerOptionViewModel> Options { get; set; }
     }
-
-    
 }

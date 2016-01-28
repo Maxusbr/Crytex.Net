@@ -52,42 +52,49 @@ namespace Crytex.Service.Service
             _serverRepository.Add(server);
             _uniOfWork.Commit();
 
-            if (serverParam.ServerOptions != null)
-                AddOptionsAviable(server.Id, serverParam.ServerOptions);
+            if (serverParam.ServerOptions != null && serverParam.ServerOptions.Any())
+            {
+                CreateOrUpdateOptions(serverParam.ServerOptions);
+                AddOptionsAviable(server.Id, serverParam.ServerOptions.Select(o => new OptionAviable {OptionId = o.Id, IsDefault = o.IsDefault}));
+            }
             return server;
         }
 
         /// <summary>
         /// Обновление доступных опций для физического сервера. 
         /// </summary>
-        /// <param name="serverId"></param>
         /// <param name="optionsParams"></param>
-        public void UpdateOptionsAviable(Guid serverId, IEnumerable<PhysicalServerOptionsParams> optionsParams)
+        public void UpdateOptionsAviable(PhysicalServerOptionsAviableParams optionsParams)
         {
-            var server = _serverRepository.GetById(serverId);
+            var server = _serverRepository.GetById(optionsParams.ServerId);
             if (server == null)
             {
-                throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
+                throw new InvalidIdentifierException($"PhysicalServer with id={optionsParams.ServerId} doesn't exist");
             }
-            _availableOptionRepository.Delete(x => x.PhysicalServerId == serverId);
-            AddOptionsAviable(serverId, optionsParams);
+            if(optionsParams.ReplaceAll)
+                _availableOptionRepository.Delete(x => x.PhysicalServerId == optionsParams.ServerId);
+            AddOptionsAviable(optionsParams.ServerId, optionsParams.Options);
         }
 
         /// <summary>
         /// Добавление доступных опций для физического сервера. 
         /// </summary>
         /// <param name="serverId"></param>
-        /// <param name="optionsParams"></param>
-        public void AddOptionsAviable(Guid serverId, IEnumerable<PhysicalServerOptionsParams> optionsParams)
+        /// <param name="options"></param>
+        private void AddOptionsAviable(Guid serverId, IEnumerable<OptionAviable> options)
         {
             var server = _serverRepository.GetById(serverId);
             if (server == null)
             {
                 throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
             }
-            foreach (var opt in optionsParams)
+            foreach (var opt in options)
             {
-                var option = CreateOrUpdateOptions(opt);
+                var option = _optionRepository.Get(x => x.Id == opt.OptionId);
+                if (option == null)
+                {
+                    throw new InvalidIdentifierException($"PhysicalServerOption with id={opt.OptionId} doesn't exist");
+                }
                 var aviable = _availableOptionRepository.Get(x => x.PhysicalServerId == serverId && x.OptionId == option.Id,
                         x => x.Option, x => x.Server);
                 if (aviable == null)
@@ -111,15 +118,15 @@ namespace Crytex.Service.Service
         /// </summary>
         /// <param name="optionsParams"></param>
         /// <returns></returns>
-        public PhysicalServerOption CreateOrUpdateOptions(PhysicalServerOptionsParams optionsParams)
+        public PhysicalServerOption CreateOrUpdateOption(PhysicalServerOptionsParams optionsParams)
         {
             PhysicalServerOption option;
-            if (optionsParams.OptionId != null)
+            if (optionsParams.Id != null)
             {
-                option = _optionRepository.Get(x => x.Id == optionsParams.OptionId);
+                option = _optionRepository.Get(x => x.Id == optionsParams.Id);
                 if (option == null)
                 {
-                    throw new InvalidIdentifierException($"PhysicalServerOption with id={optionsParams.OptionId} doesn't exist");
+                    throw new InvalidIdentifierException($"PhysicalServerOption with id={optionsParams.Id} doesn't exist");
                 }
                 option.Description = optionsParams.Description;
                 option.Name = optionsParams.Name;
@@ -149,7 +156,7 @@ namespace Crytex.Service.Service
         public void CreateOrUpdateOptions(IEnumerable<PhysicalServerOptionsParams> optionsParams)
         {
             foreach (var el in optionsParams)
-                CreateOrUpdateOptions(el);
+                CreateOrUpdateOption(el);
         }
 
         /// <summary>
@@ -250,7 +257,7 @@ namespace Crytex.Service.Service
         /// <returns></returns>
         public BoughtPhysicalServer UpdateBoughtPhysicalServer(UpdatePhysicalServerParam serverParam)
         {
-            var server = _boughtServerRepository.Get(x => x.Id == serverParam.ServerId, x => x.ServerOption,
+            var server = _boughtServerRepository.Get(x => x.Id == serverParam.ServerId, x => x.ServerOptions,
                 x => x.Server, x => x.User);
             if (server == null)
             {
@@ -274,7 +281,7 @@ namespace Crytex.Service.Service
             return GetBoughtPhysicalServer(server.Id);
         }
 
-        public IPagedList<PhysicalServer> GetPagePhysicalServer(int pageNumber, int pageSize, PhysicalServerSearchParams searchParams)
+        public IPagedList<PhysicalServer> GetPagePhysicalServer(int pageNumber, int pageSize, PhysicalServerSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
             Expression<Func<PhysicalServer, bool>> where = x => true;
@@ -284,12 +291,17 @@ namespace Crytex.Service.Service
             foreach (var server in pagedList)
             {
                 var options = _availableOptionRepository.GetMany(x => x.PhysicalServerId == server.Id, x => x.Option);
+                server.Config = server.ProcessorName;
+                if (!options.Any()) continue;
                 server.AvailableOptions = options.Where(o => o.IsDefault).ToList();
+                foreach (var opt in server.AvailableOptions.Where(o => o.IsDefault))
+                    server.Config += ", " + opt.Option.Name;
             }
             return pagedList;
         }
 
-        public IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize, PhysicalServerOptionSearchParams searchParams)
+        public IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize, 
+            PhysicalServerOptionSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
             Expression<Func<PhysicalServerOption, bool>> where = x => true;
@@ -300,7 +312,8 @@ namespace Crytex.Service.Service
             return pagedList;
         }
 
-        public IPagedList<BoughtPhysicalServer> GetPageBoughtPhysicalServer(int pageNumber, int pageSize, BoughtPhysicalServerSearchParams searchParams)
+        public IPagedList<BoughtPhysicalServer> GetPageBoughtPhysicalServer(int pageNumber, int pageSize, 
+            BoughtPhysicalServerSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
             Expression<Func<BoughtPhysicalServer, bool>> where = x => true;
@@ -308,8 +321,14 @@ namespace Crytex.Service.Service
 
             var pagedList = _boughtServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.Server, x => x.User);
             foreach (var server in pagedList)
-                server.ServerOption = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
+            {
+                server.Config = server.Server.ProcessorName;
+                server.ServerOptions = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
                     x => x.Option, x => x.Server);
+                if(!server.ServerOptions.Any()) continue;
+                foreach (var opt in server.ServerOptions)
+                    server.Config += ", " + opt.Option.Name;
+            }
 
             return pagedList;
         }
@@ -364,8 +383,13 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
             }
 
-            server.ServerOption = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
+            server.ServerOptions = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
                 x => x.Option, x => x.Server);
+            server.Config = server.Server.ProcessorName;
+            if (server.ServerOptions.Any()) 
+                foreach (var opt in server.ServerOptions)
+                    server.Config += ", " + opt.Option.Name;
+
             return server;
         }
     }

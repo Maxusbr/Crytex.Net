@@ -14,7 +14,7 @@ namespace Crytex.Model.Models
         public string ProcessorName { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        
+        public string Config { get; set; }
         public virtual ICollection<PhysicalServerOptionsAvailable> AvailableOptions { get; set; }
 
     }

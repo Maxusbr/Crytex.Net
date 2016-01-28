@@ -13,9 +13,8 @@ namespace Crytex.Service.IService
     public interface IPhysicalServerService
     {
         PhysicalServer CreatePhysicalServer(CreatePhysicalServerParam serverParam);
-        void UpdateOptionsAviable(Guid serverId, IEnumerable<PhysicalServerOptionsParams> optionsParams);
-        void AddOptionsAviable(Guid serverId, IEnumerable<PhysicalServerOptionsParams> optionsParams);
-        PhysicalServerOption CreateOrUpdateOptions(PhysicalServerOptionsParams optionsParams);
+        void UpdateOptionsAviable(PhysicalServerOptionsAviableParams optionsParams);
+        PhysicalServerOption CreateOrUpdateOption(PhysicalServerOptionsParams optionsParams);
         void CreateOrUpdateOptions(IEnumerable<PhysicalServerOptionsParams> optionsParams);
         void DeletePhysicalServer(Guid serverId);
         void DeletePhysicalServerOption(Guid optionId);
@@ -25,9 +24,9 @@ namespace Crytex.Service.IService
         BoughtPhysicalServer UpdateBoughtPhysicalServer(UpdatePhysicalServerParam serverParam);
 
 
-        IPagedList<PhysicalServer> GetPagePhysicalServer(int pageNumber, int pageSize, PhysicalServerSearchParams searchParams);
-        IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize, PhysicalServerOptionSearchParams searchParams);
-        IPagedList<BoughtPhysicalServer> GetPageBoughtPhysicalServer(int pageNumber, int pageSize, BoughtPhysicalServerSearchParams searchParams);
+        IPagedList<PhysicalServer> GetPagePhysicalServer(int pageNumber, int pageSize, PhysicalServerSearchParams searchParams = null);
+        IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize, PhysicalServerOptionSearchParams searchParams = null);
+        IPagedList<BoughtPhysicalServer> GetPageBoughtPhysicalServer(int pageNumber, int pageSize, BoughtPhysicalServerSearchParams searchParams = null);
 
         PhysicalServer GetReadyPhysicalServer(Guid serverId);
         PhysicalServer GetAviablePhysicalServer(Guid serverId);
