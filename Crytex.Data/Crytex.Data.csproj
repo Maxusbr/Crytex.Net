@@ -85,6 +85,8 @@
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="IRepository\IVmBackupRepository.cs" />
     <Compile Include="IRepository\IVmWareVCenterRepository.cs" />
+    <Compile Include="IRepository\IWebHostingRepository.cs" />
+    <Compile Include="IRepository\IWebHostingTariffRepository.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
@@ -126,6 +128,8 @@
     <Compile Include="Repository\DiscountRepository.cs" />
     <Compile Include="Repository\VmBackupRepository.cs" />
     <Compile Include="Repository\VmWareVCenterRepository.cs" />
+    <Compile Include="Repository\WebHostingRepository.cs" />
+    <Compile Include="Repository\WebHostingTariffRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">

@@ -5,6 +5,7 @@ using Crytex.Model.Models;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using Crytex.Service.Model;
 using System.Linq;
+using Crytex.Model.Models.WebHosting;
 
 namespace Crytex.Web.Mappings
 {
@@ -44,6 +45,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(dest => dest.DailyBackupStorePeriodDays, opt => opt.MapFrom(source => source.DailyBackupStorePeriodDays == null ? 1 : source.DailyBackupStorePeriodDays.Value));
             Mapper.CreateMap<SubscriptionProlongateOptionsViewModel, SubscriptionProlongateOptions>();
             Mapper.CreateMap<MachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
+            Mapper.CreateMap<WebHostingTariffViewModel, WebHostingTariff>();
         }
     }
 }

@@ -61,7 +61,8 @@ namespace Crytex.Model.Models
         DeleteBackup = 5,
         CreateSnapshot = 6,
         DeleteSnapshot = 7,
-        LoadSnapshot = 8
+        LoadSnapshot = 8,
+        CreateWebHosting = 9
     }
 
     [Serializable]
@@ -141,6 +142,12 @@ namespace Crytex.Model.Models
     public class DeleteBackupOptions : BaseOptions
     {
         public Guid VmBackupId { get; set; }
+    }
+
+    [Serializable]
+    public class CreateWebHostingOptions : BaseOptions
+    {
+
     }
 
     public enum TypeChangeStatus {
