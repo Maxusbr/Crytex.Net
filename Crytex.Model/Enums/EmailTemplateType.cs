@@ -14,6 +14,7 @@
         GameServerNeedsPayment = 9,
         GameServerEndWarning = 10,
         GameServerDeletionWarning = 11,
-        ResetPassword = 12
+        ResetPassword = 12,
+        WebHostingWasDisabled = 13
     }
 }

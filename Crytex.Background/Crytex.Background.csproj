@@ -125,6 +125,8 @@
     <Compile Include="Tasks\SubscriptionVm\WaiForDeletionStaticSubscriptionVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\WaitFotPaymentStaticSubscriptionVmJob.cs" />
     <Compile Include="Tasks\TaskExecutorUpdateJob.cs" />
+    <Compile Include="Tasks\WebHosting\ActiveWebHostingJob.cs" />
+    <Compile Include="Tasks\WebHosting\WaitForPaymentWebHostingJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />
   </ItemGroup>

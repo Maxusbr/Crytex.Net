@@ -214,6 +214,13 @@ namespace Crytex.Data.Migrations
                     Subject = "Сброс пароля учетной записи"
                 };
 
+                var webHostingDisabledEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Веб-хостинг требует оплаты",
+                    EmailTemplateType = EmailTemplateType.WebHostingWasDisabled,
+                    Body = "Веб-хостинг требует оплаты. Пожалуйста внесите платёж. Хостинг временно отключен"
+                };
+
                 context.EmailTemplates.Add(regApproveEmailtemplate);
                 context.EmailTemplates.Add(subscriptionNeedsPaymentEmailTemplate);
                 context.EmailTemplates.Add(subscriptionEndWarningEmailTemplate);
@@ -223,6 +230,7 @@ namespace Crytex.Data.Migrations
                 context.EmailTemplates.Add(gameserverNeedsPaymentEmailTemplate);
                 context.EmailTemplates.Add(gameserverDeletionWarningEmailTemplate);
                 context.EmailTemplates.Add(resetPasswordTemplate);
+                context.EmailTemplates.Add(webHostingDisabledEmailTemplate);
                 ///////////////////////////////////
 
                 for (int i = 1; i < 6; i++)

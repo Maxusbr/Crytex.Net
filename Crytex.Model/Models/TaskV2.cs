@@ -65,7 +65,8 @@ namespace Crytex.Model.Models
         CreateWebHosting = 9,
         StartWebApp = 10,
         StopWebApp = 11,
-        RestartWebApp = 12
+        RestartWebApp = 12,
+        DisableWebHosting = 13
     }
 
     [Serializable]
@@ -149,6 +150,12 @@ namespace Crytex.Model.Models
 
     [Serializable]
     public class CreateWebHostingOptions : BaseOptions
+    {
+
+    }
+
+    [Serializable]
+    public class DisableWebHostingOptions : BaseOptions
     {
 
     }

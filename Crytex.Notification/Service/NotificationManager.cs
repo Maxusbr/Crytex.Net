@@ -180,5 +180,12 @@ namespace Crytex.Notification
             bodyParams.Add(new KeyValuePair<string, string>("daysToDeletion", daysToDeletion.ToString()));
             this.SendEmailImmediately(from, user.Email, EmailTemplateType.GameServerDeletionWarning, null, bodyParams, DateTime.UtcNow);
         }
+
+        public void SendHostingDisabledEmail(string userId)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.WebHostingWasDisabled, null, null, DateTime.UtcNow);
+        }
     }
 }
