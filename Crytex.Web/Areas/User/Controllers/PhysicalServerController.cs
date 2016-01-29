@@ -98,6 +98,8 @@ namespace Crytex.Web.Areas.User.Controllers
                 CountMonth = model.CountMonth,
                 DiscountPrice = model.DiscountPrice
             };
+            if (model.CreateDate != null)
+                parameters.CreateDate = model.CreateDate;
             var options = new List<Guid>();
             foreach (var opt in model.Options)
             {

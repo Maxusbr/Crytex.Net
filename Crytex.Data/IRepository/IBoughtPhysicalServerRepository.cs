@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Crytex.Data.Infrastructure;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 
 namespace Crytex.Data.IRepository
 {

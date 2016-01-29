@@ -10,6 +10,7 @@ namespace Crytex.Model.Enums
     {
         Creting = 0,
         Active = 1,
-        Deleted = 2
+        WaitPayment = 2,
+        Deleted = 3
     }
 }

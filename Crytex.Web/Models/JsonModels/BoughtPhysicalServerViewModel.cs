@@ -16,6 +16,8 @@ namespace Crytex.Web.Models.JsonModels
         public string PhysicalServerId { get; set; }
         [Required]
         public string UserId { get; set; }
+        public DateTime? CreateDate { get; set; }
+        public DateTime? DateEnd { get; set; }
         [Required]
         public int CountMonth { get; set; }
         public decimal DiscountPrice { get; set; }

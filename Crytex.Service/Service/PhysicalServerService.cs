@@ -9,6 +9,7 @@ using Crytex.Data.IRepository;
 using Crytex.Model.Enums;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 using Crytex.Service.Extension;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
@@ -23,11 +24,13 @@ namespace Crytex.Service.Service
         private readonly IPhysicalServerOptionRepository _optionRepository;
         private readonly IPhysicalServerOptionsAvailableRepository _availableOptionRepository;
         private readonly IPhysicalServerRepository _serverRepository;
+        private readonly IBilingService _billingService;
         private readonly IUnitOfWork _uniOfWork;
 
         public PhysicalServerService(IBoughtPhysicalServerOptionRepository boughtOptionRepository,
             IBoughtPhysicalServerRepository boughtServerRepository, IPhysicalServerOptionRepository optionRepository,
-            IPhysicalServerOptionsAvailableRepository availableOptionRepository, IPhysicalServerRepository serverRepository, IUnitOfWork uniOfWork)
+            IPhysicalServerOptionsAvailableRepository availableOptionRepository, IPhysicalServerRepository serverRepository,
+            IBilingService billingService, IUnitOfWork uniOfWork)
         {
             _boughtOptionRepository = boughtOptionRepository;
             _boughtServerRepository = boughtServerRepository;
@@ -35,6 +38,7 @@ namespace Crytex.Service.Service
             _availableOptionRepository = availableOptionRepository;
             _serverRepository = serverRepository;
             _uniOfWork = uniOfWork;
+            _billingService = billingService;
         }
 
         /// <summary>
@@ -55,7 +59,7 @@ namespace Crytex.Service.Service
             if (serverParam.ServerOptions != null && serverParam.ServerOptions.Any())
             {
                 CreateOrUpdateOptions(serverParam.ServerOptions);
-                AddOptionsAviable(server.Id, serverParam.ServerOptions.Select(o => new OptionAviable {OptionId = o.Id, IsDefault = o.IsDefault}));
+                AddOptionsAviable(server.Id, serverParam.ServerOptions.Select(o => new OptionAviable { OptionId = o.Id, IsDefault = o.IsDefault }));
             }
             return server;
         }
@@ -71,7 +75,7 @@ namespace Crytex.Service.Service
             {
                 throw new InvalidIdentifierException($"PhysicalServer with id={optionsParams.ServerId} doesn't exist");
             }
-            if(optionsParams.ReplaceAll)
+            if (optionsParams.ReplaceAll)
                 _availableOptionRepository.Delete(x => x.PhysicalServerId == optionsParams.ServerId);
             AddOptionsAviable(optionsParams.ServerId, optionsParams.Options);
         }
@@ -189,6 +193,53 @@ namespace Crytex.Service.Service
             _uniOfWork.Commit();
         }
 
+        public void DeleteBoughtPhysicalServer(Guid serverId)
+        {
+            var server = _boughtServerRepository.GetById(serverId);
+            if (server.Status == BoughtPhysicalServerStatus.Deleted)
+            {
+                throw new InvalidOperationApplicationException("Subscription is already deleted");
+            }
+            server.Status = BoughtPhysicalServerStatus.Deleted;
+            _boughtServerRepository.Update(server);
+            _uniOfWork.Commit();
+            if (server.DateEnd > DateTime.UtcNow)
+                ReturnMoney(server);
+        }
+
+        private void ReturnMoney(BoughtPhysicalServer server)
+        {
+            var payments = _boughtServerRepository.GetMany(p => p.Id == server.Id);
+
+            // Find all unspended payments and current payment
+            // All unspended payments which are not "active" yet (it's startdate is grater than now) will be returned completely
+            var futurePayments = payments.Where(p => p.CreateDate > DateTime.UtcNow);
+            // Find current payment (it's startdate is less and enddate is grater than now)
+            // This payment will be returned partially
+            var currentPayment = payments.SingleOrDefault(p => p.CreateDate <= DateTime.UtcNow && p.DateEnd > DateTime.UtcNow);
+
+            decimal sumToReturn = 0;
+            sumToReturn = futurePayments.Sum(p => p.CashAmaunt);
+            if (currentPayment != null)
+            {
+                // Calculate part of current payment to return
+                var totalDays = (currentPayment.DateEnd - currentPayment.CreateDate).Days;
+                var pastDays = (DateTime.UtcNow - currentPayment.CreateDate).Days;
+                var futureDays = totalDays - pastDays;
+                sumToReturn += (currentPayment.CashAmaunt / totalDays) * futureDays;
+            }
+
+            var transaction = new BillingTransaction
+            {
+                SubscriptionVmId = server.Id,
+                CashAmount = sumToReturn,
+                TransactionType = BillingTransactionType.Crediting,
+                UserId = server.UserId,
+                Description = "Return money for deleted physical server"
+            };
+            this._billingService.AddUserTransaction(transaction);
+        }
+
         /// <summary>
         /// Покупка физического сервера
         /// </summary>
@@ -201,21 +252,60 @@ namespace Crytex.Service.Service
             {
                 throw new InvalidIdentifierException($"PhysicalServer with id={serverParam.PhysicalServerId} doesn't exist");
             }
+            var amaunt = GetPriceOption(serverParam.OptionIds);
+            var psTransaction = new BillingTransaction
+            {
+                CashAmount = -amaunt,
+                TransactionType = BillingTransactionType.OneTimeDebiting,
+                SubscriptionVmMonthCount = serverParam.CountMonth,
+                UserId = serverParam.UserId
+            };
+            var status = BoughtPhysicalServerStatus.Creting;
+            try
+            {
+                psTransaction = _billingService.AddUserTransaction(psTransaction);
+            }
+            catch (TransactionFailedException)
+            {
+                status = BoughtPhysicalServerStatus.WaitPayment;
+            }
+            var dt = serverParam.CreateDate ?? DateTime.UtcNow;
             var server = new BoughtPhysicalServer
             {
                 PhysicalServerId = serverConfig.Id,
-                CreateDate = DateTime.UtcNow,
-                Status = BoughtPhysicalServerStatus.Creting,
+                CreateDate = dt,
+                DateEnd = dt.AddMonths(serverParam.CountMonth),
+                Status = status,
                 CountMonth = serverParam.CountMonth,
-                DiscountPrice = serverParam.DiscountPrice,
-                UserId = serverParam.UserId
+                UserId = serverParam.UserId,
+                BillingTransactionId = psTransaction.Id,
+                CashAmaunt = amaunt
             };
+
+            if (serverParam.DiscountPrice != null)
+                server.DiscountPrice = serverParam.DiscountPrice ?? 0;
+
             _boughtServerRepository.Add(server);
             _uniOfWork.Commit();
 
             AddOptionToBoughtPhysicalServer(server.Id, serverParam.OptionIds);
 
             return GetBoughtPhysicalServer(server.Id);
+        }
+
+        private decimal GetPriceOption(IEnumerable<Guid> options)
+        {
+            decimal summ = 0;
+            foreach (var guid in options)
+            {
+                var option = _optionRepository.GetById(guid);
+                if (option == null)
+                {
+                    throw new InvalidIdentifierException($"PhysicalServerOption with id={guid} doesn't exist");
+                }
+                summ += option.Price;
+            }
+            return summ;
         }
 
         private void AddOptionToBoughtPhysicalServer(Guid serverId, IEnumerable<Guid> options)
@@ -244,6 +334,11 @@ namespace Crytex.Service.Service
             if (server == null)
             {
                 throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
+            }
+            if(state == BoughtPhysicalServerStatus.Active)
+            {
+                server.CreateDate = DateTime.Now;
+                server.DateEnd = server.CreateDate.AddMonths(server.CountMonth);
             }
             server.Status = state;
             _boughtServerRepository.Update(server);
@@ -274,7 +369,8 @@ namespace Crytex.Service.Service
                 _boughtOptionRepository.Delete(x => x.BoughtPhysicalServerId == server.Id);
                 AddOptionToBoughtPhysicalServer(server.Id, serverParam.OptionIds);
             }
-
+            if (serverParam.State != null)
+                server.Status = (BoughtPhysicalServerStatus)serverParam.State;
             _boughtServerRepository.Update(server);
             _uniOfWork.Commit();
 
@@ -300,7 +396,7 @@ namespace Crytex.Service.Service
             return pagedList;
         }
 
-        public IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize, 
+        public IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize,
             PhysicalServerOptionSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
@@ -312,7 +408,7 @@ namespace Crytex.Service.Service
             return pagedList;
         }
 
-        public IPagedList<BoughtPhysicalServer> GetPageBoughtPhysicalServer(int pageNumber, int pageSize, 
+        public IPagedList<BoughtPhysicalServer> GetPageBoughtPhysicalServer(int pageNumber, int pageSize,
             BoughtPhysicalServerSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
@@ -325,7 +421,7 @@ namespace Crytex.Service.Service
                 server.Config = server.Server.ProcessorName;
                 server.ServerOptions = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
                     x => x.Option, x => x.Server);
-                if(!server.ServerOptions.Any()) continue;
+                if (!server.ServerOptions.Any()) continue;
                 foreach (var opt in server.ServerOptions)
                     server.Config += ", " + opt.Option.Name;
             }
@@ -347,7 +443,7 @@ namespace Crytex.Service.Service
             }
             server.AvailableOptions = new List<PhysicalServerOptionsAvailable>();
             foreach (var option in _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option))
-                if(option.IsDefault || option.Option.Type == PhysicalServerOptionType.Hdd)
+                if (option.IsDefault || option.Option.Type == PhysicalServerOptionType.Hdd)
                     server.AvailableOptions.Add(option);
 
             return server;
@@ -386,7 +482,7 @@ namespace Crytex.Service.Service
             server.ServerOptions = _boughtOptionRepository.GetMany(x => x.BoughtPhysicalServerId == server.Id,
                 x => x.Option, x => x.Server);
             server.Config = server.Server.ProcessorName;
-            if (server.ServerOptions.Any()) 
+            if (server.ServerOptions.Any())
                 foreach (var opt in server.ServerOptions)
                     server.Config += ", " + opt.Option.Name;
 

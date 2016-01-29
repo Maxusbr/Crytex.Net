@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Crytex.Model.Enums;
 using Crytex.Model.Models;
+using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
 using PagedList;
 
@@ -18,6 +19,7 @@ namespace Crytex.Service.IService
         void CreateOrUpdateOptions(IEnumerable<PhysicalServerOptionsParams> optionsParams);
         void DeletePhysicalServer(Guid serverId);
         void DeletePhysicalServerOption(Guid optionId);
+        void DeleteBoughtPhysicalServer(Guid serverId);
 
         BoughtPhysicalServer BuyPhysicalServer(BuyPhysicalServerParam serverParam);
         void UpdateBoughtPhysicalServerState(Guid serverId, BoughtPhysicalServerStatus state);
