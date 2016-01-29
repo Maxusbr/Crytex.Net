@@ -74,6 +74,13 @@ namespace Crytex.Service
             container.RegisterType<INewsRepository, NewsRepository>();
             container.RegisterType<INewsService, NewsService>();
             container.RegisterType<IPaymentGameServerRepository, PaymentGameServerRepository>();
+            container.RegisterType<IWebHostingTariffRepository, WebHostingTariffRepository>();
+            container.RegisterType<IWebHostingTariffService, WebHostingTariffService>();
+            container.RegisterType<IWebHostingRepository, WebHostingRepository>();
+            container.RegisterType<IWebHostingService, WebHostingService>();
+            container.RegisterType<IWebHostingPaymentRepository, WebHostingPaymentRepository>();
+            container.RegisterType<IHostedWebApplicationRepository, HostedWebApplicationRepository>();
+            container.RegisterType<IHostedWebApplicationService, HostedWebApplicationService>();
 
             container.RegisterType<IBoughtPhysicalServerOptionRepository, BoughtPhysicalServerOptionRepository>();
             container.RegisterType<IBoughtPhysicalServerRepository, BoughtPhysicalServerRepository>();
@@ -92,6 +99,8 @@ namespace Crytex.Service
             container.RegisterType<IGameServerService, SecureGameServerService>("Secured");
             container.RegisterType<ISubscriptionVmService, SecuredSubscriptionVmService>("Secured");
             container.RegisterType<IFixedSubscriptionPaymentService, SecureFixedSubscriptionPaymentService>("Secured");
+            container.RegisterType<IWebHostingService, SecureWebHostingService>("Secured");
+            container.RegisterType<IHostedWebApplicationService, SecuredHostedWebApplicationService>("Secured");
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();

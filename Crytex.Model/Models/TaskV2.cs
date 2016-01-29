@@ -20,16 +20,16 @@ namespace Crytex.Model.Models
         public DateTime? StartedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
 
-        
-        public void SaveOptions<T>(T value) where T: BaseOptions
+
+        public void SaveOptions<T>(T value) where T : BaseOptions
         {
             Options = JsonConvert.SerializeObject(value ?? new BaseOptions());
         }
 
-        
+
         public T GetOptions<T>() where T : BaseOptions
         {
-            return JsonConvert.DeserializeObject<T>(Options); 
+            return JsonConvert.DeserializeObject<T>(Options);
         }
 
     }
@@ -51,7 +51,7 @@ namespace Crytex.Model.Models
         Queued = 5
     }
 
-    public enum TypeTask 
+    public enum TypeTask
     {
         CreateVm = 0,
         UpdateVm = 1,
@@ -61,7 +61,11 @@ namespace Crytex.Model.Models
         DeleteBackup = 5,
         CreateSnapshot = 6,
         DeleteSnapshot = 7,
-        LoadSnapshot = 8
+        LoadSnapshot = 8,
+        CreateWebHosting = 9,
+        StartWebApp = 10,
+        StopWebApp = 11,
+        RestartWebApp = 12
     }
 
     [Serializable]
@@ -141,6 +145,18 @@ namespace Crytex.Model.Models
     public class DeleteBackupOptions : BaseOptions
     {
         public Guid VmBackupId { get; set; }
+    }
+
+    [Serializable]
+    public class CreateWebHostingOptions : BaseOptions
+    {
+
+    }
+
+    [Serializable]
+    public class WebApplicationTaskOptions : BaseOptions
+    {
+        public Guid HostedWedApplicationId { get; set; }
     }
 
     public enum TypeChangeStatus {
