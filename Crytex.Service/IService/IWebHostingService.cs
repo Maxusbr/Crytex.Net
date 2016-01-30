@@ -18,5 +18,6 @@ namespace Crytex.Service.IService
         IEnumerable<WebHosting> GetAllByStatusAndExpireDate(WebHostingStatus status, DateTime? dateFrom = null, DateTime? dateTo = null);
         void UpdateWebHostingStatus(Guid id, WebHostingStatus newStatus);
         void PrepareHostingForDeletion(Guid id);
+        void DeleteWebHosting(Guid id);
     }
 }

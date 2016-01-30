@@ -187,5 +187,23 @@ namespace Crytex.Notification
             var from = ConfigurationManager.AppSettings["Email"];
             this.SendEmailImmediately(from, user.Email, EmailTemplateType.WebHostingWasDisabled, null, null, DateTime.UtcNow);
         }
+
+        public void SendWebHostingEndWarningEmail(string userId, int daysToEnd)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            List<KeyValuePair<string, string>> bodyParams = new List<KeyValuePair<string, string>>();
+            bodyParams.Add(new KeyValuePair<string, string>("daysToEnd", daysToEnd.ToString()));
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.WebHostingEndWaring, null, bodyParams, DateTime.UtcNow);
+        }
+
+        public void SendWebHostingDeletionWarningEmail(string userId, int daysToDeletion)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            List<KeyValuePair<string, string>> bodyParams = new List<KeyValuePair<string, string>>();
+            bodyParams.Add(new KeyValuePair<string, string>("daysToDeletion", daysToDeletion.ToString()));
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.WebHostingDeletionWarning, null, bodyParams, DateTime.UtcNow);
+        }
     }
 }

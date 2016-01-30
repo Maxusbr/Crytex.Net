@@ -31,6 +31,7 @@ namespace Crytex.Model.Models.WebHostingModels
         Creating = 0,
         Active = 1,
         WaitForPayment = 2,
-        WaitForDeletion = 3
+        WaitForDeletion = 3,
+        Deleted = 4
     }
 }

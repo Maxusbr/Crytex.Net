@@ -15,6 +15,8 @@
         GameServerEndWarning = 10,
         GameServerDeletionWarning = 11,
         ResetPassword = 12,
-        WebHostingWasDisabled = 13
+        WebHostingWasDisabled = 13,
+        WebHostingEndWaring = 14,
+        WebHostingDeletionWarning = 15
     }
 }

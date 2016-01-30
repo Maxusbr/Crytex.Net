@@ -220,6 +220,20 @@ namespace Crytex.Data.Migrations
                     EmailTemplateType = EmailTemplateType.WebHostingWasDisabled,
                     Body = "Веб-хостинг требует оплаты. Пожалуйста внесите платёж. Хостинг временно отключен"
                 };
+                var webHostingEndWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Срок оплаты веб-хостинга истекает",
+                    EmailTemplateType = EmailTemplateType.WebHostingEndWaring,
+                    Body = "Срок оплаты веб-хостинга истекает через {daysToEnd} дня",
+                    ParameterNames = @"[""daysToEnd""]"
+                };
+                var webHostingDeletionWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Веб-хостинг будет удалён",
+                    EmailTemplateType = EmailTemplateType.WebHostingDeletionWarning,
+                    Body = "Ваш веб-хостинг будет удалена через {daysToDeletion} дня",
+                    ParameterNames = @"[""daysToDeletion""]"
+                };
 
                 context.EmailTemplates.Add(regApproveEmailtemplate);
                 context.EmailTemplates.Add(subscriptionNeedsPaymentEmailTemplate);

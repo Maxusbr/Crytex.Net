@@ -212,6 +212,26 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
+        public void DeleteWebHosting(Guid id)
+        {
+            var hosting = this.GetById(id);
+            // create web-hosting disable task
+            var deleteHostingOptions = new DeleteWebHostingOptions
+            {
+            };
+            var task = new TaskV2
+            {
+                UserId = hosting.UserId,
+                TypeTask = TypeTask.DeleteHosting
+            };
+            this._taskService.CreateTask(task, deleteHostingOptions);
+
+            // Change subscription status to Deleted
+            hosting.Status = WebHostingStatus.Deleted;
+            this._webHostingRepository.Update(hosting);
+            this._unitOfWork.Commit();
+        }
+
         private WebHosting PrepareNewHosting(BuyWebHostingParams buyParams, WebHostingTariff hostingTariff)
         {
             var task = new TaskV2

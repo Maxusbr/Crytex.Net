@@ -26,6 +26,8 @@ namespace Crytex.Notification
         void SendGameServerPoweredOffEmail(string userId);
         void SendHostingDisabledEmail(string userId);
         void SendGameServerEndWarningEmail(string userId, int daysToEnd);
+        void SendWebHostingEndWarningEmail(string userId, int daysToEnd);
         void SendGameServerDeletionWarningEmail(string userId, int daysToDeletion);
+        void SendWebHostingDeletionWarningEmail(string userId, int daysToDeletion);
     }
 }
