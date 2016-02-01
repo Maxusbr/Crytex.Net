@@ -20,16 +20,16 @@ namespace Crytex.Model.Models
         public DateTime? StartedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
 
-        
-        public void SaveOptions<T>(T value) where T: BaseOptions
+
+        public void SaveOptions<T>(T value) where T : BaseOptions
         {
             Options = JsonConvert.SerializeObject(value ?? new BaseOptions());
         }
 
-        
+
         public T GetOptions<T>() where T : BaseOptions
         {
-            return JsonConvert.DeserializeObject<T>(Options); 
+            return JsonConvert.DeserializeObject<T>(Options);
         }
 
     }
@@ -51,13 +51,23 @@ namespace Crytex.Model.Models
         Queued = 5
     }
 
-    public enum TypeTask 
+    public enum TypeTask
     {
         CreateVm = 0,
         UpdateVm = 1,
         ChangeStatus = 2,
         RemoveVm = 3,
-        Backup = 4
+        Backup = 4,
+        DeleteBackup = 5,
+        CreateSnapshot = 6,
+        DeleteSnapshot = 7,
+        LoadSnapshot = 8,
+        CreateWebHosting = 9,
+        StartWebApp = 10,
+        StopWebApp = 11,
+        RestartWebApp = 12,
+        DisableWebHosting = 13,
+        DeleteHosting = 14
     }
 
     [Serializable]
@@ -71,7 +81,7 @@ namespace Crytex.Model.Models
     {
         public Int32 Cpu { get; set; }
         public Int32 Ram { get; set; }
-        public Int32 Hdd { get; set; }
+        public Int32 HddGB { get; set; }
         // Пользовательское имя виртауальной машины. Используется для отображения на UI
         public String Name { get; set; }
     }
@@ -107,6 +117,57 @@ namespace Crytex.Model.Models
     {
         public string BackupName { get; set; }
         public Guid VmId { get; set; }
+        public Guid VmBackupId { get; set; }
+    }
+
+    [Serializable]
+    public class CreateSnapshotOptions : BaseOptions
+    {
+        public Guid SnapshotId { get; set; }
+        public Guid VmId { get; set; }
+        public string Name { get; set; }
+    }
+
+    [Serializable]
+    public class DeleteSnapshotOptions : BaseOptions
+    {
+        public Guid SnapshotId { get; set; }
+        public bool DeleteWithChildrens { get; set; }
+        public Guid VmId { get; set; }
+    }
+
+    [Serializable]
+    public class LoadSnapshotOptions : BaseOptions
+    {
+        public Guid SnapshotId { get; set; }
+        public Guid VmId { get; set; }
+    }
+
+    [Serializable]
+    public class DeleteBackupOptions : BaseOptions
+    {
+        public Guid VmBackupId { get; set; }
+    }
+
+    [Serializable]
+    public class CreateWebHostingOptions : BaseOptions
+    {
+    }
+
+    [Serializable]
+    public class DisableWebHostingOptions : BaseOptions
+    {
+    }
+
+    [Serializable]
+    public class DeleteWebHostingOptions : BaseOptions
+    {
+    }
+
+    [Serializable]
+    public class WebApplicationTaskOptions : BaseOptions
+    {
+        public Guid HostedWedApplicationId { get; set; }
     }
 
     public enum TypeChangeStatus {

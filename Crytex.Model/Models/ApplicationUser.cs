@@ -48,6 +48,7 @@ namespace Crytex.Model.Models
         public string ContactPerson { get; set; }
         public decimal Balance { get; set; }
 
+
         [Timestamp]
         public byte[] RowVersion { get; set; }
     }

@@ -38,7 +38,7 @@ namespace Crytex.ExecutorTask.TaskHandler.VmWare
             try
             {
                 this._vmWareProvider.CloneVm(os.ServerTemplateName, machineName);
-                this._vmWareProvider.ModifyMachine(machineName, createOptions.Cpu, createOptions.Ram, createOptions.Hdd);
+                this._vmWareProvider.ModifyMachine(machineName, createOptions.Cpu, createOptions.Ram, createOptions.HddGB);
                 this._vmWareProvider.StartMachine(machineName, true);
 
                 var oldPassword = os.DefaultAdminPassword;

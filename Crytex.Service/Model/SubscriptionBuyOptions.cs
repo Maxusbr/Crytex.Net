@@ -18,5 +18,9 @@ namespace Crytex.Service.Model
         public string AdminUserId { get; set; }
         public bool BoughtByAdmin { get; set; }
         public TypeVirtualization Virtualization { get; set; }
+        /// <summary>
+        /// Кол-во дней, на протяжении которых будут храниться ежедневные автоматические бэкапы
+        /// </summary>
+        public int DailyBackupStorePeriodDays { get; set; }
     }
 }

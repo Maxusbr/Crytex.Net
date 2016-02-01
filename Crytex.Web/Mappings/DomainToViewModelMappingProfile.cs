@@ -13,6 +13,7 @@ using Crytex.Web.Models;
 using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
+using Crytex.Model.Models.WebHostingModels;
 
 namespace Crytex.Web.Mappings
 {
@@ -79,7 +80,8 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Name, opt => opt.MapFrom(source => source.Vm.Name))
                 .ForMember(x => x.VmName, opt => opt.MapFrom(source => source.Vm.Name));
             Mapper.CreateMap<SubscriptionVm, SubscriptionVmViewModel>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
+                .ForMember(x => x.OperatingSystemId, opt => opt.MapFrom(source => source.UserVm.OperatingSystemId));
             Mapper.CreateMap<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(s => s.SubscriptionVm.User.UserName))
                 .ForMember(x => x.UserId, opt => opt.MapFrom(s => s.SubscriptionVm.UserId))
@@ -99,6 +101,19 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<UsageSubscriptionPaymentContainer, UsageSubscriptionPaymentByPeriodView>()
                 .ForMember(x => x.Date, opt => opt.MapFrom(s => s.Date))
                 .ForMember(x => x.UsageSubscriptionPayment, opt => opt.MapFrom(s => Mapper.Map<IEnumerable<UsageSubscriptionPaymentView>>(s.UsageSubscriptionPayment)));
+            Mapper.CreateMap<News, NewsViewModel>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
+            Mapper.CreateMap<PaymentGameServer, PaymentGameServerViewModel>()
+                .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.CashAmount));
+            Mapper.CreateMap<GameServerConfigOptions, GameServerConfigViewModel>();
+            Mapper.CreateMap<News, NewsViewModel>()
+                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
+            Mapper.CreateMap<WebHostingTariff, WebHostingTariffViewModel>();
+            Mapper.CreateMap<WebHosting, WebHostingViewModel>()
+                .ForMember(x => x.TariffName, opt => opt.MapFrom(source => source.WebHostingTariff.Name));
+            Mapper.CreateMap<TestPeriodOptions, TestPeriodViewModel>();
+            Mapper.CreateMap<WebHostingPayment, WebHostingPaymentViewModel>()
+                .ForMember(x => x.WebHostingName, opt => opt.MapFrom(s => s.WebHosting.Name));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -122,6 +137,10 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UsageSubscriptionPayment, UsageSubscriptionPaymentView>();
             this.MapPagedList<UsageSubscriptionPaymentContainer, UsageSubscriptionPaymentByPeriodView>();
             this.MapPagedList<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>();
+            this.MapPagedList<News, NewsViewModel>();
+            this.MapPagedList<PaymentGameServer, PaymentGameServerViewModel>();
+            this.MapPagedList<WebHostingTariff, WebHostingTariffViewModel>();
+            this.MapPagedList<WebHostingPayment, WebHostingPaymentViewModel>();
         }
 
         protected void MapPagedList<TSource, TDest>()

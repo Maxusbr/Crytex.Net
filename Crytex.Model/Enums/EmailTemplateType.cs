@@ -10,6 +10,13 @@
         SubscriptionNeedsPayment = 5,
         SubscriptionEndWarning = 6,
         SubscriptionDeletionWarning = 7,
-        CreateVmCredentials = 8
+        CreateVmCredentials = 8,
+        GameServerNeedsPayment = 9,
+        GameServerEndWarning = 10,
+        GameServerDeletionWarning = 11,
+        ResetPassword = 12,
+        WebHostingWasDisabled = 13,
+        WebHostingEndWaring = 14,
+        WebHostingDeletionWarning = 15
     }
 }

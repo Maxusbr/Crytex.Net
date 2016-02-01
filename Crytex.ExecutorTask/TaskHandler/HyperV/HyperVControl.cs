@@ -43,9 +43,9 @@ namespace Crytex.ExecutorTask.TaskHandler.HyperV
 
                 // Resize copied vhd if needed
                 var machineVhd = vhdService.GetVhd(newMachineDrivePath);
-                if (machineVhd.VirtualHardDisk.FileSize != (uint)taskOptions.Hdd)
+                if (machineVhd.VirtualHardDisk.FileSize != (uint)taskOptions.HddGB)
                 {
-                    vhdService.ResizeVhd(machineVhd.VirtualHardDisk, (uint)taskOptions.Hdd);
+                    vhdService.ResizeVhd(machineVhd.VirtualHardDisk, (uint)taskOptions.HddGB);
                 }
                 
                 // Attach disk to machine

@@ -60,11 +60,12 @@ namespace Crytex.Background
 
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
 
-            //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "0 */5 * * * ?");
+            //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "*/10 * * * * ?");
             //scheduler.TriggerJob(emai);
 
-            //scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
-            scheduler.ScheduleJob<ActiveStaticSubscriptionVmJob>("ActiveStaticSubscriptionVmJob", "*/5 * * * * ?");
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
+            //scheduler.ScheduleJob<UsageSubscriptionVmJob>("ActiveStaticSubscriptionVmJob", "*/5 * * * * ?");
+            scheduler.ScheduleJob<BackupSubscriptionVmJob>("BackupSubscriptionVmJob", "*/5 * * * * ?");
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
             //scheduler.ScheduleJob<NetTrafficCounterUpdateJob>("net traffic", "0 */15 * * * ?");
 

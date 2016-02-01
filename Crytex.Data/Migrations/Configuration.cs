@@ -24,7 +24,7 @@ namespace Crytex.Data.Migrations
             AutomaticMigrationDataLossAllowed = true;
             CreateFakeEntries = true;
         }
-        protected  override void Seed(ApplicationDbContext context)
+        protected override void Seed(ApplicationDbContext context)
         {
 
             if (!context.OAuthClientApplications.Any())
@@ -86,6 +86,7 @@ namespace Crytex.Data.Migrations
                 {
                     roleManager.Create(new IdentityRole { Name = "Admin" });
                     roleManager.Create(new IdentityRole { Name = "Support" });
+                    roleManager.Create(new IdentityRole { Name = "FirstStepRegister" });
                     roleManager.Create(new IdentityRole { Name = "User" });
                 }
 
@@ -175,7 +176,7 @@ namespace Crytex.Data.Migrations
                 {
                     Subject = "Ваша подписка будет удалена",
                     EmailTemplateType = EmailTemplateType.SubscriptionDeletionWarning,
-                    Body = "Ваша подписка на виртуальную машину буден удаоена через {daysToDeletion} дня",
+                    Body = "Ваша подписка на виртуальную машину будет удалена через {daysToDeletion} дня",
                     ParameterNames = @"[""daysToDeletion""]"
                 };
                 var createVmCredsEmailTemplate = new EmailTemplate
@@ -185,12 +186,65 @@ namespace Crytex.Data.Migrations
                     Body = "Ваша машина {vmName} создана для доступа используйте имя пользователя {osUserName} и пароль {osUserPassword}",
                     ParameterNames = @"[""vmName"", ""osUserName"", ""osUserPassword""]"
                 };
+                var gameserverEndWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Срок подписки истекает",
+                    EmailTemplateType = EmailTemplateType.GameServerEndWarning,
+                    Body = "Ваша подписка на виртуальную машину истекает через {daysToEnd} дня",
+                    ParameterNames = @"[""daysToEnd""]"
+                };
+                var gameserverNeedsPaymentEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Подписка требует оплаты",
+                    EmailTemplateType = EmailTemplateType.GameServerNeedsPayment,
+                    Body = "Ваша подписка на игровой сервер требует оплаты. Пожалуйста внесите платёж. Машина отключена"
+                };
+                var gameserverDeletionWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Ваша подписка будет удалена",
+                    EmailTemplateType = EmailTemplateType.GameServerDeletionWarning,
+                    Body = "Ваша подписка на игровой сервер будет удалена через {daysToDeletion} дня",
+                    ParameterNames = @"[""daysToDeletion""]"
+                };
+                var resetPasswordTemplate = new EmailTemplate
+                {
+                    Body = @"Для сброса пароля перейдите по ссылке <a href=""{callbackUrl}"">здесь</a>",
+                    EmailTemplateType = EmailTemplateType.ResetPassword,
+                    ParameterNames = @"[""callbackUrl""]",
+                    Subject = "Сброс пароля учетной записи"
+                };
+
+                var webHostingDisabledEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Веб-хостинг требует оплаты",
+                    EmailTemplateType = EmailTemplateType.WebHostingWasDisabled,
+                    Body = "Веб-хостинг требует оплаты. Пожалуйста внесите платёж. Хостинг временно отключен"
+                };
+                var webHostingEndWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Срок оплаты веб-хостинга истекает",
+                    EmailTemplateType = EmailTemplateType.WebHostingEndWaring,
+                    Body = "Срок оплаты веб-хостинга истекает через {daysToEnd} дня",
+                    ParameterNames = @"[""daysToEnd""]"
+                };
+                var webHostingDeletionWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Веб-хостинг будет удалён",
+                    EmailTemplateType = EmailTemplateType.WebHostingDeletionWarning,
+                    Body = "Ваш веб-хостинг будет удалена через {daysToDeletion} дня",
+                    ParameterNames = @"[""daysToDeletion""]"
+                };
 
                 context.EmailTemplates.Add(regApproveEmailtemplate);
                 context.EmailTemplates.Add(subscriptionNeedsPaymentEmailTemplate);
                 context.EmailTemplates.Add(subscriptionEndWarningEmailTemplate);
                 context.EmailTemplates.Add(subscriptionDeletionWarningEmailTemplate);
                 context.EmailTemplates.Add(createVmCredsEmailTemplate);
+                context.EmailTemplates.Add(gameserverEndWarningEmailTemplate);
+                context.EmailTemplates.Add(gameserverNeedsPaymentEmailTemplate);
+                context.EmailTemplates.Add(gameserverDeletionWarningEmailTemplate);
+                context.EmailTemplates.Add(resetPasswordTemplate);
+                context.EmailTemplates.Add(webHostingDisabledEmailTemplate);
                 ///////////////////////////////////
 
                 for (int i = 1; i < 6; i++)
@@ -455,7 +509,7 @@ namespace Crytex.Data.Migrations
                     var createVmOptions = new CreateVmOptions
                     {
                         Cpu = 2,
-                        Hdd = 300,
+                        HddGB = 300,
                         Ram = 2048,
                         OperatingSystemId = operations[0].Id,
                         Name = "Машина #" + i,
@@ -481,7 +535,7 @@ namespace Crytex.Data.Migrations
                     {
                         Id = createVmOptions.UserVmId,
                         CoreCount = createVmOptions.Cpu,
-                        HardDriveSize = createVmOptions.Hdd,
+                        HardDriveSize = createVmOptions.HddGB,
                         RamCount = createVmOptions.Ram,
                         VirtualizationType = createTask.Virtualization,
                         Name = createVmOptions.Name,
@@ -535,7 +589,7 @@ namespace Crytex.Data.Migrations
 
                     context.EmailInfos.Add(emailInfo);
                 }
-
+                context.Commit();
                 var template = serverTemplates[0].Id;
                 var gameServerConfig = context.GameServerConfigurations.FirstOrDefault(
                     g => g.ServerTemplateId == template);
@@ -549,18 +603,20 @@ namespace Crytex.Data.Migrations
                     context.GameServerConfigurations.Add(gameServerConfig);
                 }
 
-
+                context.Commit();
                 var gameServer = new GameServer
                 {
                     PaymentType = ServerPaymentType.Slot,
                     VmId = allMachine[0].Id,
                     SlotCount = 5,
                     GameServerConfigurationId = gameServerConfig.Id,
-                    UserId = allUsers[0].Id
+                    UserId = allUsers[0].Id,
+                    CreateDate = DateTime.UtcNow,
+                    DateExpire = DateTime.UtcNow.AddMonths(1)
                 };
                 context.GameServers.Add(gameServer);
 
-
+                context.Commit();
                 var fixedSubscriptions =
                     context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Fixed).ToList();
                 foreach (var fixedSub in fixedSubscriptions)
@@ -596,7 +652,7 @@ namespace Crytex.Data.Migrations
                     context.BillingTransactions.Add(transaction);
                     context.FixedSubscriptionPayments.Add(fixedPaymentSubscription);
                 };
-
+                context.Commit();
                 var usageSubscriptions = context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Usage).ToList();
                 foreach (var usageSub in usageSubscriptions)
                 {

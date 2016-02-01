@@ -9,6 +9,7 @@ namespace Crytex.Model.Models.Biling
         public BillingTransactionType TransactionType { get; set; }
         public DateTime Date { get; set; }
         public decimal CashAmount { get; set; }
+        public decimal UserBalance { get; set; }
         public string Description { get; set; }
         public string UserId { get; set; }
         public string AdminUserId { get; set; }
@@ -38,6 +39,7 @@ namespace Crytex.Model.Models.Biling
         OneTimeDebiting = 2,
         SystemBonus = 3,
         ReplenishmentFromAdmin = 4,
-        WithdrawByAdmin = 5
+        WithdrawByAdmin = 5,
+        TestPeriod = 6
     }
 }

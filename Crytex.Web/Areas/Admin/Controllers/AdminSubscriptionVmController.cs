@@ -9,6 +9,7 @@ using PagedList;
 using System;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Crytex.Model.Models;
 
 namespace Crytex.Web.Areas.Admin.Controllers
 {
@@ -104,8 +105,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <summary>
         /// Обновление подписки админом для пользователя
         /// </summary>
-        [ResponseType(typeof(SubscriptionUpdateOptions))]
-        [Route("api/AdminSubscriptionVm/UpdateSubscription"), HttpPost()]
+        [HttpPost]
         public IHttpActionResult UpdateSubscription(SubscriptionUpdateOptions model)
         {
             if (!this.ModelState.IsValid)
@@ -130,54 +130,40 @@ namespace Crytex.Web.Areas.Admin.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Обновление статуса машины
+        /// </summary>
         [HttpPost]
-        public IHttpActionResult StartMachine(string subscriptionId)
+        public IHttpActionResult UpdateMachineStatus([FromBody]UpdateMachineStatusOptions model)
         {
             Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
+            if (!Guid.TryParse(model.SubscriptionId, out guid))
                 return this.BadRequest("Invalid Guid format");
-
-            this._subscriptionVmService.StartSubscriptionMachine(guid);
+            switch (model.Status)
+            {
+               case  TypeChangeStatus.Start:
+                    this._subscriptionVmService.StartSubscriptionMachine(guid);
+                    break;
+                case TypeChangeStatus.PowerOff:
+                    this._subscriptionVmService.PowerOffSubscriptionMachine(guid);
+                    break;
+                case TypeChangeStatus.Reload:
+                    this._subscriptionVmService.ResetSubscriptionMachine(guid);
+                    break;
+                case TypeChangeStatus.Stop:
+                    this._subscriptionVmService.StopSubscriptionMachine(guid);
+                    break;
+                default:
+                    return BadRequest("Invalid status");
+            }
 
             return Ok();
         }
 
-        [HttpPost]
-        public IHttpActionResult StopMachine(string subscriptionId)
-        {
-            Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
-                return this.BadRequest("Invalid Guid format");
 
-            this._subscriptionVmService.StopSubscriptionMachine(guid);
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public IHttpActionResult PowerOffMachine(string subscriptionId)
-        {
-            Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
-                return this.BadRequest("Invalid Guid format");
-
-            this._subscriptionVmService.PowerOffSubscriptionMachine(guid);
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public IHttpActionResult ResetMachine(string subscriptionId)
-        {
-            Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
-                return this.BadRequest("Invalid Guid format");
-
-            this._subscriptionVmService.ResetSubscriptionMachine(guid);
-
-            return Ok();
-        }
-
+        /// <summary>
+        /// Обновление характеристик машины
+        /// </summary>
         [HttpPost]
         public IHttpActionResult UpdateMachineConfiguration(MachineConfigUpdateViewModel model)
         {
@@ -192,4 +178,6 @@ namespace Crytex.Web.Areas.Admin.Controllers
             return Ok();
         }
     }
+
+  
 }

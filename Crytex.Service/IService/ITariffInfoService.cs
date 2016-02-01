@@ -15,5 +15,6 @@ namespace Crytex.Service.IService
         decimal CalculateTotalPrice(int processor, int HDD, int SSD, int RAM512, int Load10Percent, Tariff tariff);
 
         void UpdateTariff(Tariff updateTariff);
+        decimal CalculateBackupPrice(int hdd, int sdd, int days, Tariff tariff);
     }
 }

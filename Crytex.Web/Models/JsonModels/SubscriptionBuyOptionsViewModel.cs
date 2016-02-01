@@ -22,6 +22,11 @@ namespace Crytex.Web.Models.JsonModels
         public SubscriptionType? SubscriptionType { get; set; }
         [Required]
         public TypeVirtualization? Virtualization { get; set; }
+        /// <summary>
+        /// Кол-во дней, на протяжении которых будут храниться ежедневные автоматические бэкапы
+        /// </summary>
+        [Range(2, 30)]
+        public int? DailyBackupStorePeriodDays { get; set; }
     }
 
     public class SubscriptionBuyOptionsAdminViewModel : SubscriptionBuyOptionsUserViewModel

@@ -7,31 +7,58 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Routing;
 using System.Web.Routing;
+using Crytex.Service.Model;
+using Crytex.Service.Service;
+using Crytex.Web.Controllers.Api;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
-    public class AccountController : UserCrytexController
+    public class AccountController : CrytexApiController
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private NotificationManager _notificationManager { get; set; }
+        private OAuthService _oauthService;
+        private INotificationManager _notificationManager { get; set; }
+
+        public AccountController(ApplicationUserManager userManager, OAuthService oauthService, INotificationManager notificationManager, ApplicationSignInManager applicationSignInManager)
+        {
+            _userManager = userManager;
+            _oauthService = oauthService;
+            _signInManager = applicationSignInManager;
+            _notificationManager = notificationManager;
+        }
+
 
         [HttpPost]
-        public IHttpActionResult Register(RegisterViewModel model)
+        public async Task<IHttpActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, RegisterDate = DateTime.Now };
-                var result = _userManager.CreateAsync(user, model.Password).Result;
+                var user = new ApplicationUser { UserName = model.email, Email = model.email, RegisterDate = DateTime.Now };
+                var result = await _userManager.CreateAsync(user, model.password);
+
                 if (result.Succeeded)
                 {
-                    this.SendConfirmationEmailForUser(user);
 
-                    return this.Ok();
+                    await this.SendConfirmationEmailForUser(user);
+
+
+                    var addRoleResult = await _userManager.AddToRoleAsync(user.Id, "FirstStepRegister");
+                    if (addRoleResult.Succeeded)
+                    {
+                        return this.Ok();
+                    }
+                    else
+                    {
+                        return InternalServerError();
+                    }
+
                 }
 
                 AddErrors(result);
@@ -42,13 +69,13 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult SendEmailAgain(string userId)
+        public async Task<IHttpActionResult> SendEmailAgain(string userId)
         {
             if (userId != null)
             {
                 var user = _userManager.FindById(userId);
 
-                this.SendConfirmationEmailForUser(user);
+                await this.SendConfirmationEmailForUser(user);
 
                 return this.Ok();
             }
@@ -57,15 +84,15 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult ConfirmEmail(string userId, string code)
+        public async Task<IHttpActionResult> ConfirmEmail(ConfirmEmailModel confirmEmail)
         {
-            if (userId == null || code == null)
+            if (confirmEmail.userId == null || confirmEmail.code == null)
             {
                 return this.Conflict();
             }
-            var provider = new DpapiDataProtectionProvider("TestWebAPI");
-            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-            var result = _userManager.ConfirmEmailAsync(userId, code).Result;
+
+            var code = Base64ForUrlDecode(confirmEmail.code);
+            var result = await _userManager.ConfirmEmailAsync(confirmEmail.userId, code);
             if (result.Succeeded)
             {
                 return this.Ok();
@@ -142,22 +169,117 @@ namespace Crytex.Web.Areas.User.Controllers
             return this.BadRequest(this.ModelState);
         }
 
-        private void SendConfirmationEmailForUser(ApplicationUser user)
+        [HttpPost]
+        [Authorize]
+
+        public IHttpActionResult RemoveRefreshToken(RemoveRefreshTokenParams model)
         {
-            _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false).Wait();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
-            var provider = new DpapiDataProtectionProvider("TestWebAPI");
-            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+            _oauthService.RemoveRefreshToken(model);
 
-            var code = _userManager.GenerateEmailConfirmationTokenAsync(user.Id).Result;
-
-            var callbackUrl = new Uri(Url.Link("ConfirmEmailRoute", new { userId = user.Id, code = code }));
-            var mailParams = new List<KeyValuePair<string, string>>();
-            mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl.ToString()));
-
-            _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
-                mailParams, DateTime.Now).Wait();
+            return Ok("Refresh token was successfuly removed.");
         }
+
+        private async Task SendConfirmationEmailForUser(ApplicationUser user)
+        {
+            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
+            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}#/account/verify?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
+            var mailParams = new List<KeyValuePair<string, string>>();
+            mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl));
+
+            await _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.Registration, null,
+               mailParams, DateTime.Now);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="email">Email пользователя</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (model.email != null)
+            {
+                var user = await _userManager.FindByEmailAsync(model.email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "User with this Email not found");
+                    return BadRequest(ModelState);
+                }
+                await SendResetPasswordEmailForUser(user);
+
+                return this.Ok();
+            }
+
+            return this.Conflict();
+        }
+
+        private async Task SendResetPasswordEmailForUser(ApplicationUser user)
+        {
+            
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
+
+            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}#/account/resetPassword?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
+            var mailParams = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("callbackUrl", callbackUrl)
+            };
+
+            await _notificationManager.SendEmailImmediately("crytex@crytex.com", user.Email, EmailTemplateType.ResetPassword, null,
+               mailParams, DateTime.Now);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<IHttpActionResult> CreateNewPassword(CreateNewPasswordModel model)
+        {
+            if (model.userId == null || model.code == null || model.password == null)
+            {
+                return this.Conflict();
+            }
+
+            var code = Base64ForUrlDecode(model.code);
+            var result = await _userManager.ResetPasswordAsync(model.userId, code, model.password);
+            if (result.Succeeded)
+            {
+                return this.Ok();
+            }
+            else
+            {
+                return this.Conflict();
+            }
+        }
+
+        public class CreateNewPasswordModel
+        {
+            public string userId { get; set; }
+            public string code { get; set; }
+            public string password { get; set; }
+        }
+        public class ResetPasswordModel
+        {
+            public string email { get; set; }
+        }
+
+
+        public class ConfirmEmailModel
+        {
+            public string userId { get; set; }
+            public string code { get; set; }
+        }
+
+
+
+
 
         private void AddErrors(IdentityResult result)
         {
@@ -165,6 +287,19 @@ namespace Crytex.Web.Areas.User.Controllers
             {
                 ModelState.AddModelError("", error);
             }
+        }
+
+
+        public static string Base64ForUrlEncode(string str)
+        {
+            var encbuff = Encoding.UTF8.GetBytes(str);
+            return HttpServerUtility.UrlTokenEncode(encbuff);
+        }
+
+        public static string Base64ForUrlDecode(string str)
+        {
+            var decbuff = HttpServerUtility.UrlTokenDecode(str);
+            return decbuff != null ? Encoding.UTF8.GetString(decbuff) : null;
         }
     }
 }

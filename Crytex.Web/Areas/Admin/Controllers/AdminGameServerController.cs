@@ -2,6 +2,10 @@
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
+using AutoMapper;
+using Crytex.Model.Enums;
+using Crytex.Model.Models;
+using Crytex.Service.Model;
 
 namespace Crytex.Web.Areas.Admin.Controllers
 {
@@ -40,6 +44,73 @@ namespace Crytex.Web.Areas.Admin.Controllers
             var pageModel = AutoMapper.Mapper.Map<PageModel<GameServerViewModel>>(page);
 
             return this.Ok(pageModel);
+        }
+
+        /// <summary>
+        /// Обновление статуса GameServer
+        /// </summary>
+        [HttpPost]
+        public IHttpActionResult UpdateMachineStatus([FromBody]UpdateGameServerOptions model)
+        {
+            Guid guid;
+            if (!Guid.TryParse(model.serverId, out guid))
+                return this.BadRequest("Invalid Guid format");
+            switch (model.Status)
+            {
+                case TypeChangeStatus.Start:
+                    _gameServerService.StartGameServer(guid);
+                    break;
+                case TypeChangeStatus.PowerOff:
+                    _gameServerService.PowerOffGameServer(guid);
+                    break;
+                case TypeChangeStatus.Reload:
+                    _gameServerService.ResetGameServer(guid);
+                    break;
+                case TypeChangeStatus.Stop:
+                    _gameServerService.StopGameServer(guid);
+                    break;
+                default:
+                    return BadRequest("Invalid status");
+            }
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Редактирование параметров игрового сервера
+        /// </summary>
+        [HttpPost]
+        public IHttpActionResult UpdateGameServerConfiguration(GameServerConfigViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+            var serviceOptions = Mapper.Map<GameServerConfigOptions>(model);
+            serviceOptions.UpdateType = GameServerUpdateType.Configuration;
+            _gameServerService.UpdateGameServer(model.ServerId, serviceOptions);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Включение автооплаты
+        /// </summary>
+        [HttpPost]
+        public IHttpActionResult EnableAutoProlongationGameServer(GameServerConfigViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+            var serviceOptions = new GameServerConfigOptions
+            {
+                AutoProlongation = model.AutoProlongation,
+                UpdateType = GameServerUpdateType.Configuration
+            };
+            _gameServerService.UpdateGameServer(model.ServerId, serviceOptions);
+
+            return Ok();
         }
     }
 }

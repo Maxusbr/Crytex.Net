@@ -10,6 +10,16 @@ namespace Crytex.Background.Config
             return this.GetValue<int>("SubscriptionVmEndWarnPeriod");
         }
 
+        public int GetGameServerEndWarnPeriod()
+        {
+            return this.GetValue<int>("GameServerEndWarnPeriod");
+        }
+
+        public int GetGameServerWaitForPaymentPeriod()
+        {
+            return this.GetValue<int>("GameServerWaitForPaymentPeriod");
+        }
+
         public int GetSubscriptionVmWaitForDeletionActionPeriod()
         {
             return this.GetValue<int>("SubscriptionVmWaitForDeletionActionPeriod");
@@ -18,6 +28,26 @@ namespace Crytex.Background.Config
         public int GetSubscriptionVmWaitForPaymentActionPeriod()
         {
             return this.GetValue<int>("SubscriptionVmWaitForPaymentActionPeriod");
+        }
+
+        public int GetSnapshotStoringDaysPeriod()
+        {
+            return this.GetValue<int>("SnapshotStoringDaysPeriod");
+        }
+
+        public int GetWebHostingWaitForPaymentActionPeriod()
+        {
+            return this.GetValue<int>("WebHostingWaitForPaymentActionPeriod");
+        }
+
+        public int GetWebHostingWaitForDeletionActionPeriod()
+        {
+            return this.GetValue<int>("WebHostingWaitForDeletionActionPeriod");
+        }
+
+        public int GetWebHostingEndWarnPeriod()
+        {
+            return this.GetValue<int>("WebHostingEndWarnPeriod");
         }
     }
 }

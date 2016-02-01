@@ -93,8 +93,10 @@
     <Compile Include="IService\IFixedSubscriptionPaymentService.cs" />
     <Compile Include="IService\IGameServerService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
+    <Compile Include="IService\IHostedWebApplicationService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
+    <Compile Include="IService\INewsService.cs" />
     <Compile Include="IService\ITriggerService.cs" />
     <Compile Include="IService\IUserLoginLogService.cs" />
     <Compile Include="IService\IOAuthService.cs" />
@@ -117,16 +119,23 @@
     <Compile Include="IService\IHyperVHostService.cs" />
     <Compile Include="IService\IVmBackupService.cs" />
     <Compile Include="IService\IVmWareVCenterService.cs" />
+    <Compile Include="IService\IWebHostingService.cs" />
+    <Compile Include="IService\IWebHostingTariffService.cs" />
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
+    <Compile Include="Model\BuyGameServerOption.cs" />
+    <Compile Include="Model\BuyWebHostingParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
+    <Compile Include="Model\GameServerConfigOptions.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
+    <Compile Include="Model\SearchPaymentGameServerParams.cs" />
     <Compile Include="Model\SearchPaymentParams.cs" />
     <Compile Include="Model\SubscriptionUpdateOptions.cs" />
     <Compile Include="Model\SubscriptionVmStatisticModel.cs" />
+    <Compile Include="Model\TestPeriodOptions.cs" />
     <Compile Include="Model\UpdateMachineConfigOptions.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentContainer.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentGroupByVmContainer.cs" />
@@ -150,11 +159,14 @@
     <Compile Include="Service\FixedSubscriptionPaymentService.cs" />
     <Compile Include="Service\GameServerService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
+    <Compile Include="Service\HostedWebApplicationService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\NetTrafficCounterService.cs" />
+    <Compile Include="Service\NewsService.cs" />
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
+    <Compile Include="Service\SecureService\SecuredHostedWebApplicationService.cs" />
     <Compile Include="Service\SecureService\SecuredSubscriptionVmService.cs" />
     <Compile Include="Service\SecureService\SecureFixedSubscriptionPaymentService.cs" />
     <Compile Include="Service\SecureService\SecureGameServerService.cs" />
@@ -164,6 +176,7 @@
     <Compile Include="Service\SecureService\SecureTaskV2Service.cs" />
     <Compile Include="Service\SecureService\SecureUserVmService.cs" />
     <Compile Include="Service\SecureService\SecureVmBackupService.cs" />
+    <Compile Include="Service\SecureService\SecureWebHostingService.cs" />
     <Compile Include="Service\StatisticService.cs" />
     <Compile Include="Service\RegionService.cs" />
     <Compile Include="Service\StateMachineService.cs" />
@@ -183,6 +196,8 @@
     <Compile Include="Service\HyperVHostService.cs" />
     <Compile Include="Service\VmBackupService.cs" />
     <Compile Include="Service\VmWareVCenterService.cs" />
+    <Compile Include="Service\WebHostingService.cs" />
+    <Compile Include="Service\WebHostingTariffService.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>
