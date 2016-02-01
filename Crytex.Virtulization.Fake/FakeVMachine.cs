@@ -145,5 +145,10 @@ namespace Crytex.Virtualization.Fake
         {
             return new ReturnedRezultes();
         }
+
+        public void SetUserAutentification(string UserName, string Passowrd)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

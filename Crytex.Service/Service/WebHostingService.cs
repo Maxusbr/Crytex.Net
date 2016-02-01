@@ -10,6 +10,7 @@ using PagedList;
 using System.Linq.Expressions;
 using Crytex.Service.Extension;
 using Crytex.Model.Exceptions;
+using System.Collections.Generic;
 
 namespace Crytex.Service.Service
 {
@@ -75,6 +76,18 @@ namespace Crytex.Service.Service
             return newHosting;
         }
 
+        public void AutoProlongateWebHosting(Guid webHostingId, int monthCount)
+        {
+            try
+            {
+                this.ProlongateWebHosting(webHostingId, 1);
+            }
+            catch (TransactionFailedException)
+            {
+                this.UpdateWebHostingStatus(webHostingId, WebHostingStatus.WaitForPayment);
+            }
+        }
+
         public void ProlongateWebHosting(Guid webHostingId, int monthCount)
         {
             if(monthCount <= 0)
@@ -105,6 +118,7 @@ namespace Crytex.Service.Service
             this._webHostingPaymentRepository.Add(prolongateHostingPayment);
 
             webHosting.ExpireDate = webHosting.ExpireDate.AddMonths(monthCount);
+            webHosting.Status = WebHostingStatus.Active;
             this._webHostingRepository.Update(webHosting);
             this._unitOfWork.Commit();
         }
@@ -148,6 +162,72 @@ namespace Crytex.Service.Service
                 hosting.AutoProlongation = autoProlongation.Value;
             }
 
+            this._webHostingRepository.Update(hosting);
+            this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<WebHosting> GetAllByStatusAndExpireDate(WebHostingStatus status, DateTime? dateFrom = null, DateTime? dateTo = null)
+        {
+            Expression<Func<WebHosting, bool>> where = h => h.Status == status;
+            if(dateFrom != null)
+            {
+                where = where.And(h => h.ExpireDate >= dateFrom);
+            }
+            if (dateTo != null)
+            {
+                where = where.And(h => h.ExpireDate < dateTo);
+            }
+
+            var hostings = this._webHostingRepository.GetMany(where);
+
+            return hostings;
+        }
+
+        public void UpdateWebHostingStatus(Guid id, WebHostingStatus newStatus)
+        {
+            var hosting = this.GetById(id);
+            hosting.Status = newStatus;
+
+            this._webHostingRepository.Update(hosting);
+            this._unitOfWork.Commit();
+        }
+
+        public void PrepareHostingForDeletion(Guid id)
+        {
+            var hosting = this.GetById(id);
+            // create web-hosting disable task
+            var disableHostingOptions = new DisableWebHostingOptions
+            {
+            };
+            var task = new TaskV2
+            {
+                UserId = hosting.UserId,
+                TypeTask = TypeTask.DisableWebHosting
+            };
+            this._taskService.CreateTask(task, disableHostingOptions);
+
+            // Change subscription status to WaitForDeletion
+            hosting.Status = WebHostingStatus.WaitForDeletion;
+            this._webHostingRepository.Update(hosting);
+            this._unitOfWork.Commit();
+        }
+
+        public void DeleteWebHosting(Guid id)
+        {
+            var hosting = this.GetById(id);
+            // create web-hosting disable task
+            var deleteHostingOptions = new DeleteWebHostingOptions
+            {
+            };
+            var task = new TaskV2
+            {
+                UserId = hosting.UserId,
+                TypeTask = TypeTask.DeleteHosting
+            };
+            this._taskService.CreateTask(task, deleteHostingOptions);
+
+            // Change subscription status to Deleted
+            hosting.Status = WebHostingStatus.Deleted;
             this._webHostingRepository.Update(hosting);
             this._unitOfWork.Commit();
         }
