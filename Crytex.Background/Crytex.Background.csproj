@@ -106,6 +106,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scheduler\SchedulerJobs.cs" />
+    <Compile Include="Tasks\GameServer\ActiveGameServerJob.cs" />
+    <Compile Include="Tasks\GameServer\WaitForPaymentGameServerJob.cs" />
+    <Compile Include="Tasks\GameServer\WarningsGameServerJob.cs" />
     <Compile Include="Tasks\NetTrafficCounterUpdateJob.cs" />
     <Compile Include="Tasks\StatisticJob.cs" />
     <Compile Include="Tasks\BillingJob.cs" />
@@ -114,12 +117,18 @@
     <Compile Include="Tasks\MonitoringVmWareJob.cs" />
     <Compile Include="Tasks\MonitoringJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\ActiveStaticSubscriptionVmJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\ActiveTestPeriodJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\BackupSubscriptionVmJob.cs" />
+    <Compile Include="Tasks\SubscriptionVm\SnapshotVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\StaticSubscriptionVmWarningsJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\UsageSubscriptionVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\WaiForDeletionStaticSubscriptionVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\WaitFotPaymentStaticSubscriptionVmJob.cs" />
     <Compile Include="Tasks\TaskExecutorUpdateJob.cs" />
+    <Compile Include="Tasks\WebHosting\ActiveWebHostingJob.cs" />
+    <Compile Include="Tasks\WebHosting\WaitForDeletionWebHostingJob.cs" />
+    <Compile Include="Tasks\WebHosting\WaitForPaymentWebHostingJob.cs" />
+    <Compile Include="Tasks\WebHosting\WebHostingWarningsJob.cs" />
     <Compile Include="UnityConfig.cs" />
     <Compile Include="UnityJobFactory.cs" />
   </ItemGroup>

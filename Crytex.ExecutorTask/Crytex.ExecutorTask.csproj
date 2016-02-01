@@ -76,6 +76,11 @@
     <Compile Include="TaskHandler\HyperV\IHyperVControl.cs" />
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\BackupVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\CreateSnapshotTaskHandler.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\DeleteSnapshotTaskHandler.cs" />
+
+
+    <Compile Include="TaskHandler\NewTaskHandler\LoadSnapshotTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\CreateVmTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\DeleteVmBackupTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\UpdateVmTaskHandler.cs" />

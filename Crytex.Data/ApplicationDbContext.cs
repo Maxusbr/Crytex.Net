@@ -1,6 +1,4 @@
 ﻿using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
-using System.Web.UI.WebControls;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
@@ -8,6 +6,7 @@ using Crytex.Model.Models.Biling;
 namespace Crytex.Data
 {
     using Crytex.Model.Models.Notifications;
+    using Model.Models.WebHostingModels;
 
     [DbConfigurationType(typeof(DbConfig))] 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -36,6 +35,10 @@ namespace Crytex.Data
             modelBuilder.Entity<OperatingSystem>()
                 .HasRequired(t => t.ImageFileDescriptor).WithMany().HasForeignKey(system => system.ImageFileId)
                 .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<GameServerConfiguration>()
+              .HasRequired(t => t.ServerTemplate).WithMany().HasForeignKey(system => system.ServerTemplateId)
+              .WillCascadeOnDelete(false);
             modelBuilder.Entity<UsageSubscriptionPayment>()
                  .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
                  .WillCascadeOnDelete(false);
@@ -44,6 +47,12 @@ namespace Crytex.Data
                  .WillCascadeOnDelete(false);
             modelBuilder.Entity<SubscriptionVmBackupPayment>()
                  .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
+                 .WillCascadeOnDelete(false);
+            modelBuilder.Entity<WebHostingFtpAccount>()
+                 .HasRequired(t => t.WebAppliaction).WithMany().HasForeignKey(t => t.WebApplicationId)
+                 .WillCascadeOnDelete(false);
+            modelBuilder.Entity<GameServerConfiguration>()
+                 .HasRequired(t => t.ServerTemplate).WithMany().HasForeignKey(t => t.ServerTemplateId)
                  .WillCascadeOnDelete(false);
         }
         public DbSet<Statistic> Statistics { get; set; }
@@ -83,5 +92,16 @@ namespace Crytex.Data
         public DbSet<UsageSubscriptionPayment> UsageSubscriptionPayments { get; set; }
         public DbSet<FixedSubscriptionPayment> FixedSubscriptionPayments { get; set; }
         public DbSet<SubscriptionVmBackupPayment> SubscriptionVmBackupPayments { get; set; }
+        public DbSet<News> Newses { get; set; }
+        public DbSet<PaymentGameServer> PaymentGameServers { get; set; }
+        public DbSet<WebDomain> WebDomains { get; set; }
+        public DbSet<WebDatabase> WebDatabases { get; set; }
+        public DbSet<WebHostingFtpAccount> WebHostingFtpAccounts { get; set; }
+        public DbSet<WebHostingTariff> WebHostingTariffs { get; set; }
+        public DbSet<WebHosting> WebHostings { get; set; }
+        public DbSet<HostedWebApplication> HostedWebApplications { get; set; }
+        public DbSet<WebDatabaseServer> WebDatabaseServers { get; set; }
+        public DbSet<WebHttpServer> WebHttpServers { get; set; }
+        public DbSet<WebHostingPayment> WebHostingPayments { get; set; }
     }
 }

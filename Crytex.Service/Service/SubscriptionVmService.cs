@@ -737,6 +737,11 @@ namespace Crytex.Service.Service
             }
         }
 
+        public void AddTestPeriod(TestPeriodOptions options)
+        {
+            _billingService.AddTestPeriod(options);
+        }
+
         private void UpdateUsageSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
         {
             var updateTask = new TaskV2

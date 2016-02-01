@@ -165,5 +165,26 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Включение тестового периода
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult AddTestPeriod(TestPeriodViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var serviceOptions = Mapper.Map<TestPeriodOptions>(model);
+            this._subscriptionVmService.AddTestPeriod(serviceOptions);
+
+            return Ok();
+        }
     }
+
+    
 }

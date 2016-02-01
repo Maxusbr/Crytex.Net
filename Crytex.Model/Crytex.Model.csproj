@@ -78,6 +78,7 @@
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Enums\EnumApplicationType.cs" />
+    <Compile Include="Enums\GameServerUpdateType.cs" />
     <Compile Include="Enums\UrgencyLevel.cs" />
     <Compile Include="Enums\UsageSubscriptionPaymentGroupingTypes.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
@@ -97,7 +98,10 @@
     <Compile Include="Models\Biling\FixedSubscriptionPayment.cs" />
     <Compile Include="Models\Biling\Payment.cs" />
     <Compile Include="Models\Biling\PaymentBase.cs" />
+    <Compile Include="Models\Biling\PaymentGameServer.cs" />
+    <Compile Include="Models\Biling\SubscriptionPaymentBase.cs" />
     <Compile Include="Models\Biling\SubscriptionVmBackupPayment.cs" />
+    <Compile Include="Models\Biling\WebHostingPayment.cs" />
     <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
     <Compile Include="Models\GameServer.cs" />
@@ -109,6 +113,7 @@
     <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\NetTrafficCounter.cs" />
+    <Compile Include="Models\News.cs" />
     <Compile Include="Models\Notifications\EmailInfo.cs" />
     <Compile Include="Models\Notifications\EmailTemplate.cs" />
     <Compile Include="Models\OAuthClientApplication.cs" />
@@ -133,6 +138,14 @@
     <Compile Include="Models\VmIpAddress.cs" />
     <Compile Include="Models\VmWareHost.cs" />
     <Compile Include="Models\VmWareVCenter.cs" />
+    <Compile Include="Models\WebHosting\HostedWebApplication.cs" />
+    <Compile Include="Models\WebHosting\WebDatabase.cs" />
+    <Compile Include="Models\WebHosting\WebDatabaseServer.cs" />
+    <Compile Include="Models\WebHosting\WebDomain.cs" />
+    <Compile Include="Models\WebHosting\WebHosting.cs" />
+    <Compile Include="Models\WebHosting\WebHostingFtpAccount.cs" />
+    <Compile Include="Models\WebHosting\WebHostingTariff.cs" />
+    <Compile Include="Models\WebHosting\WebHttpServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

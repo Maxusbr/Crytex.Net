@@ -62,8 +62,10 @@
     <Compile Include="IRepository\IHyperVHostResourceRepository.cs" />
     <Compile Include="IRepository\ILogRepository.cs" />
     <Compile Include="IRepository\INetTrafficCounterRepository.cs" />
+    <Compile Include="IRepository\INewsRepository.cs" />
     <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
     <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
+    <Compile Include="IRepository\IPaymentGameServerRepository.cs" />
     <Compile Include="IRepository\IPhoneCallRequestRepository.cs" />
     <Compile Include="IRepository\ISubscriptionBackupPaymentRepository.cs" />
     <Compile Include="IRepository\ITriggerRepository.cs" />
@@ -83,6 +85,10 @@
     <Compile Include="IRepository\IUserVmRepository.cs" />
     <Compile Include="IRepository\IVmBackupRepository.cs" />
     <Compile Include="IRepository\IVmWareVCenterRepository.cs" />
+    <Compile Include="IRepository\IHostedWebApplicationRepository.cs" />
+    <Compile Include="IRepository\IWebHostingPaymentRepository.cs" />
+    <Compile Include="IRepository\IWebHostingRepository.cs" />
+    <Compile Include="IRepository\IWebHostingTariffRepository.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\ApplicationUserRepository.cs" />
@@ -96,14 +102,17 @@
     <Compile Include="Repository\GameServerRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestCommentRepository.cs" />
     <Compile Include="Repository\HelpDeskRequestRepository.cs" />
+    <Compile Include="Repository\HostedWebApplicationRepository.cs" />
     <Compile Include="Repository\HyperVHostRepository.cs" />
     <Compile Include="Repository\HyperVHostResourceRepository.cs" />
     <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\MessageRepository.cs" />
     <Compile Include="Repository\NetTrafficCounterRepository.cs" />
+    <Compile Include="Repository\NewsRepository.cs" />
     <Compile Include="Repository\OAuthClientApplicationRepository.cs" />
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
+    <Compile Include="Repository\PaymentGameServerRepository.cs" />
     <Compile Include="Repository\PhoneCallRequestRepository.cs" />
     <Compile Include="Repository\StatisticRepository.cs" />
     <Compile Include="Repository\SubscriptionBackupPaymentRepository.cs" />
@@ -122,6 +131,9 @@
     <Compile Include="Repository\DiscountRepository.cs" />
     <Compile Include="Repository\VmBackupRepository.cs" />
     <Compile Include="Repository\VmWareVCenterRepository.cs" />
+    <Compile Include="Repository\WebHostingPaymentRepository.cs" />
+    <Compile Include="Repository\WebHostingRepository.cs" />
+    <Compile Include="Repository\WebHostingTariffRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Crytex.Core\Crytex.Core.csproj">

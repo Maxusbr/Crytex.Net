@@ -1,4 +1,5 @@
-﻿using Crytex.Core.AppConfig;
+﻿using System;
+using Crytex.Core.AppConfig;
 using Crytex.Core.Service;
 using Crytex.Model.Exceptions;
 
@@ -11,7 +12,7 @@ namespace Crytex.Web.Service
         private const string DOCUMENT_SAVE_PATH_KEY = "docSavePath";
         private const string BIG_IMAGE_SIZE_KEY = "bigImageSize";
         private const string SMALL_IMAGE_SIZE_KEY = "smallImageSize";
-
+        private const string CLIENT_ADDRESS = "clientAddress";
         public string GetLoaderFileSavePath()
         {
             return this.GetValue<string>(LOADER_SAVE_PATH_KEY);
@@ -36,6 +37,11 @@ namespace Crytex.Web.Service
         public int GetSmallImageSize()
         {
             return this.GetValue<int>(SMALL_IMAGE_SIZE_KEY);
+        }
+
+        public String GetClientAddress()
+        {
+            return this.GetValue<String>(CLIENT_ADDRESS);
         }
     }
 }
