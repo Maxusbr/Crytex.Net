@@ -123,6 +123,13 @@ namespace Crytex.Service.Service
             return pagedList;
         }
 
+        public IEnumerable<GameServer> GetAllByUserId(string userId)
+        {
+            var servers = this._gameServerRepository.GetMany(s => s.UserId == userId);
+
+            return servers;
+        }
+
         public GameServer BuyGameServer(GameServer server, BuyGameServerOption options)
         {
             // Create new GameServer
@@ -134,10 +141,10 @@ namespace Crytex.Service.Service
             switch (options.PaymentType)
             {
                 case ServerPaymentType.Slot:
-                    amount = this.BuySlotServer(server, options);
+                    amount = this.BuySlotServer(server, options.SlotCount) * options.ExpireMonthCount;
                     break;
                 case ServerPaymentType.Configuration:
-                    amount = this.BuyConfigurationServer(server, options);
+                    amount = this.BuyConfigurationServer(server, options.Cpu, options.Ram) * options.ExpireMonthCount;
                     break;
             }
 
@@ -196,20 +203,36 @@ namespace Crytex.Service.Service
             return page;
         }
 
-        private decimal BuySlotServer(GameServer server, BuyGameServerOption options)
+        private decimal BuySlotServer(GameServer server, int slotCount)
         {
-            var themplate = server.GameServerConfiguration;
-            var total = themplate.Slot * options.SlotCount;
+            var serverConf = server.GameServerConfiguration ?? this._gameServerConfRepository.GetById(server.GameServerConfigurationId);
+            var total = serverConf.Slot * slotCount;
 
             return total;
         }
 
-        private decimal BuyConfigurationServer(GameServer server, BuyGameServerOption options)
+        private decimal BuyConfigurationServer(GameServer server, int cpu, int ram)
         {
-            var themplate = server.GameServerConfiguration;
-            var total = themplate.Processor1 * options.Cpu + themplate.RAM512 * options.Ram;
+            var serverConf = server.GameServerConfiguration ?? this._gameServerConfRepository.GetById(server.GameServerConfigurationId);
+            var total = serverConf.Processor1 * cpu + serverConf.RAM512 * ram;
 
             return total;
+        }
+
+        public decimal GetGameServerMonthPrice(GameServer server)
+        {
+            decimal amount = 0;
+            switch (server.PaymentType)
+            {
+                case ServerPaymentType.Slot:
+                    amount = this.BuySlotServer(server, server.SlotCount);
+                    break;
+                case ServerPaymentType.Configuration:
+                    amount = this.BuyConfigurationServer(server, server.Vm.CoreCount, server.Vm.RamCount);
+                    break;
+            }
+
+            return amount;
         }
 
         public IEnumerable<PaymentGameServer> GetAllGameServers()
@@ -290,11 +313,10 @@ namespace Crytex.Service.Service
             switch (gameServerPayment.PaymentType)
             {
                 case ServerPaymentType.Slot:
-                    amount = BuySlotServer(server, new BuyGameServerOption { SlotCount = gameServerPayment.SlotCount });
+                    amount = BuySlotServer(server, gameServerPayment.SlotCount );
                     break;
                 case ServerPaymentType.Configuration:
-                    amount = BuyConfigurationServer(server,
-                        new BuyGameServerOption { Ram = gameServerPayment.RamCount, Cpu = gameServerPayment.CoreCount });
+                    amount = BuyConfigurationServer(server, gameServerPayment.RamCount, gameServerPayment.CoreCount );
                     break;
             }
             var totalPrice = amount * monthCount;

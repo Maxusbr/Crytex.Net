@@ -302,6 +302,7 @@
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\NewsController.cs" />
+    <Compile Include="Areas\User\Controllers\PaymentForecastController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentGameServerController.cs" />
     <Compile Include="Areas\User\Controllers\UsageSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\GameServerController.cs" />
@@ -353,6 +354,7 @@
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerConfigViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
+    <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
     <Compile Include="Models\JsonModels\WebHostingProlongateOptionsModel.cs" />
     <Compile Include="Models\JsonModels\MachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\NewsViewModel.cs" />
