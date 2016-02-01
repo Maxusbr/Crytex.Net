@@ -336,6 +336,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CrytexResult.cs" />
+    <Compile Include="Helpers\ServerErrorTypes.cs" />
     <Compile Include="Hubs\SampleHub.cs" />
     <Compile Include="Mappings\AutoMapperConfiguration.cs" />
     <Compile Include="Mappings\DomainToViewModelMappingProfile.cs" />

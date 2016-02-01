@@ -16,6 +16,7 @@ using System.Web.Routing;
 using Crytex.Service.Model;
 using Crytex.Service.Service;
 using Crytex.Web.Controllers.Api;
+using Crytex.Web.Helpers;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -60,11 +61,8 @@ namespace Crytex.Web.Areas.User.Controllers
                     }
 
                 }
-
-                AddErrors(result);
+                return new CrytexResult(ServerTypesResult.UserExist);
             }
-
-            // Появление этого сообщения означает наличие ошибки; повторное отображение формы
             return this.Conflict();
         }
 
