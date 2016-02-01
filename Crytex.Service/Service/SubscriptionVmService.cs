@@ -188,7 +188,7 @@ namespace Crytex.Service.Service
             var createVmOptions = new CreateVmOptions
             {
                 Cpu = options.Cpu,
-                Hdd = options.Hdd,
+                HddGB = options.Hdd,
                 Ram = options.Ram,
                 OperatingSystemId = options.OperatingSystemId,
                 Name = options.VmName
@@ -753,7 +753,7 @@ namespace Crytex.Service.Service
             var taskUpdateOptions = new UpdateVmOptions
             {
                 Cpu = options.Cpu ?? sub.UserVm.CoreCount,
-                Hdd = options.Hdd ?? sub.UserVm.HardDriveSize,
+                HddGB = options.Hdd ?? sub.UserVm.HardDriveSize,
                 Ram = options.Ram ?? sub.UserVm.RamCount,
                 Name = sub.UserVm.Name,
                 VmId = sub.UserVm.Id

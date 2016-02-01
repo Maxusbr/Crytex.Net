@@ -43,7 +43,7 @@ namespace Crytex.Service.Service
             var taskOptions = new CreateVmOptions
             {
                 Cpu = operatingSystem.MinCoreCount,
-                Hdd = operatingSystem.MinHardDriveSize,
+                HddGB = operatingSystem.MinHardDriveSize,
                 Ram = operatingSystem.MinRamCount,
                 OperatingSystemId = operatingSystem.Id,
                 Name = "Game server"

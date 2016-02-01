@@ -509,7 +509,7 @@ namespace Crytex.Data.Migrations
                     var createVmOptions = new CreateVmOptions
                     {
                         Cpu = 2,
-                        Hdd = 300,
+                        HddGB = 300,
                         Ram = 2048,
                         OperatingSystemId = operations[0].Id,
                         Name = "Машина #" + i,
@@ -535,7 +535,7 @@ namespace Crytex.Data.Migrations
                     {
                         Id = createVmOptions.UserVmId,
                         CoreCount = createVmOptions.Cpu,
-                        HardDriveSize = createVmOptions.Hdd,
+                        HardDriveSize = createVmOptions.HddGB,
                         RamCount = createVmOptions.Ram,
                         VirtualizationType = createTask.Virtualization,
                         Name = createVmOptions.Name,
