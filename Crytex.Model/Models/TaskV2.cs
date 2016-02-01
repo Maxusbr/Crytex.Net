@@ -81,7 +81,7 @@ namespace Crytex.Model.Models
     {
         public Int32 Cpu { get; set; }
         public Int32 Ram { get; set; }
-        public Int32 Hdd { get; set; }
+        public Int32 HddGB { get; set; }
         // Пользовательское имя виртауальной машины. Используется для отображения на UI
         public String Name { get; set; }
     }

@@ -254,8 +254,8 @@ namespace Crytex.Data.Migrations
                     var helpDeskRequest = new HelpDeskRequest
                     {
                         UserId = userRequest.Id,
-                        Summary = "Summary",
-                        Details = "Details",
+                        Summary = "Заголовок",
+                        Details = "Описание описание описание проблемы",
                         Status = RequestStatus.New,
                         CreationDate = this.RandomDay(),
                         Read = true,
@@ -268,7 +268,7 @@ namespace Crytex.Data.Migrations
                     {
                         var commentUser = new HelpDeskRequestComment
                         {
-                            Comment = "CommentUser #" + b,
+                            Comment = "Коментарий #" + b,
                             CreationDate = this.RandomDay(),
                             UserId = userRequest.Id,
                             RequestId = helpDeskRequest.Id,
@@ -282,7 +282,7 @@ namespace Crytex.Data.Migrations
                     {
                         var commentAdmin = new HelpDeskRequestComment
                         {
-                            Comment = "CommentAdmin #" + k,
+                            Comment = "Комментарий #" + k,
                             CreationDate = RandomDay(),
                             UserId = adminRequest.Id,
                             RequestId = helpDeskRequest.Id,
@@ -300,8 +300,8 @@ namespace Crytex.Data.Migrations
                     var helpDeskRequest = new HelpDeskRequest
                     {
                         UserId = userRequest.Id,
-                        Summary = "Summary",
-                        Details = "Details",
+                        Summary = "Заголовок",
+                        Details = "Описание описание описание проблемы",
                         Status = RequestStatus.New,
                         CreationDate = RandomDay(),
                         Read = false,
@@ -357,8 +357,8 @@ namespace Crytex.Data.Migrations
                 {
                     operations[i] = new OperatingSystem
                     {
-                        Name = "OperationgSystem" + i,
-                        Description = "Description",
+                        Name = "Операционная системы " + i,
+                        Description = "Описание ",
                         ImageFileId = image.Id,
                         ServerTemplateName = "ServerTemplateName",
                         Family = (OperatingSystemFamily)i,
@@ -380,7 +380,7 @@ namespace Crytex.Data.Migrations
                 var allTemplates = context.ServerTemplates.ToList();
                 for (int i = 0; i < 4; i++)
                 {
-                    var name = (i < 2) ? "ServerTemplateWindow" : "ServerTemplateUbuntu";
+                    var name = (i < 2) ? "Шаблон Window" : "Шаблон Ubuntu";
                     var target = (i < 2) ? 0 : 1;
 
                     serverTemplates[i] = new ServerTemplate
@@ -509,7 +509,7 @@ namespace Crytex.Data.Migrations
                     var createVmOptions = new CreateVmOptions
                     {
                         Cpu = 2,
-                        Hdd = 300,
+                        HddGB = 300,
                         Ram = 2048,
                         OperatingSystemId = operations[0].Id,
                         Name = "Машина #" + i,
@@ -535,7 +535,7 @@ namespace Crytex.Data.Migrations
                     {
                         Id = createVmOptions.UserVmId,
                         CoreCount = createVmOptions.Cpu,
-                        HardDriveSize = createVmOptions.Hdd,
+                        HardDriveSize = createVmOptions.HddGB,
                         RamCount = createVmOptions.Ram,
                         VirtualizationType = createTask.Virtualization,
                         Name = createVmOptions.Name,

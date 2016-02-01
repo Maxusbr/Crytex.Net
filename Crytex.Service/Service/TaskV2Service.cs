@@ -75,7 +75,7 @@ namespace Crytex.Service.Service
                 {
                     Id = Guid.NewGuid(),
                     CoreCount = createOptions.Cpu,
-                    HardDriveSize = createOptions.Hdd,
+                    HardDriveSize = createOptions.HddGB,
                     RamCount = createOptions.Ram,
                     VirtualizationType = task.Virtualization,
                     Name = createOptions.Name,

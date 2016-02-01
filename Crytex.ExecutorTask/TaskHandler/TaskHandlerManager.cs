@@ -122,7 +122,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
                         Id = vmId,
                         CoreCount = taskOptions.Cpu,
-                        HardDriveSize = taskOptions.Hdd,
+                        HardDriveSize = taskOptions.HddGB,
                         Name = taskOptions.Name,
                         RamCount = taskOptions.Ram,
                         OperatingSystemId = taskOptions.OperatingSystemId,
@@ -162,7 +162,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {
 
                     var taskOptions = execResult.TaskEntity.GetOptions<UpdateVmOptions>();
-                    this._userVmService.UpdateVm(taskOptions.VmId, taskOptions.Cpu, taskOptions.Hdd, taskOptions.Ram);
+                    this._userVmService.UpdateVm(taskOptions.VmId, taskOptions.Cpu, taskOptions.HddGB, taskOptions.Ram);
                 }
                 else if (taskEntity.TypeTask == TypeTask.ChangeStatus)
                 {

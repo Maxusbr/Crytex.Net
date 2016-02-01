@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Crytex.Virtualization.Base;
+using Crytex.Virtualization.Base.InfoAboutVM;
 
 namespace Crytex.Virtualization.Fake
 {
@@ -69,7 +70,16 @@ namespace Crytex.Virtualization.Fake
             this.ThrowExceptionIfNotConnnected();
 
             //return FakeProvider._staticMachines.FirstOrDefault(m => m.BaseInformation.Name == machineName);
-            return new FakeVMachine();
+            var constFakeMachine = new FakeVMachine();
+            constFakeMachine.NumCPU = 1;
+            constFakeMachine.Memory = 512;
+            constFakeMachine.VirtualDrives = new DrivesInformation
+            {
+                Drives = new List<DriveInfo>()
+            };
+            constFakeMachine.VirtualDrives.Drives.Add(new DriveInfo(200));
+
+            return constFakeMachine;
         }
 
         public ReturnedRezultes GetNetworkSwithes()
