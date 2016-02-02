@@ -207,7 +207,7 @@ namespace Crytex.Service.Service
                 ReturnMoney(server);
         }
 
-        private void ReturnMoney(BoughtPhysicalServer server)
+        private void ReturnMoney(BoughtPhysicalServer server, string Description = "Return money for deleted physical server")
         {
             var payments = _boughtServerRepository.GetMany(p => p.Id == server.Id);
 
@@ -235,7 +235,7 @@ namespace Crytex.Service.Service
                 CashAmount = sumToReturn,
                 TransactionType = BillingTransactionType.Crediting,
                 UserId = server.UserId,
-                Description = "Return money for deleted physical server"
+                Description = Description
             };
             this._billingService.AddUserTransaction(transaction);
         }
@@ -260,7 +260,7 @@ namespace Crytex.Service.Service
                 SubscriptionVmMonthCount = serverParam.CountMonth,
                 UserId = serverParam.UserId
             };
-            var status = BoughtPhysicalServerStatus.Creting;
+            var status = BoughtPhysicalServerStatus.New;
             try
             {
                 psTransaction = _billingService.AddUserTransaction(psTransaction);
@@ -328,19 +328,42 @@ namespace Crytex.Service.Service
         /// </summary>
         /// <param name="serverId"></param>
         /// <param name="state"></param>
-        public void UpdateBoughtPhysicalServerState(Guid serverId, BoughtPhysicalServerStatus state)
+        public void UpdateBoughtPhysicalServerState(PhysicalServerStateParams serverParam)
         {
-            var server = _boughtServerRepository.GetById(serverId);
+            var server = _boughtServerRepository.GetById(serverParam.ServerId);
             if (server == null)
             {
-                throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverParam.ServerId} doesn't exist");
             }
-            if(state == BoughtPhysicalServerStatus.Active)
+            if (serverParam.State == BoughtPhysicalServerStatus.Created)
+            {
+                server.AdminMessage = serverParam.AdminMessage;
+                server.AdminSendMessage = true;
+            }
+            if (serverParam.State == BoughtPhysicalServerStatus.Active)
             {
                 server.CreateDate = DateTime.Now;
                 server.DateEnd = server.CreateDate.AddMonths(server.CountMonth);
+                server.AdminMessage = serverParam.AdminMessage;
+                server.AdminSendMessage = true;
             }
-            server.Status = state;
+            if (serverParam.State == BoughtPhysicalServerStatus.DontCreate)
+            {
+                server.AdminMessage = serverParam.AdminMessage;
+                server.AdminSendMessage = true;
+                ReturnMoney(server);
+            }
+            if (serverParam.State == BoughtPhysicalServerStatus.WaitPayment)
+            {
+                server.DateEnd = DateTime.UtcNow;
+            }
+            if (serverParam.State == BoughtPhysicalServerStatus.WaitForDeletion)
+            {
+                server.DateEnd = DateTime.UtcNow;
+            }
+            if (serverParam.AutoProlongation != null)
+                server.AutoProlongation = serverParam.AutoProlongation ?? false;
+            server.Status = serverParam.State;
             _boughtServerRepository.Update(server);
             _uniOfWork.Commit();
         }
@@ -487,6 +510,68 @@ namespace Crytex.Service.Service
                     server.Config += ", " + opt.Option.Name;
 
             return server;
+        }
+
+        public List<BoughtPhysicalServer> GetPhysicalServerByStatus(BoughtPhysicalServerStatus status)
+        {
+            return _boughtServerRepository.GetMany(x => x.Status == status);
+        }
+
+        public List<BoughtPhysicalServer> GetAllUsagePhysicalServer()
+        {
+            return _boughtServerRepository.GetMany(x => x.Status == BoughtPhysicalServerStatus.Active || 
+                x.Status != BoughtPhysicalServerStatus.WaitForDeletion || x.Status != BoughtPhysicalServerStatus.WaitForDeletion);
+        }
+
+        public void AutoProlongatePhysicalServer(Guid serverId)
+        {
+            try
+            {
+                ProlongatePhysicalServer(serverId, 1, BillingTransactionType.AutomaticDebiting);
+            }
+            catch (TransactionFailedException)
+            {
+                UpdateBoughtPhysicalServerState(new PhysicalServerStateParams { ServerId = serverId, State = BoughtPhysicalServerStatus.WaitPayment });
+            }
+        }
+
+        public List<BoughtPhysicalServer> GetPhysicalServerMessageSend()
+        {
+            return _boughtServerRepository.GetMany(x => x.AdminSendMessage);
+        }
+
+        public void CompleteSendMessage(Guid serverId)
+        {
+            var server = _boughtServerRepository.GetById(serverId);
+            if (server == null)
+            {
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
+            }
+            server.AdminSendMessage = false;
+            _boughtServerRepository.Update(server);
+            _uniOfWork.Commit();
+        }
+
+        private void ProlongatePhysicalServer(Guid serverId, int monthCount, BillingTransactionType transactionType)
+        {
+            var server = _boughtServerRepository.Get(x => x.Id == serverId, x => x.BillingTransaction, x => x.Server);
+            decimal amount = 0;
+
+            var totalPrice = server.Server.Price * monthCount;
+            var gameServerVmTransaction = new BillingTransaction
+            {
+                CashAmount = -totalPrice,
+                TransactionType = transactionType,
+                UserId = server.UserId,
+                SubscriptionVmMonthCount = monthCount
+            };
+            server.BillingTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
+            server.CountMonth = monthCount;
+            server.DateEnd = DateTime.UtcNow.AddMonths(monthCount);
+            server.CashAmaunt = totalPrice;
+
+            _boughtServerRepository.Update(server);
+            _uniOfWork.Commit();
         }
     }
 }

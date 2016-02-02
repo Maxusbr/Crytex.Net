@@ -350,6 +350,7 @@
     <Compile Include="Models\JsonModels\BillingViewModel.cs" />
     <Compile Include="Models\JsonModels\BoughtPhysicalServerViewModel.cs" />
     <Compile Include="Models\JsonModels\BuyWebHostingParams.cs" />
+    <Compile Include="Models\JsonModels\ChangePhysicalServerViewModel.cs" />
     <Compile Include="Models\JsonModels\DiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />

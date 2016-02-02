@@ -137,6 +137,7 @@
     <Compile Include="Model\PhysicalServerOptionSearchParams.cs" />
     <Compile Include="Model\PhysicalServerOptionsParams.cs" />
     <Compile Include="Model\PhysicalServerSearchParams.cs" />
+    <Compile Include="Model\PhysicalServerStateParams.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
     <Compile Include="Model\SearchPaymentGameServerParams.cs" />

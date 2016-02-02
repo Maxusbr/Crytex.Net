@@ -16,6 +16,8 @@ namespace Crytex.Model.Models.Biling
         public BoughtPhysicalServerStatus Status { get; set; }
         public string Config { get; set; }
         public decimal CashAmaunt { get; set; }
+        public string AdminMessage { get; set; }
+        public bool AutoProlongation { get; set; }
 
         public Guid? BillingTransactionId { get; set; }
         [ForeignKey("BillingTransactionId")]
@@ -28,6 +30,7 @@ namespace Crytex.Model.Models.Biling
         public PhysicalServer Server { get; set; }
 
         public virtual ICollection<BoughtPhysicalServerOption> ServerOptions { get; set; }
+        public bool AdminSendMessage { get; set; }
     }
 
     

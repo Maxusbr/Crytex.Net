@@ -22,9 +22,8 @@ namespace Crytex.Service.IService
         void DeleteBoughtPhysicalServer(Guid serverId);
 
         BoughtPhysicalServer BuyPhysicalServer(BuyPhysicalServerParam serverParam);
-        void UpdateBoughtPhysicalServerState(Guid serverId, BoughtPhysicalServerStatus state);
+        void UpdateBoughtPhysicalServerState(PhysicalServerStateParams serverParam);
         BoughtPhysicalServer UpdateBoughtPhysicalServer(UpdatePhysicalServerParam serverParam);
-
 
         IPagedList<PhysicalServer> GetPagePhysicalServer(int pageNumber, int pageSize, PhysicalServerSearchParams searchParams = null);
         IPagedList<PhysicalServerOption> GetPagePhysicalServerOption(int pageNumber, int pageSize, PhysicalServerOptionSearchParams searchParams = null);
@@ -34,6 +33,10 @@ namespace Crytex.Service.IService
         PhysicalServer GetAviablePhysicalServer(Guid serverId);
 
         BoughtPhysicalServer GetBoughtPhysicalServer(Guid serverId);
-
+        List<BoughtPhysicalServer> GetPhysicalServerByStatus(BoughtPhysicalServerStatus status);
+        List<BoughtPhysicalServer> GetAllUsagePhysicalServer();
+        void AutoProlongatePhysicalServer(Guid serverId);
+        List<BoughtPhysicalServer> GetPhysicalServerMessageSend();
+        void CompleteSendMessage(Guid serverId);
     }
 }

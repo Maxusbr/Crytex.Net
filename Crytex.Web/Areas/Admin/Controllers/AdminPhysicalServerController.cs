@@ -153,7 +153,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             var param = new PhysicalServerOptionsParams
             {
-                Name = model.Name, Description = model.Description, Price = model.Price, Type = model.Type
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                Type = model.Type
             };
             var server = _serverService.CreateOrUpdateOption(param);
 
@@ -174,7 +177,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             var param = options.Select(opt => new PhysicalServerOptionsParams
             {
-                Name = opt.Name, Description = opt.Description, Price = opt.Price, Type = opt.Type
+                Name = opt.Name,
+                Description = opt.Description,
+                Price = opt.Price,
+                Type = opt.Type
             });
             _serverService.CreateOrUpdateOptions(param);
 
@@ -200,7 +206,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
                 ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-            var parameters = new PhysicalServerOptionsAviableParams {ServerId = guid, ReplaceAll = replaceAll};
+            var parameters = new PhysicalServerOptionsAviableParams { ServerId = guid, ReplaceAll = replaceAll };
             var optionsnAviable = new List<OptionAviable>();
             foreach (var opt in options)
             {
@@ -210,7 +216,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
                     ModelState.AddModelError("id", "Invalid Guid format");
                     return BadRequest(ModelState);
                 }
-                var ids = new OptionAviable {OptionId = optguid, IsDefault = opt.IsDefault};
+                var ids = new OptionAviable { OptionId = optguid, IsDefault = opt.IsDefault };
                 optionsnAviable.Add(ids);
             }
             parameters.Options = optionsnAviable;
@@ -260,16 +266,23 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// </summary>
         /// <param name="serverId"></param>
         /// <param name="status"></param>
+        /// <param name="message"></param>
         /// <returns></returns>
-        public IHttpActionResult ChangeStatusServer(string serverId, int status)
+        public IHttpActionResult ChangeStatusServer(ChangePhysicalServerViewModel model)
         {
             Guid guid;
-            if (!Guid.TryParse(serverId, out guid))
+            if (!Guid.TryParse(model.ServerId, out guid))
             {
                 ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-            _serverService.UpdateBoughtPhysicalServerState(guid, (BoughtPhysicalServerStatus)status);
+            _serverService.UpdateBoughtPhysicalServerState(new PhysicalServerStateParams
+            {
+                ServerId = guid,
+                State = (BoughtPhysicalServerStatus)model.Status,
+                AdminMessage = model.Message,
+                AutoProlongation = model.AutoProlongation
+            });
 
             return Ok();
         }

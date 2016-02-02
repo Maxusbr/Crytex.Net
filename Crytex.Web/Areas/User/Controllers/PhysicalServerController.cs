@@ -96,7 +96,8 @@ namespace Crytex.Web.Areas.User.Controllers
                 PhysicalServerId = serverId,
                 UserId = model.UserId,
                 CountMonth = model.CountMonth,
-                DiscountPrice = model.DiscountPrice
+                DiscountPrice = model.DiscountPrice,
+                AutoProlongation = model.AutoProlongation
             };
             if (model.CreateDate != null)
                 parameters.CreateDate = model.CreateDate;

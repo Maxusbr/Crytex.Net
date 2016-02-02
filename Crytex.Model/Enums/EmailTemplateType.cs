@@ -14,6 +14,12 @@
         GameServerNeedsPayment = 9,
         GameServerEndWarning = 10,
         GameServerDeletionWarning = 11,
-        ResetPassword = 12
+        ResetPassword = 12,
+        PhysicalServerNeedsPayment = 13,
+        PhysicalServerEndWarning = 14,
+        PhysicalServerDeletionWarning = 15,
+        PhysicalServerCreated = 16,
+        PhysicalServerReady = 17,
+        PhysicalServerDontCreate = 18
     }
 }

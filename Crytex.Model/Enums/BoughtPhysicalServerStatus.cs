@@ -8,9 +8,12 @@ namespace Crytex.Model.Enums
 {
     public enum BoughtPhysicalServerStatus
     {
-        Creting = 0,
-        Active = 1,
-        WaitPayment = 2,
-        Deleted = 3
+        New = 0,
+        Created = 1,
+        Active = 2,
+        WaitPayment = 3,
+        WaitForDeletion = 4,
+        Deleted = 5,
+        DontCreate = 6
     }
 }

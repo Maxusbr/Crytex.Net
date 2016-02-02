@@ -26,6 +26,7 @@ namespace Crytex.Web.Models.JsonModels
         /// Конфигурация сервера
         /// </summary>
         public string Config { get; set; }
+        public bool AutoProlongation { get; set; }
 
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }

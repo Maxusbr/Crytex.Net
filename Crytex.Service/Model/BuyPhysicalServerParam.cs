@@ -17,5 +17,6 @@ namespace Crytex.Service.Model
         public IEnumerable<Guid> OptionIds { get; set; }
         public int CountMonth { get; set; }
         public decimal? DiscountPrice { get; set; }
+        public bool AutoProlongation { get; set; }
     }
 }
