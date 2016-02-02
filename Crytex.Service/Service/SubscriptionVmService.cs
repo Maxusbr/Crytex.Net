@@ -115,18 +115,21 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
 
             // Add new sub backup payment
-            var subscriptionBackupPayment = new SubscriptionVmBackupPayment
+            if (backupPaymentRequired)
             {
-                BillingTransactionId = subsciptionVmTransaction.Id,
-                Date = DateTime.UtcNow,
-                SubscriptionVmId = newSubscription.Id,
-                Amount = backupTransactionCashAmount,
-                TariffId = newSubscription.TariffId,
-                DaysPeriod = options.DailyBackupStorePeriodDays,
-                Paid = true
-            };
-            this._backupPaymentRepo.Add(subscriptionBackupPayment);
-            this._unitOfWork.Commit();
+                var subscriptionBackupPayment = new SubscriptionVmBackupPayment
+                {
+                    BillingTransactionId = subsciptionVmTransaction.Id,
+                    Date = DateTime.UtcNow,
+                    SubscriptionVmId = newSubscription.Id,
+                    Amount = backupTransactionCashAmount,
+                    TariffId = newSubscription.TariffId,
+                    DaysPeriod = options.DailyBackupStorePeriodDays,
+                    Paid = true
+                };
+                this._backupPaymentRepo.Add(subscriptionBackupPayment);
+                this._unitOfWork.Commit();
+            }
 
             // Update SubscriptionVmId
             this._billingService.UpdateTransactionSubscriptionId(subsciptionVmTransaction.Id, newSubscription.Id);
@@ -205,7 +208,7 @@ namespace Crytex.Service.Service
                 HddGB = options.Hdd,
                 Ram = options.Ram,
                 OperatingSystemId = options.OperatingSystemId,
-                Name = options.VmName
+                Name = options.Name
             };
             var createTask = new TaskV2
             {
@@ -225,7 +228,7 @@ namespace Crytex.Service.Service
                 DateCreate = DateTime.UtcNow,
                 DateEnd = subscritionDateEnd,
                 UserId = options.UserId,
-                Name = options.VmName,
+                Name = options.Name,
                 SubscriptionType = options.SubscriptionType,
                 TariffId = tariff.Id,
                 Status = SubscriptionVmStatus.Active,
@@ -455,7 +458,7 @@ namespace Crytex.Service.Service
 
         public void ProlongateFixedSubscription(SubscriptionProlongateOptions options)
         {
-            this.ProlongateFixedSubscriptionInner(options.SubscriptionVmId.Value, options.MonthCount.Value,
+            this.ProlongateFixedSubscriptionInner(options.SubscriptionId.Value, options.MonthCount.Value,
                 BillingTransactionType.OneTimeDebiting, options.ProlongatedByAdmin, options.AdminUserId);
         }
 

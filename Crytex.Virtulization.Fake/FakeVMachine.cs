@@ -148,5 +148,20 @@ namespace Crytex.Virtualization.Fake
         {
             throw new NotImplementedException();
         }
+
+        public void UserIdentification(string UserName, string Password, VMGuestOperationType OSType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RenameComputer(string NewComputerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetNewPassword(string NewPassword)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
