@@ -29,6 +29,9 @@ namespace Crytex.Model.Models.WebHostingModels
     public enum WebHostingStatus
     {
         Creating = 0,
-        Active = 1
+        Active = 1,
+        WaitForPayment = 2,
+        WaitForDeletion = 3,
+        Deleted = 4
     }
 }

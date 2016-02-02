@@ -81,6 +81,7 @@ namespace Crytex.Service
             container.RegisterType<IWebHostingPaymentRepository, WebHostingPaymentRepository>();
             container.RegisterType<IHostedWebApplicationRepository, HostedWebApplicationRepository>();
             container.RegisterType<IHostedWebApplicationService, HostedWebApplicationService>();
+            container.RegisterType<IPaymentForecastService, PaymentForecastService>();
 
             container.RegisterType<IBoughtPhysicalServerOptionRepository, BoughtPhysicalServerOptionRepository>();
             container.RegisterType<IBoughtPhysicalServerRepository, BoughtPhysicalServerRepository>();

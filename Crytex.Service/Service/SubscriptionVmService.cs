@@ -82,7 +82,7 @@ namespace Crytex.Service.Service
                     backupTransactionCashAmount = this._tariffInfoService.CalculateBackupPrice(options.Hdd, options.SDD, options.DailyBackupStorePeriodDays - 1, tariff);
                 }
             }
-            
+
             var subsciptionVmTransaction = new BillingTransaction
             {
                 CashAmount = -(transactionCashAmount + backupTransactionCashAmount),
@@ -95,7 +95,7 @@ namespace Crytex.Service.Service
 
             // Create task and new vm
             var newSubscription = this.PrepareNewSubscription(options, tariff);
-            
+
             // Add new sub payment
             var subscriptionPayment = new FixedSubscriptionPayment
             {
@@ -115,23 +115,40 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
 
             // Add new sub backup payment
-            var subscriptionBackupPayment = new SubscriptionVmBackupPayment
+            if (backupPaymentRequired)
             {
-                BillingTransactionId = subsciptionVmTransaction.Id,
-                Date = DateTime.UtcNow,
-                SubscriptionVmId = newSubscription.Id,
-                Amount = backupTransactionCashAmount,
-                TariffId = newSubscription.TariffId,
-                DaysPeriod = options.DailyBackupStorePeriodDays,
-                Paid = true
-            };
-            this._backupPaymentRepo.Add(subscriptionBackupPayment);
-            this._unitOfWork.Commit();
+                var subscriptionBackupPayment = new SubscriptionVmBackupPayment
+                {
+                    BillingTransactionId = subsciptionVmTransaction.Id,
+                    Date = DateTime.UtcNow,
+                    SubscriptionVmId = newSubscription.Id,
+                    Amount = backupTransactionCashAmount,
+                    TariffId = newSubscription.TariffId,
+                    DaysPeriod = options.DailyBackupStorePeriodDays,
+                    Paid = true
+                };
+                this._backupPaymentRepo.Add(subscriptionBackupPayment);
+                this._unitOfWork.Commit();
+            }
 
             // Update SubscriptionVmId
             this._billingService.UpdateTransactionSubscriptionId(subsciptionVmTransaction.Id, newSubscription.Id);
 
             return newSubscription;
+        }
+
+        public decimal GetFixedSubscriptionMonthPriceTotal(SubscriptionVm sub)
+        {
+            var tariff = this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subMonthPrice = this._tariffInfoService.CalculateTotalPrice(sub.UserVm.CoreCount, sub.UserVm.HardDriveSize,
+                0, sub.UserVm.RamCount, 0, tariff); // TODO: SDD параметр 0. loadPer10Percent = 0
+            
+            var subBackupPrice = this._tariffInfoService.CalculateBackupPrice(sub.UserVm.HardDriveSize,
+                0, sub.DailyBackupStorePeriodDays - 1, tariff); // TODO: SDD параметр 0
+
+            var total = subMonthPrice + subBackupPrice;
+
+            return total;
         }
 
         private SubscriptionVm BuyUsageSubscription(SubscriptionBuyOptions options)
@@ -159,7 +176,7 @@ namespace Crytex.Service.Service
                 AdminUserId = options.AdminUserId
             };
             var newTransaction = this._billingService.AddUserTransaction(transaction);
-            
+
             // Create task and new vm with
             var newSubscription = this.PrepareNewSubscription(options, tariff);
 
@@ -188,10 +205,10 @@ namespace Crytex.Service.Service
             var createVmOptions = new CreateVmOptions
             {
                 Cpu = options.Cpu,
-                Hdd = options.Hdd,
+                HddGB = options.Hdd,
                 Ram = options.Ram,
                 OperatingSystemId = options.OperatingSystemId,
-                Name = options.VmName
+                Name = options.Name
             };
             var createTask = new TaskV2
             {
@@ -211,7 +228,7 @@ namespace Crytex.Service.Service
                 DateCreate = DateTime.UtcNow,
                 DateEnd = subscritionDateEnd,
                 UserId = options.UserId,
-                Name = options.VmName,
+                Name = options.Name,
                 SubscriptionType = options.SubscriptionType,
                 TariffId = tariff.Id,
                 Status = SubscriptionVmStatus.Active,
@@ -228,7 +245,7 @@ namespace Crytex.Service.Service
         {
             var sub = this._subscriptionVmRepository.Get(s => s.Id == guid, s => s.UserVm.OperatingSystem, s => s.User);
 
-            if(sub == null)
+            if (sub == null)
             {
                 throw new InvalidIdentifierException($"Vm subscription with id={guid.ToString()} doesn't exist");
             }
@@ -348,7 +365,7 @@ namespace Crytex.Service.Service
                 .Skip((pageNumber - 1) * pageSize).Take(pageSize);
                 return paymentGroups;
             }
-            
+
             paymentGroups = allPayments.GroupBy(s => new { s.Date.Year, s.Date.Month },
             (key, ss) => new UsageSubscriptionPaymentContainer() { Month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(key.Month), UsageSubscriptionPayment = ss })
             .Skip((pageNumber - 1) * pageSize).Take(pageSize);
@@ -377,18 +394,18 @@ namespace Crytex.Service.Service
                 {
                     where = where.And(x => x.DateEnd >= searchParams.EndFrom);
                 }
-                if(searchParams.EndTo != null)
+                if (searchParams.EndTo != null)
                 {
                     where = where.And(x => x.DateEnd <= searchParams.EndTo);
                 }
 
-                if(userId != null)
+                if (userId != null)
                 {
                     where = where.And(x => x.UserId == userId);
                 }
             }
 
-            var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate, false, x=>x.User, x=>x.UserVm.OperatingSystem);
+            var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate, false, x => x.User, x => x.UserVm.OperatingSystem);
 
             return pagedList;
         }
@@ -419,7 +436,7 @@ namespace Crytex.Service.Service
         {
             var sub = this.GetById(subId);
             sub.Status = status;
-            if(subEndDate != null)
+            if (subEndDate != null)
             {
                 sub.DateEnd = subEndDate.Value;
             }
@@ -441,7 +458,7 @@ namespace Crytex.Service.Service
 
         public void ProlongateFixedSubscription(SubscriptionProlongateOptions options)
         {
-            this.ProlongateFixedSubscriptionInner(options.SubscriptionVmId.Value, options.MonthCount.Value,
+            this.ProlongateFixedSubscriptionInner(options.SubscriptionId.Value, options.MonthCount.Value,
                 BillingTransactionType.OneTimeDebiting, options.ProlongatedByAdmin, options.AdminUserId);
         }
 
@@ -449,7 +466,7 @@ namespace Crytex.Service.Service
             bool forFree = false, string adminUserId = null)
         {
             var sub = this.GetById(subId);
-            if(sub.SubscriptionType != SubscriptionType.Fixed)
+            if (sub.SubscriptionType != SubscriptionType.Fixed)
             {
                 throw new OperationNotSupportedException($"Cannot prolongate subscription of type {sub.SubscriptionType}");
             }
@@ -524,7 +541,7 @@ namespace Crytex.Service.Service
         {
             var sub = this.GetById(subId);
 
-            if(sub.Status == SubscriptionVmStatus.Deleted)
+            if (sub.Status == SubscriptionVmStatus.Deleted)
             {
                 throw new InvalidOperationApplicationException("Subscription is already deleted");
             }
@@ -548,7 +565,7 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
 
             //Return money
-            if(sub.SubscriptionType == SubscriptionType.Fixed && sub.DateEnd > DateTime.UtcNow)
+            if (sub.SubscriptionType == SubscriptionType.Fixed && sub.DateEnd > DateTime.UtcNow)
             {
                 var payments = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id);
 
@@ -561,7 +578,7 @@ namespace Crytex.Service.Service
 
                 decimal sumToReturn = 0;
                 sumToReturn = futurePayments.Sum(p => p.Amount);
-                if(currentPayment != null)
+                if (currentPayment != null)
                 {
                     // Calculate part of current payment to return
                     var totalDays = (currentPayment.DateEnd - currentPayment.DateStart).Days;
@@ -582,11 +599,58 @@ namespace Crytex.Service.Service
             }
         }
 
-        public IEnumerable<SubscriptionVm> GetAllFixedSubscriptions()
+        public IEnumerable<SubscriptionVm> GetAllSubscriptionsByTypeAndUserId(SubscriptionType subscriptionType, string userId = null)
         {
-            var subs = this._subscriptionVmRepository.GetAll(s => s.SubscriptionType == SubscriptionType.Fixed);
+            Expression<Func<SubscriptionVm, bool>> where = x => x.SubscriptionType == subscriptionType;
+            if(userId != null)
+            {
+                where = where.And(x => x.UserId == userId);
+            }
+
+            var subs = this._subscriptionVmRepository.GetMany(where);
 
             return subs;
+        }
+
+        public decimal GetUsageSubscriptionHourPriceTotal(SubscriptionVm sub)
+        {
+            var subTariff = this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subVm = sub.UserVm;
+
+            // Calculate usage hour price
+            decimal hourPrice = this.GetUsageSubscriptionHourPrice(sub);
+            decimal backupHourPrice = this.GetUsageSubscriptionBackupHourPrice(sub);
+
+            var totalPrice = hourPrice + backupHourPrice;
+
+            return totalPrice;
+        }
+
+        private decimal GetUsageSubscriptionHourPrice(SubscriptionVm sub)
+        {
+            var subTariff = sub.Tariff ?? this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subVm = sub.UserVm;
+            decimal hourPrice = 0;
+            if (subVm.Status == StatusVM.Enable)
+            {
+                hourPrice = this._tariffInfoService.CalculateTotalPrice(subVm.CoreCount,
+                    subVm.HardDriveSize, 0, subVm.RamCount, 0, subTariff) / (30 * 24);
+            }
+            else if (subVm.Status == StatusVM.Disable)
+            {
+                hourPrice = this._tariffInfoService.CalculateTotalPrice(0, subVm.HardDriveSize,
+                    0, 0, 0, subTariff) / (30 * 24);
+            }
+
+            return hourPrice;
+        }
+
+        private decimal GetUsageSubscriptionBackupHourPrice(SubscriptionVm sub)
+        {
+            var subTariff = sub.Tariff ?? this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subVm = sub.UserVm;
+
+            return this._tariffInfoService.CalculateBackupPrice(subVm.HardDriveSize, 0, sub.DailyBackupStorePeriodDays, subTariff) / (30 * 24);
         }
 
         public void UpdateUsageSubscriptionBalance(Guid subId)
@@ -595,24 +659,15 @@ namespace Crytex.Service.Service
             var subTariff = this._tariffInfoService.GetTariffById(sub.TariffId);
             var subVm = sub.UserVm;
 
-            // Calculate usage hour price
-            decimal hourPrice;
-            decimal backupHourPrice = 
-                this._tariffInfoService.CalculateBackupPrice(subVm.HardDriveSize, 0, sub.DailyBackupStorePeriodDays, subTariff) / (30 * 24);
-            if (subVm.Status == StatusVM.Enable)
-            {
-                hourPrice = this._tariffInfoService.CalculateTotalPrice(subVm.CoreCount,
-                    subVm.HardDriveSize, 0, subVm.RamCount, 0, subTariff) / (30 * 24);
-            }
-            else if(subVm.Status == StatusVM.Disable)
-            {
-                hourPrice = this._tariffInfoService.CalculateTotalPrice(0, subVm.HardDriveSize,
-                    0, 0, 0, subTariff) / (30 * 24);
-            }
-            else
+            if (!(subVm.Status == StatusVM.Enable || subVm.Status == StatusVM.Disable))
             {
                 throw new ApplicationException($"Machine status during updating usage-type vm subscription is {subVm.Status}");
             }
+
+            // Calculate usage hour price
+            decimal hourPrice = this.GetUsageSubscriptionHourPrice(sub); ;
+            decimal backupHourPrice = this.GetUsageSubscriptionBackupHourPrice(sub);
+            
 
             // Calculate hour count for payment
             var currentTime = DateTime.UtcNow;
@@ -753,7 +808,7 @@ namespace Crytex.Service.Service
             var taskUpdateOptions = new UpdateVmOptions
             {
                 Cpu = options.Cpu ?? sub.UserVm.CoreCount,
-                Hdd = options.Hdd ?? sub.UserVm.HardDriveSize,
+                HddGB = options.Hdd ?? sub.UserVm.HardDriveSize,
                 Ram = options.Ram ?? sub.UserVm.RamCount,
                 Name = sub.UserVm.Name,
                 VmId = sub.UserVm.Id

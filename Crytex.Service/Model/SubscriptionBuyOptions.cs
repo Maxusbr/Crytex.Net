@@ -11,7 +11,7 @@ namespace Crytex.Service.Model
         public int OperatingSystemId { get; set; }
         public int Ram { get; set; }
         public int SDD { get; set; }
-        public string VmName { get; set; }
+        public string Name { get; set; }
         public int SubscriptionsMonthCount { get; set; }
         public SubscriptionType SubscriptionType { get; set; }
         public string UserId { get; set; }

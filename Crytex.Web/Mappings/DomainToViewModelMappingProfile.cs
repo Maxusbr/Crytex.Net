@@ -115,6 +115,14 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<TestPeriodOptions, TestPeriodViewModel>();
             Mapper.CreateMap<WebHostingPayment, WebHostingPaymentViewModel>()
                 .ForMember(x => x.WebHostingName, opt => opt.MapFrom(s => s.WebHosting.Name));
+            Mapper.CreateMap<SubscriptionPaymentForecast, SubscriptionPaymentForecastViewModel>()
+                .ForMember(x => x.SubscriptionVmId, opt => opt.MapFrom(s => s.SubscriptionVm.Id));
+            Mapper.CreateMap<GameServerPaymentForecast, GameServerPaymentForecastViewModel>()
+                .ForMember(x => x.GameServerId, opt => opt.MapFrom(s => s.GameServer.Id));
+            Mapper.CreateMap<WebHostingPaymentForecast, WebHostingPaymentForecastViewModel>()
+                .ForMember(x => x.WebHostingId, opt => opt.MapFrom(s => s.WebHosting.Id));
+            Mapper.CreateMap<PaymentForecast, PaymentForecastViewModel>();
+                
 
             Mapper.CreateMap<PhysicalServerOption, PhysicalServerOptionViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));

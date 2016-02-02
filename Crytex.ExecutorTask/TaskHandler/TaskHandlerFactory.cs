@@ -70,22 +70,34 @@ namespace Crytex.ExecutorTask.TaskHandler
         #region Private methods
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            throw new NotImplementedException();
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, host.Id);
+
+            return handler;
         }
 
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            throw new NotImplementedException();
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, vCenter.Id);
+
+            return handler;
         }
 
         private BaseNewTaskHandler GetUpdateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            throw new NotImplementedException();
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var handler = new UpdateVmTaskHandler(task, provider, host.Id);
+
+            return handler;
         }
 
         private BaseNewTaskHandler GetUpdateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            throw new NotImplementedException();
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var handler = new UpdateVmTaskHandler(task, provider, vCenter.Id);
+
+            return handler;
         }
 
         private BaseNewTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, HyperVHost host)
@@ -98,7 +110,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
             var handler = new ChangeVmStateTaskHandler(task, provider, vCenter.Id);
 
             return handler;
@@ -116,7 +128,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetBackupVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
             var handler = new BackupVmTaskHandler(task, provider, vCenter.Id);
 
             return handler;
@@ -141,7 +153,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetDeleteBackupTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
             var handler = new DeleteVmBackupTaskHandler(task, provider, vCenter.Id);
 
             return handler;

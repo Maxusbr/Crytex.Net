@@ -16,6 +16,7 @@ using System.Web.Routing;
 using Crytex.Service.Model;
 using Crytex.Service.Service;
 using Crytex.Web.Controllers.Api;
+using Crytex.Web.Helpers;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -60,11 +61,8 @@ namespace Crytex.Web.Areas.User.Controllers
                     }
 
                 }
-
-                AddErrors(result);
+                return new CrytexResult(ServerTypesResult.UserExist);
             }
-
-            // Появление этого сообщения означает наличие ошибки; повторное отображение формы
             return this.Conflict();
         }
 
@@ -90,8 +88,7 @@ namespace Crytex.Web.Areas.User.Controllers
             {
                 return this.Conflict();
             }
-            var provider = new DpapiDataProtectionProvider("TestWebAPI");
-            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
+
             var code = Base64ForUrlDecode(confirmEmail.code);
             var result = await _userManager.ConfirmEmailAsync(confirmEmail.userId, code);
             if (result.Succeeded)
@@ -103,13 +100,6 @@ namespace Crytex.Web.Areas.User.Controllers
                 return this.Conflict();
             }
         }
-
-        public class ConfirmEmailModel
-        {
-            public string userId { get; set; }
-            public string code { get; set; }
-        }
-
 
         [HttpPost]
         public IHttpActionResult UpdateUserInfo(string userId, FullUserInfoViewModel model)
@@ -179,7 +169,6 @@ namespace Crytex.Web.Areas.User.Controllers
 
         [HttpPost]
         [Authorize]
-
         public IHttpActionResult RemoveRefreshToken(RemoveRefreshTokenParams model)
         {
             if (!ModelState.IsValid)
@@ -194,13 +183,8 @@ namespace Crytex.Web.Areas.User.Controllers
 
         private async Task SendConfirmationEmailForUser(ApplicationUser user)
         {
-
-            var provider = new DpapiDataProtectionProvider("TestWebAPI");
-            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("EmailConfirmation"));
-
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
-            
-            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}//account//verify?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
+            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}#/account/verify?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
             var mailParams = new List<KeyValuePair<string, string>>();
             mailParams.Add(new KeyValuePair<string, string>("callbackUrl", callbackUrl));
 
@@ -214,11 +198,11 @@ namespace Crytex.Web.Areas.User.Controllers
         /// <param name="email">Email пользователя</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IHttpActionResult> ResetPassword(string email)
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordModel model)
         {
-            if (email != null)
+            if (model.email != null)
             {
-                var user = await _userManager.FindByEmailAsync(email);
+                var user = await _userManager.FindByEmailAsync(model.email);
                 if (user == null)
                 {
                     ModelState.AddModelError("", "User with this Email not found");
@@ -231,15 +215,13 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return this.Conflict();
         }
+
         private async Task SendResetPasswordEmailForUser(ApplicationUser user)
         {
+            
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
 
-            var provider = new DpapiDataProtectionProvider("TestWebAPI");
-            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("ResetPassword"));
-
-            var code = await _userManager.GenerateEmailConfirmationTokenAsync(user.Id);
-
-            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}//account//resetPassword?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
+            var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}#/account/resetPassword?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
             var mailParams = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("callbackUrl", callbackUrl)
@@ -261,8 +243,7 @@ namespace Crytex.Web.Areas.User.Controllers
             {
                 return this.Conflict();
             }
-            var provider = new DpapiDataProtectionProvider("TestWebAPI");
-            _userManager.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(provider.Create("ResetPassword"));
+
             var code = Base64ForUrlDecode(model.code);
             var result = await _userManager.ResetPasswordAsync(model.userId, code, model.password);
             if (result.Succeeded)
@@ -282,6 +263,17 @@ namespace Crytex.Web.Areas.User.Controllers
             public string password { get; set; }
         }
 
+        public class ResetPasswordModel
+        {
+            public string email { get; set; }
+        }
+
+        public class ConfirmEmailModel
+        {
+            public string userId { get; set; }
+            public string code { get; set; }
+        }
+
         private void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
@@ -289,7 +281,6 @@ namespace Crytex.Web.Areas.User.Controllers
                 ModelState.AddModelError("", error);
             }
         }
-
 
         public static string Base64ForUrlEncode(string str)
         {

@@ -303,6 +303,7 @@
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\NewsController.cs" />
+    <Compile Include="Areas\User\Controllers\PaymentForecastController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentGameServerController.cs" />
     <Compile Include="Areas\User\Controllers\PhysicalServerController.cs" />
     <Compile Include="Areas\User\Controllers\UsageSubscriptionPaymentController.cs" />
@@ -338,6 +339,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CrytexResult.cs" />
+    <Compile Include="Helpers\ServerErrorTypes.cs" />
     <Compile Include="Hubs\SampleHub.cs" />
     <Compile Include="Mappings\AutoMapperConfiguration.cs" />
     <Compile Include="Mappings\DomainToViewModelMappingProfile.cs" />
@@ -357,6 +360,7 @@
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerConfigViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
+    <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
     <Compile Include="Models\JsonModels\WebHostingProlongateOptionsModel.cs" />
     <Compile Include="Models\JsonModels\MachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\NewsViewModel.cs" />

@@ -25,36 +25,37 @@ namespace Crytex.Virtualization.Fake
 
         public long Memory
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         public INetworkInformation Networks
         {
             get
             {
-                throw new NotImplementedException();
+                var networks = new NetworkInformation();
+                networks.NetAdapter = new System.Collections.Generic.List<NetworkInfo>();
+                networks.NetAdapter.Add(new NetworkInfo
+                {
+                    IPv4 = "192.168.0.1",
+                    IPv6 = "2001:0:5ef5:79fd:10a6:2543:3f57:fefd",
+                    MAC = "E6-F8-9C-41-98-94",
+                    NetworkName = "Test Network 1"
+                });
+                networks.NetAdapter.Add(new NetworkInfo
+                {
+                    IPv4 = "192.168.0.2",
+                    IPv6 = "2002:0:5ef5:79fd:10a6:2543:3f57:fefd",
+                    MAC = "E6-F8-9C-41-98-95",
+                    NetworkName = "Test Network 2"
+                });
+
+                return networks;
             }
         }
 
         public int NumCPU
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         public PowerState PowerStateMachine { get; private set; }
@@ -69,10 +70,7 @@ namespace Crytex.Virtualization.Fake
 
         public IDrivesInformation VirtualDrives
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get; set;
         }
 
         public ReturnedRezultes CloneMachine(string newMachineName, object specification)
@@ -82,7 +80,7 @@ namespace Crytex.Virtualization.Fake
 
         public ReturnedRezultes CloneMachine(string newPath)
         {
-            throw new NotImplementedException();
+            return new ReturnedRezultes();
         }
 
         public ReturnedRezultes CreateBackup(string backupName)
@@ -107,7 +105,7 @@ namespace Crytex.Virtualization.Fake
 
         public ReturnedRezultes Modify()
         {
-            throw new NotImplementedException();
+            return new ReturnedRezultes();
         }
 
         public ReturnedRezultes Reboot()
@@ -144,6 +142,26 @@ namespace Crytex.Virtualization.Fake
         public ReturnedRezultes LoadSnapshot(string snapshotServerName)
         {
             return new ReturnedRezultes();
+        }
+
+        public void SetUserAutentification(string UserName, string Passowrd)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UserIdentification(string UserName, string Password, VMGuestOperationType OSType)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RenameComputer(string NewComputerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetNewPassword(string NewPassword)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -15,11 +15,14 @@
         GameServerEndWarning = 10,
         GameServerDeletionWarning = 11,
         ResetPassword = 12,
-        PhysicalServerNeedsPayment = 13,
-        PhysicalServerEndWarning = 14,
-        PhysicalServerDeletionWarning = 15,
-        PhysicalServerCreated = 16,
-        PhysicalServerReady = 17,
-        PhysicalServerDontCreate = 18
+        WebHostingWasDisabled = 13,
+        WebHostingEndWaring = 14,
+        WebHostingDeletionWarning = 15,
+        PhysicalServerNeedsPayment = 16,
+        PhysicalServerEndWarning = 17,
+        PhysicalServerDeletionWarning = 18,
+        PhysicalServerCreated = 19,
+        PhysicalServerReady = 20,
+        PhysicalServerDontCreate = 21
     }
 }

@@ -65,7 +65,9 @@ namespace Crytex.Model.Models
         CreateWebHosting = 9,
         StartWebApp = 10,
         StopWebApp = 11,
-        RestartWebApp = 12
+        RestartWebApp = 12,
+        DisableWebHosting = 13,
+        DeleteHosting = 14
     }
 
     [Serializable]
@@ -79,7 +81,7 @@ namespace Crytex.Model.Models
     {
         public Int32 Cpu { get; set; }
         public Int32 Ram { get; set; }
-        public Int32 Hdd { get; set; }
+        public Int32 HddGB { get; set; }
         // Пользовательское имя виртауальной машины. Используется для отображения на UI
         public String Name { get; set; }
     }
@@ -150,7 +152,16 @@ namespace Crytex.Model.Models
     [Serializable]
     public class CreateWebHostingOptions : BaseOptions
     {
+    }
 
+    [Serializable]
+    public class DisableWebHostingOptions : BaseOptions
+    {
+    }
+
+    [Serializable]
+    public class DeleteWebHostingOptions : BaseOptions
+    {
     }
 
     [Serializable]

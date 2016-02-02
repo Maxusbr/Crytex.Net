@@ -151,7 +151,7 @@ namespace Crytex.Web.Auth
                     "refreshTokenId", ""
                 },
                 {
-                    "roles",$"[{string.Join(",",roles.ToArray())}]"
+                    "roles",$"{string.Join(",",roles.ToArray())}"
                 }
                 
                 //,{

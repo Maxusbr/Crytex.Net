@@ -10,6 +10,9 @@ namespace Crytex.Background.Config
         int GetGameServerEndWarnPeriod();
         int GetGameServerWaitForPaymentPeriod();
         int GetSnapshotStoringDaysPeriod();
+        int GetWebHostingWaitForPaymentActionPeriod();
+        int GetWebHostingWaitForDeletionActionPeriod();
+        int GetWebHostingEndWarnPeriod();
         int GetPhysicServerWaitForPaymentPeriod();
         int GetPhysicServerWaitForDeletionPeriod();
     }

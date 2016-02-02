@@ -37,6 +37,9 @@ namespace Crytex.Service.Service
         public void StartApplication(Guid appId)
         {
             var app = this.GetHostedWebApplicationById(appId);
+            
+            // TODO: check app's WebHosting status
+
             if(app.Status == WebApplicationStatus.Started || app.Status == WebApplicationStatus.StartRequested 
                 || app.Status == WebApplicationStatus.RestartRequested)
             {
