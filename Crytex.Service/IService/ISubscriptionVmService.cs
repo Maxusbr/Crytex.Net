@@ -18,7 +18,7 @@ namespace Crytex.Service.IService
         IPagedList<SubscriptionVm> GetPage(int pageNumber, int pageSize, string userId = null, SubscriptionVmSearchParams searchParams = null);
         IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type);
         void UpdateSubscriptionStatus(Guid subId, SubscriptionVmStatus status, DateTime? endDate = null);
-        IEnumerable<SubscriptionVm> GetAllFixedSubscriptions();
+        IEnumerable<SubscriptionVm> GetAllSubscriptionsByTypeAndUserId(SubscriptionType subscriptionType, string userId = null);
         void UpdateSubscriptionData(SubscriptionUpdateOptions model);
         void UpdateUsageSubscriptionBalance(Guid subId);
         void ProlongateFixedSubscription(SubscriptionProlongateOptions options);
@@ -31,5 +31,7 @@ namespace Crytex.Service.IService
         void ResetSubscriptionMachine(Guid subsciptionId);
         void UpdateSubscriptionMachineConfig(Guid subscriptionId, UpdateMachineConfigOptions options);
         void AddTestPeriod(TestPeriodOptions options);
+        decimal GetUsageSubscriptionHourPriceTotal(SubscriptionVm sub);
+        decimal GetFixedSubscriptionMonthPriceTotal(SubscriptionVm sub);
     }
 }

@@ -76,6 +76,13 @@ namespace Crytex.Service.Service
             return newHosting;
         }
 
+        public decimal GetWebHostingMonthPrice(WebHosting webHosting)
+        {
+            var hostingTariff = this._webHostingTariffService.GetById(webHosting.WebHostingTariffId);
+
+            return hostingTariff.Price;
+        }
+
         public void AutoProlongateWebHosting(Guid webHostingId, int monthCount)
         {
             try
@@ -179,6 +186,13 @@ namespace Crytex.Service.Service
             }
 
             var hostings = this._webHostingRepository.GetMany(where);
+
+            return hostings;
+        }
+
+        public IEnumerable<WebHosting> GetAllByUserId(string userId)
+        {
+            var hostings = this._webHostingRepository.GetMany(h => h.UserId == userId);
 
             return hostings;
         }

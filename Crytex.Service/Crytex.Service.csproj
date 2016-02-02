@@ -121,6 +121,7 @@
     <Compile Include="IService\IVmWareVCenterService.cs" />
     <Compile Include="IService\IWebHostingService.cs" />
     <Compile Include="IService\IWebHostingTariffService.cs" />
+    <Compile Include="IService\IPaymentForecastService.cs" />
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
     <Compile Include="Model\BuyGameServerOption.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\GameServerConfigOptions.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
+    <Compile Include="Model\PaymentForecast.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
     <Compile Include="Model\SearchPaymentGameServerParams.cs" />
@@ -164,6 +166,7 @@
     <Compile Include="Service\NetTrafficCounterService.cs" />
     <Compile Include="Service\NewsService.cs" />
     <Compile Include="Service\OAuthService.cs" />
+    <Compile Include="Service\PaymentForecastService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
     <Compile Include="Service\SecureService\SecuredHostedWebApplicationService.cs" />

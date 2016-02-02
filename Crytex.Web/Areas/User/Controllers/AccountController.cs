@@ -169,7 +169,6 @@ namespace Crytex.Web.Areas.User.Controllers
 
         [HttpPost]
         [Authorize]
-
         public IHttpActionResult RemoveRefreshToken(RemoveRefreshTokenParams model)
         {
             if (!ModelState.IsValid)
@@ -263,21 +262,17 @@ namespace Crytex.Web.Areas.User.Controllers
             public string code { get; set; }
             public string password { get; set; }
         }
+
         public class ResetPasswordModel
         {
             public string email { get; set; }
         }
-
 
         public class ConfirmEmailModel
         {
             public string userId { get; set; }
             public string code { get; set; }
         }
-
-
-
-
 
         private void AddErrors(IdentityResult result)
         {
@@ -286,7 +281,6 @@ namespace Crytex.Web.Areas.User.Controllers
                 ModelState.AddModelError("", error);
             }
         }
-
 
         public static string Base64ForUrlEncode(string str)
         {

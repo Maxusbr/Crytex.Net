@@ -16,9 +16,10 @@ namespace Crytex.Service.IService
         GameServer CreateServer(GameServer server);
         GameServer GetById(Guid guid);
         IPagedList<GameServer> GetPage(int pageNumber, int pageSize, string userId = null);
+        IEnumerable<GameServer> GetAllByUserId(string userId);
 
         GameServer BuyGameServer(GameServer server, BuyGameServerOption option);
-
+        decimal GetGameServerMonthPrice(GameServer server);
         IPagedList<PaymentGameServer> GetPage(int pageNumber, int pageSize, SearchPaymentGameServerParams filter = null);
 
         IEnumerable<PaymentGameServer> GetGameServerByStatus(GameServerStatus status);
