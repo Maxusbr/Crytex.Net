@@ -100,13 +100,14 @@ namespace Crytex.Service.Service
         }
 
 
-        public decimal CalculateTotalPrice(int processor, int HDD, int SSD, int RAM512, int load10Percent, Tariff tariff)
+        public decimal CalculateTotalPrice(int processor, int HDD, int SSD, int ram, int load10Percent, Tariff tariff)
 
         {
+            var ram512 = ram / (decimal)512;
             decimal totalPrice = processor * tariff.Processor1 +
                                 HDD * tariff.HDD1 +
                                 SSD * tariff.SSD1 +
-                                RAM512 * tariff.RAM512 +
+                                ram512 * tariff.RAM512 +
                                 load10Percent * tariff.Load10Percent;
             return totalPrice;
         }

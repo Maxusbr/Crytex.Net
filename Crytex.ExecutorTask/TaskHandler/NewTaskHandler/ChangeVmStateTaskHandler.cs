@@ -13,7 +13,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var result = new TaskExecutionResult();
             var options = this.TaskEntity.GetOptions<ChangeStatusOptions>();
-            var vmName = this.TaskEntity.ResourceId.ToString();
+            var vmName = options.VmId.ToString();
 
             try
             {
@@ -27,6 +27,9 @@ namespace Crytex.ExecutorTask.TaskHandler
                         break;
                     case TypeChangeStatus.Stop:
                         vm.Stop();
+                        break;
+                    case TypeChangeStatus.Reload:
+                        vm.Reboot();
                         break;
                     default:
                         throw new ApplicationException("This TypeChangeStatus is not supprted yet");

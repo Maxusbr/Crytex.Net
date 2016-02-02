@@ -6,7 +6,7 @@ namespace Crytex.Web.Models.JsonModels
     public class SubscriptionProlongateOptionsViewModel
     {
         [Required]
-        public Guid? SubscriptionVmId { get; set; }
+        public Guid? SubscriptionId { get; set; }
         [Required]
         public int? MonthCount { get; set; }
     }

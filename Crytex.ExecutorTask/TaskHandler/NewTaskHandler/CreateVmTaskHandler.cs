@@ -18,7 +18,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         
         protected override TaskExecutionResult ExecuteLogic()
         {
-            Console.WriteLine("Create task VmWare");
+            Console.WriteLine($"Create task");
             var taskExecutionResult = new CreateVmTaskExecutionResult();
             try
             {
@@ -42,7 +42,11 @@ namespace Crytex.ExecutorTask.TaskHandler
                 newVm.NumCPU = createTaskOptions.Cpu;
                 newVm.Memory = createTaskOptions.Ram;
                 newVm.VirtualDrives.Drives.First().ResizeDisk(createTaskOptions.HddGB);
-                newVm.Modify();
+                var modifyResult = newVm.Modify();
+                if (modifyResult.IsError)
+                {
+                    throw new ApplicationException(modifyResult.ErrorMessage);
+                }
 
                 newVm.Start(true);
 
