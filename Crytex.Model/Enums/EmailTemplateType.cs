@@ -17,6 +17,12 @@
         ResetPassword = 12,
         WebHostingWasDisabled = 13,
         WebHostingEndWaring = 14,
-        WebHostingDeletionWarning = 15
+        WebHostingDeletionWarning = 15,
+        PhysicalServerNeedsPayment = 16,
+        PhysicalServerEndWarning = 17,
+        PhysicalServerDeletionWarning = 18,
+        PhysicalServerCreated = 19,
+        PhysicalServerReady = 20,
+        PhysicalServerDontCreate = 21
     }
 }

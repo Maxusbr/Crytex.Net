@@ -103,5 +103,11 @@ namespace Crytex.Data
         public DbSet<WebDatabaseServer> WebDatabaseServers { get; set; }
         public DbSet<WebHttpServer> WebHttpServers { get; set; }
         public DbSet<WebHostingPayment> WebHostingPayments { get; set; }
+
+        public DbSet<PhysicalServer> PhysicalServers { get; set; }
+        public DbSet<PhysicalServerOption> PhysicalServerOptions { get; set; }
+        public DbSet<BoughtPhysicalServer> BoughtPhysicalServers { get; set; }
+        public DbSet<BoughtPhysicalServerOption> BoughtPhysicalServerOptions { get; set; }
+        public DbSet<PhysicalServerOptionsAvailable> AvailableOptionsPhysicalServers { get; set; }
     }
 }

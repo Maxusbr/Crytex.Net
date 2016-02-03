@@ -102,23 +102,37 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult UpdateUserInfo(string userId, FullUserInfoViewModel model)
+        public async Task<IHttpActionResult> UpdateUserInfo(FullUserInfoViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = _userManager.FindById(userId);
 
-                if (user != null)
+                var user = await  _userManager.FindByIdAsync(CrytexContext.UserInfoProvider.GetUserId());
+                if (!user.PhoneNumberConfirmed)
                 {
-                    user.Payer = model.Payer;
-                    user.UserType = model.UserType;
-                    user.ContactPerson = model.ContactPerson;
-                    user.PhoneNumber = model.TelephoneNumber;
-                    user.City = model.City;
-                    user.Country = model.Country;
+                    return this.Conflict();
                 }
+                user.Name = model.Name;
+                user.Lastname = model.LastName;
+                user.CodePhrase = model.CodePhrase;
+                user.Patronymic = model.Patronymic;
+                user.Region = model.Region;
+                user.Address = model.Address;
+                user.UserType = model.UserType;
+                user.City = model.City;
+                user.Country = model.Country;
 
-                var result = _userManager.UpdateAsync(user).Result;
+                var result = await  _userManager.UpdateAsync(user);
+                var addRoleResult = await _userManager.RemoveFromRoleAsync(user.Id, "FirstStepRegister");
+                if (!addRoleResult.Succeeded)
+                {
+                    return this.Conflict();
+                }
+                addRoleResult = await _userManager.AddToRoleAsync(user.Id, "User");
+                if (addRoleResult.Succeeded)
+                {
+                    return this.Ok();
+                }
 
                 if (!result.Succeeded)
                 {
@@ -154,6 +168,7 @@ namespace Crytex.Web.Areas.User.Controllers
         [HttpPost]
         public IHttpActionResult VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
+         
             if (this.ModelState.IsValid)
             {
                 var result = UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code).Result;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Crytex.Model.Models;
 
@@ -65,28 +66,15 @@ namespace Crytex.Web.Models
 
     public class FullUserInfoViewModel
     {
-        [Required]
-        [Display(Name = "Плательщик")]
-        public string Payer { get; set; }
-
         public TypeUser UserType { get; set; }
-
-        [Required]
-        [Display(Name = "Контактное лицо")]
-        public string ContactPerson { get; set; }
-
-        [Required]
-        [Display(Name = "Телефон")]
-        [Phone]
-        public string TelephoneNumber { get; set; }
-
-        [Required]
-        [Display(Name = "Страна")]
+        public String Name { get; set; }
+        public String LastName { get; set; }
+        public String Patronymic { get; set; }
         public string Country { get; set; }
-
-        [Required]
-        [Display(Name = "Город")]
+        public string Region { get; set; }
         public string City { get; set; }
+        public String Address { get; set; }
+        public String CodePhrase { get; set; }
     }
 
 

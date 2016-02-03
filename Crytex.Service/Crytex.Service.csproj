@@ -97,6 +97,7 @@
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
     <Compile Include="IService\INewsService.cs" />
+    <Compile Include="IService\IPhysicalServerService.cs" />
     <Compile Include="IService\ITriggerService.cs" />
     <Compile Include="IService\IUserLoginLogService.cs" />
     <Compile Include="IService\IOAuthService.cs" />
@@ -124,13 +125,21 @@
     <Compile Include="IService\IPaymentForecastService.cs" />
     <Compile Include="Model\ApplicationUserSearchParams.cs" />
     <Compile Include="Model\BillingSearchParams.cs" />
+    <Compile Include="Model\BoughtPhysicalServerSearchParams.cs" />
     <Compile Include="Model\BuyGameServerOption.cs" />
+    <Compile Include="Model\BuyPhysicalServerParam.cs" />
+    <Compile Include="Model\CreatePhysicalServerParam.cs" />
     <Compile Include="Model\BuyWebHostingParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\GameServerConfigOptions.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\PaymentForecast.cs" />
+    <Compile Include="Model\PhysicalServerOptionsAviableParams.cs" />
+    <Compile Include="Model\PhysicalServerOptionSearchParams.cs" />
+    <Compile Include="Model\PhysicalServerOptionsParams.cs" />
+    <Compile Include="Model\PhysicalServerSearchParams.cs" />
+    <Compile Include="Model\PhysicalServerStateParams.cs" />
     <Compile Include="Model\RemoveRefreshTokenParams.cs" />
     <Compile Include="Model\RemoveVmOption.cs" />
     <Compile Include="Model\SearchPaymentGameServerParams.cs" />
@@ -139,6 +148,7 @@
     <Compile Include="Model\SubscriptionVmStatisticModel.cs" />
     <Compile Include="Model\TestPeriodOptions.cs" />
     <Compile Include="Model\UpdateMachineConfigOptions.cs" />
+    <Compile Include="Model\UpdatePhysicalServerParam.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentContainer.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentGroupByVmContainer.cs" />
     <Compile Include="Model\UsageSubscriptionPaymentSearchParams.cs" />
@@ -169,6 +179,7 @@
     <Compile Include="Service\PaymentForecastService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
+    <Compile Include="Service\PhysicalServerService.cs" />
     <Compile Include="Service\SecureService\SecuredHostedWebApplicationService.cs" />
     <Compile Include="Service\SecureService\SecuredSubscriptionVmService.cs" />
     <Compile Include="Service\SecureService\SecureFixedSubscriptionPaymentService.cs" />
