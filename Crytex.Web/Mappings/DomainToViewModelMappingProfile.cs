@@ -127,18 +127,15 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhysicalServerOption, PhysicalServerOptionViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
             Mapper.CreateMap<PhysicalServer, PhysicalServerViewModel>()
-                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                .ForMember(x => x.Options, opt => opt.MapFrom(source => Mapper.Map<ICollection<PhysicalServerOptionViewModel>>(source.AvailableOptions)));
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
             Mapper.CreateMap<PhysicalServerOptionsAvailable, PhysicalServerOptionViewModel>()
-                .ForMember(x => x, opt => opt.MapFrom(source => Mapper.Map<PhysicalServerOptionViewModel>(source.Option)))
                 .ForMember(x => x.IsDefault, opt => opt.MapFrom(source => source.IsDefault));
 
             Mapper.CreateMap<BoughtPhysicalServer, BoughtPhysicalServerViewModel>()
-                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                .ForMember(x => x.Server, opt => opt.MapFrom(source => Mapper.Map<PhysicalServerViewModel>(source.Server)))
-                .ForMember(x => x.Options, opt => opt.MapFrom(source => Mapper.Map<ICollection<PhysicalServerOptionViewModel>>(source.ServerOptions)));
-            Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>()
-                .ForMember(x => x, opt => opt.MapFrom(source => Mapper.Map<PhysicalServerOptionViewModel>(source.Option)));
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+
+            Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
+                
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();

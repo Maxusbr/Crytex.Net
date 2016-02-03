@@ -313,6 +313,7 @@
     <Compile Include="Areas\User\Controllers\HelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\User\Controllers\PhoneCallRequestController.cs" />
     <Compile Include="Areas\User\Controllers\SubscriptionVmController.cs" />
+    <Compile Include="Areas\User\Controllers\UserController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
     <Compile Include="Areas\User\Controllers\VmBackupController.cs" />
     <Compile Include="Areas\User\Controllers\WebHostingController.cs" />
