@@ -7,7 +7,7 @@ using Crytex.Virtualization.Base;
 
 namespace Crytex.Virtualization.ProviderFactory
 {
-    public class FakeProviderFactory: IProviderFactory
+    public class FakeProviderFactory // : IProviderFactory uncomment when this interface will be exist again
     {
         public IProviderVM GetProviderVm(ProviderVirtualization provider)
         {
