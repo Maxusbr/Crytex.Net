@@ -211,7 +211,7 @@ namespace Crytex.Web.Controllers
             {
                 var user = _userManager.FindById(userId);
 
-                if (user != null)
+                /*if (user != null)
                 {
                     user.Payer = model.Payer;
                     user.UserType = model.UserType;
@@ -219,7 +219,7 @@ namespace Crytex.Web.Controllers
                     user.PhoneNumber = model.TelephoneNumber;
                     user.City = model.City;
                     user.Country = model.Country;
-                }
+                }*/
 
                 var result = await _userManager.UpdateAsync(user);
 

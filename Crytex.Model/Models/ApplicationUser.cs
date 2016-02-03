@@ -47,10 +47,12 @@ namespace Crytex.Model.Models
         public string Payer { get; set; }
         public string ContactPerson { get; set; }
         public decimal Balance { get; set; }
-
+        public string Region { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
+
+        
     }
 
     public  enum TypeUser
