@@ -19,5 +19,7 @@ namespace Crytex.Service.IService
         void UpdateWebHostingStatus(Guid id, WebHostingStatus newStatus);
         void PrepareHostingForDeletion(Guid id);
         void DeleteWebHosting(Guid id);
+        IEnumerable<WebHosting> GetAllByUserId(string userId);
+        decimal GetWebHostingMonthPrice(WebHosting webHosting);
     }
 }
