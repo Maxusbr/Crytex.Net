@@ -105,7 +105,7 @@ namespace Crytex.Service.Service
         public Guid CreateVm(UserVm userVm)
         {
             var os = this._operatingSystemService.GetById(userVm.OperatingSystemId);
-            this.CheckOsHardwareMinRequirements(userVm, os);
+            this.CheckOsHardwareMinRequirements(userVm.GetVmHardwareConfiguration(), os);
 
             this._userVmRepo.Add(userVm);
             this._unitOfWork.Commit();
@@ -113,21 +113,28 @@ namespace Crytex.Service.Service
             return userVm.Id;
         }
 
-        private void CheckOsHardwareMinRequirements(UserVm userVm, OperatingSystem os)
+        public void CheckOsHardwareMinRequirements(VmHardwareConfig hardwareConfig, int operatingSystemId)
         {
-            if(userVm.CoreCount < os.MinCoreCount)
+            var os = this._operatingSystemService.GetById(operatingSystemId);
+
+            this.CheckOsHardwareMinRequirements(hardwareConfig, os);
+        }
+
+        public void CheckOsHardwareMinRequirements(VmHardwareConfig hardwareConfig, OperatingSystem os)
+        {
+            if(hardwareConfig.Cpu < os.MinCoreCount)
             {
-                throw new ValidationException($"Cannot create vm with CoreCount={userVm.CoreCount}."+ 
+                throw new ValidationException($"Cannot create vm with CoreCount={hardwareConfig.Cpu}."+ 
                     $"Min CoreCount for this OS is {os.MinCoreCount}");
             }
-            if (userVm.RamCount < os.MinRamCount)
+            if (hardwareConfig.RamMB < os.MinRamCount)
             {
-                throw new ValidationException($"Cannot create vm with RamCount={userVm.RamCount}." +
+                throw new ValidationException($"Cannot create vm with RamCount={hardwareConfig.RamMB}." +
                     $"Min RamCount for this OS is {os.MinRamCount}");
             }
-            if (userVm.HardDriveSize < os.MinHardDriveSize)
+            if (hardwareConfig.HardDriveSizeGB < os.MinHardDriveSize)
             {
-                throw new ValidationException($"Cannot create vm with HardDriveSize={userVm.HardDriveSize}." +
+                throw new ValidationException($"Cannot create vm with HardDriveSize={hardwareConfig.HardDriveSizeGB}." +
                     $"Min HardDriveSize for this OS is {os.MinHardDriveSize}");
             }
         }
@@ -137,6 +144,14 @@ namespace Crytex.Service.Service
          
             var userVm = this.GetVmById(vmId);
 
+            // Get vm's VmHardwareConf object, update its props and pass it to CheckOsHardwareMinRequirements
+            var hardwareConf = userVm.GetVmHardwareConfiguration();
+            hardwareConf.Cpu = cpu ?? userVm.CoreCount;
+            hardwareConf.RamMB = ram ?? userVm.RamCount;
+            hardwareConf.HardDriveSizeGB = hdd ?? userVm.HardDriveSize;
+            this.CheckOsHardwareMinRequirements(hardwareConf, userVm.OperatingSystemId); // Throws exception if new conf is invalid
+
+            // New config is ok. Update UserVm entity
             userVm.CoreCount = cpu ?? userVm.CoreCount;
             userVm.RamCount = ram ?? userVm.RamCount;
             userVm.HardDriveSize = hdd ?? userVm.HardDriveSize;

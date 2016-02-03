@@ -65,7 +65,7 @@ namespace Crytex.Service.Service
 
         private SubscriptionVm BuyFixedSubscription(SubscriptionBuyOptions options)
         {
-            // Calculate subscription price, add a billiing transaction and update user balance
+            // Calculate subscription price
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
             decimal transactionCashAmount = 0;
@@ -82,7 +82,11 @@ namespace Crytex.Service.Service
                     backupTransactionCashAmount = this._tariffInfoService.CalculateBackupPrice(options.Hdd, options.SDD, options.DailyBackupStorePeriodDays - 1, tariff);
                 }
             }
+            
+            // Create task and new vm. Check os min requirements
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
 
+            // Add a billiing transaction and update user balance
             var subsciptionVmTransaction = new BillingTransaction
             {
                 CashAmount = -(transactionCashAmount + backupTransactionCashAmount),
@@ -92,9 +96,6 @@ namespace Crytex.Service.Service
                 AdminUserId = options.AdminUserId
             };
             subsciptionVmTransaction = this._billingService.AddUserTransaction(subsciptionVmTransaction);
-
-            // Create task and new vm
-            var newSubscription = this.PrepareNewSubscription(options, tariff);
 
             // Add new sub payment
             var subscriptionPayment = new FixedSubscriptionPayment
@@ -153,7 +154,7 @@ namespace Crytex.Service.Service
 
         private SubscriptionVm BuyUsageSubscription(SubscriptionBuyOptions options)
         {
-            // Calculate subscription hour price, add a billiing transaction and update user balance
+            // Calculate subscription hour price
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
 
@@ -175,10 +176,12 @@ namespace Crytex.Service.Service
                 UserId = options.UserId,
                 AdminUserId = options.AdminUserId
             };
-            var newTransaction = this._billingService.AddUserTransaction(transaction);
 
             // Create task and new vm with
             var newSubscription = this.PrepareNewSubscription(options, tariff);
+
+            // Add a billiing transaction and update user balance
+            var newTransaction = this._billingService.AddUserTransaction(transaction);
 
             var subscriptionPayment = new UsageSubscriptionPayment
             {
@@ -216,6 +219,7 @@ namespace Crytex.Service.Service
                 Virtualization = options.Virtualization,
                 UserId = options.UserId
             };
+            // Check os min requirements and create task if it's ok.
             var newTask = this._taskService.CreateTask(createTask, createVmOptions);
 
             // Create new subscription

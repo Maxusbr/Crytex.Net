@@ -58,12 +58,29 @@ namespace Crytex.Service.Service
             task.CreatedAt = DateTime.UtcNow;
             task.StatusTask = StatusTask.Pending;
 
+            this.ValidateTaskOptions(task);
             this.CreateOrRemoveTaskRelatedDbEntities(task);
 
             this._taskV2Repo.Add(task);
             this._unitOfWork.Commit();
 
             return task;
+        }
+
+        private void ValidateTaskOptions(TaskV2 task)
+        {
+            if (task.TypeTask == TypeTask.UpdateVm)
+            {
+                var updateOptions = task.GetOptions<UpdateVmOptions>();
+                var vm = this._userVmService.GetVmById(updateOptions.VmId);
+                var hardwareConf = vm.GetVmHardwareConfiguration();
+
+                hardwareConf.RamMB = updateOptions.Ram;
+                hardwareConf.Cpu = updateOptions.Cpu;
+                hardwareConf.HardDriveSizeGB = updateOptions.HddGB;
+
+                this._userVmService.CheckOsHardwareMinRequirements(hardwareConf, vm.OperatingSystemId);
+            }
         }
 
         private void CreateOrRemoveTaskRelatedDbEntities(TaskV2 task)

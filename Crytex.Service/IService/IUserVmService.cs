@@ -3,6 +3,7 @@ using Crytex.Model.Models;
 using System;
 using System.Collections.Generic;
 using Crytex.Service.Model;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.Service.IService
 {
@@ -30,5 +31,7 @@ namespace Crytex.Service.IService
         void AddIpAddressesToVm(Guid vmId, IEnumerable<VmIpAddress> addresses);
         void MarkAsDeleted(Guid vmId);
         IEnumerable<UserVm> GetAllVmsByUserId(string userId);
+        void CheckOsHardwareMinRequirements(VmHardwareConfig hardwareConf, int operatingSystemId);
+        void CheckOsHardwareMinRequirements(VmHardwareConfig hardwareConf, OperatingSystem os);
     }
 }
