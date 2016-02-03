@@ -101,12 +101,14 @@ namespace Crytex.Data.Migrations
                         RegisterDate = DateTime.Now,
                         Country = "Россия",
                         ContactPerson = "Контактное лицо",
-                        Payer = "Плательщик"
+                        Payer = "Плательщик",
+                        PhoneNumberConfirmed = true
+                  
                     };
                     if (allUsers.All(u => u.UserName != admin.UserName))
                     {
-                        manager.Create(admin, "wUcheva$3a");
-                        manager.AddToRoles(admin.Id, new string[] { "Admin" });
+                        manager.Create(admin, "adsfdg");
+                        manager.AddToRoles(admin.Id, new string[] { "Admin","User" });
                         allUsers.Add(admin);
                     }
                 }
@@ -125,8 +127,8 @@ namespace Crytex.Data.Migrations
                     };
                     if (allUsers.All(u => u.UserName != support.UserName))
                     {
-                        manager.Create(support, "wUcheva$3a");
-                        manager.AddToRoles(support.Id, new string[] { "Support" });
+                        manager.Create(support, "adsfdg");
+                        manager.AddToRoles(support.Id, new string[] { "Support","User" });
                         allUsers.Add(support);
                     }
                 }
