@@ -13,12 +13,16 @@ namespace Crytex.Web.Areas.User.Controllers
     public class UserController : UserCrytexController
     {
         private IApplicationUserService _applicationUserService { get; }
-        /// <summary>
-        /// Получение пользователя по id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        // GET api/Admin/<controller>/5
+
+        public UserController(IApplicationUserService applicationUserService)
+        {
+            _applicationUserService = applicationUserService;
+         
+        }
+
+
+
+
         [ResponseType(typeof(ApplicationUserViewModel))]
         public IHttpActionResult Get()
         {
