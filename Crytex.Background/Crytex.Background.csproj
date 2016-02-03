@@ -110,6 +110,11 @@
     <Compile Include="Tasks\GameServer\WaitForPaymentGameServerJob.cs" />
     <Compile Include="Tasks\GameServer\WarningsGameServerJob.cs" />
     <Compile Include="Tasks\NetTrafficCounterUpdateJob.cs" />
+    <Compile Include="Tasks\PhysicalServer\SendMessagesPhysicalServerJob.cs" />
+    <Compile Include="Tasks\PhysicalServer\UsagePhysicalServerJob.cs" />
+    <Compile Include="Tasks\PhysicalServer\WaiForDeletionPhysicalServerJob.cs" />
+    <Compile Include="Tasks\PhysicalServer\WaitFotPaymentPhysicalServerJob.cs" />
+    <Compile Include="Tasks\PhysicalServer\ActivePhysicalServerJob.cs" />
     <Compile Include="Tasks\StatisticJob.cs" />
     <Compile Include="Tasks\BillingJob.cs" />
     <Compile Include="Tasks\EmailSendJob.cs" />

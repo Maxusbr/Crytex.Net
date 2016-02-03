@@ -205,5 +205,70 @@ namespace Crytex.Notification
             bodyParams.Add(new KeyValuePair<string, string>("daysToDeletion", daysToDeletion.ToString()));
             this.SendEmailImmediately(from, user.Email, EmailTemplateType.WebHostingDeletionWarning, null, bodyParams, DateTime.UtcNow);
         }
+
+        public void SendPhysicalServerWaitPaymentEmail(string userId)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.PhysicalServerNeedsPayment, null, null, DateTime.UtcNow);
+        }
+
+        public void SendPhysicalServerPoweredOffEmail(string userId)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.PhysicalServerDeletionWarning, null, null, DateTime.UtcNow);
+        }
+
+        public void SendPhysicalServerAdminCreated(string userId)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.PhysicalServerCreated, null, null, DateTime.UtcNow);
+        }
+
+        public void SendPhysicalServerAdminReady(string userId, string message)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            var bodyParams = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("AdminMessage", message)
+            };
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.PhysicalServerReady, null, bodyParams, DateTime.UtcNow);
+        }
+
+        public void SendPhysicalServerAdminDontCreate(string userId, string message)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            var bodyParams = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("AdminMessage", message)
+            };
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.PhysicalServerDontCreate, null, bodyParams, DateTime.UtcNow);
+        }
+
+        public void SendPhysicalServerEndWarningEmail(string userId, int daysToEnd)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            var bodyParams = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("daysToEnd", daysToEnd.ToString())
+            };
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.PhysicalServerEndWarning, null, bodyParams, DateTime.UtcNow);
+        }
+
+        public void SendPhysicalServerDeletionWarningEmail(string userId, int daysToDeletion)
+        {
+            var user = this._applicationUserService.GetUserById(userId);
+            var from = ConfigurationManager.AppSettings["Email"];
+            var bodyParams = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("daysToDeletion", daysToDeletion.ToString())
+            };
+            this.SendEmailImmediately(from, user.Email, EmailTemplateType.PhysicalServerDeletionWarning, null, bodyParams, DateTime.UtcNow);
+        }
     }
 }

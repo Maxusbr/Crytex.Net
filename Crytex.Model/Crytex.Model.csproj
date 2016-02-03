@@ -74,11 +74,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\BoughtPhysicalServerStatus.cs" />
     <Compile Include="Enums\CountingPeriodType.cs" />
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Enums\EnumApplicationType.cs" />
     <Compile Include="Enums\GameServerUpdateType.cs" />
+    <Compile Include="Enums\PhysicalServerOptionType.cs" />
     <Compile Include="Enums\UrgencyLevel.cs" />
     <Compile Include="Enums\UsageSubscriptionPaymentGroupingTypes.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
@@ -101,6 +103,7 @@
     <Compile Include="Models\Biling\PaymentGameServer.cs" />
     <Compile Include="Models\Biling\SubscriptionPaymentBase.cs" />
     <Compile Include="Models\Biling\SubscriptionVmBackupPayment.cs" />
+    <Compile Include="Models\Biling\BoughtPhysicalServer.cs" />
     <Compile Include="Models\Biling\WebHostingPayment.cs" />
     <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
@@ -120,6 +123,10 @@
     <Compile Include="Models\OperatingSystem.cs" />
     <Compile Include="Models\OAuthRefreshToken.cs" />
     <Compile Include="Models\PhoneCallRequest.cs" />
+    <Compile Include="Models\PhysicalServer.cs" />
+    <Compile Include="Models\PhysicalServerOption.cs" />
+    <Compile Include="Models\PhysicalServerOptionsAvailable.cs" />
+    <Compile Include="Models\BoughtPhysicalServerOption.cs" />
     <Compile Include="Models\Region.cs" />
     <Compile Include="Models\ServerTemplate.cs" />
     <Compile Include="Models\SnapshotVm.cs" />

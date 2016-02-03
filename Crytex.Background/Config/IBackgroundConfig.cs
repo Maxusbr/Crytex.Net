@@ -13,5 +13,7 @@ namespace Crytex.Background.Config
         int GetWebHostingWaitForPaymentActionPeriod();
         int GetWebHostingWaitForDeletionActionPeriod();
         int GetWebHostingEndWarnPeriod();
+        int GetPhysicServerWaitForPaymentPeriod();
+        int GetPhysicServerWaitForDeletionPeriod();
     }
 }
