@@ -104,17 +104,6 @@ namespace Crytex.Service.Service
 
         public Guid CreateVm(UserVm userVm)
         {
-           
-            if (userVm.VirtualizationType == TypeVirtualization.HyperV && userVm.HyperVHostId == null)
-            {
-                throw new ApplicationException("HyperVHostId property value is required for HyperV virtualization type");
-            }
-         
-            if (userVm.VirtualizationType == TypeVirtualization.VmWare && userVm.VmWareCenterId == null)
-            {
-                throw new ApplicationException("VmWareCenterId property value is required for VmWare virtualization type");
-            }
-
             var os = this._operatingSystemService.GetById(userVm.OperatingSystemId);
             this.CheckOsHardwareMinRequirements(userVm, os);
 
