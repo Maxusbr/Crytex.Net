@@ -244,6 +244,56 @@ namespace Crytex.Data.Migrations
                 context.EmailTemplates.Add(gameserverNeedsPaymentEmailTemplate);
                 context.EmailTemplates.Add(gameserverDeletionWarningEmailTemplate);
                 context.EmailTemplates.Add(resetPasswordTemplate);
+
+                var physicserverEndWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Срок подписки истекает",
+                    EmailTemplateType = EmailTemplateType.PhysicalServerEndWarning,
+                    Body = "Ваша подписка на физический сервер истекает через {daysToEnd} дня",
+                    ParameterNames = @"[""daysToEnd""]"
+                };
+                var physicserverNeedsPaymentEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Подписка требует оплаты",
+                    EmailTemplateType = EmailTemplateType.PhysicalServerNeedsPayment,
+                    Body = "Ваша подписка на физический сервер требует оплаты. Пожалуйста внесите платёж. Машина отключена."
+                };
+                var physicserverDeletionWarningEmailTemplate = new EmailTemplate
+                {
+                    Subject = "Ваша подписка будет удалена",
+                    EmailTemplateType = EmailTemplateType.PhysicalServerDeletionWarning,
+                    Body = "Ваша подписка на физический сервер будет удалена через {daysToDeletion} дня",
+                    ParameterNames = @"[""daysToDeletion""]"
+                };
+
+                
+                var physicServerAdminCreated = new EmailTemplate
+                {
+                    Subject = "Ваш физический сервер в процессе создания",
+                    EmailTemplateType = EmailTemplateType.PhysicalServerCreated,
+                    Body = "Ваш физический сервер находится в процессе создания и настройки.",
+                };
+                var physicServerAdminReady = new EmailTemplate
+                {
+                    Subject = "Ваша физический сервер создан",
+                    EmailTemplateType = EmailTemplateType.PhysicalServerReady,
+                    Body = "Ваш физический сервер создан. {AdminMessage}",
+                    ParameterNames = @"[""AdminMessage""]"
+                };
+                var physicServerAdminDontCreate = new EmailTemplate
+                {
+                    Subject = "Ваша физический сервер не может быть создан",
+                    EmailTemplateType = EmailTemplateType.PhysicalServerDontCreate,
+                    Body = "Ваш физический сервер не может быть создан. {AdminMessage}",
+                    ParameterNames = @"[""AdminMessage""]"
+                };
+
+                context.EmailTemplates.Add(physicserverEndWarningEmailTemplate);
+                context.EmailTemplates.Add(physicserverNeedsPaymentEmailTemplate);
+                context.EmailTemplates.Add(physicserverDeletionWarningEmailTemplate);
+                context.EmailTemplates.Add(physicServerAdminCreated);
+                context.EmailTemplates.Add(physicServerAdminReady);
+                context.EmailTemplates.Add(physicServerAdminDontCreate);
                 context.EmailTemplates.Add(webHostingDisabledEmailTemplate);
                 ///////////////////////////////////
 

@@ -29,5 +29,12 @@ namespace Crytex.Notification
         void SendWebHostingEndWarningEmail(string userId, int daysToEnd);
         void SendGameServerDeletionWarningEmail(string userId, int daysToDeletion);
         void SendWebHostingDeletionWarningEmail(string userId, int daysToDeletion);
+        void SendPhysicalServerWaitPaymentEmail(string userId);
+        void SendPhysicalServerPoweredOffEmail(string userId);
+        void SendPhysicalServerAdminCreated(string userId);
+        void SendPhysicalServerAdminReady(string userId, string message);
+        void SendPhysicalServerAdminDontCreate(string userId, string message);
+        void SendPhysicalServerEndWarningEmail(string userId, int daysToEnd);
+        void SendPhysicalServerDeletionWarningEmail(string userId, int daysToDeletion);
     }
 }

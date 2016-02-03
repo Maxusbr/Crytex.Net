@@ -49,5 +49,15 @@ namespace Crytex.Background.Config
         {
             return this.GetValue<int>("WebHostingEndWarnPeriod");
         }
+
+        public int GetPhysicServerWaitForPaymentPeriod()
+        {
+            return this.GetValue<int>("PhysicServerWaitForPaymentPeriod");
+        }
+
+        public int GetPhysicServerWaitForDeletionPeriod()
+        {
+            return this.GetValue<int>("PhysicServerWaitForDeletionPeriod");
+        }
     }
 }
