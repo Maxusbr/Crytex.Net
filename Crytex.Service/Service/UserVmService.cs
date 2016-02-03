@@ -10,6 +10,7 @@ using System.Data.Entity.Core;
 using System.Linq.Expressions;
 using Crytex.Service.Extension;
 using Crytex.Service.Model;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.Service.Service
 {
@@ -17,10 +18,12 @@ namespace Crytex.Service.Service
     {
         private IUserVmRepository _userVmRepo;
         private IUnitOfWork _unitOfWork;
+        private readonly IOperatingSystemsService _operatingSystemService;
 
-        public UserVmService(IUserVmRepository userVmRepo, IUnitOfWork unitOfWork)
+        public UserVmService(IUserVmRepository userVmRepo, IOperatingSystemsService operatingSystemService, IUnitOfWork unitOfWork)
         {
             this._userVmRepo = userVmRepo;
+            this._operatingSystemService = operatingSystemService;
             this._unitOfWork = unitOfWork;
         }
 
@@ -112,10 +115,32 @@ namespace Crytex.Service.Service
                 throw new ApplicationException("VmWareCenterId property value is required for VmWare virtualization type");
             }
 
+            var os = this._operatingSystemService.GetById(userVm.OperatingSystemId);
+            this.CheckOsHardwareMinRequirements(userVm, os);
+
             this._userVmRepo.Add(userVm);
             this._unitOfWork.Commit();
 
             return userVm.Id;
+        }
+
+        private void CheckOsHardwareMinRequirements(UserVm userVm, OperatingSystem os)
+        {
+            if(userVm.CoreCount < os.MinCoreCount)
+            {
+                throw new ValidationException($"Cannot create vm with CoreCount={userVm.CoreCount}."+ 
+                    $"Min CoreCount for this OS is {os.MinCoreCount}");
+            }
+            if (userVm.RamCount < os.MinRamCount)
+            {
+                throw new ValidationException($"Cannot create vm with RamCount={userVm.RamCount}." +
+                    $"Min RamCount for this OS is {os.MinRamCount}");
+            }
+            if (userVm.HardDriveSize < os.MinHardDriveSize)
+            {
+                throw new ValidationException($"Cannot create vm with HardDriveSize={userVm.HardDriveSize}." +
+                    $"Min HardDriveSize for this OS is {os.MinHardDriveSize}");
+            }
         }
 
         public void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null)
@@ -193,6 +218,13 @@ namespace Crytex.Service.Service
             vm.Status = StatusVM.Deleted;
             this._userVmRepo.Update(vm);
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<UserVm> GetAllVmsByUserId(string userId)
+        {
+            var vms = this._userVmRepo.GetMany(vm => vm.UserId == userId);
+
+            return vms;
         }
     }
 }

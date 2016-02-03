@@ -85,6 +85,19 @@ namespace Crytex.Virtualization.Fake
             }
         }
 
+        public string pathVM
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public PowerState PowerStateMachine
         {
             get

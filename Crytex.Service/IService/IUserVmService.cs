@@ -29,5 +29,6 @@ namespace Crytex.Service.IService
 
         void AddIpAddressesToVm(Guid vmId, IEnumerable<VmIpAddress> addresses);
         void MarkAsDeleted(Guid vmId);
+        IEnumerable<UserVm> GetAllVmsByUserId(string userId);
     }
 }
