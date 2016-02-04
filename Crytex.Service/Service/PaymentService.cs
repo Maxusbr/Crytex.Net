@@ -17,16 +17,21 @@ namespace Crytex.Service.Service
     {
         private readonly IUnitOfWork _unitOfWork;
         private IBillingTransactionRepository _billingTransactionRepository;
+        private readonly IBilingService _bilingService;
+        private readonly IDiscountService _discountService;
         private readonly ICreditPaymentOrderRepository _creditPaymentOrderRepository;
         private readonly IPaymentSystemRepository _paymentSystemRepository;
 
         public PaymentService(IUnitOfWork unitOfWork, IBillingTransactionRepository billingRepo,
-            ICreditPaymentOrderRepository creditPaymentOrderRepo, IPaymentSystemRepository paymentSystemRepository)
+            ICreditPaymentOrderRepository creditPaymentOrderRepo, IPaymentSystemRepository paymentSystemRepository, 
+            IDiscountService discountService, IBilingService bilingService)
         {
             this._unitOfWork = unitOfWork;
             this._billingTransactionRepository = billingRepo;
             this._creditPaymentOrderRepository = creditPaymentOrderRepo;
             _paymentSystemRepository = paymentSystemRepository;
+            _discountService = discountService;
+            _bilingService = bilingService;
         }
 
         public Payment CreateCreditPaymentOrder(decimal cashAmount, string userId, Guid paymentSystem)
@@ -63,10 +68,18 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException($"CreditPaymentOrder with id = {id} doesn't exist.");
             }
             payment.AmountReal = cashAmount;
+            payment.AmountWithBonus = _discountService.GetBonusReplenishmentDiscount(cashAmount);
             payment.Status = PaymentStatus.Success;
-            //TODO Add transaction?
             _creditPaymentOrderRepository.Update(payment);
             _unitOfWork.Commit();
+            
+            var transaction = new BillingTransaction
+            {
+                CashAmount = payment.AmountWithBonus,
+                TransactionType = BillingTransactionType.Crediting,
+                UserId = payment.UserId
+            };
+            _bilingService.AddUserTransaction(transaction);
         }
 
         public void FailCreditPaymentOrder(Guid id)
