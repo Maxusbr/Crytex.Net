@@ -13,10 +13,16 @@ namespace Crytex.Model.Models.Biling
         public DateTime? DateEnd { get; set; }
         public decimal CashAmount { get; set; }
         public string UserId { get; set; }
-        public PaymentSystemType PaymentSystem { get; set; }
-        public bool Success { get; set; }
+        public Guid PaymentSystemId { get; set; }
+
+        public decimal AmountReal { get; set; }
+        public decimal AmountWithBonus { get; set; }
+
+        public PaymentStatus Status { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
+        [ForeignKey("PaymentSystemId")]
+        public PaymentSystem PaymentSystem { get; set; }
     }
 
     public enum PaymentSystemType
@@ -27,5 +33,12 @@ namespace Crytex.Model.Models.Biling
         PayPal = 3,
         WebMoney = 4,
         YandexMoney = 5
+    }
+
+    public enum PaymentStatus
+    {
+        Success = 0,
+        Created = 1,
+        Failed = 2
     }
 }

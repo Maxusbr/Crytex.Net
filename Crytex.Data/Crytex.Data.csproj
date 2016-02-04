@@ -68,6 +68,7 @@
     <Compile Include="IRepository\IOAuthClientApplicationRepository.cs" />
     <Compile Include="IRepository\IOAuthRefreshTokenRepository.cs" />
     <Compile Include="IRepository\IPaymentGameServerRepository.cs" />
+    <Compile Include="IRepository\IPaymentSystemRepository.cs" />
     <Compile Include="IRepository\IPhoneCallRequestRepository.cs" />
     <Compile Include="IRepository\IPhysicalServerOptionRepository.cs" />
     <Compile Include="IRepository\IPhysicalServerOptionsAvailableRepository.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="Repository\OAuthRefreshTokenRepository.cs" />
     <Compile Include="Repository\OperatingSystemRepository.cs" />
     <Compile Include="Repository\PaymentGameServerRepository.cs" />
+    <Compile Include="Repository\PaymentSystemRepository.cs" />
     <Compile Include="Repository\PhoneCallRequestRepository.cs" />
     <Compile Include="Repository\PhysicalServerOptionRepository.cs" />
     <Compile Include="Repository\PhysicalServerOptionsAvailableRepository.cs" />

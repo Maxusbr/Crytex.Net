@@ -11,7 +11,7 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public decimal? CashAmount { get; set; }
         [Required]
-        public PaymentSystemType? PaymentSystem { get; set; }
+        public string PaymentSystemId { get; set; }
         public DateTime Date { get; set; }
         public DateTime? DateEnd { get; set; }
         public string UserId { get; set; }

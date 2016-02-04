@@ -482,11 +482,25 @@ namespace Crytex.Data.Migrations
                     }
                 }
 
+                var onpay = new PaymentSystem { Name = "Onpay", IsEnabled = true };
+                var sprypay = new PaymentSystem { Name = "Sprypay", IsEnabled = true };
+                var interkassa = new PaymentSystem { Name = "Interkassa", IsEnabled = true };
+                var payPal = new PaymentSystem { Name = "PayPal", IsEnabled = true };
+                var webMoney = new PaymentSystem { Name = "WebMoney", IsEnabled = true };
+                var yandexMoney = new PaymentSystem { Name = "YandexMoney", IsEnabled = true };
+                context.PaymentSystems.Add(onpay);
+                context.PaymentSystems.Add(sprypay);
+                context.PaymentSystems.Add(interkassa);
+                context.PaymentSystems.Add(payPal);
+                context.PaymentSystems.Add(webMoney);
+                context.PaymentSystems.Add(yandexMoney);
+                context.Commit();
+
                 for (int i = 1; i < 5; i++)
                 {
                     var userMoney = allUsers.First(u => u.UserName == "User" + i);
                     var valuesTransaction = Enum.GetValues(typeof(BillingTransactionType));
-                    var valuesPayment = Enum.GetValues(typeof(PaymentSystemType));
+                    var valuesPayment = context.PaymentSystems;
 
                     for (int b = 0; b < 2; b++)
                     {
@@ -517,8 +531,8 @@ namespace Crytex.Data.Migrations
                                 Date = startDate,
                                 DateEnd = startDate.AddHours(1),
                                 UserId = userMoney.Id,
-                                Success = (random.Next(2) > 0),
-                                PaymentSystem = (PaymentSystemType)typePayment
+                                Status = (PaymentStatus)random.Next(3),
+                                PaymentSystemId = typePayment.Id
                             };
                             context.Payments.Add(payment);
                         }

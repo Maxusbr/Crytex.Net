@@ -1,6 +1,7 @@
 ﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -67,8 +68,13 @@ namespace Crytex.Web.Areas.User
             {
                 return BadRequest(ModelState);
             }
+            Guid paymentGuid;
+            if (!Guid.TryParse(model.PaymentSystemId, out paymentGuid))
+            {
+                this.ModelState.AddModelError("PaymentSystemId", "Invalid Guid format");
+            }
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, model.PaymentSystem.Value);
+            var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, paymentGuid);
 
             return Ok(new { id = newOrder.Guid });
         }
@@ -85,6 +91,19 @@ namespace Crytex.Web.Areas.User
             this._paymentService.DeleteCreditPaymentOrderById(guid);
 
             return Ok();
+        }
+
+        // GET: api/Payment/PaymentSystems
+        /// <summary>
+        /// Получить список доступных платежных систем
+        /// </summary>
+        /// <returns></returns>
+        public IHttpActionResult PaymentSystems()
+        {
+            var systems = _paymentService.GetPaymentSystems(true);
+            var model = AutoMapper.Mapper.Map<IEnumerable<PaymentSystemView>>(systems);
+
+            return Ok(model);
         }
     }
 }
