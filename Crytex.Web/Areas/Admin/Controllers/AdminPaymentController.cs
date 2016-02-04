@@ -1,6 +1,7 @@
 ﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -63,8 +64,13 @@ namespace Crytex.Web.Areas.Admin
             {
                 BadRequest(ModelState);
             }
+            Guid guid;
+            if (!Guid.TryParse(model.PaymentSystemId, out guid))
+            {
+                this.ModelState.AddModelError("PaymentSystemId", "Invalid Guid format");
+            }
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, model.PaymentSystem.Value);
+            var newOrder = this._paymentService.CreateCreditPaymentOrder(model.CashAmount.Value, userId, guid);
 
             return Ok(new { id = newOrder.Guid });
         }
@@ -82,5 +88,57 @@ namespace Crytex.Web.Areas.Admin
 
             return Ok();
         }
+
+        // GET: api/AdminPayment/PaymentSystems
+        /// <summary>
+        /// Получить список доступных платежных систем
+        /// </summary>
+        /// <returns></returns>
+        public IHttpActionResult PaymentSystems()
+        {
+            var systems = _paymentService.GetPaymentSystems();
+            var model = AutoMapper.Mapper.Map<IEnumerable<PaymentSystemView>>(systems);
+
+            return Ok(model);
+        }
+
+        // POST: api/AdminPayment/EnablePaymentSystem
+        /// <summary>
+        /// Включить платежную систему 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IHttpActionResult EnablePaymentSystem(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                ModelState.AddModelError("Id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
+            _paymentService.EnableDisablePaymentSystem(guid, true);
+
+            return Ok();
+        }
+
+        // POST: api/AdminPayment/EnablePaymentSystem
+        /// <summary>
+        /// Выключить платежную систему 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public IHttpActionResult DisablePaymentSystem(string id)
+        {
+            Guid guid;
+            if (!Guid.TryParse(id, out guid))
+            {
+                ModelState.AddModelError("Id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
+            _paymentService.EnableDisablePaymentSystem(guid, false);
+
+            return Ok();
+        }
+
     }
 }

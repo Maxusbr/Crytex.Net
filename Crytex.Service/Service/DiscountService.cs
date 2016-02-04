@@ -87,6 +87,12 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-
+        public decimal GetBonusReplenishmentDiscount(decimal amount)
+        {
+            var discounts = this._discountRepository.GetMany(d => d.DiscountType == TypeDiscount.BonusReplenishment &&
+                d.Count <= amount).OrderBy(x => x.Count);
+            if (!discounts.Any()) return amount;
+            return amount * (decimal)discounts.Last().DiscountSize / 100;
+        }
     }
 }
