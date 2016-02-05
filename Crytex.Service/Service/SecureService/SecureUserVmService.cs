@@ -13,7 +13,7 @@ namespace Crytex.Service.Service.SecureService
     {
         private readonly IIdentity _userIdentity;
 
-        public SecureUserVmService(IUserVmRepository userVmRepo, IUnitOfWork unitOfWork, IIdentity userIdentity) : base(userVmRepo, unitOfWork)
+        public SecureUserVmService(IUserVmRepository userVmRepo, IOperatingSystemsService osService, IUnitOfWork unitOfWork, IIdentity userIdentity) : base(userVmRepo, osService, unitOfWork)
         {
             this._userIdentity = userIdentity;
         }

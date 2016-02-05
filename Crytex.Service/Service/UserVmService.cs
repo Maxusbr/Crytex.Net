@@ -10,6 +10,7 @@ using System.Data.Entity.Core;
 using System.Linq.Expressions;
 using Crytex.Service.Extension;
 using Crytex.Service.Model;
+using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 
 namespace Crytex.Service.Service
 {
@@ -17,10 +18,12 @@ namespace Crytex.Service.Service
     {
         private IUserVmRepository _userVmRepo;
         private IUnitOfWork _unitOfWork;
+        private readonly IOperatingSystemsService _operatingSystemService;
 
-        public UserVmService(IUserVmRepository userVmRepo, IUnitOfWork unitOfWork)
+        public UserVmService(IUserVmRepository userVmRepo, IOperatingSystemsService operatingSystemService, IUnitOfWork unitOfWork)
         {
             this._userVmRepo = userVmRepo;
+            this._operatingSystemService = operatingSystemService;
             this._unitOfWork = unitOfWork;
         }
 
@@ -101,16 +104,8 @@ namespace Crytex.Service.Service
 
         public Guid CreateVm(UserVm userVm)
         {
-           
-            if (userVm.VirtualizationType == TypeVirtualization.HyperV && userVm.HyperVHostId == null)
-            {
-                throw new ApplicationException("HyperVHostId property value is required for HyperV virtualization type");
-            }
-         
-            if (userVm.VirtualizationType == TypeVirtualization.VmWare && userVm.VmWareCenterId == null)
-            {
-                throw new ApplicationException("VmWareCenterId property value is required for VmWare virtualization type");
-            }
+            var os = this._operatingSystemService.GetById(userVm.OperatingSystemId);
+            this.CheckOsHardwareMinRequirements(userVm.GetVmHardwareConfiguration(), os);
 
             this._userVmRepo.Add(userVm);
             this._unitOfWork.Commit();
@@ -118,11 +113,45 @@ namespace Crytex.Service.Service
             return userVm.Id;
         }
 
+        public void CheckOsHardwareMinRequirements(VmHardwareConfig hardwareConfig, int operatingSystemId)
+        {
+            var os = this._operatingSystemService.GetById(operatingSystemId);
+
+            this.CheckOsHardwareMinRequirements(hardwareConfig, os);
+        }
+
+        public void CheckOsHardwareMinRequirements(VmHardwareConfig hardwareConfig, OperatingSystem os)
+        {
+            if(hardwareConfig.Cpu < os.MinCoreCount)
+            {
+                throw new ValidationException($"Cannot create vm with CoreCount={hardwareConfig.Cpu}."+ 
+                    $"Min CoreCount for this OS is {os.MinCoreCount}");
+            }
+            if (hardwareConfig.RamMB < os.MinRamCount)
+            {
+                throw new ValidationException($"Cannot create vm with RamCount={hardwareConfig.RamMB}." +
+                    $"Min RamCount for this OS is {os.MinRamCount}");
+            }
+            if (hardwareConfig.HardDriveSizeGB < os.MinHardDriveSize)
+            {
+                throw new ValidationException($"Cannot create vm with HardDriveSize={hardwareConfig.HardDriveSizeGB}." +
+                    $"Min HardDriveSize for this OS is {os.MinHardDriveSize}");
+            }
+        }
+
         public void UpdateVm(Guid vmId, int? cpu = null, int? hdd = null, int? ram = null)
         {
          
             var userVm = this.GetVmById(vmId);
 
+            // Get vm's VmHardwareConf object, update its props and pass it to CheckOsHardwareMinRequirements
+            var hardwareConf = userVm.GetVmHardwareConfiguration();
+            hardwareConf.Cpu = cpu ?? userVm.CoreCount;
+            hardwareConf.RamMB = ram ?? userVm.RamCount;
+            hardwareConf.HardDriveSizeGB = hdd ?? userVm.HardDriveSize;
+            this.CheckOsHardwareMinRequirements(hardwareConf, userVm.OperatingSystemId); // Throws exception if new conf is invalid
+
+            // New config is ok. Update UserVm entity
             userVm.CoreCount = cpu ?? userVm.CoreCount;
             userVm.RamCount = ram ?? userVm.RamCount;
             userVm.HardDriveSize = hdd ?? userVm.HardDriveSize;
@@ -193,6 +222,13 @@ namespace Crytex.Service.Service
             vm.Status = StatusVM.Deleted;
             this._userVmRepo.Update(vm);
             this._unitOfWork.Commit();
+        }
+
+        public IEnumerable<UserVm> GetAllVmsByUserId(string userId)
+        {
+            var vms = this._userVmRepo.GetMany(vm => vm.UserId == userId);
+
+            return vms;
         }
     }
 }
