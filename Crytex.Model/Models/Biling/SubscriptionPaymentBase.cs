@@ -8,7 +8,6 @@ namespace Crytex.Model.Models.Biling
         public int TariffId { get; set; }
         public Guid SubscriptionVmId { get; set; }
 
-
         [ForeignKey("TariffId")]
         public Tariff Tariff { get; set; }
         [ForeignKey("SubscriptionVmId")]

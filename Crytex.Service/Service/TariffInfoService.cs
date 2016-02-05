@@ -112,9 +112,9 @@ namespace Crytex.Service.Service
             return totalPrice;
         }
 
-        public decimal CalculateBackupPrice(int hdd, int sdd, int days, Tariff tariff)
+        public decimal CalculateBackupPrice(int hddGB, int sddGB, int days, Tariff tariff)
         {
-            decimal price = ((hdd + sdd) / 1024) * days * tariff.BackupStoringGb;
+            decimal price = (hddGB + sddGB) * days * tariff.BackupStoringGb;
 
             return price;
         }
