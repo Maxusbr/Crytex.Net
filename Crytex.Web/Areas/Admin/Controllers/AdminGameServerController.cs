@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
@@ -109,6 +110,58 @@ namespace Crytex.Web.Areas.Admin.Controllers
                 UpdateType = GameServerUpdateType.Configuration
             };
             _gameServerService.UpdateGameServer(model.ServerId, serviceOptions);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Получить список конфигураций игровых серверов
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetGameServerConfig()
+        {
+
+            var configs = _gameServerService.GetGameServerConfigurations();
+            var model = Mapper.Map<IEnumerable<GameServerConfigurationView>>(configs);
+
+            return Ok(model);
+        }
+
+        /// <summary>
+        /// Создать конфигурацию игрового сервера
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult CreateGameServerConfig(GameServerConfigurationView model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var config = Mapper.Map<GameServerConfiguration>(model);
+            config = _gameServerService.CreateGameServerConfiguration(config);
+
+            return Ok(new { id = config.Id });
+        }
+
+        /// <summary>
+        /// Изменить конфигурацию игрового сервера
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult UpdateGameServerConfig(GameServerConfigurationView model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var config = Mapper.Map<GameServerConfiguration>(model);
+            _gameServerService.UpdateGameServerConfiguration(config);
 
             return Ok();
         }
