@@ -8,6 +8,8 @@ namespace Crytex.Model.Models.Biling
         public DateTime Date { get; set; }
         public decimal Amount { get; set; }
         public Guid? BillingTransactionId { get; set; }
+        public bool ReturnedToUser { get; set; }
+        public DateTime? ReturnDate { get; set; }
 
         [ForeignKey("BillingTransactionId")]
         public BillingTransaction BillingTransaction { get; set; }

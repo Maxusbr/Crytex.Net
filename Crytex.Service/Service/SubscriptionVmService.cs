@@ -65,7 +65,7 @@ namespace Crytex.Service.Service
 
         private SubscriptionVm BuyFixedSubscription(SubscriptionBuyOptions options)
         {
-            // Calculate subscription price, add a billiing transaction and update user balance
+            // Calculate subscription price
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
             decimal transactionCashAmount = 0;
@@ -79,10 +79,15 @@ namespace Crytex.Service.Service
 
                 if (backupPaymentRequired)
                 {
-                    backupTransactionCashAmount = this._tariffInfoService.CalculateBackupPrice(options.Hdd, options.SDD, options.DailyBackupStorePeriodDays - 1, tariff);
+                    var backupMonthPrice = this._tariffInfoService.CalculateBackupPrice(options.Hdd, options.SDD, options.DailyBackupStorePeriodDays - 1, tariff);
+                    backupTransactionCashAmount = backupMonthPrice * options.SubscriptionsMonthCount;
                 }
             }
+            
+            // Create task and new vm. Check os min requirements
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
 
+            // Add a billiing transaction and update user balance
             var subsciptionVmTransaction = new BillingTransaction
             {
                 CashAmount = -(transactionCashAmount + backupTransactionCashAmount),
@@ -93,15 +98,14 @@ namespace Crytex.Service.Service
             };
             subsciptionVmTransaction = this._billingService.AddUserTransaction(subsciptionVmTransaction);
 
-            // Create task and new vm
-            var newSubscription = this.PrepareNewSubscription(options, tariff);
+            var dateNow = DateTime.UtcNow;
 
             // Add new sub payment
             var subscriptionPayment = new FixedSubscriptionPayment
             {
                 BillingTransactionId = subsciptionVmTransaction.Id,
                 MonthCount = options.SubscriptionsMonthCount,
-                Date = DateTime.UtcNow,
+                Date = dateNow,
                 DateStart = newSubscription.DateCreate,
                 DateEnd = newSubscription.DateEnd,
                 SubscriptionVmId = newSubscription.Id,
@@ -120,12 +124,14 @@ namespace Crytex.Service.Service
                 var subscriptionBackupPayment = new SubscriptionVmBackupPayment
                 {
                     BillingTransactionId = subsciptionVmTransaction.Id,
-                    Date = DateTime.UtcNow,
+                    Date = dateNow,
                     SubscriptionVmId = newSubscription.Id,
                     Amount = backupTransactionCashAmount,
                     TariffId = newSubscription.TariffId,
                     DaysPeriod = options.DailyBackupStorePeriodDays,
-                    Paid = true
+                    Paid = true,
+                    DateStart = newSubscription.DateCreate,
+                    DateEnd = newSubscription.DateEnd,
                 };
                 this._backupPaymentRepo.Add(subscriptionBackupPayment);
                 this._unitOfWork.Commit();
@@ -139,21 +145,36 @@ namespace Crytex.Service.Service
 
         public decimal GetFixedSubscriptionMonthPriceTotal(SubscriptionVm sub)
         {
-            var tariff = this._tariffInfoService.GetTariffById(sub.TariffId);
-            var subMonthPrice = this._tariffInfoService.CalculateTotalPrice(sub.UserVm.CoreCount, sub.UserVm.HardDriveSize,
-                0, sub.UserVm.RamCount, 0, tariff); // TODO: SDD параметр 0. loadPer10Percent = 0
-            
-            var subBackupPrice = this._tariffInfoService.CalculateBackupPrice(sub.UserVm.HardDriveSize,
-                0, sub.DailyBackupStorePeriodDays - 1, tariff); // TODO: SDD параметр 0
+            var tariff = sub.Tariff ?? this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subMonthPrice = this.GetFixedSubscriptionMonthPrice(sub);
+            var subBackupPrice = this.GetFixedSubscriptionBackupMonthPrice(sub);
 
             var total = subMonthPrice + subBackupPrice;
 
             return total;
         }
 
+        private decimal GetFixedSubscriptionMonthPrice(SubscriptionVm sub)
+        {
+            var tariff = sub.Tariff ?? this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subMonthPrice = this._tariffInfoService.CalculateTotalPrice(sub.UserVm.CoreCount, sub.UserVm.HardDriveSize,
+                0, sub.UserVm.RamCount, 0, tariff); // TODO: SDD параметр 0. loadPer10Percent = 0
+
+            return subMonthPrice;
+        }
+
+        private decimal GetFixedSubscriptionBackupMonthPrice(SubscriptionVm sub)
+        {
+            var tariff = sub.Tariff ?? this._tariffInfoService.GetTariffById(sub.TariffId);
+            var subBackupPrice = this._tariffInfoService.CalculateBackupPrice(sub.UserVm.HardDriveSize,
+                0, sub.DailyBackupStorePeriodDays - 1, tariff); // TODO: SDD параметр 0
+
+            return subBackupPrice;
+        }
+
         private SubscriptionVm BuyUsageSubscription(SubscriptionBuyOptions options)
         {
-            // Calculate subscription hour price, add a billiing transaction and update user balance
+            // Calculate subscription hour price
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
 
@@ -175,10 +196,12 @@ namespace Crytex.Service.Service
                 UserId = options.UserId,
                 AdminUserId = options.AdminUserId
             };
-            var newTransaction = this._billingService.AddUserTransaction(transaction);
 
             // Create task and new vm with
             var newSubscription = this.PrepareNewSubscription(options, tariff);
+
+            // Add a billiing transaction and update user balance
+            var newTransaction = this._billingService.AddUserTransaction(transaction);
 
             var subscriptionPayment = new UsageSubscriptionPayment
             {
@@ -216,6 +239,7 @@ namespace Crytex.Service.Service
                 Virtualization = options.Virtualization,
                 UserId = options.UserId
             };
+            // Check os min requirements and create task if it's ok.
             var newTask = this._taskService.CreateTask(createTask, createVmOptions);
 
             // Create new subscription
@@ -701,7 +725,9 @@ namespace Crytex.Service.Service
                     Date = currentTime,
                     DaysPeriod = sub.DailyBackupStorePeriodDays,
                     SubscriptionVmId = sub.Id,
-                    TariffId = subTariff.Id
+                    TariffId = subTariff.Id,
+                    DateStart = sub.LastUsageBillingTransactionDate.Value.AddHours(i),
+                    DateEnd = sub.LastUsageBillingTransactionDate.Value.AddHours(i + 1)
                 };
 
                 try
@@ -799,6 +825,11 @@ namespace Crytex.Service.Service
 
         private void UpdateUsageSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
         {
+            this.UpdateSubMachineConfig(sub, options);
+        }
+
+        private void UpdateSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
+        {
             var updateTask = new TaskV2
             {
                 TypeTask = TypeTask.UpdateVm,
@@ -818,7 +849,124 @@ namespace Crytex.Service.Service
 
         private void UpdateFixedSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
         {
-            throw new NotImplementedException();
+            var dateNow = DateTime.UtcNow;
+
+            if(sub.DateEnd < DateTime.UtcNow)
+            {
+                throw new TaskOperationException("Updating expired subscription config is not supported");
+            }
+
+            var daysToSubEnd = (sub.DateEnd - dateNow).Days;
+
+            // Calculate remainin days price according to OLD config values
+            // ... calculate subscroption price
+            var subscriptionDayOldPrice = this.GetFixedSubscriptionMonthPrice(sub) / 30;
+            var daysToEndOldCost = subscriptionDayOldPrice * daysToSubEnd;
+
+            // ... calclulate backup price
+            var subscriptionBackupDayOldPrice = this.GetFixedSubscriptionBackupMonthPrice(sub) / 30;
+            var daysToEndBackupOldCost = subscriptionBackupDayOldPrice * daysToSubEnd;
+            var daysToEndOldTotal = daysToEndOldCost + daysToEndBackupOldCost;
+
+            // Calculate remainin days price according to NEW config values
+            var userVm = sub.UserVm;
+            var oldCpu = userVm.CoreCount;
+            var oldRam = userVm.RamCount;
+            var oldHdd = userVm.HardDriveSize;
+
+            userVm.CoreCount = options.Cpu ?? userVm.CoreCount;
+            userVm.RamCount = options.Ram ?? userVm.RamCount;
+            userVm.HardDriveSize = options.Hdd ?? userVm.HardDriveSize;
+
+            // ... calculate subscroption price
+            var subscriptionDayNewPrice = this.GetFixedSubscriptionMonthPrice(sub) / 30;
+            var daysToEndNewCost = subscriptionDayNewPrice * daysToSubEnd;
+            
+            // ... calclulate backup price
+            var subscriptionBackupDayNewPrice = this.GetFixedSubscriptionBackupMonthPrice(sub) / 30;
+            var daysToEndBackupNewCost = subscriptionBackupDayNewPrice * daysToSubEnd;
+            var daysToEndNewTotal = daysToEndNewCost + daysToEndBackupNewCost;
+
+            var billingTransactionCashAmount = -(daysToEndNewTotal - daysToEndOldTotal);
+            var subsciptionVmTransaction = new BillingTransaction
+            {
+                CashAmount = billingTransactionCashAmount,
+                TransactionType = BillingTransactionType.OneTimeDebiting,
+                UserId = sub.UserId,
+                Description = "Update fixed subscriptionVm vm configuration",
+                SubscriptionVmId = sub.Id
+            };
+
+            try
+            {
+                subsciptionVmTransaction = this._billingService.AddUserTransaction(subsciptionVmTransaction);
+            }
+            catch (TransactionFailedException)
+            {
+                // Restore UserVm ef entity state
+                userVm.CoreCount = oldCpu;
+                userVm.RamCount = oldRam;
+                userVm.HardDriveSize = userVm.HardDriveSize;
+                throw;
+            }
+            // Create task and update vm
+            this.UpdateSubMachineConfig(sub, options);
+
+            // Mark current and subsequent subscroption payments as ReturnedToUser
+            var paymentsToMark = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            foreach (var payment in paymentsToMark)
+            {
+                payment.ReturnDate = dateNow;
+                payment.ReturnedToUser = true;
+            }
+
+            // Add new sub payment
+            dateNow = DateTime.UtcNow;
+            var subscriptionPayment = new FixedSubscriptionPayment
+            {
+                BillingTransactionId = subsciptionVmTransaction.Id,
+                Date = DateTime.UtcNow,
+                DateStart = dateNow,
+                DateEnd = sub.DateEnd,
+                SubscriptionVmId = sub.Id,
+                CoreCount = options.Cpu ?? userVm.CoreCount,
+                HardDriveSize = options.Hdd ?? userVm.HardDriveSize,
+                RamCount = options.Ram ?? userVm.RamCount, 
+                Amount = daysToEndNewCost,
+                TariffId = sub.TariffId
+            };
+            this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
+            this._unitOfWork.Commit();
+
+            // Mark current and subsequent subscroption BACKUP payments as ReturnedToUser
+            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            foreach (var payment in backupPaymentsToMark)
+            {
+                payment.ReturnDate = dateNow;
+                payment.ReturnedToUser = true;
+            }
+
+            // Add new subdate backup payment
+            var backupPaymentRequired = sub.DailyBackupStorePeriodDays > 1; // TODO: move to separate function
+            if (backupPaymentRequired)
+            {
+                decimal backupSubPaymentCashAmount = daysToEndBackupNewCost;
+
+                var subscriptionBackupPayment = new SubscriptionVmBackupPayment
+                {
+                    BillingTransactionId = subsciptionVmTransaction.Id,
+                    Date = DateTime.UtcNow,
+                    SubscriptionVmId = sub.Id,
+                    Amount = backupSubPaymentCashAmount,
+                    TariffId = sub.TariffId,
+                    DaysPeriod = sub.DailyBackupStorePeriodDays,
+                    Paid = true,
+                    DateStart = dateNow,
+                    DateEnd = sub.DateEnd
+                };
+                this._backupPaymentRepo.Add(subscriptionBackupPayment);
+                this._unitOfWork.Commit();
+            }
         }
     }
 }

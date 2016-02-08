@@ -108,7 +108,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<News, NewsViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<PaymentGameServer, PaymentGameServerViewModel>()
-                .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.CashAmount));
+                .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.Amount));
             Mapper.CreateMap<GameServerConfigOptions, GameServerConfigViewModel>();
             Mapper.CreateMap<News, NewsViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));

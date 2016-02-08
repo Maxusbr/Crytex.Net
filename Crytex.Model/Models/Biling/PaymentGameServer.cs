@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace Crytex.Model.Models.Biling
 {
-    public class PaymentGameServer : GuidBaseEntity
+    public class PaymentGameServer : PaymentBase
     {
-        public DateTime Date { get; set; }
+        public DateTime DateStart { get; set; }
         public DateTime? DateEnd { get; set; }
-        public decimal CashAmount { get; set; }
         public string UserId { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
@@ -21,9 +20,6 @@ namespace Crytex.Model.Models.Biling
         public int RamCount { get; set; }
         public int SlotCount { get; set; }
         public ServerPaymentType PaymentType { get; set; }
-        public Guid? BillingTransactionId { get; set; }
-        [ForeignKey("BillingTransactionId")]
-        public virtual BillingTransaction BillingTransaction { get; set; }
         public int MonthCount { get; set; }
 
         public GameServerStatus Status { get; set; }
