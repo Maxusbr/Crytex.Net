@@ -5,7 +5,7 @@ namespace Crytex.Model.Models.Biling
 {
     public class FixedSubscriptionPayment : SubscriptionPaymentBase
     {
-        public int MonthCount { get; set; }
+        public int? MonthCount { get; set; }
         public int CoreCount { get; set; }
         public int RamCount { get; set; }
         public int HardDriveSize { get; set; }

@@ -20,6 +20,19 @@ namespace Crytex.Web.Areas.User.Controllers
             this._webApplicationService = webApplicationService;
         }
 
+        [HttpPut]
+        public IHttpActionResult Put([FromUri]Guid id, [FromBody]WebHostingUpdateModel updateModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            this._webHostingService.UpdateWebHosting(id, updateModel.Name, updateModel.AutoProlongation);
+
+            return this.Ok();
+        }
+
         [HttpPost]
         public IHttpActionResult BuyWebHosting(BuyWebHostingParamsModel buyParamsModel)
         {
@@ -74,19 +87,6 @@ namespace Crytex.Web.Areas.User.Controllers
         public IHttpActionResult RestartWebApplication(Guid appId)
         {
             this._webApplicationService.RestartApplication(appId);
-
-            return this.Ok();
-        }
-
-        [HttpPut]
-        public IHttpActionResult Put([FromUri]Guid id, [FromBody]WebHostingUpdateModel updateModel)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
-            this._webHostingService.UpdateWebHosting(id, updateModel.Name, updateModel.AutoProlongation);
 
             return this.Ok();
         }
