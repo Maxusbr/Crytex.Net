@@ -391,6 +391,35 @@ namespace Crytex.Service.Service
             ChangeGameServerMachineState(serverId, TypeChangeStatus.Reload);
         }
 
+        public GameServerConfiguration CreateGameServerConfiguration(GameServerConfiguration config)
+        {
+            _gameServerConfRepository.Add(config);
+            _unitOfWork.Commit();
+            return config;
+        }
+
+        public void UpdateGameServerConfiguration(GameServerConfiguration config)
+        {
+            var serverConfig = _gameServerConfRepository.GetById(config.Id);
+            if (serverConfig == null)
+            {
+                throw new InvalidIdentifierException($"GameServerConfiguration with id={config.Id} doesn't exist");
+            }
+
+            serverConfig.GameName = config.GameName;
+            serverConfig.ServerTemplateId = config.ServerTemplateId;
+            serverConfig.Processor1 = config.Processor1;
+            serverConfig.RAM512 = config.RAM512;
+            serverConfig.Slot = config.Slot;
+            _gameServerConfRepository.Update(serverConfig);
+            _unitOfWork.Commit();
+        }
+
+        public IEnumerable<GameServerConfiguration> GetGameServerConfigurations()
+        {
+            return _gameServerConfRepository.GetAll();
+        }
+
         private void ChangeGameServerMachineState(Guid serverId, TypeChangeStatus status)
         {
 

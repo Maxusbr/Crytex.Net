@@ -33,6 +33,9 @@ namespace Crytex.Service.IService
         void StopGameServer(Guid serverId);
         void PowerOffGameServer(Guid serverId);
         void ResetGameServer(Guid serverId);
-        
+
+        GameServerConfiguration CreateGameServerConfiguration(GameServerConfiguration config);
+        void UpdateGameServerConfiguration(GameServerConfiguration config);
+        IEnumerable<GameServerConfiguration> GetGameServerConfigurations();
     }
 }

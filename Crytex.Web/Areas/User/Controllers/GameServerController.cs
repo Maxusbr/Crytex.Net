@@ -3,6 +3,7 @@ using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using Microsoft.Practices.Unity;
 using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using Crytex.Service.Model;
 
@@ -82,6 +83,19 @@ namespace Crytex.Web.Areas.User.Controllers
             server = this._gameServerService.BuyGameServer(server, options);
 
             return this.Ok(new { id = server.Id });
+        }
+
+        /// <summary>
+        /// Получить список конфигураций игровых серверов
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IHttpActionResult GetGameServerConfig()
+        {
+            var configs = _gameServerService.GetGameServerConfigurations();
+            var model = AutoMapper.Mapper.Map<IEnumerable<GameServerConfigurationView>>(configs);
+
+            return Ok(model);
         }
     }
 }
