@@ -6,6 +6,7 @@ using System;
 using System.Web.Http;
 using Crytex.Service.Model;
 using AutoMapper;
+using Crytex.Model.Enums;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -97,6 +98,20 @@ namespace Crytex.Web.Areas.User.Controllers
 
             var serviceOptions = Mapper.Map<UpdateMachineConfigOptions>(model);
             this._gameServerService.UpdateGameServerMachineConfig(model.GameServerId.Value, serviceOptions);
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult ProlongateGameServer(ProlongateGameServerViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+            var serviceOptions = Mapper.Map<GameServerConfigOptions>(model);
+            serviceOptions.UpdateType = GameServerUpdateType.Prolongation;
+            _gameServerService.UpdateGameServer(model.ServerId.Value, serviceOptions);
 
             return Ok();
         }

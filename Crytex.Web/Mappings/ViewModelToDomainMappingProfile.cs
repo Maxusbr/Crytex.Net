@@ -57,7 +57,7 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<PhysicalServerViewModel, CreatePhysicalServerParam>();
             Mapper.CreateMap<GameServerMachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
-
+            Mapper.CreateMap<ProlongateGameServerViewModel, GameServerConfigOptions>();
         }
     }
 }

@@ -310,16 +310,17 @@ namespace Crytex.Service.Service
 
         private void ProlongateGameServer(Guid guid, int monthCount, BillingTransactionType transactionType)
         {
-            var server = GetById(guid);
-            var gameServerPayment = GetGameServerById(guid);
+            var dateNow = DateTime.UtcNow;
+            var server = this.GetById(guid);
+
             decimal amount = 0;
-            switch (gameServerPayment.PaymentType)
+            switch (server.PaymentType)
             {
                 case ServerPaymentType.Slot:
-                    amount = GetSlotServerMonthPrice(server, gameServerPayment.SlotCount );
+                    amount = GetSlotServerMonthPrice(server, server.SlotCount );
                     break;
                 case ServerPaymentType.Configuration:
-                    amount = GetConfigurationServerMonthPrice(server, gameServerPayment.RamCount, gameServerPayment.CoreCount );
+                    amount = GetConfigurationServerMonthPrice(server, server.Vm.RamCount, server.Vm.CoreCount );
                     break;
             }
             var totalPrice = amount * monthCount;
@@ -332,16 +333,24 @@ namespace Crytex.Service.Service
                 GameServer = server
             };
             gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
-            server.DateExpire = server.DateExpire.AddMonths(monthCount);
+
+            var serverExpired = server.DateExpire < dateNow;
+            var serverDateExpireOld = server.DateExpire;
+            server.DateExpire = serverExpired ? dateNow.AddMonths(monthCount) : server.DateExpire.AddMonths(monthCount);
             _gameServerRepository.Update(server);
 
-            gameServerPayment.MonthCount = monthCount;
-            gameServerPayment.DateEnd = server.DateExpire;
-            gameServerPayment.Amount = totalPrice;
-            gameServerPayment.BillingTransaction = gameServerVmTransaction;
-            gameServerPayment.BillingTransactionId = gameServerVmTransaction.Id;
+            var gameServerPayment = new PaymentGameServer
+            {
+                MonthCount = monthCount,
+                Date = dateNow,
+                DateStart = serverExpired ? dateNow : serverDateExpireOld.AddTicks(1),
+                DateEnd = server.DateExpire,
+                Amount = totalPrice,
+                BillingTransactionId = gameServerVmTransaction.Id,
+                GameServerId = server.Id
+            };
 
-            _paymentGameServerRepository.Update(gameServerPayment);
+            _paymentGameServerRepository.Add(gameServerPayment);
             _unitOfWork.Commit();
         }
 
