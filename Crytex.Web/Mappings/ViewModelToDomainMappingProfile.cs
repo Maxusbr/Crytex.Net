@@ -41,6 +41,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<AdminBillingSearchParamsViewModel, BillingSearchParams>();
             Mapper.CreateMap<DiscountViewModel, Discount>();
             Mapper.CreateMap<GameServerViewModel, GameServer>();
+            Mapper.CreateMap<GameServerViewModel, BuyGameServerOption>();
             Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>()
                 .ForMember(dest => dest.DailyBackupStorePeriodDays, opt => opt.MapFrom(source => source.DailyBackupStorePeriodDays == null ? 1 : source.DailyBackupStorePeriodDays.Value));
             Mapper.CreateMap<SubscriptionBuyOptionsUserViewModel, SubscriptionBuyOptions>()
@@ -55,6 +56,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<IEnumerable<PhysicalServerOptionViewModel>, IEnumerable<PhysicalServerOptionsParams>>();
 
             Mapper.CreateMap<PhysicalServerViewModel, CreatePhysicalServerParam>();
+            Mapper.CreateMap<GameServerMachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
 
         }
     }

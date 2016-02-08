@@ -360,6 +360,7 @@
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerConfigViewModel.cs" />
+    <Compile Include="Models\JsonModels\GameServerMachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
     <Compile Include="Models\JsonModels\WebHostingProlongateOptionsModel.cs" />

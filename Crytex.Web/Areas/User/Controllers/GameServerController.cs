@@ -5,6 +5,7 @@ using Microsoft.Practices.Unity;
 using System;
 using System.Web.Http;
 using Crytex.Service.Model;
+using AutoMapper;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -77,11 +78,27 @@ namespace Crytex.Web.Areas.User.Controllers
 
             var server = AutoMapper.Mapper.Map<GameServer>(model);
             var options = AutoMapper.Mapper.Map<BuyGameServerOption>(model);
-            server.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            server.UserId = userId;
+            options.UserId = userId;
 
             server = this._gameServerService.BuyGameServer(server, options);
 
             return this.Ok(new { id = server.Id });
+        }
+
+        [HttpPost]
+        public IHttpActionResult UpdateServerMachineConfiguration(GameServerMachineConfigUpdateViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            var serviceOptions = Mapper.Map<UpdateMachineConfigOptions>(model);
+            this._gameServerService.UpdateGameServerMachineConfig(model.GameServerId.Value, serviceOptions);
+
+            return Ok();
         }
     }
 }
