@@ -109,5 +109,6 @@ namespace Crytex.Data
         public DbSet<BoughtPhysicalServer> BoughtPhysicalServers { get; set; }
         public DbSet<BoughtPhysicalServerOption> BoughtPhysicalServerOptions { get; set; }
         public DbSet<PhysicalServerOptionsAvailable> AvailableOptionsPhysicalServers { get; set; }
+        public DbSet<PaymentSystem> PaymentSystems { get; set; }
     }
 }

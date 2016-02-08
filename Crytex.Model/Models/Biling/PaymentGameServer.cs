@@ -13,8 +13,6 @@ namespace Crytex.Model.Models.Biling
         public DateTime DateStart { get; set; }
         public DateTime? DateEnd { get; set; }
         public string UserId { get; set; }
-        public PaymentSystemType PaymentSystem { get; set; }
-        public bool Success { get; set; }
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
         public Guid GameServerId { get; set; }

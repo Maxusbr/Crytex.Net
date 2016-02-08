@@ -17,17 +17,17 @@ namespace Crytex.Service.Service
     {
         private ITaskV2Repository _taskV2Repo;
         private IUnitOfWork _unitOfWork;
-        private readonly IUserVmRepository _userVmRepository;
+        private readonly IUserVmService _userVmService;
         private readonly IVmBackupService _vmBackupService;
         private readonly ISnapshotVmService _snapshotService;
+        private readonly IOperatingSystemsService _operatingSystemService;
 
-        public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmRepository userVmRepo, IUnitOfWork unitOfWork,
+        public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmService userVmService, IUnitOfWork unitOfWork,
             IVmBackupService vmBackupService, ISnapshotVmService snapshotService)
         {
             this._taskV2Repo = taskV2Repo;
-            this._userVmRepository = userVmRepo;
+            this._userVmService = userVmService;
             this._unitOfWork = unitOfWork;
-            this._userVmRepository = userVmRepo;
             this._vmBackupService = vmBackupService;
             this._snapshotService = snapshotService;
         }
@@ -58,12 +58,29 @@ namespace Crytex.Service.Service
             task.CreatedAt = DateTime.UtcNow;
             task.StatusTask = StatusTask.Pending;
 
+            this.ValidateTaskOptions(task);
             this.CreateOrRemoveTaskRelatedDbEntities(task);
 
             this._taskV2Repo.Add(task);
             this._unitOfWork.Commit();
 
             return task;
+        }
+
+        private void ValidateTaskOptions(TaskV2 task)
+        {
+            if (task.TypeTask == TypeTask.UpdateVm)
+            {
+                var updateOptions = task.GetOptions<UpdateVmOptions>();
+                var vm = this._userVmService.GetVmById(updateOptions.VmId);
+                var hardwareConf = vm.GetVmHardwareConfiguration();
+
+                hardwareConf.RamMB = updateOptions.Ram;
+                hardwareConf.Cpu = updateOptions.Cpu;
+                hardwareConf.HardDriveSizeGB = updateOptions.HddGB;
+
+                this._userVmService.CheckOsHardwareMinRequirements(hardwareConf, vm.OperatingSystemId);
+            }
         }
 
         private void CreateOrRemoveTaskRelatedDbEntities(TaskV2 task)
@@ -85,7 +102,8 @@ namespace Crytex.Service.Service
                 };
                 createOptions.UserVmId = newVm.Id;
                 task.SaveOptions(createOptions);
-                this._userVmRepository.Add(newVm);
+
+                this._userVmService.CreateVm(newVm);
             }
             if(task.TypeTask == TypeTask.Backup)
             {
@@ -229,8 +247,8 @@ namespace Crytex.Service.Service
 
         public void StopAllUserMachines(string userId)
         {
-           var userVms = _userVmRepository.GetMany(m => m.UserId == userId);
-            if (userVms.Count > 0)
+            var userVms = this._userVmService.GetAllVmsByUserId(userId);
+            if (userVms.Count() > 0)
             {
                 foreach (var vm in userVms)
                 {

@@ -101,6 +101,7 @@
     <Compile Include="Models\Biling\Payment.cs" />
     <Compile Include="Models\Biling\PaymentBase.cs" />
     <Compile Include="Models\Biling\PaymentGameServer.cs" />
+    <Compile Include="Models\Biling\PaymentSystem.cs" />
     <Compile Include="Models\Biling\SubscriptionPaymentBase.cs" />
     <Compile Include="Models\Biling\SubscriptionVmBackupPayment.cs" />
     <Compile Include="Models\Biling\BoughtPhysicalServer.cs" />

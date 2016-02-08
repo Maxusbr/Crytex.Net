@@ -41,8 +41,26 @@ namespace Crytex.Model.Models
         public ICollection<VmIpAddress> IpAdresses { get; set; }
         [InverseProperty("Vm")]
         public ICollection<SnapshotVm> Snapshots { get; set; }
+
+        public VmHardwareConfig GetVmHardwareConfiguration()
+        {
+            var vmConfig = new VmHardwareConfig
+            {
+                Cpu = this.CoreCount,
+                HardDriveSizeGB = this.HardDriveSize,
+                RamMB = this.RamCount
+            };
+
+            return vmConfig;
+        }
     }
 
+    public class VmHardwareConfig
+    {
+        public int Cpu { get; set; }
+        public int HardDriveSizeGB { get; set; }
+        public int RamMB { get; set; }
+    }
 
     public enum StatusVM
     {
