@@ -272,7 +272,9 @@
     <Compile Include="Areas\Admin\Controllers\AdminFixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentGameServerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerBoughtController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerOptionsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUsageSubscriptionPaymentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestCommentController.cs" />
@@ -364,6 +366,7 @@
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentSystemView.cs" />
+    <Compile Include="Models\JsonModels\PhysicalServerGetOption.cs" />
     <Compile Include="Models\JsonModels\WebHostingProlongateOptionsModel.cs" />
     <Compile Include="Models\JsonModels\MachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\NewsViewModel.cs" />

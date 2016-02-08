@@ -459,16 +459,14 @@ namespace Crytex.Service.Service
         /// <returns></returns>
         public PhysicalServer GetReadyPhysicalServer(Guid serverId)
         {
-            var server = _serverRepository.GetById(serverId);
+            var server = _serverRepository.Get(x => x.Id == serverId);
             if (server == null)
             {
-                throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
             }
-            server.AvailableOptions = new List<PhysicalServerOptionsAvailable>();
-            foreach (var option in _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option))
-                if (option.IsDefault || option.Option.Type == PhysicalServerOptionType.Hdd)
-                    server.AvailableOptions.Add(option);
-
+            var availableOptions = _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option)
+                .Where(option => option.IsDefault || option.Option.Type == PhysicalServerOptionType.Hdd).ToList();
+            server.AvailableOptions = availableOptions;
             return server;
         }
 
@@ -482,7 +480,7 @@ namespace Crytex.Service.Service
             var server = _serverRepository.GetById(serverId);
             if (server == null)
             {
-                throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
             }
             server.AvailableOptions = _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option);
 

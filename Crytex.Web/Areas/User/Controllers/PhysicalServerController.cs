@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Mvc;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Areas.Admin;
@@ -28,6 +27,7 @@ namespace Crytex.Web.Areas.User.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [ResponseType(typeof(PageModel<PhysicalServerViewModel>))]
+        [HttpGet]
         public IHttpActionResult Get(int pageNumber, int pageSize)
         {
             var servers = _serverService.GetPagePhysicalServer(pageNumber, pageSize);
@@ -41,6 +41,7 @@ namespace Crytex.Web.Areas.User.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ResponseType(typeof(PhysicalServerViewModel))]
+        [HttpGet]
         public IHttpActionResult GetReadyServer(string id)
         {
             Guid guid;
@@ -60,6 +61,7 @@ namespace Crytex.Web.Areas.User.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ResponseType(typeof(PhysicalServerViewModel))]
+        [HttpGet]
         public IHttpActionResult GetAviableServer(string id)
         {
             Guid guid;
