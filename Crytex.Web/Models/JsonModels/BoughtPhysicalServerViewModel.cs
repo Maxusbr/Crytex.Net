@@ -14,7 +14,6 @@ namespace Crytex.Web.Models.JsonModels
         public string Id { get; set; }
         [Required]
         public string PhysicalServerId { get; set; }
-        [Required]
         public string UserId { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? DateEnd { get; set; }

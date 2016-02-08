@@ -5,23 +5,18 @@ using Crytex.Model.Enums;
 
 namespace Crytex.Model.Models.Biling
 {
-    public class BoughtPhysicalServer : GuidBaseEntity
+    public class BoughtPhysicalServer : PaymentBase
     {
         public Guid PhysicalServerId { get; set; }
         public string UserId { get; set; }
-        public DateTime CreateDate { get; set; }
+
         public DateTime DateEnd { get; set; }
         public int CountMonth { get; set; }
         public decimal DiscountPrice { get; set; }
         public BoughtPhysicalServerStatus Status { get; set; }
         public string Config { get; set; }
-        public decimal CashAmaunt { get; set; }
         public string AdminMessage { get; set; }
         public bool AutoProlongation { get; set; }
-
-        public Guid? BillingTransactionId { get; set; }
-        [ForeignKey("BillingTransactionId")]
-        public virtual BillingTransaction BillingTransaction { get; set; }
 
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }

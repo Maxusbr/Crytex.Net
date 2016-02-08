@@ -144,7 +144,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
-                
+            Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();                
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();

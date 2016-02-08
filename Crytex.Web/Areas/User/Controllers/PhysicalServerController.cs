@@ -4,10 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
+using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Areas.Admin;
 using Crytex.Web.Models.JsonModels;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -36,13 +38,14 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         /// <summary>
-        /// Получить конфигурацию готового физического сервера
+        /// Получить конфигурацию физического сервера
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         [ResponseType(typeof(PhysicalServerViewModel))]
         [HttpGet]
-        public IHttpActionResult GetReadyServer(string id)
+        public IHttpActionResult GetServer(string id, PhysicalServerType type)
         {
             Guid guid;
             if (!Guid.TryParse(id, out guid))
@@ -50,37 +53,37 @@ namespace Crytex.Web.Areas.User.Controllers
                 ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-            var server = _serverService.GetReadyPhysicalServer(guid);
+            PhysicalServer server = null;
+            switch (type)
+            {
+                case PhysicalServerType.ReadyServer:
+                    server = _serverService.GetReadyPhysicalServer(guid);
+                    break;
+                case PhysicalServerType.AviableServer:
+                    server = _serverService.GetAviablePhysicalServer(guid);
+                    break;
+                default:
+                    ModelState.AddModelError("type", "Invalid Physical Server type");
+                    return BadRequest(ModelState);
+            }
+
+            if (server == null)
+            {
+                ModelState.AddModelError("id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
             var viewModel = AutoMapper.Mapper.Map<PhysicalServerViewModel>(server);
             return Ok(viewModel);
         }
 
-        /// <summary>
-        /// Получить конфигурацию физического сервера со списком доступных опций
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [ResponseType(typeof(PhysicalServerViewModel))]
-        [HttpGet]
-        public IHttpActionResult GetAviableServer(string id)
-        {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
-            {
-                ModelState.AddModelError("id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            var server = _serverService.GetAviablePhysicalServer(guid);
-            var viewModel = AutoMapper.Mapper.Map<PhysicalServerViewModel>(server);
-            return Ok(viewModel);
-        }
 
         /// <summary>
         /// Купить физический сервер
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public IHttpActionResult Buy(BoughtPhysicalServerViewModel model)
+        [HttpPost]
+        public IHttpActionResult Post([FromBody]BoughtPhysicalServerViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -96,7 +99,7 @@ namespace Crytex.Web.Areas.User.Controllers
             var parameters = new BuyPhysicalServerParam
             {
                 PhysicalServerId = serverId,
-                UserId = model.UserId,
+                UserId = CrytexContext.UserInfoProvider.GetUserId(),
                 CountMonth = model.CountMonth,
                 DiscountPrice = model.DiscountPrice,
                 AutoProlongation = model.AutoProlongation
@@ -117,7 +120,7 @@ namespace Crytex.Web.Areas.User.Controllers
             parameters.OptionIds = options;
             var server = _serverService.BuyPhysicalServer(parameters);
 
-            return Ok(server);
+            return Ok(new { id = server.Id });
         }
 
         /// <summary>
@@ -126,6 +129,7 @@ namespace Crytex.Web.Areas.User.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [ResponseType(typeof(BoughtPhysicalServerViewModel))]
+        [HttpGet]
         public IHttpActionResult GetBoughtServer(string id)
         {
             Guid guid;

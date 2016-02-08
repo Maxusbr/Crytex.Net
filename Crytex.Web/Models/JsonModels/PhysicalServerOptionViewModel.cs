@@ -24,7 +24,6 @@ namespace Crytex.Web.Models.JsonModels
         /// <summary>
         /// Опция по умолчанию?
         /// </summary>
-        [Required]
         public bool IsDefault { get; set; }
     }
 }

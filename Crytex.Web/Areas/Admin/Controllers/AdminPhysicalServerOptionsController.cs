@@ -57,33 +57,33 @@ namespace Crytex.Web.Areas.Admin.Controllers
             };
             var server = _serverService.CreateOrUpdateOption(param);
 
-            return Ok(server);
+            return Ok(new { id = server.Id });
         }
 
-        /// <summary>
-        /// Создать опции для физического сервера
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public IHttpActionResult Post([FromBody]IEnumerable<PhysicalServerOptionViewModel> options)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        ///// <summary>
+        ///// Создать опции для физического сервера
+        ///// </summary>
+        ///// <param name="model"></param>
+        ///// <returns></returns>
+        //[HttpPost]
+        //public IHttpActionResult Post([FromBody]IEnumerable<PhysicalServerOptionViewModel> options)
+        //{
+        //    if (!this.ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var param = options.Select(opt => new PhysicalServerOptionsParams
-            {
-                Name = opt.Name,
-                Description = opt.Description,
-                Price = opt.Price,
-                Type = opt.Type
-            });
-            _serverService.CreateOrUpdateOptions(param);
+        //    var param = options.Select(opt => new PhysicalServerOptionsParams
+        //    {
+        //        Name = opt.Name,
+        //        Description = opt.Description,
+        //        Price = opt.Price,
+        //        Type = opt.Type
+        //    });
+        //    _serverService.CreateOrUpdateOptions(param);
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
 
         /// <summary>
         /// Добавить доступные опции для физического сервера
@@ -93,21 +93,21 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="replaceAll"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult ChangeOptionsAviable(string serverId, [FromBody]IEnumerable<PhysicalServerOptionViewModel> options, bool replaceAll)
+        public IHttpActionResult ChangeOptionsAviable([FromBody]PhysicalServerChangeOptionsAviable model)
         {
             if (!this.ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             Guid guid;
-            if (!Guid.TryParse(serverId, out guid))
+            if (!Guid.TryParse(model.ServerId, out guid))
             {
                 ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-            var parameters = new PhysicalServerOptionsAviableParams { ServerId = guid, ReplaceAll = replaceAll };
+            var parameters = new PhysicalServerOptionsAviableParams { ServerId = guid, ReplaceAll = model.ReplaceAll };
             var optionsnAviable = new List<OptionAviable>();
-            foreach (var opt in options)
+            foreach (var opt in model.Options)
             {
                 Guid optguid;
                 if (!Guid.TryParse(opt.Id, out optguid))
@@ -142,6 +142,5 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             return Ok();
         }
-
     }
 }

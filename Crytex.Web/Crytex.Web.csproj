@@ -367,6 +367,7 @@
     <Compile Include="Models\JsonModels\GameServerMachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
+    <Compile Include="Models\JsonModels\PhysicalServerChangeOptionsAviable.cs" />
     <Compile Include="Models\JsonModels\ProlongateGameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentSystemView.cs" />
     <Compile Include="Models\JsonModels\PhysicalServerGetOption.cs" />

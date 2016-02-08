@@ -90,7 +90,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
             param.CalculatePrice = model.Price == 0;
             var server = _serverService.CreatePhysicalServer(param);
 
-            return Ok(server);
+            return Ok(new { id = server.Id });
         }
 
         /// <summary>
