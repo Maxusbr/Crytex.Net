@@ -40,6 +40,7 @@ namespace Crytex.Model.Models.Biling
         SystemBonus = 3,
         ReplenishmentFromAdmin = 4,
         WithdrawByAdmin = 5,
-        TestPeriod = 6
+        TestPeriod = 6,
+        Refill =7
     }
 }

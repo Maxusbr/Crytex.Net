@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
@@ -404,27 +405,37 @@ namespace Crytex.Data.Migrations
                 }
 
                 var allOperations = context.OperatingSystems.ToList();
-                OperatingSystem[] operations = new OperatingSystem[2];
-                for (int i = 0; i < 2; i++)
+                var operations = new List<OperatingSystem>();
+
+
+                operations.Add(new OperatingSystem
                 {
-                    operations[i] = new OperatingSystem
-                    {
-                        Name = "Операционная системы " + i,
-                        Description = "Описание ",
-                        ImageFileId = image.Id,
-                        ServerTemplateName = "ServerTemplateName",
-                        Family = (OperatingSystemFamily)i,
-                        DefaultAdminPassword = "Password123",
-                        DefaultAdminName = "Administrator",
-                        MinCoreCount = 2,
-                        MinHardDriveSize = 50000,
-                        MinRamCount = 512
-                    };
-                    if (allOperations.All(o => o.Name != operations[i].Name))
-                        context.OperatingSystems.Add(operations[i]);
-                    else
-                        operations[i] = allOperations.First(o => o.Name == operations[i].Name);
-                }
+                    Name = "Windows ",
+                    Description = "Описание ",
+                    ImageFileId = image.Id,
+                    ServerTemplateName = "ServerTemplateName",
+                    Family = OperatingSystemFamily.Windows2012,
+                    DefaultAdminPassword = "Password123",
+                    DefaultAdminName = "Administrator",
+                    MinCoreCount = 2,
+                    MinHardDriveSize = 50,
+                    MinRamCount = 1024
+                });
+                operations.Add(new OperatingSystem
+                {
+                    Name = "Ubuntu ",
+                    Description = "Описание ",
+                    ImageFileId = image.Id,
+                    ServerTemplateName = "ServerTemplateName",
+                    Family = OperatingSystemFamily.Ubuntu,
+                    DefaultAdminPassword = "Password123",
+                    DefaultAdminName = "Administrator",
+                    MinCoreCount =1,
+                    MinHardDriveSize =25,
+                    MinRamCount = 512
+                });
+                context.OperatingSystems.AddRange(operations);
+               
 
                 context.Commit();
 
@@ -467,7 +478,7 @@ namespace Crytex.Data.Migrations
                             RamCount = 512,
                             Status = StatusVM.Disable,
                             UserId = adminUser.Id,
-                            OperatingSystemId = operations[random.Next(operations.Length)].Id,
+                            OperatingSystemId = operations[random.Next(operations.Count)].Id,
                             Name = "Machine " + i + "" + c,
                             VirtualizationType = (c < 2) ? TypeVirtualization.HyperV : TypeVirtualization.VmWare,
                             OperatingSystemPassword = "1111",
