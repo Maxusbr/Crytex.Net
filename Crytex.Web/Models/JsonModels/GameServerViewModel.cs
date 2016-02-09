@@ -10,7 +10,7 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
 
         public string Name { get; set; }
-
+        [Required]
         public int? GameServerConfigurationId { get; set; }
 
         [Required]
