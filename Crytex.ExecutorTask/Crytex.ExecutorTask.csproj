@@ -63,7 +63,7 @@
   <ItemGroup>
     <Compile Include="Config\ExecutorTaskConfig.cs" />
     <Compile Include="Config\IExecutorTaskConfig.cs" />
-    <Compile Include="ITaskManager.cs" />
+    <Compile Include="ITaskQueuePoolManager.cs" />
     <Compile Include="TaskHandler\BaseTaskHandler.cs" />
     <Compile Include="TaskHandler\HyperV\BaseHyperVTaskHandler.cs" />
     <Compile Include="TaskHandler\HyperV\CreateVmResult.cs" />
@@ -78,11 +78,10 @@
     <Compile Include="TaskHandler\NewTaskHandler\BackupVmTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\CreateSnapshotTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\DeleteSnapshotTaskHandler.cs" />
-
-
     <Compile Include="TaskHandler\NewTaskHandler\LoadSnapshotTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\CreateVmTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\DeleteVmBackupTaskHandler.cs" />
+    <Compile Include="TaskHandler\NewTaskHandler\TestTaskHandler.cs" />
     <Compile Include="TaskHandler\NewTaskHandler\UpdateVmTaskHandler.cs" />
     <Compile Include="TaskHandler\TaskHandlerManager.cs" />
     <Compile Include="TaskHandler\ITaskHandler.cs" />
@@ -100,9 +99,10 @@
     <Compile Include="TaskHandler\VmWare\VmWareRemoveVmTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareStandartVmWareTaskHandler.cs" />
     <Compile Include="TaskHandler\VmWare\VmWareUpdateTaskHandler.cs" />
-    <Compile Include="TaskManager.cs" />
-    <Compile Include="TaskQueueManager.cs" />
+    <Compile Include="TaskQueuePoolManager.cs" />
+    <Compile Include="TaskQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserTaskQueueManager.cs" />
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>

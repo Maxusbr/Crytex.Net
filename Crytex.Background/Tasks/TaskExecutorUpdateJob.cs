@@ -13,9 +13,9 @@ namespace Crytex.Background.Tasks
     [DisallowConcurrentExecution]
     class TaskExecutorUpdateJob : IJob
     {
-        private ITaskManager _taskManager;
+        private ITaskQueuePoolManager _taskManager;
 
-        public TaskExecutorUpdateJob(ITaskManager taskManager)
+        public TaskExecutorUpdateJob(ITaskQueuePoolManager taskManager)
         {
             this._taskManager = taskManager;
         }

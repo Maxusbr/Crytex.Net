@@ -163,5 +163,10 @@ namespace Crytex.Virtualization.Fake
         {
             throw new NotImplementedException();
         }
+
+        public ReturnedRezultes Reboot(bool WaitForLoadOS)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

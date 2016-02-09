@@ -43,7 +43,7 @@ namespace Crytex.Background
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
 
                 unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>(new PerResolveLifetimeManager());
-                unityContainer.RegisterType<ITaskManager, TaskManager>(new ContainerControlledLifetimeManager());
+                unityContainer.RegisterType<ITaskQueuePoolManager, TaskQueuePoolManager>(new ContainerControlledLifetimeManager());
             };
         }
 

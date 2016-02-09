@@ -40,16 +40,14 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._snapshotVmService = snapshotVmService;
         }
 
-        public IEnumerable<ITaskHandler> GetTaskHandlers(TypeVirtualization virtualizationType)
+        public IEnumerable<ITaskHandler> GetTaskHandlers(IEnumerable<TaskV2> tasks)
         {
-            var tasks = this._taskService.GetPendingTasks(virtualizationType);
-
-            var taskHandlers = this.GetTaskHandlerList(tasks, virtualizationType);
+            var taskHandlers = this.GetTaskHandlerList(tasks);
 
             return taskHandlers;
         }
 
-        private List<ITaskHandler> GetTaskHandlerList(IEnumerable<TaskV2> tasks, TypeVirtualization virtualizationType)
+        private List<ITaskHandler> GetTaskHandlerList(IEnumerable<TaskV2> tasks)
         {
             var handlerList = new List<ITaskHandler>();
             foreach (var task in tasks)
@@ -75,7 +73,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 }
 
             return handlerList;
-            }
+        }
 
         private VmWareVCenter GetVmWareVCenterForTask(TaskV2 task)
         {
@@ -92,6 +90,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private void ProcessingFinishedEventHandler(object sender, TaskExecutionResult execResult)
         {
             var taskEntity = ((ITaskHandler)sender).TaskEntity;
+
             TaskEndNotify taskEndNotify = new TaskEndNotify
             {
                 UserId = execResult.TaskEntity.UserId,
@@ -210,7 +209,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
             try
             {
-                this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
+                //this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
             catch (Exception ex)
             {

@@ -5,6 +5,6 @@ namespace Crytex.ExecutorTask.TaskHandler
 {
     public interface ITaskHandlerManager
     {
-        IEnumerable<ITaskHandler> GetTaskHandlers(TypeVirtualization virtualizationType);
+        IEnumerable<ITaskHandler> GetTaskHandlers(IEnumerable<TaskV2> tasks);
     }
 }
