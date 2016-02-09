@@ -209,7 +209,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
             try
             {
-                //this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
+                this._notificationManager.SendToUserNotification(taskEndNotify.UserId, taskEndNotify);
             }
             catch (Exception ex)
             {
