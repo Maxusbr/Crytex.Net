@@ -146,6 +146,9 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
             Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();                
+            Mapper.CreateMap<DhcpServer, DhcpServerView>()
+                .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));           
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -177,6 +180,8 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
             this.MapPagedList<WebHostingTariff, WebHostingTariffViewModel>();
             this.MapPagedList<WebHostingPayment, WebHostingPaymentViewModel>();
+            this.MapPagedList<DhcpServer, DhcpServerView>();
+
         }
 
         protected void MapPagedList<TSource, TDest>()

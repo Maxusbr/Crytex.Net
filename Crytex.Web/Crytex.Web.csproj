@@ -267,6 +267,7 @@
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminBillingTransactionController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminCrytexController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminDhcpServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminEmailTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFileController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFixedSubscriptionPaymentController.cs" />
@@ -360,6 +361,7 @@
     <Compile Include="Models\JsonModels\BoughtPhysicalServerViewModel.cs" />
     <Compile Include="Models\JsonModels\BuyWebHostingParams.cs" />
     <Compile Include="Models\JsonModels\ChangePhysicalServerViewModel.cs" />
+    <Compile Include="Models\JsonModels\DhcpServerView.cs" />
     <Compile Include="Models\JsonModels\DiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
@@ -504,6 +506,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\Admin\Views\AdminDhspServer\" />
     <Folder Include="Areas\Admin\Views\AdminPaymentGameServer\" />
     <Folder Include="Areas\Admin\Views\AdminPhysicalServer\" />
     <Folder Include="Areas\Admin\Views\Shared\" />

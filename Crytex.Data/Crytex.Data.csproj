@@ -51,6 +51,7 @@
     <Compile Include="IRepository\IBoughtPhysicalServerOptionRepository.cs" />
     <Compile Include="IRepository\IBoughtPhysicalServerRepository.cs" />
     <Compile Include="IRepository\ICreditPaymentOrderRepository.cs" />
+    <Compile Include="IRepository\IDhcpServerRepository.cs" />
     <Compile Include="IRepository\IDiscountRepository.cs" />
     <Compile Include="IRepository\IEmailInfoRepository.cs" />
     <Compile Include="IRepository\IEmailTemplateRepository.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="Repository\BoughtPhysicalServerOptionRepository.cs" />
     <Compile Include="Repository\BoughtPhysicalServerRepository.cs" />
     <Compile Include="Repository\CreditPayementOrderRepository.cs" />
+    <Compile Include="Repository\DhcpServerRepository.cs" />
     <Compile Include="Repository\EmailInfoRepository.cs" />
     <Compile Include="Repository\EmailTemplateRepository.cs" />
     <Compile Include="Repository\FileDescriptorRepository.cs" />
