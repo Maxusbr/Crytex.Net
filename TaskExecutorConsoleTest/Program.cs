@@ -20,7 +20,7 @@ namespace TaskExecutorConsoleTest
         static void Main(string[] args)
         {
             UnityConfig.Configure();
-            var taskManager = UnityConfig.Resolve<ITaskManager>();
+            var taskManager = UnityConfig.Resolve<ITaskQueuePoolManager>();
         }
     }
 }

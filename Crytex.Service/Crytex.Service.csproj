@@ -167,6 +167,7 @@
     <Compile Include="Service\BilingService.cs" />
     <Compile Include="Service\EmailInfoService.cs" />
     <Compile Include="Service\EmailTemplateService.cs" />
+    <Compile Include="Service\FakeTaskV2Service.cs" />
     <Compile Include="Service\FileService.cs" />
     <Compile Include="Service\FixedSubscriptionPaymentService.cs" />
     <Compile Include="Service\GameServerService.cs" />

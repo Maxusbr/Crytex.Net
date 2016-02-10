@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Crytex.ExecutorTask
 {
-    public interface ITaskManager
+    public interface ITaskQueuePoolManager
     {
-        void RunTasks();
         void UpdateTaskQueues();
     }
 }

@@ -55,6 +55,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var typeTask = task.TypeTask;
             var handler = this._hyperVTaskHandlerMappings[typeTask].Invoke(task, hyperVHost);
+            //var handler = new TestTaskHandler(task);
             
             return handler;
         }
@@ -63,6 +64,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         {
             var typeTask = task.TypeTask;
             var handler = this._vmWareTaskHandlerMappings[typeTask].Invoke(task, vCenter);
+            //var handler = new TestTaskHandler(task);
 
             return handler;
         }

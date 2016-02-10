@@ -26,8 +26,7 @@ namespace Crytex.Background
 
             var Thread = new Thread((() =>
             {
-                var taskManager = UnityConfig.Resolve<ITaskManager>();
-                taskManager.RunTasks();
+                var taskManager = UnityConfig.Resolve<ITaskQueuePoolManager>();
             }));
             Thread.Start();
 
@@ -63,9 +62,9 @@ namespace Crytex.Background
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "*/10 * * * * ?");
             //scheduler.TriggerJob(emai);
 
-            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/10 * * * * ?");
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/5 * * * * ?");
             //scheduler.ScheduleJob<UsageSubscriptionVmJob>("ActiveStaticSubscriptionVmJob", "*/5 * * * * ?");
-            scheduler.ScheduleJob<BackupSubscriptionVmJob>("BackupSubscriptionVmJob", "*/5 * * * * ?");
+            //scheduler.ScheduleJob<BackupSubscriptionVmJob>("BackupSubscriptionVmJob", "*/5 * * * * ?");
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
             //scheduler.ScheduleJob<NetTrafficCounterUpdateJob>("net traffic", "0 */15 * * * ?");
 

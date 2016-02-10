@@ -211,9 +211,9 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<TaskV2> GetPendingTasks(TypeVirtualization virtualizationType)
+        public IEnumerable<TaskV2> GetPendingTasks()
         {
-            var tasks = this._taskV2Repo.GetMany(t => t.StatusTask == StatusTask.Pending && t.Virtualization == virtualizationType);
+            var tasks = this._taskV2Repo.GetMany(t => t.StatusTask == StatusTask.Pending);
 
             return tasks;
         }

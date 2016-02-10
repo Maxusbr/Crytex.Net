@@ -67,7 +67,10 @@ namespace Crytex.Model.Models
         StopWebApp = 11,
         RestartWebApp = 12,
         DisableWebHosting = 13,
-        DeleteHosting = 14
+        DeleteHosting = 14,
+
+
+        Test = 99
     }
 
     [Serializable]

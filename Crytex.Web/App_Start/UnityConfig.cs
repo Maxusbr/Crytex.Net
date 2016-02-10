@@ -47,6 +47,8 @@ namespace Crytex.Web.App_Start
                                      unityContainer.RegisterType<IUserInfoProvider, UserInfoProvider>();
                                      unityContainer.RegisterType<IIdentity>(new InjectionFactory(o => HttpContext.Current.User.Identity));
                                      unityContainer.RegisterType<ISignalRSender, AspNetSignalRSender>();
+
+                                     //unityContainer.RegisterType<ITaskV2Service, FakeTaskV2Service>("Secured");
                                  };
         }
     }

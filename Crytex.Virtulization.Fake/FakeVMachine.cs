@@ -110,7 +110,10 @@ namespace Crytex.Virtualization.Fake
 
         public ReturnedRezultes Reboot()
         {
-            throw new NotImplementedException();
+            this.PowerStateMachine = PowerState.PowerOn;
+            this.GuestOSState = Crytex.Virtualization.Base.GuestOSState.Running;
+
+            return new ReturnedRezultes();
         }
 
         public ReturnedRezultes Start(bool WaitForLoadOS)
@@ -162,6 +165,14 @@ namespace Crytex.Virtualization.Fake
         public void SetNewPassword(string NewPassword)
         {
             throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes Reboot(bool WaitForLoadOS)
+        {
+            this.PowerStateMachine = PowerState.PowerOn;
+            this.GuestOSState = Crytex.Virtualization.Base.GuestOSState.Running;
+
+            return new ReturnedRezultes();
         }
     }
 }
