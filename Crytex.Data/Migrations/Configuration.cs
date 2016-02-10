@@ -693,7 +693,38 @@ namespace Crytex.Data.Migrations
                 };
                 context.GameServers.Add(gameServer);
 
+                var phServer1 = new PhysicalServer {ProcessorName = "Intel® Xeon™ 1 Core", Price = (decimal) 45.5};
+                var phServer2 = new PhysicalServer {ProcessorName = "Intel® Xeon™ 2 Core", Price = (decimal) 85.5};
+                var opt1 = new PhysicalServerOption {Name = "5 GB SSD", Type = PhysicalServerOptionType.Hdd, Price = 50.5m};
+                var opt2 = new PhysicalServerOption { Name = "25 GB SSD", Type = PhysicalServerOptionType.Hdd, Price = 50.5m };
+                var opt3 = new PhysicalServerOption { Name = "1 GB DDR4", Type = PhysicalServerOptionType.Ram, Price = 50.5m };
+                var opt4 = new PhysicalServerOption { Name = "2 GB DDR4", Type = PhysicalServerOptionType.Ram, Price = 50.5m };
+                var opt5 = new PhysicalServerOption { Name = "4 GB DDR4", Type = PhysicalServerOptionType.Ram, Price = 50.5m };
+                var opt6 = new PhysicalServerOption { Name = "8 GB DDR4", Type = PhysicalServerOptionType.Ram, Price = 50.5m };
+
+                context.PhysicalServerOptions.Add(opt1);
+                context.PhysicalServerOptions.Add(opt2);
+                context.PhysicalServerOptions.Add(opt3);
+                context.PhysicalServerOptions.Add(opt4);
+                context.PhysicalServerOptions.Add(opt5);
+                context.PhysicalServerOptions.Add(opt6);
                 context.Commit();
+
+                context.PhysicalServers.Add(phServer1);
+                context.PhysicalServers.Add(phServer2);
+                context.Commit();
+
+                var avServOpt1 = new PhysicalServerOptionsAvailable {PhysicalServerId = phServer1.Id, OptionId = opt1.Id, IsDefault = true};
+                var avServOpt2 = new PhysicalServerOptionsAvailable { PhysicalServerId = phServer1.Id, OptionId = opt2.Id};
+                var avServOpt3 = new PhysicalServerOptionsAvailable { PhysicalServerId = phServer1.Id, OptionId = opt3.Id, IsDefault = true };
+                var avServOpt4 = new PhysicalServerOptionsAvailable { PhysicalServerId = phServer1.Id, OptionId = opt4.Id};
+                context.AvailableOptionsPhysicalServers.Add(avServOpt1);
+                context.AvailableOptionsPhysicalServers.Add(avServOpt2);
+                context.AvailableOptionsPhysicalServers.Add(avServOpt3);
+                context.AvailableOptionsPhysicalServers.Add(avServOpt4);
+
+                context.Commit();
+
                 var fixedSubscriptions =
                     context.SubscriptionVms.Where(s => s.SubscriptionType == SubscriptionType.Fixed).ToList();
                 foreach (var fixedSub in fixedSubscriptions)

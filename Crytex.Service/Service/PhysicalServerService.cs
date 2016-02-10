@@ -213,20 +213,20 @@ namespace Crytex.Service.Service
 
             // Find all unspended payments and current payment
             // All unspended payments which are not "active" yet (it's startdate is grater than now) will be returned completely
-            var futurePayments = payments.Where(p => p.CreateDate > DateTime.UtcNow);
+            var futurePayments = payments.Where(p => p.Date > DateTime.UtcNow);
             // Find current payment (it's startdate is less and enddate is grater than now)
             // This payment will be returned partially
-            var currentPayment = payments.SingleOrDefault(p => p.CreateDate <= DateTime.UtcNow && p.DateEnd > DateTime.UtcNow);
+            var currentPayment = payments.SingleOrDefault(p => p.Date <= DateTime.UtcNow && p.DateEnd > DateTime.UtcNow);
 
             decimal sumToReturn = 0;
-            sumToReturn = futurePayments.Sum(p => p.CashAmaunt);
+            sumToReturn = futurePayments.Sum(p => p.Amount);
             if (currentPayment != null)
             {
                 // Calculate part of current payment to return
-                var totalDays = (currentPayment.DateEnd - currentPayment.CreateDate).Days;
-                var pastDays = (DateTime.UtcNow - currentPayment.CreateDate).Days;
+                var totalDays = (currentPayment.DateEnd - currentPayment.Date).Days;
+                var pastDays = (DateTime.UtcNow - currentPayment.Date).Days;
                 var futureDays = totalDays - pastDays;
-                sumToReturn += (currentPayment.CashAmaunt / totalDays) * futureDays;
+                sumToReturn += (currentPayment.Amount / totalDays) * futureDays;
             }
 
             var transaction = new BillingTransaction
@@ -260,27 +260,27 @@ namespace Crytex.Service.Service
                 SubscriptionVmMonthCount = serverParam.CountMonth,
                 UserId = serverParam.UserId
             };
+            var dt = serverParam.CreateDate ?? DateTime.UtcNow;
+            var server = new BoughtPhysicalServer
+            {
+                PhysicalServerId = serverConfig.Id,
+                Date = dt,
+                DateEnd = dt.AddMonths(serverParam.CountMonth),
+                CountMonth = serverParam.CountMonth,
+                UserId = serverParam.UserId,
+                Amount = amaunt
+            };
             var status = BoughtPhysicalServerStatus.New;
             try
             {
                 psTransaction = _billingService.AddUserTransaction(psTransaction);
+                server.BillingTransactionId = psTransaction.Id;
             }
             catch (TransactionFailedException)
             {
                 status = BoughtPhysicalServerStatus.WaitPayment;
             }
-            var dt = serverParam.CreateDate ?? DateTime.UtcNow;
-            var server = new BoughtPhysicalServer
-            {
-                PhysicalServerId = serverConfig.Id,
-                CreateDate = dt,
-                DateEnd = dt.AddMonths(serverParam.CountMonth),
-                Status = status,
-                CountMonth = serverParam.CountMonth,
-                UserId = serverParam.UserId,
-                BillingTransactionId = psTransaction.Id,
-                CashAmaunt = amaunt
-            };
+            server.Status = status;
 
             if (serverParam.DiscountPrice != null)
                 server.DiscountPrice = serverParam.DiscountPrice ?? 0;
@@ -342,8 +342,8 @@ namespace Crytex.Service.Service
             }
             if (serverParam.State == BoughtPhysicalServerStatus.Active)
             {
-                server.CreateDate = DateTime.Now;
-                server.DateEnd = server.CreateDate.AddMonths(server.CountMonth);
+                server.Date = DateTime.Now;
+                server.DateEnd = server.Date.AddMonths(server.CountMonth);
                 server.AdminMessage = serverParam.AdminMessage;
                 server.AdminSendMessage = true;
             }
@@ -459,16 +459,14 @@ namespace Crytex.Service.Service
         /// <returns></returns>
         public PhysicalServer GetReadyPhysicalServer(Guid serverId)
         {
-            var server = _serverRepository.GetById(serverId);
+            var server = _serverRepository.Get(x => x.Id == serverId);
             if (server == null)
             {
-                throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
             }
-            server.AvailableOptions = new List<PhysicalServerOptionsAvailable>();
-            foreach (var option in _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option))
-                if (option.IsDefault || option.Option.Type == PhysicalServerOptionType.Hdd)
-                    server.AvailableOptions.Add(option);
-
+            var availableOptions = _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option)
+                .Where(option => option.IsDefault || option.Option.Type == PhysicalServerOptionType.Hdd).ToList();
+            server.AvailableOptions = availableOptions;
             return server;
         }
 
@@ -482,7 +480,7 @@ namespace Crytex.Service.Service
             var server = _serverRepository.GetById(serverId);
             if (server == null)
             {
-                throw new InvalidIdentifierException($"BoughtPhysicalServer with id={serverId} doesn't exist");
+                throw new InvalidIdentifierException($"PhysicalServer with id={serverId} doesn't exist");
             }
             server.AvailableOptions = _availableOptionRepository.GetMany(x => x.PhysicalServerId == serverId, x => x.Option);
 
@@ -568,7 +566,7 @@ namespace Crytex.Service.Service
             server.BillingTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
             server.CountMonth = monthCount;
             server.DateEnd = DateTime.UtcNow.AddMonths(monthCount);
-            server.CashAmaunt = totalPrice;
+            server.Amount = totalPrice;
 
             _boughtServerRepository.Update(server);
             _uniOfWork.Commit();

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Mvc;
 using Crytex.Model.Enums;
+using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
@@ -28,6 +28,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [ResponseType(typeof(PageModel<PhysicalServerViewModel>))]
+        [HttpGet]
         public IHttpActionResult Get(int pageNumber, int pageSize)
         {
             var servers = _serverService.GetPagePhysicalServer(pageNumber, pageSize);
@@ -36,40 +37,14 @@ namespace Crytex.Web.Areas.Admin.Controllers
         }
 
         /// <summary>
-        /// Список опций
-        /// </summary>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
-        [ResponseType(typeof(PageModel<PhysicalServerOptionViewModel>))]
-        public IHttpActionResult GetOptions(int pageNumber, int pageSize)
-        {
-            var options = _serverService.GetPagePhysicalServerOption(pageNumber, pageSize);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<PhysicalServerOptionViewModel>>(options);
-            return Ok(viewModel);
-        }
-
-        /// <summary>
-        /// Список купленных серверов
-        /// </summary>
-        /// <param name="pageNumber"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
-        [ResponseType(typeof(PageModel<BoughtPhysicalServerViewModel>))]
-        public IHttpActionResult GetBoughtServers(int pageNumber, int pageSize)
-        {
-            var servers = _serverService.GetPageBoughtPhysicalServer(pageNumber, pageSize);
-            var viewModel = AutoMapper.Mapper.Map<PageModel<BoughtPhysicalServerViewModel>>(servers);
-            return Ok(viewModel);
-        }
-
-        /// <summary>
-        /// Получить конфигурацию готового физического сервера
+        /// Получить конфигурацию физического сервера
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="type"></param>
         /// <returns></returns>
         [ResponseType(typeof(PhysicalServerViewModel))]
-        public IHttpActionResult GetReadyServer(string id)
+        [HttpGet]
+        public IHttpActionResult Get(string id, PhysicalServerType type = PhysicalServerType.ReadyServer)
         {
             Guid guid;
             if (!Guid.TryParse(id, out guid))
@@ -77,54 +52,33 @@ namespace Crytex.Web.Areas.Admin.Controllers
                 ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-            var server = _serverService.GetReadyPhysicalServer(guid);
+            PhysicalServer server = null;
+            switch (type)
+            {
+                case PhysicalServerType.ReadyServer:
+                    server = _serverService.GetReadyPhysicalServer(guid);
+                    break;
+                case PhysicalServerType.AviableServer:
+                    server = _serverService.GetAviablePhysicalServer(guid);
+                    break;
+            }
+
+            if (server == null)
+            {
+                ModelState.AddModelError("id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
             var viewModel = AutoMapper.Mapper.Map<PhysicalServerViewModel>(server);
             return Ok(viewModel);
         }
 
-        /// <summary>
-        /// Получить конфигурацию физического сервера со списком доступных опций
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [ResponseType(typeof(PhysicalServerViewModel))]
-        public IHttpActionResult GetAviableServer(string id)
-        {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
-            {
-                ModelState.AddModelError("id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            var server = _serverService.GetAviablePhysicalServer(guid);
-            var viewModel = AutoMapper.Mapper.Map<PhysicalServerViewModel>(server);
-            return Ok(viewModel);
-        }
-
-        /// <summary>
-        /// Получить конфигурацию купленного физического сервера
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [ResponseType(typeof(PhysicalServerViewModel))]
-        public IHttpActionResult GetBoughtServer(string id)
-        {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
-            {
-                ModelState.AddModelError("id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            var server = _serverService.GetBoughtPhysicalServer(guid);
-            var viewModel = AutoMapper.Mapper.Map<BoughtPhysicalServerViewModel>(server);
-            return Ok(viewModel);
-        }
 
         /// <summary>
         /// Создать конфигурацию физического сервера
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
+        [HttpPost]
         public IHttpActionResult Post([FromBody]PhysicalServerViewModel model)
         {
             if (!this.ModelState.IsValid)
@@ -136,153 +90,24 @@ namespace Crytex.Web.Areas.Admin.Controllers
             param.CalculatePrice = model.Price == 0;
             var server = _serverService.CreatePhysicalServer(param);
 
-            return Ok(server);
-        }
-
-        /// <summary>
-        /// Создать опцию для физического сервера
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public IHttpActionResult Post([FromBody]PhysicalServerOptionViewModel model)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var param = new PhysicalServerOptionsParams
-            {
-                Name = model.Name,
-                Description = model.Description,
-                Price = model.Price,
-                Type = model.Type
-            };
-            var server = _serverService.CreateOrUpdateOption(param);
-
-            return Ok(server);
-        }
-
-        /// <summary>
-        /// Создать опции для физического сервера
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        public IHttpActionResult Post([FromBody]IEnumerable<PhysicalServerOptionViewModel> options)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var param = options.Select(opt => new PhysicalServerOptionsParams
-            {
-                Name = opt.Name,
-                Description = opt.Description,
-                Price = opt.Price,
-                Type = opt.Type
-            });
-            _serverService.CreateOrUpdateOptions(param);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// Добавить доступные опции для физического сервера
-        /// </summary>
-        /// <param name="serverId"></param>
-        /// <param name="options"></param>
-        /// <param name="replaceAll"></param>
-        /// <returns></returns>
-        public IHttpActionResult ChangeOptionsAviable(string serverId, [FromBody]IEnumerable<PhysicalServerOptionViewModel> options, bool replaceAll)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            Guid guid;
-            if (!Guid.TryParse(serverId, out guid))
-            {
-                ModelState.AddModelError("id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            var parameters = new PhysicalServerOptionsAviableParams { ServerId = guid, ReplaceAll = replaceAll };
-            var optionsnAviable = new List<OptionAviable>();
-            foreach (var opt in options)
-            {
-                Guid optguid;
-                if (!Guid.TryParse(opt.Id, out optguid))
-                {
-                    ModelState.AddModelError("id", "Invalid Guid format");
-                    return BadRequest(ModelState);
-                }
-                var ids = new OptionAviable { OptionId = optguid, IsDefault = opt.IsDefault };
-                optionsnAviable.Add(ids);
-            }
-            parameters.Options = optionsnAviable;
-            _serverService.UpdateOptionsAviable(parameters);
-
-            return Ok();
+            return Ok(new { id = server.Id });
         }
 
         /// <summary>
         /// Удалить конфигурацию физического сервера
         /// </summary>
-        /// <param name="serverId"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
-        public IHttpActionResult DaeletePhysicalServer(string serverId)
+        [HttpDelete]
+        public IHttpActionResult Delete(string id)
         {
             Guid guid;
-            if (!Guid.TryParse(serverId, out guid))
+            if (!Guid.TryParse(id, out guid))
             {
                 ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
             _serverService.DeletePhysicalServer(guid);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// Удалить опцию физического сервера
-        /// </summary>
-        /// <param name="serverId"></param>
-        /// <returns></returns>
-        public IHttpActionResult DaeletePhysicalServerOption(string serverId)
-        {
-            Guid guid;
-            if (!Guid.TryParse(serverId, out guid))
-            {
-                ModelState.AddModelError("id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            _serverService.DeletePhysicalServerOption(guid);
-
-            return Ok();
-        }
-
-        /// <summary>
-        /// Изменить статус купленного физического сервера
-        /// </summary>
-        /// <param name="serverId"></param>
-        /// <param name="status"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public IHttpActionResult ChangeStatusServer(ChangePhysicalServerViewModel model)
-        {
-            Guid guid;
-            if (!Guid.TryParse(model.ServerId, out guid))
-            {
-                ModelState.AddModelError("id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            _serverService.UpdateBoughtPhysicalServerState(new PhysicalServerStateParams
-            {
-                ServerId = guid,
-                State = (BoughtPhysicalServerStatus)model.Status,
-                AdminMessage = model.Message,
-                AutoProlongation = model.AutoProlongation
-            });
 
             return Ok();
         }

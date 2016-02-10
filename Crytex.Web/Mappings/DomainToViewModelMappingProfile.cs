@@ -134,15 +134,21 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhysicalServerOption, PhysicalServerOptionViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
             Mapper.CreateMap<PhysicalServer, PhysicalServerViewModel>()
+                .ForMember(x => x.Options, opt => opt.MapFrom(src => src.AvailableOptions))
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
             Mapper.CreateMap<PhysicalServerOptionsAvailable, PhysicalServerOptionViewModel>()
+                .ForMember(x => x.Name, opt => opt.MapFrom(source => source.Option.Name))
+                .ForMember(x => x.Description, opt => opt.MapFrom(source => source.Option.Description))
+                .ForMember(x => x.Id, opt => opt.MapFrom(source => source.Option.Id.ToString()))
+                .ForMember(x => x.Price, opt => opt.MapFrom(source => source.Option.Price))
+                .ForMember(x => x.Type, opt => opt.MapFrom(source => source.Option.Type))
                 .ForMember(x => x.IsDefault, opt => opt.MapFrom(source => source.IsDefault));
 
             Mapper.CreateMap<BoughtPhysicalServer, BoughtPhysicalServerViewModel>()
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
-                
+            Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();                
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
