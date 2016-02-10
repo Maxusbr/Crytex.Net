@@ -1,8 +1,12 @@
-﻿using Crytex.ExecutorTask.TaskHandler.HyperV;
+﻿using Crytex.ExecutorTask.Config;
+using Crytex.ExecutorTask.TaskHandler.HyperV;
 using Crytex.ExecutorTask.TaskHandler.VmWare;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
+using Crytex.Virtualization._VMware;
+using Crytex.Virtualization.Base;
 using Crytex.Virtualization.Fake;
+using Crytex.Virtualization.HyperV;
 using HyperVRemote;
 using HyperVRemote.Source.Implementation;
 using System;
@@ -19,6 +23,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IDictionary<TypeTask, Func<TaskV2, VmWareVCenter, ITaskHandler>> _vmWareTaskHandlerMappings;
         private IOperatingSystemsService _operatingSystemService;
         private readonly ISnapshotVmService _snapshotVmService;
+        private bool _useFakeProviders = false;
 
         public TaskHandlerFactory(IOperatingSystemsService operatingSystemService, ISnapshotVmService snapshotVmService)
         {
@@ -49,6 +54,9 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.DeleteSnapshot, this.GetDeleteSnapshotTaskHandler },
                 {TypeTask.LoadSnapshot, this.GetLoadSnapshotTaskHandler }
             };
+
+            var config = new ExecutorTaskConfig();
+            this._useFakeProviders = config.GetUseFakeProviders();
         }
 
         public ITaskHandler GetHyperVHandler(TaskV2 task, HyperVHost hyperVHost)
@@ -70,9 +78,49 @@ namespace Crytex.ExecutorTask.TaskHandler
         }
 
         #region Private methods
+        private IProviderVM GetProvider(HyperVHost host)
+        {
+            IProviderVM provider;
+            if (!this._useFakeProviders)
+            {
+                AutorizationInfo userData = new AutorizationInfo
+                {
+                    ServerAddress = host.Host,
+                    UserName = host.UserName,
+                    UserPassword = host.Password
+                };
+                provider = new ProviderHyper_V(userData);
+            }
+            else
+            {
+                provider = new FakeProvider(ProviderVirtualization.Hyper_V);
+            }
+
+            return provider;
+        }
+        private IProviderVM GetProvider(VmWareVCenter vCenter)
+        {
+            IProviderVM provider;
+            if (!this._useFakeProviders)
+            {
+                AutorizationInfo userData = new AutorizationInfo
+                {
+                    ServerAddress = vCenter.ServerAddress,
+                    UserName = vCenter.UserName,
+                    UserPassword = vCenter.Password
+                };
+                provider = new ProviderWMware(userData);
+            }
+            else
+            {
+                provider = new FakeProvider(ProviderVirtualization.WMware);
+            }
+
+            return provider;
+        }
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, host.Id);
 
             return handler;
@@ -80,7 +128,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, vCenter.Id);
 
             return handler;
@@ -88,7 +136,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetUpdateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new UpdateVmTaskHandler(task, provider, host.Id);
 
             return handler;
@@ -96,7 +144,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetUpdateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new UpdateVmTaskHandler(task, provider, vCenter.Id);
 
             return handler;
@@ -104,7 +152,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new ChangeVmStateTaskHandler(task, provider, host.Id);
 
             return handler;
@@ -112,7 +160,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new ChangeVmStateTaskHandler(task, provider, vCenter.Id);
 
             return handler;
@@ -130,7 +178,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetBackupVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new BackupVmTaskHandler(task, provider, vCenter.Id);
 
             return handler;
@@ -138,7 +186,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private BaseNewTaskHandler GetBackupVmTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new BackupVmTaskHandler(task, provider, host.Id);
 
             return handler;
@@ -147,7 +195,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetDeleteBackupTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new DeleteVmBackupTaskHandler(task, provider, host.Id);
 
             return handler;
@@ -155,14 +203,14 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetDeleteBackupTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new DeleteVmBackupTaskHandler(task, provider, vCenter.Id);
 
             return handler;
         }
         private ITaskHandler GetCreateSnapshotTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new CreateSnapshotTaskHandler(task, provider, host.Id);
 
             return handler;
@@ -170,14 +218,14 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetCreateSnapshotTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new CreateSnapshotTaskHandler(task, provider, vCenter.Id);
 
             return handler;
         }
         private ITaskHandler GetDeleteSnapshotTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new DeleteSnapshotTaskHandler(task, provider, host.Id);
 
             return handler;
@@ -185,7 +233,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetDeleteSnapshotTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new DeleteSnapshotTaskHandler(task, provider, vCenter.Id);
 
             return handler;
@@ -193,7 +241,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetLoadSnapshotTaskHandler(TaskV2 task, HyperVHost host)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.Hyper_V);
+            var provider = this.GetProvider(host);
             var handler = new LoadSnapshotTaskHandler(task, provider, host.Id, this._snapshotVmService);
 
             return handler;
@@ -201,7 +249,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetLoadSnapshotTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
-            var provider = new FakeProvider(Virtualization.Base.ProviderVirtualization.WMware);
+            var provider = this.GetProvider(vCenter);
             var handler = new LoadSnapshotTaskHandler(task, provider, vCenter.Id, this._snapshotVmService);
 
             return handler;

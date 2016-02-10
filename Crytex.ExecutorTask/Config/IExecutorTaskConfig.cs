@@ -6,5 +6,6 @@ namespace Crytex.ExecutorTask.Config
     {
         string GetHyperVTemplateDriveRoot();
         string GetHyperVVmDriveRoot();
+        bool GetUseFakeProviders();
     }
 }

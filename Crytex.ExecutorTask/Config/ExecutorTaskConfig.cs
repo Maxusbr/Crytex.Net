@@ -1,4 +1,5 @@
-﻿using Crytex.Core.AppConfig;
+﻿using System;
+using Crytex.Core.AppConfig;
 
 namespace Crytex.ExecutorTask.Config
 {
@@ -12,6 +13,11 @@ namespace Crytex.ExecutorTask.Config
         public string GetHyperVVmDriveRoot()
         {
             return this.GetValue<string>("hyperVVmDriveRoot");
+        }
+
+        public bool GetUseFakeProviders()
+        {
+            return this.GetValue<bool>("UseFakeProviders");
         }
     }
 }
