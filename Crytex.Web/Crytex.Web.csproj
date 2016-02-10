@@ -272,13 +272,14 @@
     <Compile Include="Areas\Admin\Controllers\AdminEmailTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFileController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFixedSubscriptionPaymentController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminGameServerConfigurationController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerBoughtController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerOptionsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminUsageSubscriptionPaymentController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestCommentController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHelpDeskRequestController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminLogController.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\OperatingSystemController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
+    <Compile Include="Areas\User\Controllers\GameServerConfigurationController.cs" />
     <Compile Include="Areas\User\Controllers\NewsController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentForecastController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentGameServerController.cs" />

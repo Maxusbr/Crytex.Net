@@ -15,8 +15,10 @@ namespace Crytex.Service.Service.SecureService
 
         public SecureGameServerService(IGameServerRepository gameServerRepo, ITaskV2Service taskService,
             IGameServerConfigurationRepository gameServerConfRepository, IBilingService billingService,
-            IPaymentGameServerRepository paymentGameServerRepository, IUnitOfWork unitOfWork, IIdentity userIdentity) 
-            : base(gameServerRepo, taskService, gameServerConfRepository, billingService, paymentGameServerRepository, unitOfWork)
+            IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository, 
+            IUnitOfWork unitOfWork, IIdentity userIdentity) 
+            : base(gameServerRepo, taskService, gameServerConfRepository, billingService, paymentGameServerRepository,
+                  serverTemplateRepository, unitOfWork)
         {
             this._userIdentity = userIdentity;
         }

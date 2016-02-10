@@ -47,123 +47,70 @@ namespace Crytex.Web.Areas.Admin.Controllers
             return this.Ok(pageModel);
         }
 
-        /// <summary>
-        /// Обновление статуса GameServer
-        /// </summary>
-        [HttpPost]
-        public IHttpActionResult UpdateMachineStatus([FromBody]UpdateGameServerOptions model)
+
+        private bool UpdateMachineStatus(Guid serverId, TypeChangeStatus? status)
         {
-            Guid guid;
-            if (!Guid.TryParse(model.serverId, out guid))
-                return this.BadRequest("Invalid Guid format");
-            switch (model.Status)
+            switch (status)
             {
                 case TypeChangeStatus.Start:
-                    _gameServerService.StartGameServer(guid);
+                    _gameServerService.StartGameServer(serverId);
                     break;
                 case TypeChangeStatus.PowerOff:
-                    _gameServerService.PowerOffGameServer(guid);
+                    _gameServerService.PowerOffGameServer(serverId);
                     break;
                 case TypeChangeStatus.Reload:
-                    _gameServerService.ResetGameServer(guid);
+                    _gameServerService.ResetGameServer(serverId);
                     break;
                 case TypeChangeStatus.Stop:
-                    _gameServerService.StopGameServer(guid);
+                    _gameServerService.StopGameServer(serverId);
                     break;
                 default:
-                    return BadRequest("Invalid status");
+                    return false;
             }
-
-            return Ok();
+            return true;
         }
 
         /// <summary>
         /// Редактирование параметров игрового сервера
         /// </summary>
-        [HttpPost]
+        [HttpPut]
         public IHttpActionResult UpdateGameServerConfiguration(GameServerConfigViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(this.ModelState);
             }
+            Guid serverId;
+            if (!Guid.TryParse(model.serverId, out serverId))
+            {
+                ModelState.AddModelError("id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
             var serviceOptions = Mapper.Map<GameServerConfigOptions>(model);
-            serviceOptions.UpdateType = GameServerUpdateType.Configuration;
-            _gameServerService.UpdateGameServer(model.ServerId, serviceOptions);
 
+            switch (model.UpdateType)
+            {
+                case GameServerUpdateType.Configuration:
+                    if (string.IsNullOrEmpty(model.ServerName)) return BadRequest("ServerName must be not empty");
+                    _gameServerService.UpdateGameServer(serverId, serviceOptions);
+                    break;
+                case GameServerUpdateType.Prolongation:
+                    if(model.MonthCount <= 0) return BadRequest("MonthCount must be greater than 0");
+                    _gameServerService.UpdateGameServer(serverId, serviceOptions);
+                    break;
+                case GameServerUpdateType.EnableAutoProlongation:
+                    if (model.AutoProlongation == null) return BadRequest("AutoProlongation must have value");
+                    _gameServerService.UpdateGameServer(serverId, serviceOptions);
+                    break;
+                case GameServerUpdateType.State:
+                    if(!UpdateMachineStatus(serverId, model.Status)) return BadRequest("Invalid status");
+                    break;
+                default:
+                    return BadRequest("Invalid UpdateType");
+            }
             return Ok();
         }
 
-        /// <summary>
-        /// Включение автооплаты
-        /// </summary>
-        [HttpPost]
-        public IHttpActionResult EnableAutoProlongationGameServer(GameServerConfigViewModel model)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-            var serviceOptions = new GameServerConfigOptions
-            {
-                AutoProlongation = model.AutoProlongation,
-                UpdateType = GameServerUpdateType.Configuration
-            };
-            _gameServerService.UpdateGameServer(model.ServerId, serviceOptions);
 
-            return Ok();
-        }
-
-        /// <summary>
-        /// Получить список конфигураций игровых серверов
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public IHttpActionResult GetGameServerConfig()
-        {
-
-            var configs = _gameServerService.GetGameServerConfigurations();
-            var model = Mapper.Map<IEnumerable<GameServerConfigurationView>>(configs);
-
-            return Ok(model);
-        }
-
-        /// <summary>
-        /// Создать конфигурацию игрового сервера
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public IHttpActionResult CreateGameServerConfig(GameServerConfigurationView model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var config = Mapper.Map<GameServerConfiguration>(model);
-            config = _gameServerService.CreateGameServerConfiguration(config);
-
-            return Ok(new { id = config.Id });
-        }
-
-        /// <summary>
-        /// Изменить конфигурацию игрового сервера
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        [HttpPost]
-        public IHttpActionResult UpdateGameServerConfig(GameServerConfigurationView model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var config = Mapper.Map<GameServerConfiguration>(model);
-            _gameServerService.UpdateGameServerConfiguration(config);
-
-            return Ok();
-        }
     }
 }

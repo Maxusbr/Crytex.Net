@@ -17,6 +17,7 @@ namespace Crytex.Service.Service
     class GameServerService : IGameServerService
     {
         private readonly IGameServerConfigurationRepository _gameServerConfRepository;
+        private readonly IServerTemplateRepository _serverTemplateRepository;
         private readonly IGameServerRepository _gameServerRepository;
         private readonly ITaskV2Service _taskService;
         private readonly IBilingService _billingService;
@@ -25,12 +26,13 @@ namespace Crytex.Service.Service
 
         public GameServerService(IGameServerRepository gameServerRepository, ITaskV2Service taskService,
             IGameServerConfigurationRepository gameServerConfRepository, IBilingService billingService,
-            IPaymentGameServerRepository paymentGameServerRepository, IUnitOfWork unitOfWork)
+            IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository, IUnitOfWork unitOfWork)
         {
             this._gameServerRepository = gameServerRepository;
             this._taskService = taskService;
             this._gameServerConfRepository = gameServerConfRepository;
             this._unitOfWork = unitOfWork;
+            _serverTemplateRepository = serverTemplateRepository;
             _paymentGameServerRepository = paymentGameServerRepository;
             _billingService = billingService;
         }
@@ -68,8 +70,15 @@ namespace Crytex.Service.Service
         public GameServer CreateServer(GameServer server, BuyGameServerOption options)
         {
             var gameServerConf = this._gameServerConfRepository.Get(conf => conf.Id == server.GameServerConfigurationId, conf => conf.ServerTemplate.OperatingSystem);
+            if (gameServerConf == null)
+            {
+                throw new InvalidIdentifierException($"GameServerConfiguration with id={server.GameServerConfigurationId} doesn't exist");
+            }
             var operatingSystem = gameServerConf.ServerTemplate.OperatingSystem;
-
+            if (options.PaymentType == ServerPaymentType.Slot && options.SlotCount < 1)
+            {
+                throw new InvalidIdentifierException($"Cannot create vm with SlotCount={options.SlotCount}.");
+            }
             var taskOptions = new CreateVmOptions
             {
                 Cpu = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinCoreCount : options.Cpu,
@@ -137,7 +146,10 @@ namespace Crytex.Service.Service
             // Create new GameServer
             server.CreateDate = dateNow;
             server.DateExpire = dateNow.AddMonths(options.ExpireMonthCount);
-
+            if (options.ExpireMonthCount < 1)
+            {
+                throw new InvalidIdentifierException("ExpireMonthCount must be greater than 0");
+            }
             server = CreateServer(server, options);
             decimal amount = 0;
             switch (options.PaymentType)
@@ -254,7 +266,7 @@ namespace Crytex.Service.Service
             var srv = _paymentGameServerRepository.Get(x => x.GameServerId == guid, x => x.User);
             if (srv == null)
             {
-                throw new InvalidIdentifierException($"Game server with id={guid.ToString()} doesn't exist");
+                throw new InvalidIdentifierException($"Game server with id={guid} doesn't exist");
             }
             return srv;
         }
@@ -405,6 +417,11 @@ namespace Crytex.Service.Service
 
         public GameServerConfiguration CreateGameServerConfiguration(GameServerConfiguration config)
         {
+            var serverTemplate = _serverTemplateRepository.GetById(config.ServerTemplateId);
+            if (serverTemplate == null)
+            {
+                throw new InvalidIdentifierException($"ServerTemplate with id={config.ServerTemplateId} doesn't exist");
+            }
             _gameServerConfRepository.Add(config);
             _unitOfWork.Commit();
             return config;
@@ -417,7 +434,11 @@ namespace Crytex.Service.Service
             {
                 throw new InvalidIdentifierException($"GameServerConfiguration with id={config.Id} doesn't exist");
             }
-
+            var serverTemplate = _serverTemplateRepository.GetById(config.ServerTemplateId);
+            if (serverTemplate == null)
+            {
+                throw new InvalidIdentifierException($"ServerTemplate with id={config.ServerTemplateId} doesn't exist");
+            }
             serverConfig.GameName = config.GameName;
             serverConfig.ServerTemplateId = config.ServerTemplateId;
             serverConfig.Processor1 = config.Processor1;

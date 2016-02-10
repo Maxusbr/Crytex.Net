@@ -49,21 +49,21 @@ namespace Crytex.Web.Areas.User.Controllers
             return this.Ok(pageModel);
         }
 
-        [HttpPost]
-        public IHttpActionResult Post(GameServerViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+        //[HttpPost]
+        //public IHttpActionResult Post(GameServerViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return BadRequest(ModelState);
+        //    }
 
-            var server = AutoMapper.Mapper.Map<GameServer>(model);
-            server.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
+        //    var server = AutoMapper.Mapper.Map<GameServer>(model);
+        //    server.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
 
-            server = this._gameServerService.CreateServer(server);
+        //    server = this._gameServerService.CreateServer(server);
 
-            return this.Ok(new { id = server.Id});
-        }
+        //    return this.Ok(new { id = server.Id});
+        //}
 
         /// <summary>
         /// покупка игровых машин
@@ -71,7 +71,7 @@ namespace Crytex.Web.Areas.User.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public IHttpActionResult Buy(GameServerViewModel model)
+        public IHttpActionResult Post([FromBody]GameServerViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -90,20 +90,26 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult UpdateServerMachineConfiguration(GameServerMachineConfigUpdateViewModel model)
+        public IHttpActionResult UpdateConfiguration([FromBody]GameServerMachineConfigUpdateViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
-                return this.BadRequest(this.ModelState);
+                return BadRequest(ModelState);
             }
-
+            Guid guid;
+            if (!Guid.TryParse(model.GameServerId, out guid))
+            {
+                ModelState.AddModelError("id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
             var serviceOptions = Mapper.Map<UpdateMachineConfigOptions>(model);
-            this._gameServerService.UpdateGameServerMachineConfig(model.GameServerId.Value, serviceOptions);
+            this._gameServerService.UpdateGameServerMachineConfig(guid, serviceOptions);
 
             return Ok();
         }
 
-        [HttpPost]
+
+        [HttpPut]
         public IHttpActionResult ProlongateGameServer(ProlongateGameServerViewModel model)
         {
             if (!this.ModelState.IsValid)
@@ -115,19 +121,6 @@ namespace Crytex.Web.Areas.User.Controllers
             _gameServerService.UpdateGameServer(model.ServerId.Value, serviceOptions);
 
             return Ok();
-        }
-
-        /// <summary>
-        /// Получить список конфигураций игровых серверов
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        public IHttpActionResult GetGameServerConfig()
-        {
-            var configs = _gameServerService.GetGameServerConfigurations();
-            var model = AutoMapper.Mapper.Map<IEnumerable<GameServerConfigurationView>>(configs);
-
-            return Ok(model);
         }
     }
 }
