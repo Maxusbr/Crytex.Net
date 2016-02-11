@@ -90,7 +90,8 @@ namespace Crytex.Service
             container.RegisterType<IPhysicalServerRepository, PhysicalServerRepository>();
             container.RegisterType<IPhysicalServerService, PhysicalServerService>();
             container.RegisterType<IPaymentSystemRepository, PaymentSystemRepository>();
-
+            container.RegisterType<IDhcpServerRepository, DhcpServerRepository>();
+            container.RegisterType<IDhcpServerService, DhcpServerService>();
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");
             container.RegisterType<IPaymentService, SecurePaymentService>("Secured");
