@@ -111,8 +111,6 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.Amount));
             Mapper.CreateMap<GameServerConfigOptions, GameServerConfigViewModel>()
                 .ForMember(x => x.serverId, opt => opt.MapFrom(src => src.ServerId.ToString()));
-            Mapper.CreateMap<News, NewsViewModel>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<WebHostingTariff, WebHostingTariffViewModel>();
             Mapper.CreateMap<WebHosting, WebHostingViewModel>()
                 .ForMember(x => x.TariffName, opt => opt.MapFrom(source => source.WebHostingTariff.Name));

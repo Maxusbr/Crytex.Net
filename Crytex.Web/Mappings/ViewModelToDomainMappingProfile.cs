@@ -61,6 +61,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.ServerId, opt => opt.MapFrom(src => Guid.Parse(src.serverId)));
             Mapper.CreateMap<GameServerConfigurationView, GameServerConfiguration>();
             Mapper.CreateMap<DhcpServerView, DhcpServerOption>();
+            Mapper.CreateMap<NewsViewModel, News>();
         }
     }
 }
