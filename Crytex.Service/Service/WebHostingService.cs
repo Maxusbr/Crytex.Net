@@ -54,7 +54,7 @@ namespace Crytex.Service.Service
             var hostingBuyTransaction = new BillingTransaction
             {
                 CashAmount = -totalPrice,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.WebHostingPayment,
                 UserId = buyParams.UserId,
                 Description = "Web Hosting purchase"
             };
@@ -108,7 +108,7 @@ namespace Crytex.Service.Service
             var prolongateBillingTransaction = new BillingTransaction
             {
                 CashAmount = -totalPrice,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.WebHostingPayment,
                 UserId = webHosting.UserId,
                 Description = "Web Hosting prolongation"
             };

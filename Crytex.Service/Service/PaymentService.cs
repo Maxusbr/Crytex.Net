@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using Crytex.Model.Models.Biling;
 using Crytex.Service.Extension;
 using Crytex.Service.Model;
+using System.Linq;
 
 namespace Crytex.Service.Service
 {
@@ -21,10 +22,19 @@ namespace Crytex.Service.Service
         private readonly IDiscountService _discountService;
         private readonly ICreditPaymentOrderRepository _creditPaymentOrderRepository;
         private readonly IPaymentSystemRepository _paymentSystemRepository;
+        private readonly IWebHostingPaymentRepository _webHostingPaymentRepo;
+        private readonly IFixedSubscriptionPaymentRepository _fixedSubscriptionPaymentRepository;
+        private readonly IUsageSubscriptionPaymentRepository _usageSubscriptionPaymentRepository;
+        private readonly ISubscriptionBackupPaymentRepository _subscriptionBackupPaymentRepository;
+        private readonly IBoughtPhysicalServerRepository _physicalServerPaymentRepository;
+        private readonly IPaymentGameServerRepository _gameServerPaymentRepository;
 
         public PaymentService(IUnitOfWork unitOfWork, IBillingTransactionRepository billingRepo,
             ICreditPaymentOrderRepository creditPaymentOrderRepo, IPaymentSystemRepository paymentSystemRepository, 
-            IDiscountService discountService, IBilingService bilingService)
+            IDiscountService discountService, IBilingService bilingService, IWebHostingPaymentRepository webHostingPaymentRepo,
+            IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepository, IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepository,
+            ISubscriptionBackupPaymentRepository subscriptionBackupPaymentRepository, IBoughtPhysicalServerRepository physicalServerPaymentRepository,
+            IPaymentGameServerRepository gameServerPaymentRepository)
         {
             this._unitOfWork = unitOfWork;
             this._billingTransactionRepository = billingRepo;
@@ -32,6 +42,12 @@ namespace Crytex.Service.Service
             _paymentSystemRepository = paymentSystemRepository;
             _discountService = discountService;
             _bilingService = bilingService;
+            this._webHostingPaymentRepo = webHostingPaymentRepo;
+            this._fixedSubscriptionPaymentRepository = fixedSubscriptionPaymentRepository;
+            this._usageSubscriptionPaymentRepository = usageSubscriptionPaymentRepository;
+            this._subscriptionBackupPaymentRepository = subscriptionBackupPaymentRepository;
+            this._physicalServerPaymentRepository = physicalServerPaymentRepository;
+            this._gameServerPaymentRepository = gameServerPaymentRepository;
         }
 
         public Payment CreateCreditPaymentOrder(decimal cashAmount, string userId, Guid paymentSystem)
@@ -76,7 +92,7 @@ namespace Crytex.Service.Service
             var transaction = new BillingTransaction
             {
                 CashAmount = payment.AmountWithBonus,
-                TransactionType = BillingTransactionType.Crediting,
+                TransactionType = BillingTransactionType.BalanceReplenishment,
                 UserId = payment.UserId
             };
             _bilingService.AddUserTransaction(transaction);
@@ -175,6 +191,58 @@ namespace Crytex.Service.Service
                 where = where.And(x => x.IsEnabled);
             var list = _paymentSystemRepository.GetMany(where);
             return list;
+        }
+
+        public IEnumerable<BillingTransactionInfo> GetUserBillingTransactionInfos(string userId)
+        {
+            var userTransactions = this._bilingService.GetUserTransactions(userId);
+            var paymentInfos = userTransactions.Select(t => new BillingTransactionInfo {BillingTransaction = t, Payments = null }).ToList();
+
+            var webHostingTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.WebHostingPayment);
+            IEnumerable<PaymentBase> webHostingPayments = this.GetPaymentsByTransactions<WebHostingPayment>(webHostingTransactions, this._webHostingPaymentRepo);
+
+            var fixedSubscriptionTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.FixedSubscriptionVmPayment);
+            IEnumerable<PaymentBase> fixedSubscriptionPayments = this.GetPaymentsByTransactions(fixedSubscriptionTransactions, this._fixedSubscriptionPaymentRepository);
+            IEnumerable<PaymentBase> fixedSubscriptionBackupPayments = this.GetPaymentsByTransactions(fixedSubscriptionTransactions, this._subscriptionBackupPaymentRepository);
+
+            var usageSubscriptionTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.UsageSubscriptionVmPayment);
+            IEnumerable<PaymentBase> usageSubscriptionPayments = this.GetPaymentsByTransactions(usageSubscriptionTransactions, this._usageSubscriptionPaymentRepository);
+            IEnumerable<PaymentBase> usageSubscriptionBackupPayments = this.GetPaymentsByTransactions(usageSubscriptionTransactions, this._subscriptionBackupPaymentRepository);
+
+            var gameServerTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.GameServer);
+            IEnumerable<PaymentBase> gameServerPayments = this.GetPaymentsByTransactions(gameServerTransactions, this._gameServerPaymentRepository);
+
+            var physicalServerTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.PhysicalServerPayment);
+            IEnumerable<PaymentBase> physicalServerPayments = this.GetPaymentsByTransactions(physicalServerTransactions, this._physicalServerPaymentRepository);
+
+            IEnumerable<PaymentBase> allPayments = webHostingPayments
+                .Union(fixedSubscriptionPayments)
+                .Union(fixedSubscriptionBackupPayments)
+                .Union(usageSubscriptionPayments)
+                .Union(usageSubscriptionBackupPayments)
+                .Union(gameServerPayments)
+                .Union(physicalServerPayments);
+
+            var allPaymentsGroupedByTransaction = allPayments.GroupBy(p => p.BillingTransactionId);
+            foreach(var group in allPaymentsGroupedByTransaction)
+            {
+                var paymentInfo = paymentInfos.Single(pi => pi.BillingTransaction.Id == group.Key);
+                paymentInfo.Payments = group.ToArray();
+            }
+
+            return paymentInfos;
+        }
+
+        private IEnumerable<T> GetPaymentsByTransactions<T>(IEnumerable<BillingTransaction> transactions, IRepository<T> repo) where T : PaymentBase
+        {
+            Expression<Func<T, bool>> paymentWhereExpression = x => false;
+            foreach (var transaction in transactions)
+            {
+                paymentWhereExpression = paymentWhereExpression.Or(p => p.BillingTransactionId == transaction.Id);
+            }
+            var payments = repo.GetMany(paymentWhereExpression);
+
+            return payments;
         }
     }
 }

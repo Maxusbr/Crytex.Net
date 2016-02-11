@@ -34,13 +34,13 @@ namespace Crytex.Model.Models.Biling
 
     public enum BillingTransactionType
     {
-        AutomaticDebiting = 0,
-        Crediting = 1,
-        OneTimeDebiting = 2,
-        SystemBonus = 3,
-        ReplenishmentFromAdmin = 4,
-        WithdrawByAdmin = 5,
-        TestPeriod = 6,
-        Refill =7
+        BalanceReplenishment = 0,
+        WebHostingPayment = 1,
+        FixedSubscriptionVmPayment = 2,
+        UsageSubscriptionVmPayment = 3,
+        PhysicalServerPayment = 5,
+        GameServer = 6,
+        TestPeriod = 7,
+        ReturnMoneyForDeletedService = 8
     }
 }

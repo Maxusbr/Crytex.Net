@@ -21,5 +21,7 @@ namespace Crytex.Service.IService
 
         void EnableDisablePaymentSystem(Guid id, bool enable);
         IEnumerable<PaymentSystem> GetPaymentSystems(bool searchEnabled = false);
+
+        IEnumerable<BillingTransactionInfo> GetUserBillingTransactionInfos(string userId);
     }
 }

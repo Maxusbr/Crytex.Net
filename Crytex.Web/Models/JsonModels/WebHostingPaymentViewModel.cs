@@ -2,11 +2,17 @@
 
 namespace Crytex.Web.Models.JsonModels
 {
-    public class WebHostingPaymentViewModel
+    public class WebHostingPaymentViewModel : PaymentViewModelBase
     {
-        public DateTime Date { get; set; }
-        public decimal Amount { get; set; }
         public string WebHostingName { get; set; }
         public Guid WebHostingId { get; set; }
+
+        public override PaymentViewModelType PaymentModelType
+        {
+            get
+            {
+                return PaymentViewModelType.WebHosting;
+            }
+        }
     }
 }
