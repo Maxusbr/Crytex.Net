@@ -70,8 +70,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             var news = AutoMapper.Mapper.Map<News>(model);
+            news.UserId = userId;
+            news.CreateTime = DateTime.UtcNow;
             var newnews = this._newsService.CreateNews(news);
 
             return Ok(newnews);
@@ -97,8 +99,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
                 this.ModelState.AddModelError("id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             var news = AutoMapper.Mapper.Map<News>(model);
+            news.UserId = userId;
+            news.CreateTime = DateTime.UtcNow;
             this._newsService.UpdateNews(news);
 
             return Ok();
