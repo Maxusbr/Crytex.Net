@@ -7,6 +7,7 @@ namespace Crytex.Web.Models.JsonModels
     {
         public Guid BillingTransactionId { get; set; }
         public BillingTransactionType TransactionType { get; set; }
+        public decimal TransactionCashAmount{ get; set; }
         public PaymentViewModelBase[] Payments { get; set; }
     }
 }

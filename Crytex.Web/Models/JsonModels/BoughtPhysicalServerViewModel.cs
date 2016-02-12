@@ -26,9 +26,6 @@ namespace Crytex.Web.Models.JsonModels
         public string Config { get; set; }
         public bool AutoProlongation { get; set; }
 
-        [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
-
         [ForeignKey("PhysicalServerId")]
         public PhysicalServerViewModel Server { get; set; }
 

@@ -17,6 +17,5 @@ namespace Crytex.Service.IService
         IEnumerable<BillingTransaction> SearchBillingTransactions(BillingSearchParams searchParams);
         BillingTransaction AddTestPeriod(TestPeriodOptions options);
         void CancelTestPeriod(UpdateUserBalance data, BillingTransaction transaction);
-        IEnumerable<BillingTransaction> GetUserTransactions(string userId);
     }
 }

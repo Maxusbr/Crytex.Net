@@ -193,9 +193,16 @@ namespace Crytex.Service.Service
             return list;
         }
 
-        public IEnumerable<BillingTransactionInfo> GetUserBillingTransactionInfos(string userId)
+        public IPagedList<BillingTransactionInfo> GetUserBillingTransactionInfosPage(string userId, int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null)
         {
-            var userTransactions = this._bilingService.GetUserTransactions(userId);
+            var transactionSearchParams = new BillingSearchParams
+            {
+                DateFrom = from,
+                DateTo = to,
+                UserId = userId
+            };
+            var userTransactions = this._bilingService.GetPageBillingTransaction(pageNumber, pageSize, transactionSearchParams);
+
             var paymentInfos = userTransactions.Select(t => new BillingTransactionInfo {BillingTransaction = t, Payments = null }).ToList();
 
             var webHostingTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.WebHostingPayment);
@@ -230,7 +237,9 @@ namespace Crytex.Service.Service
                 paymentInfo.Payments = group.ToArray();
             }
 
-            return paymentInfos;
+            var staticPagedList = new StaticPagedList<BillingTransactionInfo>(paymentInfos, userTransactions);
+
+            return staticPagedList;
         }
 
         private IEnumerable<T> GetPaymentsByTransactions<T>(IEnumerable<BillingTransaction> transactions, IRepository<T> repo) where T : PaymentBase
@@ -240,9 +249,43 @@ namespace Crytex.Service.Service
             {
                 paymentWhereExpression = paymentWhereExpression.Or(p => p.BillingTransactionId == transaction.Id);
             }
-            var payments = repo.GetMany(paymentWhereExpression);
+
+            var payments = repo.GetMany(paymentWhereExpression, this.GetRequiredPropIncludes<T>());
 
             return payments;
+        }
+
+        private Expression<Func<T, object>>[] GetRequiredPropIncludes<T>() where T : PaymentBase
+        {
+            Expression<Func<T, object>>[] includes = new Expression<Func<T, object>>[0];
+
+            if(typeof(T) == typeof(FixedSubscriptionPayment))
+            {
+                includes = new Expression<Func<T, object>>[4];
+                includes[0] = x => (x as FixedSubscriptionPayment).SubscriptionVm;
+                includes[1] = x => (x as FixedSubscriptionPayment).SubscriptionVm.UserVm;
+                includes[2] = x => (x as FixedSubscriptionPayment).SubscriptionVm.User;
+                includes[3] = x => (x as FixedSubscriptionPayment).SubscriptionVm.Tariff;
+            }
+            if (typeof(T) == typeof(UsageSubscriptionPayment))
+            {
+                includes = new Expression<Func<T, object>>[3];
+                includes[0] = x => (x as UsageSubscriptionPayment).SubscriptionVm;
+                includes[1] = x => (x as UsageSubscriptionPayment).SubscriptionVm.UserVm;
+                includes[2] = x => (x as UsageSubscriptionPayment).SubscriptionVm.User;
+            }
+            if (typeof(T) == typeof(WebHostingPayment))
+            {
+                includes = new Expression<Func<T, object>>[1];
+                includes[0] = x => (x as WebHostingPayment).WebHosting;
+            }
+            if (typeof(T) == typeof(PaymentGameServer))
+            {
+                includes = new Expression<Func<T, object>>[1];
+                includes[0] = x => (x as PaymentGameServer).GameServer;
+            }
+
+            return includes;
         }
     }
 }

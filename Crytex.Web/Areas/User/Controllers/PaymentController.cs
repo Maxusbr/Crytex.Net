@@ -1,4 +1,5 @@
-﻿using Crytex.Service.IService;
+﻿using System.Linq;
+using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
 using System.Collections.Generic;
@@ -108,11 +109,11 @@ namespace Crytex.Web.Areas.User
         }
 
         [HttpPost]
-        public IHttpActionResult BillingTransactionInfos()
+        public IHttpActionResult BillingTransactionInfos(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null)
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            var infos = this._paymentService.GetUserBillingTransactionInfos(userId);
-            var models = Mapper.Map<IEnumerable<BillingTransactionInfoViewModel>>(infos);
+            var infos = this._paymentService.GetUserBillingTransactionInfosPage(userId, pageNumber, pageSize, from, to);
+            var models = Mapper.Map<PageModel<BillingTransactionInfoViewModel>>(infos);
 
             return Ok(models);
         }

@@ -24,6 +24,9 @@ namespace Crytex.Model.Models.Biling
 
         public GameServerStatus Status { get; set; }
         public bool AutoProlongation { get; set; }
+
+        [ForeignKey("GameServerId")]
+        public GameServer GameServer { get; set; }
     }
 
     public enum GameServerStatus

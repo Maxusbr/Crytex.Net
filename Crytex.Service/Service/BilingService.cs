@@ -253,7 +253,7 @@ namespace Crytex.Service.Service
             if(list != null) throw new InvalidIdentifierException($"Вы уже заказывали тестовый период {list.Date.ToString("d")}");
 
             var transaction = AddUserTransactionInner(BillingTransactionType.TestPeriod, options.CashAmount, 
-                "Test period", options.UserId, "", null, options.CountDay);
+                "Test period", options.UserId, null, null, options.CountDay);
             return transaction;
         }
 
