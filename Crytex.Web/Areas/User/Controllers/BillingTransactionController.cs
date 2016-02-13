@@ -8,13 +8,13 @@ using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
 using PagedList;
 
-namespace Crytex.Web.Areas.Admin.Controllers
+namespace Crytex.Web.Areas.User.Controllers
 {
-    public class AdminBillingTransactionController : AdminCrytexController
+    public class BillingTransactionController : UserCrytexController
     {
         private readonly IBilingService _billingService;
 
-        public AdminBillingTransactionController(IBilingService billingService)
+        public BillingTransactionController(IBilingService billingService)
         {
             this._billingService = billingService;
         }
@@ -28,7 +28,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <returns></returns>
         // GET: api/Admin/AdminBillingTransaction
         [ResponseType(typeof(PageModel<BillingViewModel>))]
-        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]AdminBillingSearchParamsViewModel searchParams = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]BillingSearchParamsViewModel searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be grater than 1");
@@ -37,8 +37,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
                 return BadRequest(ModelState);
             }
 
-            IPagedList<BillingTransaction> transactions = 
+            IPagedList<BillingTransaction> transactions =
                 new PagedList<BillingTransaction>(new List<BillingTransaction>(), pageNumber, pageSize);
+
+            searchParams.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
 
             if (searchParams != null)
             {
