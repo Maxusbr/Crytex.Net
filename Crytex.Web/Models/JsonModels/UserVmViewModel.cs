@@ -1,5 +1,6 @@
 ﻿using System;
 using Crytex.Model.Models;
+using System.Collections.Generic;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -17,5 +18,6 @@ namespace Crytex.Web.Models.JsonModels
         public string OsImageFilePath { get; set; }
         public string OsName { get; set; }
         public OperatingSystemViewModel OperatingSystem { get; set; }
+        public IEnumerable<VmIpAddressViewModel> IpAdresses { get; set; }
     }
 }

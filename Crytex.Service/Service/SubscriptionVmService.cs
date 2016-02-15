@@ -267,7 +267,7 @@ namespace Crytex.Service.Service
 
         public virtual SubscriptionVm GetById(Guid guid)
         {
-            var sub = this._subscriptionVmRepository.Get(s => s.Id == guid, s => s.UserVm.OperatingSystem, s => s.User);
+            var sub = this._subscriptionVmRepository.Get(s => s.Id == guid, s => s.UserVm.OperatingSystem, s => s.User, s => s.UserVm.IpAdresses);
 
             if (sub == null)
             {
@@ -429,7 +429,8 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate, false, x => x.User, x => x.UserVm.OperatingSystem);
+            var pagedList = this._subscriptionVmRepository.GetPage(pageInfo, where, x => x.DateCreate, false, x => x.User,
+                x => x.UserVm.OperatingSystem, x => x.UserVm.IpAdresses);
 
             return pagedList;
         }
