@@ -76,7 +76,7 @@ namespace Crytex.Service.Service
             var transaction = new BillingTransaction
             {
                 CashAmount = payment.AmountWithBonus,
-                TransactionType = BillingTransactionType.Crediting,
+                TransactionType = BillingTransactionType.Refill,
                 UserId = payment.UserId
             };
             _bilingService.AddUserTransaction(transaction);

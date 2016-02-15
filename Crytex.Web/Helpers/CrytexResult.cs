@@ -36,6 +36,9 @@ namespace Crytex.Web.Helpers
                     {
                        "error",  Enum.GetName(typeof(ServerTypesResult), typeResult)
                     },
+                      {
+                       "errorEnum",   typeResult
+                    },
                      {
                        "data", data
                     }

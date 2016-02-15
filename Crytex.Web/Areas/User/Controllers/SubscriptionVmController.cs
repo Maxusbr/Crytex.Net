@@ -8,6 +8,8 @@ using Microsoft.Practices.Unity;
 using PagedList;
 using System;
 using System.Web.Http;
+using Crytex.Model.Exceptions;
+using Crytex.Web.Helpers;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -69,9 +71,17 @@ namespace Crytex.Web.Areas.User.Controllers
             var buyOptions = Mapper.Map<SubscriptionBuyOptions>(model);
             buyOptions.BoughtByAdmin = false;
             buyOptions.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
-            var newSubscription = this._subscriptionVmService.BuySubscription(buyOptions);
+            try
+            {
+                var newSubscription = this._subscriptionVmService.BuySubscription(buyOptions);
 
-            return this.Ok(new { Id = newSubscription.Id });
+
+                return this.Ok(new { Id = newSubscription.Id });
+            }
+            catch (TransactionFailedException ex)
+            {
+                return new CrytexResult(ServerTypesResult.NotEnoughMoney);
+            }
         }
 
         /// <summary>
@@ -186,5 +196,5 @@ namespace Crytex.Web.Areas.User.Controllers
         }
     }
 
-    
+
 }

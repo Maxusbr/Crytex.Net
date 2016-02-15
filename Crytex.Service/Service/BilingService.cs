@@ -171,7 +171,7 @@ namespace Crytex.Service.Service
 
                     if(userCash < 0)
                     {
-                        throw new TransactionFailedException("Not enough money. Transaction failed.");
+                        throw new TransactionFailedException("Not enough money. Transaction failed.", TransactionFailedException.TypeError.NotEnough);
                     }
 
                     user.BillingTransactions.Add(transaction);

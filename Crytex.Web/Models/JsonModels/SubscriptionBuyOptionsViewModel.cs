@@ -17,8 +17,6 @@ namespace Crytex.Web.Models.JsonModels
         public int? SSD { get; set; }
         [Required]
         public int? Hdd { get; set; }
-        [Required]
-        [Range(1, 120)]
         public int? SubscriptionsMonthCount { get; set; }
         public bool? AutoProlongation { get; set; }
         [Required]
