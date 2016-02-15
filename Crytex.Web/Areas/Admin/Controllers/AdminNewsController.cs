@@ -103,6 +103,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
             var news = AutoMapper.Mapper.Map<News>(model);
             news.UserId = userId;
             news.CreateTime = DateTime.UtcNow;
+            news.Id = guid;
             this._newsService.UpdateNews(news);
 
             return Ok();
