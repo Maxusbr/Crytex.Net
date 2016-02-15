@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using Crytex.Model.Models.Biling;
 using Crytex.Service.Extension;
 using Crytex.Service.Model;
+using System.Linq;
 
 namespace Crytex.Service.Service
 {
@@ -21,10 +22,19 @@ namespace Crytex.Service.Service
         private readonly IDiscountService _discountService;
         private readonly ICreditPaymentOrderRepository _creditPaymentOrderRepository;
         private readonly IPaymentSystemRepository _paymentSystemRepository;
+        private readonly IWebHostingPaymentRepository _webHostingPaymentRepo;
+        private readonly IFixedSubscriptionPaymentRepository _fixedSubscriptionPaymentRepository;
+        private readonly IUsageSubscriptionPaymentRepository _usageSubscriptionPaymentRepository;
+        private readonly ISubscriptionBackupPaymentRepository _subscriptionBackupPaymentRepository;
+        private readonly IBoughtPhysicalServerRepository _physicalServerPaymentRepository;
+        private readonly IPaymentGameServerRepository _gameServerPaymentRepository;
 
         public PaymentService(IUnitOfWork unitOfWork, IBillingTransactionRepository billingRepo,
             ICreditPaymentOrderRepository creditPaymentOrderRepo, IPaymentSystemRepository paymentSystemRepository, 
-            IDiscountService discountService, IBilingService bilingService)
+            IDiscountService discountService, IBilingService bilingService, IWebHostingPaymentRepository webHostingPaymentRepo,
+            IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepository, IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepository,
+            ISubscriptionBackupPaymentRepository subscriptionBackupPaymentRepository, IBoughtPhysicalServerRepository physicalServerPaymentRepository,
+            IPaymentGameServerRepository gameServerPaymentRepository)
         {
             this._unitOfWork = unitOfWork;
             this._billingTransactionRepository = billingRepo;
@@ -32,6 +42,12 @@ namespace Crytex.Service.Service
             _paymentSystemRepository = paymentSystemRepository;
             _discountService = discountService;
             _bilingService = bilingService;
+            this._webHostingPaymentRepo = webHostingPaymentRepo;
+            this._fixedSubscriptionPaymentRepository = fixedSubscriptionPaymentRepository;
+            this._usageSubscriptionPaymentRepository = usageSubscriptionPaymentRepository;
+            this._subscriptionBackupPaymentRepository = subscriptionBackupPaymentRepository;
+            this._physicalServerPaymentRepository = physicalServerPaymentRepository;
+            this._gameServerPaymentRepository = gameServerPaymentRepository;
         }
 
         public Payment CreateCreditPaymentOrder(decimal cashAmount, string userId, Guid paymentSystem)
@@ -76,7 +92,7 @@ namespace Crytex.Service.Service
             var transaction = new BillingTransaction
             {
                 CashAmount = payment.AmountWithBonus,
-                TransactionType = BillingTransactionType.Crediting,
+                TransactionType = BillingTransactionType.BalanceReplenishment,
                 UserId = payment.UserId
             };
             _bilingService.AddUserTransaction(transaction);
@@ -175,6 +191,101 @@ namespace Crytex.Service.Service
                 where = where.And(x => x.IsEnabled);
             var list = _paymentSystemRepository.GetMany(where);
             return list;
+        }
+
+        public IPagedList<BillingTransactionInfo> GetUserBillingTransactionInfosPage(string userId, int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null)
+        {
+            var transactionSearchParams = new BillingSearchParams
+            {
+                DateFrom = from,
+                DateTo = to,
+                UserId = userId
+            };
+            var userTransactions = this._bilingService.GetPageBillingTransaction(pageNumber, pageSize, transactionSearchParams);
+
+            var paymentInfos = userTransactions.Select(t => new BillingTransactionInfo {BillingTransaction = t, Payments = null }).ToList();
+
+            var webHostingTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.WebHostingPayment);
+            IEnumerable<PaymentBase> webHostingPayments = this.GetPaymentsByTransactions<WebHostingPayment>(webHostingTransactions, this._webHostingPaymentRepo);
+
+            var fixedSubscriptionTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.FixedSubscriptionVmPayment);
+            IEnumerable<PaymentBase> fixedSubscriptionPayments = this.GetPaymentsByTransactions(fixedSubscriptionTransactions, this._fixedSubscriptionPaymentRepository);
+            IEnumerable<PaymentBase> fixedSubscriptionBackupPayments = this.GetPaymentsByTransactions(fixedSubscriptionTransactions, this._subscriptionBackupPaymentRepository);
+
+            var usageSubscriptionTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.UsageSubscriptionVmPayment);
+            IEnumerable<PaymentBase> usageSubscriptionPayments = this.GetPaymentsByTransactions(usageSubscriptionTransactions, this._usageSubscriptionPaymentRepository);
+            IEnumerable<PaymentBase> usageSubscriptionBackupPayments = this.GetPaymentsByTransactions(usageSubscriptionTransactions, this._subscriptionBackupPaymentRepository);
+
+            var gameServerTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.GameServer);
+            IEnumerable<PaymentBase> gameServerPayments = this.GetPaymentsByTransactions(gameServerTransactions, this._gameServerPaymentRepository);
+
+            var physicalServerTransactions = userTransactions.Where(t => t.TransactionType == BillingTransactionType.PhysicalServerPayment);
+            IEnumerable<PaymentBase> physicalServerPayments = this.GetPaymentsByTransactions(physicalServerTransactions, this._physicalServerPaymentRepository);
+
+            IEnumerable<PaymentBase> allPayments = webHostingPayments
+                .Union(fixedSubscriptionPayments)
+                .Union(fixedSubscriptionBackupPayments)
+                .Union(usageSubscriptionPayments)
+                .Union(usageSubscriptionBackupPayments)
+                .Union(gameServerPayments)
+                .Union(physicalServerPayments);
+
+            var allPaymentsGroupedByTransaction = allPayments.GroupBy(p => p.BillingTransactionId);
+            foreach(var group in allPaymentsGroupedByTransaction)
+            {
+                var paymentInfo = paymentInfos.Single(pi => pi.BillingTransaction.Id == group.Key);
+                paymentInfo.Payments = group.ToArray();
+            }
+
+            var staticPagedList = new StaticPagedList<BillingTransactionInfo>(paymentInfos, userTransactions);
+
+            return staticPagedList;
+        }
+
+        private IEnumerable<T> GetPaymentsByTransactions<T>(IEnumerable<BillingTransaction> transactions, IRepository<T> repo) where T : PaymentBase
+        {
+            Expression<Func<T, bool>> paymentWhereExpression = x => false;
+            foreach (var transaction in transactions)
+            {
+                paymentWhereExpression = paymentWhereExpression.Or(p => p.BillingTransactionId == transaction.Id);
+            }
+
+            var payments = repo.GetMany(paymentWhereExpression, this.GetRequiredPropIncludes<T>());
+
+            return payments;
+        }
+
+        private Expression<Func<T, object>>[] GetRequiredPropIncludes<T>() where T : PaymentBase
+        {
+            Expression<Func<T, object>>[] includes = new Expression<Func<T, object>>[0];
+
+            if(typeof(T) == typeof(FixedSubscriptionPayment))
+            {
+                includes = new Expression<Func<T, object>>[4];
+                includes[0] = x => (x as FixedSubscriptionPayment).SubscriptionVm;
+                includes[1] = x => (x as FixedSubscriptionPayment).SubscriptionVm.UserVm;
+                includes[2] = x => (x as FixedSubscriptionPayment).SubscriptionVm.User;
+                includes[3] = x => (x as FixedSubscriptionPayment).SubscriptionVm.Tariff;
+            }
+            if (typeof(T) == typeof(UsageSubscriptionPayment))
+            {
+                includes = new Expression<Func<T, object>>[3];
+                includes[0] = x => (x as UsageSubscriptionPayment).SubscriptionVm;
+                includes[1] = x => (x as UsageSubscriptionPayment).SubscriptionVm.UserVm;
+                includes[2] = x => (x as UsageSubscriptionPayment).SubscriptionVm.User;
+            }
+            if (typeof(T) == typeof(WebHostingPayment))
+            {
+                includes = new Expression<Func<T, object>>[1];
+                includes[0] = x => (x as WebHostingPayment).WebHosting;
+            }
+            if (typeof(T) == typeof(PaymentGameServer))
+            {
+                includes = new Expression<Func<T, object>>[1];
+                includes[0] = x => (x as PaymentGameServer).GameServer;
+            }
+
+            return includes;
         }
     }
 }

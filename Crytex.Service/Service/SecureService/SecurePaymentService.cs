@@ -15,8 +15,13 @@ namespace Crytex.Service.Service.SecureService
 
         public SecurePaymentService(IUnitOfWork unitOfWork, IBillingTransactionRepository billingRepo,
             ICreditPaymentOrderRepository creditPaymentOrderRepo, IPaymentSystemRepository paymentSystemRepository,
-            IDiscountService discountService, IBilingService bilingService, IIdentity userIdentity) : 
-                base(unitOfWork, billingRepo, creditPaymentOrderRepo, paymentSystemRepository, discountService, bilingService)
+            IDiscountService discountService, IBilingService bilingService, IIdentity userIdentity,
+            IWebHostingPaymentRepository webHostingPaymentRepo, IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepository,
+            IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepository, ISubscriptionBackupPaymentRepository subscriptionBackupPaymentRepository,
+            IBoughtPhysicalServerRepository physicalServerPaymentRepository, IPaymentGameServerRepository gameServerPaymentRepository) : 
+                base(unitOfWork, billingRepo, creditPaymentOrderRepo, paymentSystemRepository, discountService, bilingService, webHostingPaymentRepo,
+                    fixedSubscriptionPaymentRepository, usageSubscriptionPaymentRepository, subscriptionBackupPaymentRepository, physicalServerPaymentRepository,
+                    gameServerPaymentRepository)
         {
             this._userIdentity = userIdentity;
         }

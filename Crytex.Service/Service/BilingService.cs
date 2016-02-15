@@ -133,7 +133,7 @@ namespace Crytex.Service.Service
 
         public BillingTransaction UpdateUserBalance(UpdateUserBalance data)
         {
-            var transactionType = (data.Amount > 0) ? BillingTransactionType.ReplenishmentFromAdmin : BillingTransactionType.WithdrawByAdmin;
+            var transactionType = BillingTransactionType.BalanceReplenishment;
             var cashAmount = Math.Abs(data.Amount);
             var description = "Admin Transaction";
 
@@ -253,7 +253,7 @@ namespace Crytex.Service.Service
             if(list != null) throw new InvalidIdentifierException($"Вы уже заказывали тестовый период {list.Date.ToString("d")}");
 
             var transaction = AddUserTransactionInner(BillingTransactionType.TestPeriod, options.CashAmount, 
-                "Test period", options.UserId, "", null, options.CountDay);
+                "Test period", options.UserId, null, null, options.CountDay);
             return transaction;
         }
 
@@ -278,5 +278,11 @@ namespace Crytex.Service.Service
             return user;
         }
 
+        public IEnumerable<BillingTransaction> GetUserTransactions(string userId)
+        {
+            var transactions = this._billingTransactionRepo.GetMany(t => t.UserId == userId);
+
+            return transactions;
+        }
     }
 }

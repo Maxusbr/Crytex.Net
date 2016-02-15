@@ -31,7 +31,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                 option.DateFrom = transaction.Date;
                 option.UserId = transaction.UserId;
                 option.DateTo = DateTime.UtcNow;
-                option.BillingTransactionType = (int) BillingTransactionType.OneTimeDebiting;
+                option.BillingTransactionType = (int) BillingTransactionType.TestPeriod;
                 var userTransactions = _bilingService.SearchBillingTransactions(option);
                 if (userTransactions.Any())
                     totalbalance += userTransactions.Sum(o => o.CashAmount);

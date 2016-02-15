@@ -233,7 +233,7 @@ namespace Crytex.Service.Service
             {
                 SubscriptionVmId = server.Id,
                 CashAmount = sumToReturn,
-                TransactionType = BillingTransactionType.Crediting,
+                TransactionType = BillingTransactionType.PhysicalServerPayment,
                 UserId = server.UserId,
                 Description = Description
             };
@@ -256,7 +256,7 @@ namespace Crytex.Service.Service
             var psTransaction = new BillingTransaction
             {
                 CashAmount = -amaunt,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.PhysicalServerPayment,
                 SubscriptionVmMonthCount = serverParam.CountMonth,
                 UserId = serverParam.UserId
             };
@@ -525,7 +525,7 @@ namespace Crytex.Service.Service
         {
             try
             {
-                ProlongatePhysicalServer(serverId, 1, BillingTransactionType.AutomaticDebiting);
+                ProlongatePhysicalServer(serverId, 1, BillingTransactionType.PhysicalServerPayment);
             }
             catch (TransactionFailedException)
             {

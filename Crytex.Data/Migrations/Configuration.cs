@@ -734,7 +734,7 @@ namespace Crytex.Data.Migrations
                     {
                         Id = Guid.NewGuid(),
                         CashAmount = -2000,
-                        TransactionType = BillingTransactionType.OneTimeDebiting,
+                        TransactionType = BillingTransactionType.TestPeriod,
                         SubscriptionVmMonthCount = 10,
                         UserId = fixedSub.UserId,
                         AdminUserId = adminUser.Id,
@@ -769,7 +769,7 @@ namespace Crytex.Data.Migrations
                     {
                         Id = Guid.NewGuid(),
                         CashAmount = -2000,
-                        TransactionType = BillingTransactionType.OneTimeDebiting,
+                        TransactionType = BillingTransactionType.TestPeriod,
                         UserId = usageSub.UserId,
                         AdminUserId = adminUser.Id,
                         SubscriptionVmId = usageSub.Id,
