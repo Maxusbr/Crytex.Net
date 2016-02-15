@@ -39,6 +39,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhoneCallRequestViewModel, PhoneCallRequest>();
             Mapper.CreateMap<PhoneCallRequestEditViewModel, PhoneCallRequest>();
             Mapper.CreateMap<AdminBillingSearchParamsViewModel, BillingSearchParams>();
+            Mapper.CreateMap<BillingSearchParamsViewModel, BillingSearchParams>();
             Mapper.CreateMap<DiscountViewModel, Discount>();
             Mapper.CreateMap<GameServerViewModel, GameServer>();
             Mapper.CreateMap<GameServerViewModel, BuyGameServerOption>();
