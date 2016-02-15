@@ -89,7 +89,7 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var list = this._userVmRepo.GetPage(page, where, x => x.CreateDate, false, x => x.User);
+            var list = this._userVmRepo.GetPage(page, where, x => x.CreateDate, false, x => x.User, x => x.IpAdresses);
             return list;
         }
 
@@ -98,7 +98,7 @@ namespace Crytex.Service.Service
     
             var page = new PageInfo(pageNumber, pageSize);
        
-            var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.CreateDate);
+            var list = this._userVmRepo.GetPage(page, x => x.UserId == userId, x => x.CreateDate, false, x => x.User, x => x.IpAdresses);
             return list;
         }
 

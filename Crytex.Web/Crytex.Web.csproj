@@ -381,6 +381,7 @@
     <Compile Include="Models\JsonModels\PaymentSystemView.cs" />
     <Compile Include="Models\JsonModels\PhysicalServerGetOption.cs" />
     <Compile Include="Models\JsonModels\SubscriptionVmBackupPaymentViewModel.cs" />
+    <Compile Include="Models\JsonModels\VmIpAddressViewModel.cs" />
     <Compile Include="Models\JsonModels\WebHostingProlongateOptionsModel.cs" />
     <Compile Include="Models\JsonModels\MachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\NewsViewModel.cs" />
