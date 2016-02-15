@@ -29,7 +29,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                         vm.Stop();
                         break;
                     case TypeChangeStatus.Reload:
-                        vm.Reboot();
+                        vm.Reboot(true);
                         break;
                     default:
                         throw new ApplicationException("This TypeChangeStatus is not supprted yet");
