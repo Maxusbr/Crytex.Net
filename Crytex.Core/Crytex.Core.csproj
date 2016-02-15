@@ -87,7 +87,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="AppConfig\AppConfig.cs" />
     <Compile Include="AppConfig\IAppConfig.cs" />
     <Compile Include="Extension\DateTimeExtension.cs" />
