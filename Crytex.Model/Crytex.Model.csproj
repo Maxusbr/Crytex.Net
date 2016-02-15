@@ -106,6 +106,7 @@
     <Compile Include="Models\Biling\SubscriptionVmBackupPayment.cs" />
     <Compile Include="Models\Biling\BoughtPhysicalServer.cs" />
     <Compile Include="Models\Biling\WebHostingPayment.cs" />
+    <Compile Include="Models\DhcpServer.cs" />
     <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\FileDescriptor.cs" />
     <Compile Include="Models\GameServer.cs" />

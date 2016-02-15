@@ -115,8 +115,6 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.Amount));
             Mapper.CreateMap<GameServerConfigOptions, GameServerConfigViewModel>()
                 .ForMember(x => x.serverId, opt => opt.MapFrom(src => src.ServerId.ToString()));
-            Mapper.CreateMap<News, NewsViewModel>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<WebHostingTariff, WebHostingTariffViewModel>();
             Mapper.CreateMap<WebHosting, WebHostingViewModel>()
                 .ForMember(x => x.TariffName, opt => opt.MapFrom(source => source.WebHostingTariff.Name));
@@ -150,6 +148,9 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
             Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();                
+            Mapper.CreateMap<DhcpServer, DhcpServerView>()
+                .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));           
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -181,6 +182,8 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
             this.MapPagedList<WebHostingTariff, WebHostingTariffViewModel>();
             this.MapPagedList<WebHostingPayment, WebHostingPaymentViewModel>();
+            this.MapPagedList<DhcpServer, DhcpServerView>();
+
         }
 
         protected void MapPagedList<TSource, TDest>()
