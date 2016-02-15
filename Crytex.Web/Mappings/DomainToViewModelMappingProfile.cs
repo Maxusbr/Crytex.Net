@@ -116,8 +116,6 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.GameServerName, opt => opt.MapFrom(s => s.GameServer.Name));
             Mapper.CreateMap<GameServerConfigOptions, GameServerConfigViewModel>()
                 .ForMember(x => x.serverId, opt => opt.MapFrom(src => src.ServerId.ToString()));
-            Mapper.CreateMap<News, NewsViewModel>()
-                .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<WebHostingTariff, WebHostingTariffViewModel>();
             Mapper.CreateMap<WebHosting, WebHostingViewModel>()
                 .ForMember(x => x.TariffName, opt => opt.MapFrom(source => source.WebHostingTariff.Name));
@@ -162,7 +160,11 @@ namespace Crytex.Web.Mappings
                 .Include<UsageSubscriptionPayment, UsageSubscriptionPaymentView>()
                 .Include<SubscriptionVmBackupPayment, SubscriptionVmBackupPaymentViewModel>()
                 .Include<PaymentGameServer, PaymentGameServerViewModel>()
-                .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
+                .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();            
+
+            Mapper.CreateMap<DhcpServer, DhcpServerView>()
+                .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));           
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
@@ -188,13 +190,13 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>();
             this.MapPagedList<News, NewsViewModel>();
             this.MapPagedList<PaymentGameServer, PaymentGameServerViewModel>();
-
             this.MapPagedList<PhysicalServer, PhysicalServerViewModel>();
             this.MapPagedList<PhysicalServerOption, PhysicalServerOptionViewModel>();
             this.MapPagedList<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
             this.MapPagedList<WebHostingTariff, WebHostingTariffViewModel>();
             this.MapPagedList<WebHostingPayment, WebHostingPaymentViewModel>();
             this.MapPagedList<BillingTransactionInfo, BillingTransactionInfoViewModel>();
+            this.MapPagedList<DhcpServer, DhcpServerView>();
         }
 
         protected void MapPagedList<TSource, TDest>()

@@ -88,6 +88,7 @@
     <Compile Include="Extension\PredicatBuilder.cs" />
     <Compile Include="IService\IApplicationUserService.cs" />
     <Compile Include="IService\IBilingService.cs" />
+    <Compile Include="IService\IDhcpServerService.cs" />
     <Compile Include="IService\IEmailTemplateService.cs" />
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IFixedSubscriptionPaymentService.cs" />
@@ -131,6 +132,7 @@
     <Compile Include="Model\CreatePhysicalServerParam.cs" />
     <Compile Include="Model\BuyWebHostingParams.cs" />
     <Compile Include="Model\CreateVmOption.cs" />
+    <Compile Include="Model\DhcpServerOption.cs" />
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
     <Compile Include="Model\GameServerConfigOptions.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
@@ -166,6 +168,7 @@
     <Compile Include="Model\UserVmSearchParams.cs" />
     <Compile Include="Service\ApplicationUserService.cs" />
     <Compile Include="Service\BilingService.cs" />
+    <Compile Include="Service\DhcpServerService.cs" />
     <Compile Include="Service\EmailInfoService.cs" />
     <Compile Include="Service\EmailTemplateService.cs" />
     <Compile Include="Service\FakeTaskV2Service.cs" />
