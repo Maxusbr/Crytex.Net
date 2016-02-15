@@ -112,7 +112,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<News, NewsViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName));
             Mapper.CreateMap<PaymentGameServer, PaymentGameServerViewModel>()
-                .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.Amount));
+                .ForMember(x => x.Amount, opt => opt.MapFrom(s => s.Amount))
+                .ForMember(x => x.GameServerName, opt => opt.MapFrom(s => s.GameServer.Name));
             Mapper.CreateMap<GameServerConfigOptions, GameServerConfigViewModel>()
                 .ForMember(x => x.serverId, opt => opt.MapFrom(src => src.ServerId.ToString()));
             Mapper.CreateMap<WebHostingTariff, WebHostingTariffViewModel>();
@@ -143,11 +144,24 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Type, opt => opt.MapFrom(source => source.Option.Type))
                 .ForMember(x => x.IsDefault, opt => opt.MapFrom(source => source.IsDefault));
 
-            Mapper.CreateMap<BoughtPhysicalServer, BoughtPhysicalServerViewModel>()
-                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+            Mapper.CreateMap<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
-            Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();                
+            Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();
+
+            Mapper.CreateMap<BillingTransactionInfo, BillingTransactionInfoViewModel>()
+                .ForMember(x => x.BillingTransactionId, opt => opt.MapFrom(source => source.BillingTransaction.Id))
+                .ForMember(x => x.TransactionType, opt => opt.MapFrom(source => source.BillingTransaction.TransactionType))
+                .ForMember(x => x.TransactionCashAmount, opt => opt.MapFrom(source => source.BillingTransaction.CashAmount));
+            Mapper.CreateMap<SubscriptionVmBackupPayment, SubscriptionVmBackupPaymentViewModel>();
+            Mapper.CreateMap<PaymentBase, PaymentViewModelBase>()
+                .Include<WebHostingPayment, WebHostingPaymentViewModel>()
+                .Include<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>()
+                .Include<UsageSubscriptionPayment, UsageSubscriptionPaymentView>()
+                .Include<SubscriptionVmBackupPayment, SubscriptionVmBackupPaymentViewModel>()
+                .Include<PaymentGameServer, PaymentGameServerViewModel>()
+                .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();            
+
             Mapper.CreateMap<DhcpServer, DhcpServerView>()
                 .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));           
@@ -176,14 +190,13 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UsageSubscriptionPaymentGroupByVmContainer, UsageSubscriptionPaymentGroupByVmView>();
             this.MapPagedList<News, NewsViewModel>();
             this.MapPagedList<PaymentGameServer, PaymentGameServerViewModel>();
-
             this.MapPagedList<PhysicalServer, PhysicalServerViewModel>();
             this.MapPagedList<PhysicalServerOption, PhysicalServerOptionViewModel>();
             this.MapPagedList<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
             this.MapPagedList<WebHostingTariff, WebHostingTariffViewModel>();
             this.MapPagedList<WebHostingPayment, WebHostingPaymentViewModel>();
+            this.MapPagedList<BillingTransactionInfo, BillingTransactionInfoViewModel>();
             this.MapPagedList<DhcpServer, DhcpServerView>();
-
         }
 
         protected void MapPagedList<TSource, TDest>()

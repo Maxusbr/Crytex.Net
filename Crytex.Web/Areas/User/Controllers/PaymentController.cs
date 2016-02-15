@@ -1,4 +1,5 @@
-﻿using Crytex.Service.IService;
+﻿using System.Linq;
+using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;
 using Microsoft.Practices.Unity;
+using AutoMapper;
 
 namespace Crytex.Web.Areas.User
 {
@@ -104,6 +106,16 @@ namespace Crytex.Web.Areas.User
             var model = AutoMapper.Mapper.Map<IEnumerable<PaymentSystemView>>(systems);
 
             return Ok(model);
+        }
+
+        [HttpPost]
+        public IHttpActionResult BillingTransactionInfos(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null)
+        {
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+            var infos = this._paymentService.GetUserBillingTransactionInfosPage(userId, pageNumber, pageSize, from, to);
+            var models = Mapper.Map<PageModel<BillingTransactionInfoViewModel>>(infos);
+
+            return Ok(models);
         }
     }
 }

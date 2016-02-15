@@ -8,7 +8,7 @@ using Crytex.Model.Models.Biling;
 
 namespace Crytex.Web.Models.JsonModels
 {
-    public class PaymentGameServerViewModel
+    public class PaymentGameServerViewModel : PaymentViewModelBase
     {
         public Guid GameServerId { get; set; }
         public String GameServerName { get; set; }
@@ -16,9 +16,14 @@ namespace Crytex.Web.Models.JsonModels
         public int RamCount { get; set; }
         public int SlotCount { get; set; }
         public ServerPaymentType PaymentType { get; set; }
-        public Guid? BillingTransactionId { get; set; }
-        public DateTime Date { get; set; }
-        public decimal Amount { get; set; }
         public int MonthCount { get; set; }
+
+        public override PaymentViewModelType PaymentModelType
+        {
+            get
+            {
+                return PaymentViewModelType.GameServer;
+            }
+        }
     }
 }

@@ -137,6 +137,7 @@
     <Compile Include="Model\GameServerConfigOptions.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\PaymentForecast.cs" />
+    <Compile Include="Model\BillingTransactionInfo.cs" />
     <Compile Include="Model\PhysicalServerOptionsAviableParams.cs" />
     <Compile Include="Model\PhysicalServerOptionSearchParams.cs" />
     <Compile Include="Model\PhysicalServerOptionsParams.cs" />

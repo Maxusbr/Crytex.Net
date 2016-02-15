@@ -9,9 +9,8 @@ using Crytex.Model.Models;
 
 namespace Crytex.Web.Models.JsonModels
 {
-    public class BoughtPhysicalServerViewModel
+    public class BoughtPhysicalServerViewModel : PaymentViewModelBase
     {
-        public string Id { get; set; }
         [Required]
         public string PhysicalServerId { get; set; }
         public string UserId { get; set; }
@@ -27,12 +26,17 @@ namespace Crytex.Web.Models.JsonModels
         public string Config { get; set; }
         public bool AutoProlongation { get; set; }
 
-        [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; }
-
         [ForeignKey("PhysicalServerId")]
         public PhysicalServerViewModel Server { get; set; }
 
         public ICollection<PhysicalServerOptionViewModel> Options { get; set; }
+
+        public override PaymentViewModelType PaymentModelType
+        {
+            get
+            {
+                return PaymentViewModelType.PhysicalServer;
+            }
+        }
     }
 }

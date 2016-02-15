@@ -91,7 +91,7 @@ namespace Crytex.Service.Service
             var subsciptionVmTransaction = new BillingTransaction
             {
                 CashAmount = -(transactionCashAmount + backupTransactionCashAmount),
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.FixedSubscriptionVmPayment,
                 SubscriptionVmMonthCount = options.SubscriptionsMonthCount,
                 UserId = options.UserId,
                 AdminUserId = options.AdminUserId
@@ -192,7 +192,7 @@ namespace Crytex.Service.Service
             var transaction = new BillingTransaction
             {
                 CashAmount = -tariffHourPrice,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.UsageSubscriptionVmPayment,
                 UserId = options.UserId,
                 AdminUserId = options.AdminUserId
             };
@@ -472,7 +472,7 @@ namespace Crytex.Service.Service
         {
             try
             {
-                this.ProlongateFixedSubscriptionInner(subId, 1, BillingTransactionType.AutomaticDebiting);
+                this.ProlongateFixedSubscriptionInner(subId, 1, BillingTransactionType.FixedSubscriptionVmPayment);
             }
             catch (TransactionFailedException)
             {
@@ -483,7 +483,7 @@ namespace Crytex.Service.Service
         public void ProlongateFixedSubscription(SubscriptionProlongateOptions options)
         {
             this.ProlongateFixedSubscriptionInner(options.SubscriptionId.Value, options.MonthCount.Value,
-                BillingTransactionType.OneTimeDebiting, options.ProlongatedByAdmin, options.AdminUserId);
+                BillingTransactionType.FixedSubscriptionVmPayment, options.ProlongatedByAdmin, options.AdminUserId);
         }
 
         private void ProlongateFixedSubscriptionInner(Guid subId, int monthCount, BillingTransactionType transactionType,
@@ -615,7 +615,7 @@ namespace Crytex.Service.Service
                 {
                     SubscriptionVmId = sub.Id,
                     CashAmount = sumToReturn,
-                    TransactionType = BillingTransactionType.Crediting,
+                    TransactionType = BillingTransactionType.ReturnMoneyForDeletedService,
                     UserId = sub.UserId,
                     Description = "Return money for deleted subscription"
                 };
@@ -702,7 +702,7 @@ namespace Crytex.Service.Service
             {
                 var hourTransaction = new BillingTransaction
                 {
-                    TransactionType = BillingTransactionType.AutomaticDebiting,
+                    TransactionType = BillingTransactionType.UsageSubscriptionVmPayment,
                     CashAmount = -(hourPrice + backupHourPrice),
                     UserId = sub.UserId,
                     Description = "Hourly debiting for usage-type vm subscription",
@@ -891,7 +891,7 @@ namespace Crytex.Service.Service
             var subsciptionVmTransaction = new BillingTransaction
             {
                 CashAmount = billingTransactionCashAmount,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.FixedSubscriptionVmPayment,
                 UserId = sub.UserId,
                 Description = "Update fixed subscriptionVm vm configuration",
                 SubscriptionVmId = sub.Id

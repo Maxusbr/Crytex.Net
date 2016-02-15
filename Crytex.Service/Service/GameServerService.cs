@@ -165,7 +165,7 @@ namespace Crytex.Service.Service
             var gameServerVmTransaction = new BillingTransaction
             {
                 CashAmount = -amount,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.GameServer,
                 UserId = options.UserId
             };
             gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
@@ -305,14 +305,14 @@ namespace Crytex.Service.Service
 
         private void ProlongateGameServerMonth(Guid gameServerId, int monthCount)
         {
-            ProlongateGameServer(gameServerId, monthCount, BillingTransactionType.AutomaticDebiting);
+            ProlongateGameServer(gameServerId, monthCount, BillingTransactionType.GameServer);
         }
 
         public void AutoProlongateGameServer(Guid guid)
         {
             try
             {
-                ProlongateGameServer(guid, 1, BillingTransactionType.AutomaticDebiting);
+                ProlongateGameServer(guid, 1, BillingTransactionType.GameServer);
             }
             catch (TransactionFailedException)
             {
@@ -519,7 +519,7 @@ namespace Crytex.Service.Service
             var transaction = new BillingTransaction
             {
                 CashAmount = -transactionCash,
-                TransactionType = BillingTransactionType.OneTimeDebiting,
+                TransactionType = BillingTransactionType.GameServer,
                 UserId = gameServer.UserId,
                 Description = "Update gameserver vm configuration"
             };
