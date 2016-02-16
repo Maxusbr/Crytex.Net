@@ -83,9 +83,6 @@ namespace Crytex.Service.Service
                     backupTransactionCashAmount = backupMonthPrice * options.SubscriptionsMonthCount;
                 }
             }
-            
-            // Create task and new vm. Check os min requirements
-            var newSubscription = this.PrepareNewSubscription(options, tariff);
 
             // Add a billiing transaction and update user balance
             var subsciptionVmTransaction = new BillingTransaction
@@ -97,6 +94,9 @@ namespace Crytex.Service.Service
                 AdminUserId = options.AdminUserId
             };
             subsciptionVmTransaction = this._billingService.AddUserTransaction(subsciptionVmTransaction);
+
+            // Create task and new vm. Check os min requirements
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
 
             var dateNow = DateTime.UtcNow;
 
@@ -197,11 +197,11 @@ namespace Crytex.Service.Service
                 AdminUserId = options.AdminUserId
             };
 
-            // Create task and new vm with
-            var newSubscription = this.PrepareNewSubscription(options, tariff);
-
             // Add a billiing transaction and update user balance
             var newTransaction = this._billingService.AddUserTransaction(transaction);
+
+            // Create task and new vm with
+            var newSubscription = this.PrepareNewSubscription(options, tariff);
 
             var subscriptionPayment = new UsageSubscriptionPayment
             {
