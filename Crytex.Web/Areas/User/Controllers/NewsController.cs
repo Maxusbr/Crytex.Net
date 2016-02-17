@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Description;
-using System.Web.Mvc;
 using Crytex.Service.IService;
-using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
-using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
+    [AllowAnonymous]
     public class NewsController : UserCrytexController
     {
         private readonly INewsService _newsService;
@@ -26,14 +21,13 @@ namespace Crytex.Web.Areas.User.Controllers
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
-        /// <param name="filter"></param>
         /// <returns></returns>
-        [ResponseType(typeof(IEnumerable<NewsViewModel>))]
+        [ResponseType(typeof(PageModel<NewsViewModel>))]
         // GET: api/User/News
-        public IHttpActionResult Get()
+        public IHttpActionResult Get(int pageNumber, int pageSize)
         {
-            var news = this._newsService.GetAll();
-            var viewModel = AutoMapper.Mapper.Map<IEnumerable<NewsViewModel>>(news);
+            var news = this._newsService.GetPage(pageNumber, pageSize);
+            var viewModel = AutoMapper.Mapper.Map<PageModel<NewsViewModel>>(news);
 
             return Ok(viewModel);
         }
