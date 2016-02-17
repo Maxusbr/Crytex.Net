@@ -24,7 +24,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
 
         public void Execute(IJobExecutionContext context)
         {
-            var subs = this._subscriptionService.GetAllByStatus(SubscriptionVmStatus.Active);
+            var subs = this._subscriptionService.GetSubscriptionsByStatusAndType(SubscriptionVmStatus.Active);
             foreach(var sub in subs)
             {
                 var subVmBackups = this._vmBackupService.GetByVmId(sub.UserVm.Id);

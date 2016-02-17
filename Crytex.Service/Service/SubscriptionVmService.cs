@@ -277,13 +277,6 @@ namespace Crytex.Service.Service
             return sub;
         }
 
-        public IEnumerable<SubscriptionVm> GetAllByStatus(SubscriptionVmStatus status)
-        {
-            var subs = this._subscriptionVmRepository.GetMany(x => x.Status == status);
-
-            return subs;
-        }
-
         public IPagedList<UsageSubscriptionPayment> GetPageUsageSubscriptionPayment(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null)
         {
             var pageInfo = new PageInfo(pageNumber, pageSize);
@@ -435,10 +428,15 @@ namespace Crytex.Service.Service
             return pagedList;
         }
 
-        public IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type)
+        public IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType? type = null)
         {
-            var subs = this._subscriptionVmRepository.GetMany(s => s.Status == status && s.SubscriptionType == type
-                && s.UserVm.Status != StatusVM.Creating && s.UserVm.Status != StatusVM.Error);
+            Expression<Func<SubscriptionVm, bool>> where = s => s.Status == status
+                && s.UserVm.Status != StatusVM.Creating && s.UserVm.Status != StatusVM.Error;
+            if(type != null)
+            {
+                where = where.And(s => s.SubscriptionType == type);
+            }
+            var subs = this._subscriptionVmRepository.GetMany(where);
 
             return subs;
         }

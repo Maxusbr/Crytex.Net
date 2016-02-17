@@ -9,16 +9,15 @@ namespace Crytex.Service.IService
 {
     public interface ISubscriptionVmService
     {
-        SubscriptionVm BuySubscription(SubscriptionBuyOptions options);
         SubscriptionVm GetById(Guid guid);
         IPagedList<UsageSubscriptionPayment> GetPageUsageSubscriptionPayment(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null);
         StaticPagedList<UsageSubscriptionPaymentContainer> GetPageUsageSubscriptionPaymentByPeriod(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null);
-        IEnumerable<SubscriptionVm> GetAllByStatus(SubscriptionVmStatus status);
+        IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType? type = null);
+        IEnumerable<SubscriptionVm> GetAllSubscriptionsByTypeAndUserId(SubscriptionType subscriptionType, string userId = null);
         StaticPagedList<UsageSubscriptionPaymentGroupByVmContainer> GetPageUsageSubscriptionPaymentByVmPeriod(int pageNumber, int pageSize, string userId = null, UsageSubscriptionPaymentSearchParams searchParams = null);
         IPagedList<SubscriptionVm> GetPage(int pageNumber, int pageSize, string userId = null, SubscriptionVmSearchParams searchParams = null);
-        IEnumerable<SubscriptionVm> GetSubscriptionsByStatusAndType(SubscriptionVmStatus status, SubscriptionType type);
         void UpdateSubscriptionStatus(Guid subId, SubscriptionVmStatus status, DateTime? endDate = null);
-        IEnumerable<SubscriptionVm> GetAllSubscriptionsByTypeAndUserId(SubscriptionType subscriptionType, string userId = null);
+        SubscriptionVm BuySubscription(SubscriptionBuyOptions options);
         void UpdateSubscriptionData(SubscriptionUpdateOptions model);
         void UpdateUsageSubscriptionBalance(Guid subId);
         void ProlongateFixedSubscription(SubscriptionProlongateOptions options);
