@@ -45,6 +45,8 @@ namespace Crytex.Web.Areas.User
 
             IPagedList<TaskV2> tasks = new PagedList<TaskV2>(new List<TaskV2>(), pageNumber, pageSize);
 
+            searchParams.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
+
             if (searchParams != null)
             {
                 var taskV2Params = AutoMapper.Mapper.Map<TaskV2SearchParams>(searchParams);
