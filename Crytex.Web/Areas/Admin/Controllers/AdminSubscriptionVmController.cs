@@ -134,8 +134,12 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// Обновление статуса машины
         /// </summary>
         [HttpPost]
-        public IHttpActionResult UpdateMachineStatus([FromBody]UpdateMachineStatusOptions model)
+        public IHttpActionResult UpdateMachineStatus(UpdateMachineStatusOptions model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
             Guid guid;
             if (!Guid.TryParse(model.SubscriptionId, out guid))
                 return this.BadRequest("Invalid Guid format");

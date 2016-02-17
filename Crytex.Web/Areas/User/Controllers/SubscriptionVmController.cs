@@ -10,6 +10,7 @@ using System;
 using System.Web.Http;
 using Crytex.Model.Exceptions;
 using Crytex.Web.Helpers;
+using Crytex.Model.Models;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -114,50 +115,36 @@ namespace Crytex.Web.Areas.User.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Обновление статуса машины
+        /// </summary>
         [HttpPost]
-        public IHttpActionResult StartMachine(string subscriptionId)
+        public IHttpActionResult UpdateMachineStatus(UpdateMachineStatusOptions model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
             Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
+            if (!Guid.TryParse(model.SubscriptionId, out guid))
                 return this.BadRequest("Invalid Guid format");
-
-            this._subscriptionVmService.StartSubscriptionMachine(guid);
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public IHttpActionResult StopMachine(string subscriptionId)
-        {
-            Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
-                return this.BadRequest("Invalid Guid format");
-
-            this._subscriptionVmService.StopSubscriptionMachine(guid);
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public IHttpActionResult PowerOffMachine(string subscriptionId)
-        {
-            Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
-                return this.BadRequest("Invalid Guid format");
-
-            this._subscriptionVmService.PowerOffSubscriptionMachine(guid);
-
-            return Ok();
-        }
-
-        [HttpPost]
-        public IHttpActionResult ResetMachine(string subscriptionId)
-        {
-            Guid guid;
-            if (!Guid.TryParse(subscriptionId, out guid))
-                return this.BadRequest("Invalid Guid format");
-
-            this._subscriptionVmService.ResetSubscriptionMachine(guid);
+            switch (model.Status)
+            {
+                case TypeChangeStatus.Start:
+                    this._subscriptionVmService.StartSubscriptionMachine(guid);
+                    break;
+                case TypeChangeStatus.PowerOff:
+                    this._subscriptionVmService.PowerOffSubscriptionMachine(guid);
+                    break;
+                case TypeChangeStatus.Reload:
+                    this._subscriptionVmService.ResetSubscriptionMachine(guid);
+                    break;
+                case TypeChangeStatus.Stop:
+                    this._subscriptionVmService.StopSubscriptionMachine(guid);
+                    break;
+                default:
+                    return BadRequest("Invalid status");
+            }
 
             return Ok();
         }

@@ -1,10 +1,13 @@
 ﻿using Crytex.Model.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Web.Models.JsonModels
 {
     public class UpdateMachineStatusOptions
     {
-        public TypeChangeStatus Status { get; internal set; }
-        public string SubscriptionId { get; internal set; }
+        [Required]
+        public TypeChangeStatus? Status { get; set; }
+        [Required]
+        public string SubscriptionId { get; set; }
     }
 }
