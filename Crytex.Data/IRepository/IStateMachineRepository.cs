@@ -9,5 +9,6 @@ namespace Crytex.Data.IRepository
     public interface IStateMachineRepository : IRepository<StateMachine>
     {
         List<StateMachine> GetMany<TOrder>(Expression<Func<StateMachine, bool>> where, Expression<Func<StateMachine, TOrder>> order = null);
+        StateMachine GetLastState(Guid vmId);
     }
 }

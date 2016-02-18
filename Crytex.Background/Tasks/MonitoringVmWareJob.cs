@@ -16,22 +16,20 @@ namespace Crytex.Background.Tasks
     using Quartz;
     using Crytex.Background.Monitor.Vmware;
 
+    [DisallowConcurrentExecution]
     public class MonitoringVmWareJob : IJob
     {
-        private INotificationManager _notificationManager { get; set; }
         private IVmWareMonitorFactory _vmWareMonitorFactory { get; set; }
         private IStateMachineService _stateMachine { get; set; }
         private IUserVmService _userVm { get; set; }
         private IVmWareVCenterService _vCenter { get; set; }
 
-        public MonitoringVmWareJob(INotificationManager notificationManager,
-            IVmWareMonitorFactory vmWareMonitorFactory,
+        public MonitoringVmWareJob(IVmWareMonitorFactory vmWareMonitorFactory,
             IStateMachineService stateMachine,
             IUserVmService userVm,
             IVmWareVCenterService vCenter)
         {
             this._vmWareMonitorFactory = vmWareMonitorFactory;
-            this._notificationManager = notificationManager;
             this._stateMachine = stateMachine;
             this._userVm = userVm;
             this._vCenter = vCenter;
@@ -39,45 +37,37 @@ namespace Crytex.Background.Tasks
 
         public void Execute(IJobExecutionContext context)
         {
-            Console.WriteLine("It's monitoring job!");
-            List<Guid> vmActiveList = _notificationManager.GetVMs();
-            List<UserVm> allVMs = _userVm.GetAllVmsHyperV().ToList();
+            Console.WriteLine("Vmware monitoring job");
+            List<UserVm> allVMs = _userVm.GetAllVmsVmWare().ToList();
             var vCenters = _vCenter.GetAllVCenters().ToList();
             List<Task> tasks = new List<Task>(vCenters.Count());
 
             foreach (var vCenter in vCenters)
             {
-                Task task = Task.Factory.StartNew(() => GetVmInfo(vCenter, allVMs, vmActiveList));
+                Task task = Task.Factory.StartNew(() => GetVmInfo(vCenter, allVMs));
                 tasks.Add(task);
             }
             Task.WaitAll(tasks.ToArray());
         }
 
-        public void GetVmInfo(VmWareVCenter vCenter, List<UserVm> allVMs, List<Guid> vmActiveList)
+        public void GetVmInfo(VmWareVCenter vCenter, List<UserVm> allVMs)
         {
             var vmWareMonitor = _vmWareMonitorFactory.CreateVmWareVMonitor(vCenter);
-            var hostVms = allVMs.Where(v => v.VirtualizationType == TypeVirtualization.VmWare && v.VmWareCenterId == vCenter.Id);
+            var vCenterVms = allVMs.Where(v => v.VirtualizationType == TypeVirtualization.VmWare && v.VmWareCenterId == vCenter.Id);
 
-            foreach (var vm in hostVms)
+            foreach (var vm in vCenterVms)
             {
                 var stateData = vmWareMonitor.GetVmByName(vm.Name);
-                if (stateData.State == VmPowerState.On)
-                    vm.Status = StatusVM.Enable;
-                else if (stateData.State == VmPowerState.Off)
-                    vm.Status = StatusVM.Disable;
 
                 StateMachine vmState = new StateMachine
                 {
                     CpuLoad = Convert.ToInt32(stateData.CpuUsage),
                     RamLoad = Convert.ToInt32(stateData.RamUsage),
+                    UpTime = TimeSpan.FromSeconds(stateData.Uptime.Value),
                     Date = DateTime.UtcNow,
                     VmId = vm.Id
                 };
                 var newState = _stateMachine.CreateState(vmState);
-                if (vmActiveList.Contains(vm.Id))
-                {
-                    _notificationManager.SendVmMessage(vm.Id, newState);
-                }
             }
         }
     }

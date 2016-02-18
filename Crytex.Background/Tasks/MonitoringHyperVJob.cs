@@ -16,22 +16,19 @@ namespace Crytex.Background.Tasks
     using Crytex.Background.Monitor.HyperV;
 
     [DisallowConcurrentExecution]
-    public class MonitoringJob: IJob
+    public class MonitoringHyperVJob : IJob
     {
-        private INotificationManager _notificationManager { get; set; }
         private IHyperVMonitorFactory _hyperVMonitorFactory { get; set; }
         private IStateMachineService _stateMachine { get; set; }
         private IUserVmService _userVm { get; set; }
         private ISystemCenterVirtualManagerService _systemCenter { get; set; }
 
-        public MonitoringJob(INotificationManager notificationManager,
-            IHyperVMonitorFactory hyperVMonitorFactory,
+        public MonitoringHyperVJob (IHyperVMonitorFactory hyperVMonitorFactory,
             IStateMachineService stateMachine, 
             IUserVmService userVm,
             ISystemCenterVirtualManagerService systemCenter)
         {
             this._hyperVMonitorFactory = hyperVMonitorFactory;
-            this._notificationManager = notificationManager;
             this._stateMachine = stateMachine;
             this._userVm = userVm;
             this._systemCenter = systemCenter;
@@ -39,22 +36,20 @@ namespace Crytex.Background.Tasks
 
         public void Execute(IJobExecutionContext context)
         {
-            Console.WriteLine("It's monitoring job!");
-            List<Guid> vmActiveList = _notificationManager.GetVMs();
-            //List<Guid> vmActiveList = new List<Guid>();
+            Console.WriteLine("HyperV monitoring job");
             List<UserVm> allVMs = _userVm.GetAllVmsHyperV().ToList();
             var hosts = _systemCenter.GetAllHyperVHosts().ToList();
             List<Task> tasks = new List<Task>(hosts.Count());
 
             foreach (var host in hosts)
             {
-                Task task = Task.Factory.StartNew(()=>GetVmInfo(host, allVMs, vmActiveList));
+                Task task = Task.Factory.StartNew(()=>GetVmInfo(host, allVMs));
                 tasks.Add(task);
             }
             Task.WaitAll(tasks.ToArray());
         }
 
-        public void GetVmInfo(HyperVHost host, List<UserVm> allVMs, List<Guid> vmActiveList)
+        public void GetVmInfo(HyperVHost host, List<UserVm> allVMs)
         {
             var hyperVMonitor = _hyperVMonitorFactory.CreateHyperVMonitor(host);
             var hostVms = allVMs.Where(v=>v.VirtualizationType == TypeVirtualization.HyperV && v.HyperVHostId == host.Id);
@@ -62,24 +57,16 @@ namespace Crytex.Background.Tasks
             foreach (var vm in hostVms)
             {
                 var stateData = hyperVMonitor.GetVmByName(vm.Name);
-                
-                if (stateData.State == "Running")
-                    vm.Status = StatusVM.Enable;
-                else
-                    vm.Status = StatusVM.Disable;
 
                 StateMachine vmState = new StateMachine
                 {
                     CpuLoad = stateData.CPUUsage,
                     RamLoad = stateData.MemoryAssigned,
+                    UpTime = stateData.Uptime,
                     Date = DateTime.UtcNow,
                     VmId = vm.Id
                 };
                 var newState = _stateMachine.CreateState(vmState);
-                if (vmActiveList.Contains(vm.Id))
-                {
-                    _notificationManager.SendVmMessage(vm.Id, newState);
-                }
             }
         }
     }

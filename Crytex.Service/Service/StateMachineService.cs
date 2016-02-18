@@ -56,5 +56,12 @@ namespace Crytex.Service.Service
             _unitOfWork.Commit();
             return state;
         }
+
+        public virtual StateMachine GetLastVmState(Guid vmId)
+        {
+            var state = this._stateMachineRepository.GetLastState(vmId);
+
+            return state;
+        }
     }
 }
