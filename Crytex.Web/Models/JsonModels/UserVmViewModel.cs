@@ -17,6 +17,7 @@ namespace Crytex.Web.Models.JsonModels
         public string UserName { get; set; }
         public string OsImageFilePath { get; set; }
         public string OsName { get; set; }
+        public string OperatingSystemPassword { get; set; }
         public OperatingSystemViewModel OperatingSystem { get; set; }
         public IEnumerable<VmIpAddressViewModel> IpAdresses { get; set; }
     }
