@@ -108,7 +108,9 @@ namespace Crytex.Web.Areas.User
             return Ok(model);
         }
 
-        [HttpPost]
+        [HttpGet]
+        [ResponseType(typeof(PageModel<BillingTransactionInfoViewModel>))]
+        [Route("api/User/Payment/method/billingTransactionInfo")]
         public IHttpActionResult BillingTransactionInfos(int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null)
         {
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
