@@ -1,4 +1,5 @@
-﻿using Crytex.Service.IService;
+﻿using System;
+using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
 using Microsoft.Practices.Unity;
@@ -26,15 +27,9 @@ namespace Crytex.Web.Areas.User.Controllers
 
             IPagedList<FixedSubscriptionPayment> fixedSubscriptionPayments = new PagedList<FixedSubscriptionPayment>(new List<FixedSubscriptionPayment>(), pageNumber, pageSize);
 
-            if (searchParams != null)
-            {
-                var fixedSubscriptionPaymentParams = AutoMapper.Mapper.Map<FixedSubscriptionPaymentSearchParams>(searchParams);
-                fixedSubscriptionPayments = _paymentService.GetPage(pageNumber, pageSize, fixedSubscriptionPaymentParams);
-            }
-            else
-            {
-                fixedSubscriptionPayments = _paymentService.GetPage(pageNumber, pageSize);
-            }
+            var fixedSubscriptionPaymentParams = AutoMapper.Mapper.Map<FixedSubscriptionPaymentSearchParams>(searchParams);
+
+            fixedSubscriptionPayments = _paymentService.GetPage(pageNumber, pageSize, fixedSubscriptionPaymentParams);
 
             var pageModel = AutoMapper.Mapper.Map<PageModel<FixedSubscriptionPaymentViewModel>>(fixedSubscriptionPayments);
 

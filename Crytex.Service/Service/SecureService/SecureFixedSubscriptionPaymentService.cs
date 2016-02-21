@@ -1,4 +1,5 @@
-﻿using Crytex.Data.IRepository;
+﻿using System;
+using Crytex.Data.IRepository;
 using Crytex.Service.IService;
 using System.Security.Principal;
 using Crytex.Model.Models.Biling;
@@ -26,10 +27,15 @@ namespace Crytex.Service.Service.SecureService
             var userId = this._userIdentity.GetUserId();
             if (searchParams.SubscriptionVmId != null)
             {
-                var sub = this._subscriptionVmRepository.GetById(searchParams.SubscriptionVmId);
-                if(sub.UserId != userId)
+                Guid SubscriptionVmId = new Guid();
+                if (Guid.TryParse(searchParams.SubscriptionVmId, out SubscriptionVmId))
                 {
-                    throw new SecurityException($"Access denied for SubscriptionVm with id={searchParams.SubscriptionVmId}");
+                    var sub = this._subscriptionVmRepository.GetById(SubscriptionVmId);
+                    if (sub.UserId != userId)
+                    {
+                        throw new SecurityException(
+                            $"Access denied for SubscriptionVm with id={searchParams.SubscriptionVmId}");
+                    }
                 }
             }
             searchParams.UserId = userId;
