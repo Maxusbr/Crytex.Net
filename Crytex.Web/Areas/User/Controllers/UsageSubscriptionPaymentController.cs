@@ -1,9 +1,6 @@
-﻿using System;
-using Crytex.Service.IService;
+﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
-using Crytex.Data.IRepository;
-using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
 
 namespace Crytex.Web.Areas.User
@@ -22,11 +19,11 @@ namespace Crytex.Web.Areas.User
         /// </summary>
         /// <param name="pageNumber"></param>
         /// <param name="pageSize"></param>
-        /// <param name="userId"></param>
         ///<param name="searchParams"></param>
         /// <returns></returns>
-        // GET: api/Trigger
-        public IHttpActionResult Get(int pageNumber, int pageSize, UsageSubscriptionPaymentSearchParams searchParams)
+        // GET: api/User/UsageSubscriptionPayment
+        [HttpGet]
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri] UsageSubscriptionPaymentSearchParams searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be equal or grater than 1");
