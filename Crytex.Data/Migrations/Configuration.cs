@@ -63,8 +63,11 @@ namespace Crytex.Data.Migrations
                 Payer = "Плательщик",
                 PhoneNumberConfirmed = true
             };
-            manager.Create(admin, "adsfdg");
-            manager.AddToRoles(admin.Id, new string[] { "Admin", "User" });
+            if(manager.Users.Where(user => user.UserName == "AdminUser").Any() == false)
+            {
+                manager.Create(admin, "adsfdg");
+                manager.AddToRoles(admin.Id, new string[] { "Admin", "User" });
+            }
 
             var regApproveEmailtemplate = new EmailTemplate
             {

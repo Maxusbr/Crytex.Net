@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using Crytex.Service.Extension;
 using Crytex.Service.Model;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
+using System.Linq;
 
 namespace Crytex.Service.Service
 {
@@ -37,6 +38,24 @@ namespace Crytex.Service.Service
             }
 
             return vm;
+        }
+
+        public IEnumerable<UserVm> GetVmsByIds(IEnumerable<Guid> ids)
+        {
+            if(ids.Count() == 0)
+            {
+                throw new ArgumentException("Ids collection is empty");
+            }
+
+            Expression<Func<UserVm, bool>> where = x => true;
+            foreach(var id in ids)
+            {
+                where.Or(x => x.Id == id);
+            }
+
+            var vms = this._userVmRepo.GetMany(where, vm => vm.VmWareCenter, vm => vm.HyperVHost);
+
+            return vms;
         }
 
         public IEnumerable<UserVm> GetAllVmsHyperV()

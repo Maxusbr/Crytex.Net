@@ -42,5 +42,12 @@ namespace Crytex.Web.Areas.User
         {
             return Ok(_stateMachineService.GetStateById(id));
         }
+
+        [HttpPost]
+        public IHttpActionResult GetLastState(Guid vmId)
+        {
+            var state = this._stateMachineService.GetLastVmState(vmId);
+            return this.Ok(state);
+        }
     }
 }

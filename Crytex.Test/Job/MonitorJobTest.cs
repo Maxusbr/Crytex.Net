@@ -53,7 +53,7 @@ namespace Crytex.Test.Notification.Hub
         IStateMachineService _stateMachine { get; set; }
         IUserVmService _userVm { get; set; }
         ISystemCenterVirtualManagerService _systemCenter { get; set; }
-        MonitoringJob _monitoringJob { get; set; }
+        MonitoringHyperVJob  _monitoringJob { get; set; }
 
 
         [SetUp]
@@ -65,7 +65,7 @@ namespace Crytex.Test.Notification.Hub
             _userVm = Substitute.For<IUserVmService>();
             _systemCenter = Substitute.For<ISystemCenterVirtualManagerService>();
 
-            _monitoringJob = Substitute.For<MonitoringJob>(_notificationManager,
+            _monitoringJob = Substitute.For<MonitoringHyperVJob >(_notificationManager,
                 _hyperVMonitorFactory,
                 _stateMachine,
                 _userVm,

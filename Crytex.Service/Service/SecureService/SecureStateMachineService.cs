@@ -41,6 +41,23 @@ namespace Crytex.Service.Service.SecureService
             return state;
         }
 
+        public override StateMachine GetLastVmState(Guid vmId)
+        {
+            var state = base.GetLastVmState(vmId);
+
+            var vm = this._userVmRepo.GetById(vmId);
+            if(vm != null)
+            {
+                ThrowExceptionIfNeeded(vm);
+            }
+            else
+            {
+                throw new InvalidIdentifierException($"User vm with id={vmId.ToString()} doesnt exist");
+            }
+
+            return state;
+        }
+
         private void ThrowExceptionIfNeeded(UserVm vm)
         {
             if (vm.UserId != this._userIdentity.GetUserId())

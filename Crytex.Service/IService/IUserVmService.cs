@@ -10,6 +10,7 @@ namespace Crytex.Service.IService
     public interface IUserVmService
     {
         UserVm GetVmById(Guid id);
+        IEnumerable<UserVm> GetVmsByIds(IEnumerable<Guid> ids);
 
         IPagedList<UserVm> GetPage(int pageNumber, int pageSize, UserVmSearchParams searchParams = null);
 

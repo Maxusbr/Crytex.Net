@@ -109,6 +109,7 @@
     <Compile Include="Tasks\GameServer\ActiveGameServerJob.cs" />
     <Compile Include="Tasks\GameServer\WaitForPaymentGameServerJob.cs" />
     <Compile Include="Tasks\GameServer\WarningsGameServerJob.cs" />
+    <Compile Include="Tasks\MonitoringVmActiveJob.cs" />
     <Compile Include="Tasks\NetTrafficCounterUpdateJob.cs" />
     <Compile Include="Tasks\PhysicalServer\SendMessagesPhysicalServerJob.cs" />
     <Compile Include="Tasks\PhysicalServer\UsagePhysicalServerJob.cs" />
@@ -120,7 +121,7 @@
     <Compile Include="Tasks\EmailSendJob.cs" />
     <Compile Include="Tasks\HyperVSynchronizationJob.cs" />
     <Compile Include="Tasks\MonitoringVmWareJob.cs" />
-    <Compile Include="Tasks\MonitoringJob.cs" />
+    <Compile Include="Tasks\MonitoringHyperVJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\ActiveStaticSubscriptionVmJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\ActiveTestPeriodJob.cs" />
     <Compile Include="Tasks\SubscriptionVm\BackupSubscriptionVmJob.cs" />
@@ -154,6 +155,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\crytex.virtualization.base\Crytex.Virtualization\Crytex.Virtualization.Base.csproj">
+      <Project>{0c16dd67-e3eb-4b88-aaec-6784dcfda318}</Project>
+      <Name>Crytex.Virtualization.Base</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
       <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>
       <Name>HyperVRemote</Name>
