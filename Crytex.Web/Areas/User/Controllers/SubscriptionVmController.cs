@@ -183,7 +183,7 @@ namespace Crytex.Web.Areas.User.Controllers
         }
 
         /// <summary>
-        /// Обновление подписки админом для пользователя
+        /// Обновление подписки пользователем
         /// </summary>
         [HttpPost]
         public IHttpActionResult UpdateSubscription(SubscriptionUpdateOptions model)
