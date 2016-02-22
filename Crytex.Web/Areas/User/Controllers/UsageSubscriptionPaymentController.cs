@@ -1,9 +1,6 @@
-﻿using System;
-using Crytex.Service.IService;
+﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
-using Crytex.Data.IRepository;
-using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
 
 namespace Crytex.Web.Areas.User
