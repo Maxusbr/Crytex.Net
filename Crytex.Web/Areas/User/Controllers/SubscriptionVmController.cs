@@ -181,6 +181,22 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Обновление подписки пользователем
+        /// </summary>
+        [HttpPost]
+        public IHttpActionResult UpdateSubscription(SubscriptionUpdateOptions model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            this._subscriptionVmService.UpdateSubscriptionData(model);
+
+            return this.Ok();
+        }
     }
 
 
