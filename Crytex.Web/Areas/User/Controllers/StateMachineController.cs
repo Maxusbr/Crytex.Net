@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Model.Models;
@@ -43,7 +40,15 @@ namespace Crytex.Web.Areas.User
             return Ok(_stateMachineService.GetStateById(id));
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Получение последнего состояния машины по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // GET: api/User/StateMachine/method/lastState/5
+        [HttpGet]
+        [ResponseType(typeof(PageModel<StateMachine>))]
+        [Route("api/User/StateMachine/method/lastState")]
         public IHttpActionResult GetLastState(Guid vmId)
         {
             var state = this._stateMachineService.GetLastVmState(vmId);
