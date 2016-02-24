@@ -4,6 +4,7 @@ using AutoMapper;
 using Crytex.Core.Service;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 using Crytex.Web.Models.JsonModels;
 using PagedList;
 using Crytex.Web.Models.ViewModels;
@@ -148,7 +149,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
-            Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();
+            Mapper.CreateMap<GameServerTariff, GameServerTariffView>();
 
             Mapper.CreateMap<BillingTransactionInfo, BillingTransactionInfoViewModel>()
                 .ForMember(x => x.BillingTransactionId, opt => opt.MapFrom(source => source.BillingTransaction.Id))

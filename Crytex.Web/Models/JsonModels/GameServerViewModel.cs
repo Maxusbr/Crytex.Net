@@ -1,6 +1,7 @@
 ﻿using System;
 using Crytex.Model.Models;
 using System.ComponentModel.DataAnnotations;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -12,9 +13,6 @@ namespace Crytex.Web.Models.JsonModels
         public string Name { get; set; }
         [Required]
         public int? GameServerConfigurationId { get; set; }
-
-        [Required]
-        public ServerPaymentType? PaymentType { get; set; }
 
         public int? SlotCount { get; set; }
 

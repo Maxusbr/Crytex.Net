@@ -3,9 +3,9 @@ using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Service.IService;
 using System.Security.Principal;
-using Crytex.Model.Models;
 using Microsoft.AspNet.Identity;
 using Crytex.Model.Exceptions;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Service.Service.SecureService
 {
@@ -14,10 +14,10 @@ namespace Crytex.Service.Service.SecureService
         private readonly IIdentity _userIdentity;
 
         public SecureGameServerService(IGameServerRepository gameServerRepo, ITaskV2Service taskService,
-            IGameServerConfigurationRepository gameServerConfRepository, IBilingService billingService,
+            IGameServerTariffRepository gameServerTariffRepository, IBilingService billingService,
             IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository, 
             IUnitOfWork unitOfWork, IIdentity userIdentity) 
-            : base(gameServerRepo, taskService, gameServerConfRepository, billingService, paymentGameServerRepository,
+            : base(gameServerRepo, taskService, gameServerTariffRepository, billingService, paymentGameServerRepository,
                   serverTemplateRepository, unitOfWork)
         {
             this._userIdentity = userIdentity;

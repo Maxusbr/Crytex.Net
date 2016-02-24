@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Model.Models.Biling
 {

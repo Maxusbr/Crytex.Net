@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -15,7 +16,6 @@ namespace Crytex.Web.Models.JsonModels
         public int CoreCount { get; set; }
         public int RamCount { get; set; }
         public int SlotCount { get; set; }
-        public ServerPaymentType PaymentType { get; set; }
         public int MonthCount { get; set; }
 
         public override PaymentViewModelType PaymentModelType

@@ -11,11 +11,11 @@ using Crytex.Model.Enums;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
-    public class GameServerConfigurationController : UserCrytexController
+    public class GameServerTariffController : UserCrytexController
     {
         private readonly IGameServerService _gameServerService;
 
-        public GameServerConfigurationController([Dependency("Secured")]IGameServerService gameServerService)
+        public GameServerTariffController([Dependency("Secured")]IGameServerService gameServerService)
         {
             this._gameServerService = gameServerService;
         }
@@ -25,10 +25,10 @@ namespace Crytex.Web.Areas.User.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetGameServerConfig()
+        public IHttpActionResult GetGameServerTariff()
         {
-            var configs = _gameServerService.GetGameServerConfigurations();
-            var model = AutoMapper.Mapper.Map<IEnumerable<GameServerConfigurationView>>(configs);
+            var configs = _gameServerService.GetGameServerTariffs();
+            var model = AutoMapper.Mapper.Map<IEnumerable<GameServerTariffView>>(configs);
 
             return Ok(model);
         }

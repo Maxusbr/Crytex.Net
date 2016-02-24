@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using Crytex.Model.Models.Biling;
 
-namespace Crytex.Model.Models
+namespace Crytex.Model.Models.GameServers
 {
     public class GameServer : GuidBaseEntity
     {
         public string Name { get; set; }
-        public ServerPaymentType PaymentType { get; set; }
         public Guid VmId { get; set; }
         public int SlotCount { get; set; }
-        public int GameServerConfigurationId { get; set; }
+        public int GameServerTariffId { get; set; }
         public string UserId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime DateExpire { get; set; }
@@ -19,19 +18,13 @@ namespace Crytex.Model.Models
         [ForeignKey("VmId")]
         public UserVm Vm { get; set; }
 
-        [ForeignKey("GameServerConfigurationId")]
+        [ForeignKey("GameServerTariffId")]
 
-        public GameServerConfiguration GameServerConfiguration { get; set; }
+        public GameServerTariff GameServerTariff { get; set; }
 
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
 
         public virtual ICollection<BillingTransaction> BillingTransaction { get; set; }
-    }
-
-    public enum ServerPaymentType
-    {
-        Slot = 0,
-        Configuration = 1
     }
 }

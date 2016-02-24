@@ -2,6 +2,7 @@
 using Microsoft.AspNet.Identity.EntityFramework;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Data
 {
@@ -35,10 +36,6 @@ namespace Crytex.Data
             modelBuilder.Entity<OperatingSystem>()
                 .HasRequired(t => t.ImageFileDescriptor).WithMany().HasForeignKey(system => system.ImageFileId)
                 .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<GameServerConfiguration>()
-              .HasRequired(t => t.ServerTemplate).WithMany().HasForeignKey(system => system.ServerTemplateId)
-              .WillCascadeOnDelete(false);
             modelBuilder.Entity<UsageSubscriptionPayment>()
                  .HasRequired(t => t.SubscriptionVm).WithMany().HasForeignKey(t => t.SubscriptionVmId)
                  .WillCascadeOnDelete(false);
@@ -50,9 +47,6 @@ namespace Crytex.Data
                  .WillCascadeOnDelete(false);
             modelBuilder.Entity<WebHostingFtpAccount>()
                  .HasRequired(t => t.WebAppliaction).WithMany().HasForeignKey(t => t.WebApplicationId)
-                 .WillCascadeOnDelete(false);
-            modelBuilder.Entity<GameServerConfiguration>()
-                 .HasRequired(t => t.ServerTemplate).WithMany().HasForeignKey(t => t.ServerTemplateId)
                  .WillCascadeOnDelete(false);
         }
         public DbSet<Statistic> Statistics { get; set; }
@@ -87,7 +81,9 @@ namespace Crytex.Data
         public DbSet<UserLoginLogEntry> UserLoginLogEntries { get; set; }
 		public DbSet<Trigger> Triggers { get; set; }
         public DbSet<GameServer> GameServers { get; set; }
-        public DbSet<GameServerConfiguration> GameServerConfigurations { get; set; }
+        public DbSet<GameServerTariff> GameServerTariffs { get; set; }
+        public DbSet<Game> Games { get; set; }
+        public DbSet<GameHost> GameHosts { get; set; }
         public DbSet<VmIpAddress> VmIpAddresses { get; set; }
         public DbSet<UsageSubscriptionPayment> UsageSubscriptionPayments { get; set; }
         public DbSet<FixedSubscriptionPayment> FixedSubscriptionPayments { get; set; }

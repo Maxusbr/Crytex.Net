@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 using Crytex.Service.Model;
 using PagedList;
 
@@ -10,10 +11,6 @@ namespace Crytex.Service.IService
 {
     public interface IGameServerService
     {
-        /// <summary>
-        /// Создаёт новый игровой сервер, задачу создания виртуальной машины, а также саму сущность виртуальной машины в БД
-        /// </summary>
-        GameServer CreateServer(GameServer server);
         GameServer GetById(Guid guid);
         IPagedList<GameServer> GetPage(int pageNumber, int pageSize, string userId = null);
         IEnumerable<GameServer> GetAllByUserId(string userId);
@@ -33,10 +30,9 @@ namespace Crytex.Service.IService
         void StopGameServer(Guid serverId);
         void PowerOffGameServer(Guid serverId);
         void ResetGameServer(Guid serverId);
-        void UpdateGameServerMachineConfig(Guid gameServerId, UpdateMachineConfigOptions serviceOptions);
 
-        GameServerConfiguration CreateGameServerConfiguration(GameServerConfiguration config);
-        void UpdateGameServerConfiguration(GameServerConfiguration config);
-        IEnumerable<GameServerConfiguration> GetGameServerConfigurations();
+        GameServerTariff CreateGameServerTariff(GameServerTariff tariff);
+        void UpdateGameServerTariff(GameServerTariff config);
+        IEnumerable<GameServerTariff> GetGameServerTariffs();
     }
 }

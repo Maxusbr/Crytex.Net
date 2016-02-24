@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Crytex.Model.Models;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Service.Model
 {
     public class BuyGameServerOption
     {
         public int GameServerConfigurationId { get; set; }
-        public ServerPaymentType PaymentType { get; set; }
         public int Cpu { get; set; }
         public int Ram { get; set; }
         public int SlotCount { get; set; }
