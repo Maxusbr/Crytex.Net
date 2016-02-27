@@ -29,8 +29,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 var machineGuid = createTaskOptions.UserVmId;
                 var machineName = machineGuid.ToString();
 
-                // TODO: нужен метод для запуска скриптов на гостевой ОС
-                //var newPassword = System.Web.Security.Membership.GeneratePassword(6, 0); 
+                var newPassword = System.Web.Security.Membership.GeneratePassword(6, 0); 
 
                 this.ConnectProvider();
 
@@ -49,6 +48,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 }
 
                 newVm.Start(true);
+                newVm.SetNewPassword(newPassword);
 
                 var ipAddresses = newVm.Networks.NetAdapter.Select(adp => new VmIpAddress
                 {
