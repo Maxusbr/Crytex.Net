@@ -18,29 +18,30 @@ namespace Crytex.Service.Service
     class GameServerService : IGameServerService
     {
         private readonly IGameServerTariffRepository _gameServerTariffRepository;
-        private readonly IServerTemplateRepository _serverTemplateRepository;
         private readonly IGameServerRepository _gameServerRepository;
         private readonly ITaskV2Service _taskService;
         private readonly IBilingService _billingService;
         private readonly IPaymentGameServerRepository _paymentGameServerRepository;
+        private readonly IGameHostService _gameHostService;
         private readonly IUnitOfWork _unitOfWork;
 
         public GameServerService(IGameServerRepository gameServerRepository, ITaskV2Service taskService,
             IGameServerTariffRepository gameServerTariffRepository, IBilingService billingService,
-            IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository, IUnitOfWork unitOfWork)
+            IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository, 
+            IGameHostService gameHostService, IUnitOfWork unitOfWork)
         {
             this._gameServerRepository = gameServerRepository;
             this._taskService = taskService;
             this._gameServerTariffRepository = gameServerTariffRepository;
             this._unitOfWork = unitOfWork;
-            _serverTemplateRepository = serverTemplateRepository;
             _paymentGameServerRepository = paymentGameServerRepository;
+            _gameHostService = gameHostService;
             _billingService = billingService;
         }
         #region Get operations
         public virtual GameServer GetById(Guid guid)
         {
-            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.Vm, x => x.GameServerTariff);
+            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.GameHost, x => x.GameServerTariff);
 
             if (server == null)
             {
@@ -60,7 +61,7 @@ namespace Crytex.Service.Service
                 where = where.And(x => x.UserId == userId);
             }
 
-            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.User, x => x.Vm);
+            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.User, x => x.GameHost);
 
             return pagedList;
         }
@@ -127,7 +128,7 @@ namespace Crytex.Service.Service
             {
                 throw new InvalidIdentifierException("ExpireMonthCount must be greater than 0");
             }
-            server = CreateServer(server, options);
+            
             decimal amount =  this.GetSlotServerMonthPrice(server, options.SlotCount) * options.ExpireMonthCount;
 
             var gameServerVmTransaction = new BillingTransaction
@@ -138,6 +139,8 @@ namespace Crytex.Service.Service
             };
             gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
 
+            server = CreateServer(server, options);
+
             var gameServerPayment = new PaymentGameServer
             {
                 BillingTransactionId = gameServerVmTransaction.Id,
@@ -145,8 +148,6 @@ namespace Crytex.Service.Service
                 DateStart = dateNow,
                 DateEnd = server.DateExpire,
                 GameServerId = server.Id,
-                CoreCount = options.Cpu,
-                RamCount = options.Ram,
                 Amount = amount,
                 UserId = server.UserId,
                 SlotCount = options.SlotCount,
@@ -163,7 +164,7 @@ namespace Crytex.Service.Service
         {
             switch (options.UpdateType)
             {
-                case GameServerUpdateType.Configuration:
+                case GameServerUpdateType.UpdateName:
                     UpdateNameGameServerConfiguration(serverId, options);
                     break;
                 case GameServerUpdateType.EnableAutoProlongation:
@@ -204,16 +205,16 @@ namespace Crytex.Service.Service
 
         public void DeleteGameServer(Guid guid)
         {
+            //throw new NotImplementedException();
             var srv = GetById(guid);
-            var removeVmOptions = new RemoveVmOptions
+            var removeVmOptions = new DeleteGameServerOptions
             {
-                VmId = srv.Vm.Id
+                GameServerId = guid
             };
             var deleteTask = new TaskV2
             {
-                Virtualization = srv.Vm.VirtualizationType,
                 UserId = srv.UserId,
-                TypeTask = TypeTask.RemoveVm
+                TypeTask = TypeTask.DeleteGameServer
             };
             this._taskService.CreateTask(deleteTask, removeVmOptions);
 
@@ -266,42 +267,40 @@ namespace Crytex.Service.Service
         #region Private methods
         private GameServer CreateServer(GameServer server, BuyGameServerOption options)
         {
-            throw new NotImplementedException();
-            //var gameServerConf = this._gameServerTariffRepository.Get(conf => conf.Id == server.GameServerTariffId, conf => conf.ServerTemplate.OperatingSystem);
-            //if (gameServerConf == null)
-            //{
-            //    throw new InvalidIdentifierException($"GameServerConfiguration with id={server.GameServerTariffId} doesn't exist");
-            //}
-            //var operatingSystem = gameServerConf.ServerTemplate.OperatingSystem;
-            //if (options.PaymentType == ServerPaymentType.Slot && options.SlotCount < 1)
-            //{
-            //    throw new InvalidIdentifierException($"Cannot create vm with SlotCount={options.SlotCount}.");
-            //}
-            //var taskOptions = new CreateVmOptions
-            //{
-            //    Cpu = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinCoreCount : options.Cpu,
-            //    HddGB = operatingSystem.MinHardDriveSize,
-            //    Ram = options.PaymentType == ServerPaymentType.Slot ? options.SlotCount * operatingSystem.MinRamCount : options.Ram,
-            //    OperatingSystemId = operatingSystem.Id,
-            //    Name = server.Name
-            //};
-            //var newTask = new TaskV2
-            //{
-            //    StatusTask = StatusTask.Pending,
-            //    TypeTask = TypeTask.CreateVm,
-            //    UserId = server.UserId,
-            //    Virtualization = TypeVirtualization.HyperV
-            //};
+            var gameServerTariff = this._gameServerTariffRepository.Get(tariff => tariff.Id == server.GameServerTariffId);
+            if (gameServerTariff == null)
+            {
+                throw new InvalidIdentifierException($"GameServerTariff with id={server.GameServerTariffId} doesn't exist");
+            }
 
-            //newTask = this._taskService.CreateTask<CreateVmOptions>(newTask, taskOptions);
-            //server.VmId = newTask.GetOptions<CreateVmOptions>().UserVmId;
+            var gameHost = _gameHostService.GetGameHostWithAvalailableSlot(gameServerTariff.GameId);
+            if (gameHost == null)
+            {
+                throw new TaskOperationException("Cannot find gamehost for new gameserver");
+            }
+            server.GameHostId = gameHost.Id;
 
-            //this._gameServerRepository.Add(server);
+            this._gameServerRepository.Add(server);
+            this._unitOfWork.Commit();
 
-            //this._unitOfWork.Commit();
+            var taskOptions = new CreateGameServerOptions
+            {
+                GameServerId = server.Id,
+                GameServerTariffId = server.GameServerTariffId,
+                GameHostId = server.GameHostId
+            };
+            var newTask = new TaskV2
+            {
+                StatusTask = StatusTask.Pending,
+                TypeTask = TypeTask.CreateGameServer,
+                UserId = server.UserId
+            };
 
-            //return server;
+             _taskService.CreateTask<CreateGameServerOptions>(newTask, taskOptions);
+
+            return server;
         }
+
         private PaymentGameServer GetGameServerById(Guid guid)
         {
             var srv = _paymentGameServerRepository.Get(x => x.GameServerId == guid, x => x.User);
@@ -378,7 +377,6 @@ namespace Crytex.Service.Service
 
         private void ChangeGameServerMachineState(Guid serverId, TypeChangeStatus status)
         {
-
             var gameserv = GetGameServerById(serverId);
             if (gameserv.Status != GameServerStatus.Active)
             {
@@ -387,15 +385,14 @@ namespace Crytex.Service.Service
             else
             {
                 var srv = GetById(serverId);
-                var taskOptions = new ChangeStatusOptions
+                var taskOptions = new ChangeGameServerStatusOptions
                 {
                     TypeChangeStatus = status,
-                    VmId = srv.Vm.Id
+                    GameServerId = srv.Id
                 };
                 var task = new TaskV2
                 {
-                    TypeTask = TypeTask.ChangeStatus,
-                    Virtualization = srv.Vm.VirtualizationType,
+                    TypeTask = TypeTask.GameServerChangeStatus,
                     UserId = srv.UserId
                 };
 
@@ -405,21 +402,22 @@ namespace Crytex.Service.Service
 
         private void CreateUpdateGameServerTask(GameServer server, UpdateMachineConfigOptions options)
         {
-            var updateTask = new TaskV2
-            {
-                TypeTask = TypeTask.UpdateVm,
-                UserId = server.UserId,
-                Virtualization = server.Vm.VirtualizationType
-            };
-            var taskUpdateOptions = new UpdateVmOptions
-            {
-                Cpu = options.Cpu ?? server.Vm.CoreCount,
-                HddGB = server.Vm.HardDriveSize,
-                Ram = options.Ram ?? server.Vm.RamCount,
-                Name = server.Vm.Name,
-                VmId = server.Vm.Id
-            };
-            this._taskService.CreateTask(updateTask, taskUpdateOptions);
+            throw new NotImplementedException();
+            //var updateTask = new TaskV2
+            //{
+            //    TypeTask = TypeTask.UpdateVm,
+            //    UserId = server.UserId,
+            //    Virtualization = server.Vm.VirtualizationType
+            //};
+            //var taskUpdateOptions = new UpdateVmOptions
+            //{
+            //    Cpu = options.Cpu ?? server.Vm.CoreCount,
+            //    HddGB = server.Vm.HardDriveSize,
+            //    Ram = options.Ram ?? server.Vm.RamCount,
+            //    Name = server.Vm.Name,
+            //    VmId = server.Vm.Id
+            //};
+            //this._taskService.CreateTask(updateTask, taskUpdateOptions);
         }
         #endregion
     }

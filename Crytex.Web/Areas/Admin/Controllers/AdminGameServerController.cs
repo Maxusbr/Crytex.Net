@@ -90,7 +90,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             switch (model.UpdateType)
             {
-                case GameServerUpdateType.Configuration:
+                case GameServerUpdateType.UpdateName:
                     if (string.IsNullOrEmpty(model.ServerName)) return BadRequest("ServerName must be not empty");
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;

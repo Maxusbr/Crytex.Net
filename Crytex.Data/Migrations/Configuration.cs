@@ -683,7 +683,6 @@ namespace Crytex.Data.Migrations
                 context.EmailInfos.Add(emailInfo);
             }
             context.Commit();
-            var template = serverTemplates[0].Id;
             var gameServerTariff = context.GameServerTariffs.FirstOrDefault();
 
             if (gameServerTariff == null)
@@ -695,16 +694,6 @@ namespace Crytex.Data.Migrations
             }
 
             context.Commit();
-            var gameServer = new GameServer
-            {
-                VmId = allMachine[0].Id,
-                SlotCount = 5,
-                GameServerTariffId = gameServerTariff.Id,
-                UserId = allUsers[0].Id,
-                CreateDate = DateTime.UtcNow,
-                DateExpire = DateTime.UtcNow.AddMonths(1)
-            };
-            context.GameServers.Add(gameServer);
 
             var phServer1 = new PhysicalServer { ProcessorName = "Intel® Xeon™ 1 Core", Price = (decimal)45.5 };
             var phServer2 = new PhysicalServer { ProcessorName = "Intel® Xeon™ 2 Core", Price = (decimal)85.5 };

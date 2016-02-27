@@ -87,8 +87,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
             Mapper.CreateMap<GameServer, GameServerViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
-                .ForMember(x => x.Name, opt => opt.MapFrom(source => source.Vm.Name))
-                .ForMember(x => x.VmName, opt => opt.MapFrom(source => source.Vm.Name));
+                .ForMember(x => x.GameHostId, opt => opt.MapFrom(source => source.GameHost.Id));
             Mapper.CreateMap<SubscriptionVm, SubscriptionVmViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
                 .ForMember(x => x.OperatingSystemId, opt => opt.MapFrom(source => source.UserVm.OperatingSystemId));

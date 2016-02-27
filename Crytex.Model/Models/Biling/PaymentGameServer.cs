@@ -17,8 +17,6 @@ namespace Crytex.Model.Models.Biling
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
         public Guid GameServerId { get; set; }
-        public int CoreCount { get; set; }
-        public int RamCount { get; set; }
         public int SlotCount { get; set; }
         public int MonthCount { get; set; }
 

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Linq.Expressions;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Models.GameServers;
@@ -31,7 +33,8 @@ namespace Crytex.Service.Service
                 Port = options.Port,
                 UserName = options.UserName,
                 Password = options.Password,
-
+                GameServersMaxCount = options.GameServersMaxCount,
+                GameServersCount = 0
             };
 
             this.ValidateHostEntity(host);
@@ -55,6 +58,14 @@ namespace Crytex.Service.Service
             _unitOfWork.Commit();
 
             return host;
+        }
+
+        public GameHost GetGameHostWithAvalailableSlot(int gameId)
+        {
+            Expression<Func<GameHost, bool>> where = x => x.GameServersCount < x.GameServersMaxCount && x.SupportedGames.Any(y => y.Id == gameId);
+            var hosts = _gameHostRepository.GetMany(where);
+
+            return hosts.FirstOrDefault();
         }
 
         private void ValidateHostEntity(GameHost host)

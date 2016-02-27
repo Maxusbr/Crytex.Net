@@ -11,9 +11,7 @@ namespace Crytex.Service.Model
 {
     public class BuyGameServerOption
     {
-        public int GameServerConfigurationId { get; set; }
-        public int Cpu { get; set; }
-        public int Ram { get; set; }
+        public int GameServerTariffId { get; set; }
         public int SlotCount { get; set; }
         public int ExpireMonthCount { get; set; }
         public string UserId { get; set; }
