@@ -24,7 +24,7 @@ namespace Crytex.Web.Areas.User
         /// <param name="id"></param>
         /// <returns></returns>
         // GET: api/HelpDeskRequestComment/5
-        [ResponseType(typeof(PageModel<HelpDeskRequestCommentViewModel>))]
+        [ResponseType(typeof(IEnumerable<HelpDeskRequestCommentViewModel>))]
         public IHttpActionResult Get(int id)
         {
             var comments = this._helpDeskRequestService.GetCommentsByRequestId(id).ToList();

@@ -33,7 +33,9 @@ namespace Crytex.Web.Areas.User
             if (!Enum.IsDefined(typeof(HelpDeskRequestFilter), filter))
                 return BadRequest("Filter wrong type");
 
-            var page = this._helpDeskRequestService.GetPage(pageNumber, pageSize, filter);
+            var userId = this.CrytexContext.UserInfoProvider.GetUserId();
+
+            var page = this._helpDeskRequestService.GetPage(pageNumber, pageSize, userId, filter);
             var viewModel = AutoMapper.Mapper.Map<PageModel<HelpDeskRequestViewModel>>(page);
 
             return Ok(viewModel);
