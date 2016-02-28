@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq.Expressions;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
@@ -249,6 +250,16 @@ namespace Crytex.Service.Service
 
         public BillingTransaction AddTestPeriod(TestPeriodOptions options)
         {
+            // Возьмём из web config данные для тестового периода
+            Int32 countDay = 0;
+            Decimal cashAmount = 0;
+
+            Int32.TryParse(ConfigurationSettings.AppSettings["testPeriodCountDay"], out countDay);
+            Decimal.TryParse(ConfigurationSettings.AppSettings["testPeriodCashAmount"], out cashAmount);
+
+            options.CashAmount = cashAmount;
+            options.CountDay = countDay;
+
             var list = _billingTransactionRepo.Get(x => x.UserId == options.UserId && x.TransactionType == BillingTransactionType.TestPeriod); ;
             if(list != null) throw new InvalidIdentifierException($"Вы уже заказывали тестовый период {list.Date.ToString("d")}");
 
