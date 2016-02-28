@@ -15,7 +15,7 @@ namespace Crytex.Service.IService
 
         void DeleteById(int id);
 
-        IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize, HelpDeskRequestFilter filter = HelpDeskRequestFilter.All);
+        IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize, string userId, HelpDeskRequestFilter filter = HelpDeskRequestFilter.All);
 
         IEnumerable<HelpDeskRequestComment> GetCommentsByRequestId(int id);
 

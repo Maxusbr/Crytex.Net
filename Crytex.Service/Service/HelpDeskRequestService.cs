@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using Crytex.Data.IRepository;
 using Crytex.Data.Infrastructure;
 using Crytex.Model.Exceptions;
+using Crytex.Service.Extension;
 using Crytex.Service.Model;
 using PagedList;
 
@@ -87,22 +88,27 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize, HelpDeskRequestFilter filter = HelpDeskRequestFilter.All)
+        public IPagedList<HelpDeskRequest> GetPage(int pageNumber, int pageSize, string userId, HelpDeskRequestFilter filter = HelpDeskRequestFilter.All)
         {
             IPagedList<HelpDeskRequest> page = new PagedList<HelpDeskRequest>(Enumerable.Empty<HelpDeskRequest>().AsQueryable(), 1, 1);
-            if (filter == HelpDeskRequestFilter.All) { 
-             
-                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => true), (x => x.Read), (x => x.CreationDate), x => x.User);
-            }
-            else if (filter == HelpDeskRequestFilter.Read)
+
+            Expression<Func<HelpDeskRequest, bool>> where = x => true;
+
+            if (userId != null && userId != String.Empty)
             {
-               
-                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => x.Read), (x => x.CreationDate));
+                where = where.And(x => x.UserId == userId);
+            }
+
+            if (filter == HelpDeskRequestFilter.Read)
+            {
+                where = where.And(x => x.Read);
             }
             else if (filter == HelpDeskRequestFilter.Unread)
             {
-                page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), (x => !x.Read), (x => x.CreationDate));
+                where = where.And(x => !x.Read);
             }
+
+            page = this._requestRepository.GetPage(new PageInfo(pageNumber, pageSize), where, (x => x.CreationDate), x => x.User);
 
             return page;
         }
