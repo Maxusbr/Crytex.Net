@@ -55,7 +55,9 @@ namespace Crytex.Service.Service
                 StatusTask = StatusTask.Pending,
                 TypeTask = TypeTask.CreateVm,
                 UserId = server.UserId,
-                Virtualization = TypeVirtualization.HyperV
+                Virtualization = TypeVirtualization.HyperV,
+                ResourceId = server.Id,
+                ResourceType = ResourceType.GameServer
             };
 
             newTask = this._taskService.CreateTask<CreateVmOptions>(newTask, taskOptions);
@@ -92,7 +94,9 @@ namespace Crytex.Service.Service
                 StatusTask = StatusTask.Pending,
                 TypeTask = TypeTask.CreateVm,
                 UserId = server.UserId,
-                Virtualization = TypeVirtualization.HyperV
+                Virtualization = TypeVirtualization.HyperV,
+                ResourceId = server.Id,
+                ResourceType = ResourceType.GameServer
             };
 
             newTask = this._taskService.CreateTask<CreateVmOptions>(newTask, taskOptions);
@@ -385,7 +389,9 @@ namespace Crytex.Service.Service
             {
                 Virtualization = srv.Vm.VirtualizationType,
                 UserId = srv.UserId,
-                TypeTask = TypeTask.RemoveVm
+                TypeTask = TypeTask.RemoveVm,
+                ResourceId = srv.Id,
+                ResourceType = ResourceType.GameServer
             };
             this._taskService.CreateTask(deleteTask, removeVmOptions);
 
@@ -473,7 +479,9 @@ namespace Crytex.Service.Service
                 {
                     TypeTask = TypeTask.ChangeStatus,
                     Virtualization = srv.Vm.VirtualizationType,
-                    UserId = srv.UserId
+                    UserId = srv.UserId,
+                    ResourceId = srv.Id,
+                    ResourceType = ResourceType.GameServer
                 };
 
                 this._taskService.CreateTask(task, taskOptions);
@@ -563,7 +571,9 @@ namespace Crytex.Service.Service
             {
                 TypeTask = TypeTask.UpdateVm,
                 UserId = server.UserId,
-                Virtualization = server.Vm.VirtualizationType
+                Virtualization = server.Vm.VirtualizationType,
+                ResourceId = server.Id,
+                ResourceType = ResourceType.GameServer
             };
             var taskUpdateOptions = new UpdateVmOptions
             {
@@ -571,7 +581,7 @@ namespace Crytex.Service.Service
                 HddGB = server.Vm.HardDriveSize,
                 Ram = options.Ram ?? server.Vm.RamCount,
                 Name = server.Vm.Name,
-                VmId = server.Vm.Id
+                VmId = server.VmId
             };
             this._taskService.CreateTask(updateTask, taskUpdateOptions);
         }

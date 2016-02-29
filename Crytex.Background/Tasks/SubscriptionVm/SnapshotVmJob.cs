@@ -36,7 +36,9 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                     };
                     var task = new TaskV2
                     {
-                        TypeTask = TypeTask.DeleteSnapshot
+                        TypeTask = TypeTask.DeleteSnapshot,
+                        ResourceId = snapshot.VmId,
+                        ResourceType = ResourceType.SubscriptionVm,
                     };
                     this._taskService.CreateTask(task, options);
                 }

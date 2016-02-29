@@ -35,7 +35,6 @@ namespace Crytex.Service.Service
                 Options = "",
                 UserId = randomUser.Id,
                 CreatedAt = DateTime.UtcNow,
-                ResourceType = ResourceType.Vm,
                 StatusTask = StatusTask.Pending,
                 Virtualization = TypeVirtualization.HyperV,
                 TypeTask = TypeTask.Test

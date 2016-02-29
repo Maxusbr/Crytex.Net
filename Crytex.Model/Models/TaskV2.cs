@@ -6,9 +6,7 @@ namespace Crytex.Model.Models
     public class TaskV2
     {
         public Guid Id { get; set; }
-        // Тип ресурса на сервере виртаулизации (например - виртуальная машина)
         public ResourceType ResourceType { get; set; }
-        // Id ресурса на сервере виртаулизации (например имя виртуальной машины на сервере виртуализации)
         public Guid? ResourceId { get; set; }
         public TypeTask TypeTask { get; set; }
         public StatusTask StatusTask { get; set; }
@@ -182,7 +180,10 @@ namespace Crytex.Model.Models
 
     public enum ResourceType
     {
-        Vm = 0
+        SubscriptionVm = 0,
+        WebHosting = 1,
+        WebApp = 2,
+        GameServer = 3
     }
 }
 
