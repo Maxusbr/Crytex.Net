@@ -68,9 +68,13 @@ namespace Crytex.Model.Models
         RestartWebApp = 12,
         DisableWebHosting = 13,
         DeleteHosting = 14,
+        CreateGameServer = 15,
+        DeleteGameServer = 16,
+        GameServerChangeStatus = 17,
 
 
-        Test = 99
+
+        Test = 99,
     }
 
     [Serializable]
@@ -171,6 +175,30 @@ namespace Crytex.Model.Models
     public class WebApplicationTaskOptions : BaseOptions
     {
         public Guid HostedWedApplicationId { get; set; }
+    }
+
+    public abstract class BaseGameServerOptions : BaseOptions
+    {
+        public Guid GameServerId { get; set; }
+    }
+
+    [Serializable]
+    public class CreateGameServerOptions : BaseGameServerOptions
+    {
+        public int GameServerTariffId { get; set; }
+        public int GameHostId { get; set; }
+    }
+
+    [Serializable]
+    public class DeleteGameServerOptions : BaseGameServerOptions
+    {
+        
+    }
+
+    [Serializable]
+    public class ChangeGameServerStatusOptions : BaseGameServerOptions
+    {
+        public TypeChangeStatus TypeChangeStatus { get; set; }
     }
 
     public enum TypeChangeStatus {

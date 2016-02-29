@@ -92,6 +92,7 @@
     <Compile Include="IService\IEmailTemplateService.cs" />
     <Compile Include="IService\IFileService.cs" />
     <Compile Include="IService\IFixedSubscriptionPaymentService.cs" />
+    <Compile Include="IService\IGameHostService.cs" />
     <Compile Include="IService\IGameServerService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\IHostedWebApplicationService.cs" />
@@ -134,6 +135,7 @@
     <Compile Include="Model\CreateVmOption.cs" />
     <Compile Include="Model\DhcpServerOption.cs" />
     <Compile Include="Model\FixedSubscriptionPaymentSearchParams.cs" />
+    <Compile Include="Model\GameHostCreateOptions.cs" />
     <Compile Include="Model\GameServerConfigOptions.cs" />
     <Compile Include="Model\HelpDeskRequestFilter.cs" />
     <Compile Include="Model\PaymentForecast.cs" />
@@ -174,9 +176,12 @@
     <Compile Include="Service\FakeTaskV2Service.cs" />
     <Compile Include="Service\FileService.cs" />
     <Compile Include="Service\FixedSubscriptionPaymentService.cs" />
+    <Compile Include="Service\GameHostService.cs" />
     <Compile Include="Service\GameServerService.cs" />
+    <Compile Include="Service\GameService.cs" />
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\HostedWebApplicationService.cs" />
+    <Compile Include="IService\IGameService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\NetTrafficCounterService.cs" />
     <Compile Include="Service\NewsService.cs" />

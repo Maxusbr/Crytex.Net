@@ -7,6 +7,7 @@ using Crytex.Model.Models;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using Crytex.Service.Model;
 using System.Linq;
+using Crytex.Model.Models.GameServers;
 using Crytex.Model.Models.WebHostingModels;
 
 namespace Crytex.Web.Mappings
@@ -43,6 +44,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<DiscountViewModel, Discount>();
             Mapper.CreateMap<GameServerViewModel, GameServer>();
             Mapper.CreateMap<GameServerViewModel, BuyGameServerOption>();
+            Mapper.CreateMap<GameViewModel, Game>();
+            Mapper.CreateMap<GameHostViewModel, GameHostCreateOptions>();
             Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>()
                 .ForMember(dest => dest.DailyBackupStorePeriodDays, opt => opt.MapFrom(source => source.DailyBackupStorePeriodDays == null ? 1 : source.DailyBackupStorePeriodDays.Value));
             Mapper.CreateMap<SubscriptionBuyOptionsUserViewModel, SubscriptionBuyOptions>()
@@ -60,7 +63,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<GameServerMachineConfigUpdateViewModel, UpdateMachineConfigOptions>();
             Mapper.CreateMap<GameServerConfigViewModel, GameServerConfigOptions>()
                 .ForMember(x => x.ServerId, opt => opt.MapFrom(src => Guid.Parse(src.serverId)));
-            Mapper.CreateMap<GameServerConfigurationView, GameServerConfiguration>();
+            Mapper.CreateMap<GameServerTariffView, GameServerTariff>();
             Mapper.CreateMap<TestPeriodViewModel, TestPeriodOptions>();
             Mapper.CreateMap<DhcpServerView, DhcpServerOption>();
             Mapper.CreateMap<NewsViewModel, News>();

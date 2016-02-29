@@ -6,15 +6,16 @@ using System.Web.Http;
 using AutoMapper;
 using Crytex.Model.Enums;
 using Crytex.Model.Models;
+using Crytex.Model.Models.GameServers;
 using Crytex.Service.Model;
 
 namespace Crytex.Web.Areas.Admin.Controllers
 {
-    public class AdminGameServerConfigurationController : AdminCrytexController
+    public class AdminGameServerTariffController : AdminCrytexController
     {
         private readonly IGameServerService _gameServerService;
 
-        public AdminGameServerConfigurationController(IGameServerService gameServerService)
+        public AdminGameServerTariffController(IGameServerService gameServerService)
         {
             this._gameServerService = gameServerService;
         }
@@ -24,11 +25,11 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public IHttpActionResult GetGameServerConfig()
+        public IHttpActionResult GetGameServerTariff()
         {
 
-            var configs = _gameServerService.GetGameServerConfigurations();
-            var model = Mapper.Map<IEnumerable<GameServerConfigurationView>>(configs);
+            var tariffs = _gameServerService.GetGameServerTariffs();
+            var model = Mapper.Map<IEnumerable<GameServerTariffView>>(tariffs);
 
             return Ok(model);
         }
@@ -39,15 +40,15 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public IHttpActionResult Post([FromBody]GameServerConfigurationView model)
+        public IHttpActionResult Post([FromBody]GameServerTariffView model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var config = Mapper.Map<GameServerConfiguration>(model);
-            config = _gameServerService.CreateGameServerConfiguration(config);
+            var config = Mapper.Map<GameServerTariff>(model);
+            config = _gameServerService.CreateGameServerTariff(config);
 
             return Ok(new { id = config.Id });
         }
@@ -58,15 +59,15 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult UpdateGameServerConfig(GameServerConfigurationView model)
+        public IHttpActionResult UpdateGameServerTariff(GameServerTariffView model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var config = Mapper.Map<GameServerConfiguration>(model);
-            _gameServerService.UpdateGameServerConfiguration(config);
+            var config = Mapper.Map<GameServerTariff>(model);
+            _gameServerService.UpdateGameServerTariff(config);
 
             return Ok();
         }

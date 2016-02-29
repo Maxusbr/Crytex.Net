@@ -65,7 +65,11 @@ namespace Crytex.Service
 			container.RegisterType<ITriggerService, TriggerService>();
             container.RegisterType<IGameServerRepository, GameServerRepository>();
             container.RegisterType<IGameServerService, GameServerService>();
-            container.RegisterType<IGameServerConfigurationRepository, GameServerConfigurationRepository>();
+            container.RegisterType<IGameServerTariffRepository, GameServerTariffRepository>();
+            container.RegisterType<IGameRepository, GameRepository>();
+            container.RegisterType<IGameHostRepository, GameHostRepository>();
+            container.RegisterType<IGameService, GameService>();
+            container.RegisterType<IGameHostService, GameHostService>();
             container.RegisterType<IUsageSubscriptionPaymentRepository, UsageSubscriptionPaymentRepository>();
             container.RegisterType<IFixedSubscriptionPaymentRepository, FixedSubscriptionPaymentRepository>();
             container.RegisterType<IFixedSubscriptionPaymentService, FixedSubscriptionPaymentService>();

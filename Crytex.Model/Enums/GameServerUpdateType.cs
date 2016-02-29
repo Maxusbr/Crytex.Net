@@ -8,7 +8,7 @@ namespace Crytex.Model.Enums
 {
     public enum GameServerUpdateType
     {
-        Configuration = 0,
+        UpdateName = 0,
         Prolongation = 1,
         EnableAutoProlongation = 2,
         State = 3
