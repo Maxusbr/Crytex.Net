@@ -36,8 +36,8 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                     // create backup task
                     var backupTask = new TaskV2
                     {
-                        ResourceId = sub.UserVm.Id,
-                        ResourceType = ResourceType.Vm,
+                        ResourceId = sub.Id,
+                        ResourceType = ResourceType.SubscriptionVm,
                         TypeTask = TypeTask.Backup,
                         Virtualization = sub.UserVm.VirtualizationType,
                         UserId = sub.UserId
@@ -59,8 +59,8 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                     // delete backup
                     var deleteBackupTask = new TaskV2
                     {
-                        ResourceId = sub.UserVm.Id,
-                        ResourceType = ResourceType.Vm,
+                        ResourceId = sub.Id,
+                        ResourceType = ResourceType.SubscriptionVm,
                         TypeTask = TypeTask.DeleteBackup,
                         Virtualization = sub.UserVm.VirtualizationType,
                         UserId = sub.UserId

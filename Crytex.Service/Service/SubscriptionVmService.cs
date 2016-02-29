@@ -237,7 +237,8 @@ namespace Crytex.Service.Service
             {
                 TypeTask = TypeTask.CreateVm,
                 Virtualization = options.Virtualization,
-                UserId = options.UserId
+                UserId = options.UserId,
+                ResourceType = ResourceType.SubscriptionVm
             };
             // Check os min requirements and create task if it's ok.
             var newTask = this._taskService.CreateTask(createTask, createVmOptions);
@@ -261,6 +262,9 @@ namespace Crytex.Service.Service
             };
             this._subscriptionVmRepository.Add(newSubscription);
             this._unitOfWork.Commit();
+
+            newTask.ResourceId = newSubscription.Id;
+            _taskService.UpdateTask(newTask);
 
             return newSubscription;
         }
@@ -550,7 +554,9 @@ namespace Crytex.Service.Service
             {
                 Virtualization = sub.UserVm.VirtualizationType,
                 UserId = sub.UserId,
-                TypeTask = TypeTask.ChangeStatus
+                TypeTask = TypeTask.ChangeStatus,
+                ResourceId = sub.Id,
+                ResourceType = ResourceType.SubscriptionVm
             };
             this._taskService.CreateTask(deleteTask, removeVmOptions);
 
@@ -578,7 +584,9 @@ namespace Crytex.Service.Service
             {
                 Virtualization = sub.UserVm.VirtualizationType,
                 UserId = sub.UserId,
-                TypeTask = TypeTask.RemoveVm
+                TypeTask = TypeTask.RemoveVm,
+                ResourceId = sub.Id,
+                ResourceType = ResourceType.SubscriptionVm
             };
             this._taskService.CreateTask(deleteTask, removeVmOptions);
 
@@ -795,7 +803,9 @@ namespace Crytex.Service.Service
                 {
                     TypeTask = TypeTask.ChangeStatus,
                     Virtualization = sub.UserVm.VirtualizationType,
-                    UserId = sub.UserId
+                    UserId = sub.UserId,
+                    ResourceId = sub.Id,
+                    ResourceType =  ResourceType.SubscriptionVm
                 };
 
                 this._taskService.CreateTask(task, taskOptions);
@@ -833,7 +843,9 @@ namespace Crytex.Service.Service
             {
                 TypeTask = TypeTask.UpdateVm,
                 UserId = sub.UserId,
-                Virtualization = sub.UserVm.VirtualizationType
+                Virtualization = sub.UserVm.VirtualizationType,
+                ResourceId = sub.Id,
+                ResourceType = ResourceType.SubscriptionVm
             };
             var taskUpdateOptions = new UpdateVmOptions
             {

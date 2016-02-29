@@ -128,11 +128,11 @@ namespace Crytex.Service.Service
             {
                 throw new InvalidIdentifierException("ExpireMonthCount must be greater than 0");
             }
-            
+
             decimal amount =  this.GetSlotServerMonthPrice(server, options.SlotCount) * options.ExpireMonthCount;
 
             var gameServerVmTransaction = new BillingTransaction
-            {
+        {
                 CashAmount = -amount,
                 TransactionType = BillingTransactionType.GameServer,
                 UserId = options.UserId
@@ -142,7 +142,7 @@ namespace Crytex.Service.Service
             server = CreateServer(server, options);
 
             var gameServerPayment = new PaymentGameServer
-            {
+        {
                 BillingTransactionId = gameServerVmTransaction.Id,
                 Date = dateNow,
                 DateStart = dateNow,
@@ -214,7 +214,9 @@ namespace Crytex.Service.Service
             var deleteTask = new TaskV2
             {
                 UserId = srv.UserId,
-                TypeTask = TypeTask.DeleteGameServer
+                TypeTask = TypeTask.DeleteGameServer,
+                ResourceType = ResourceType.GameServer,
+                ResourceId = srv.Id
             };
             this._taskService.CreateTask(deleteTask, removeVmOptions);
 
@@ -288,11 +290,13 @@ namespace Crytex.Service.Service
                 GameServerId = server.Id,
                 GameServerTariffId = server.GameServerTariffId,
                 GameHostId = server.GameHostId
-            };
+                };
             var newTask = new TaskV2
             {
                 StatusTask = StatusTask.Pending,
                 TypeTask = TypeTask.CreateGameServer,
+                ResourceType = ResourceType.GameServer,
+                ResourceId = server.Id,
                 UserId = server.UserId
             };
 
@@ -356,19 +360,19 @@ namespace Crytex.Service.Service
         }
 
         private void EnableProlongateGameServer(Guid gameServerId, bool autoProlongation)
-        {
+            {
             var gamesrv = GetGameServerById(gameServerId);
             gamesrv.AutoProlongation = autoProlongation;
             _paymentGameServerRepository.Update(gamesrv);
             _unitOfWork.Commit();
-        }
+            }
 
         private void ProlongateGameServerMonth(Guid gameServerId, int monthCount)
         {
             ProlongateGameServer(gameServerId, monthCount, BillingTransactionType.GameServer);
         }
         private decimal GetSlotServerMonthPrice(GameServer server, int slotCount)
-        {
+            {
             var serverTariff = server.GameServerTariff ?? this._gameServerTariffRepository.GetById(server.GameServerTariffId);
             var total = serverTariff.Slot * slotCount;
 
@@ -386,16 +390,17 @@ namespace Crytex.Service.Service
             {
                 var srv = GetById(serverId);
                 var taskOptions = new ChangeGameServerStatusOptions
-                {
+            {
                     TypeChangeStatus = status,
                     GameServerId = srv.Id
-                };
+            };
                 var task = new TaskV2
-                {
+            {
                     TypeTask = TypeTask.GameServerChangeStatus,
-                    UserId = srv.UserId
-                };
-
+                    UserId = srv.UserId,
+                    ResourceType = ResourceType.GameServer,
+                    ResourceId = srv.Id
+            };
                 this._taskService.CreateTask(task, taskOptions);
             }
         }
