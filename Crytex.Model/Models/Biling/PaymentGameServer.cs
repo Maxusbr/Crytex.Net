@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Model.Models.Biling
 {
@@ -16,10 +17,7 @@ namespace Crytex.Model.Models.Biling
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
         public Guid GameServerId { get; set; }
-        public int CoreCount { get; set; }
-        public int RamCount { get; set; }
         public int SlotCount { get; set; }
-        public ServerPaymentType PaymentType { get; set; }
         public int MonthCount { get; set; }
 
         public GameServerStatus Status { get; set; }

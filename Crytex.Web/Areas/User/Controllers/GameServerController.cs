@@ -8,6 +8,7 @@ using System.Web.Http;
 using Crytex.Service.Model;
 using AutoMapper;
 using Crytex.Model.Enums;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -88,26 +89,6 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return this.Ok(new { id = server.Id });
         }
-
-        [HttpPost]
-        public IHttpActionResult UpdateConfiguration([FromBody]GameServerMachineConfigUpdateViewModel model)
-        {
-            if (!this.ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            Guid guid;
-            if (!Guid.TryParse(model.GameServerId, out guid))
-            {
-                ModelState.AddModelError("id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            var serviceOptions = Mapper.Map<UpdateMachineConfigOptions>(model);
-            this._gameServerService.UpdateGameServerMachineConfig(guid, serviceOptions);
-
-            return Ok();
-        }
-
 
         [HttpPut]
         public IHttpActionResult ProlongateGameServer(ProlongateGameServerViewModel model)

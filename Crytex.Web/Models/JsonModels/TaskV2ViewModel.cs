@@ -13,11 +13,13 @@ namespace Crytex.Web.Models.JsonModels
         /// <summary>
         /// Тип ресурса на сервере виртаулизации (например - виртуальная машина)
         /// </summary>
-        public ResourceType ResourceType { get; set; }
+        [Required]
+        public ResourceType? ResourceType { get; set; }
         /// <summary>
         /// Id ресурса на сервере виртаулизации (например имя виртуальной машины на сервере виртуализации)
         /// </summary>
-        public Guid ResourceId { get; set; }
+        [Required]
+        public Guid? ResourceId { get; set; }
         [Required]
         [EnumDataType(typeof(TypeTask))]
         public TypeTask? TypeTask { get; set; }

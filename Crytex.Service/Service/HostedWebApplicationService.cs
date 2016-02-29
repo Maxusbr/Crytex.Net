@@ -56,6 +56,8 @@ namespace Crytex.Service.Service
             {
                 TypeTask = TypeTask.StartWebApp,
                 UserId = app.WebHosting.UserId,
+                ResourceId = app.Id,
+                ResourceType = ResourceType.WebApp
             };
             var taskOptions = new WebApplicationTaskOptions
             {
@@ -88,6 +90,8 @@ namespace Crytex.Service.Service
             {
                 TypeTask = TypeTask.RestartWebApp,
                 UserId = app.WebHosting.UserId,
+                ResourceId = app.Id,
+                ResourceType = ResourceType.WebApp
             };
             var taskOptions = new WebApplicationTaskOptions
             {
@@ -119,6 +123,8 @@ namespace Crytex.Service.Service
             {
                 TypeTask = TypeTask.StopWebApp,
                 UserId = app.WebHosting.UserId,
+                ResourceId = app.Id,
+                ResourceType = ResourceType.WebApp
             };
             var taskOptions = new WebApplicationTaskOptions
             {

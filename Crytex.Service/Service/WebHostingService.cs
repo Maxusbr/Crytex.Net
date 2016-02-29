@@ -216,7 +216,9 @@ namespace Crytex.Service.Service
             var task = new TaskV2
             {
                 UserId = hosting.UserId,
-                TypeTask = TypeTask.DisableWebHosting
+                TypeTask = TypeTask.DisableWebHosting,
+                ResourceType = ResourceType.WebHosting,
+                ResourceId = hosting.Id
             };
             this._taskService.CreateTask(task, disableHostingOptions);
 
@@ -236,7 +238,9 @@ namespace Crytex.Service.Service
             var task = new TaskV2
             {
                 UserId = hosting.UserId,
-                TypeTask = TypeTask.DeleteHosting
+                TypeTask = TypeTask.DeleteHosting,
+                ResourceType = ResourceType.WebHosting,
+                ResourceId = hosting.Id
             };
             this._taskService.CreateTask(task, deleteHostingOptions);
 
@@ -251,10 +255,11 @@ namespace Crytex.Service.Service
             var task = new TaskV2
             {
                 TypeTask = TypeTask.CreateWebHosting,
-                UserId = buyParams.UserId
+                UserId = buyParams.UserId,
+                ResourceType = ResourceType.WebHosting
             };
             var options = new CreateWebHostingOptions();
-            this._taskService.CreateTask(task, options);
+            var newTask = this._taskService.CreateTask(task, options);
 
             var hosting = new WebHosting
             {
@@ -269,6 +274,9 @@ namespace Crytex.Service.Service
 
             this._webHostingRepository.Add(hosting);
             this._unitOfWork.Commit();
+
+            newTask.ResourceId = hosting.Id;
+            _taskService.UpdateTask(newTask);
 
             return hosting;
         }

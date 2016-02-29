@@ -6,9 +6,7 @@ namespace Crytex.Model.Models
     public class TaskV2
     {
         public Guid Id { get; set; }
-        // Тип ресурса на сервере виртаулизации (например - виртуальная машина)
         public ResourceType ResourceType { get; set; }
-        // Id ресурса на сервере виртаулизации (например имя виртуальной машины на сервере виртуализации)
         public Guid? ResourceId { get; set; }
         public TypeTask TypeTask { get; set; }
         public StatusTask StatusTask { get; set; }
@@ -68,9 +66,13 @@ namespace Crytex.Model.Models
         RestartWebApp = 12,
         DisableWebHosting = 13,
         DeleteHosting = 14,
+        CreateGameServer = 15,
+        DeleteGameServer = 16,
+        GameServerChangeStatus = 17,
 
 
-        Test = 99
+
+        Test = 99,
     }
 
     [Serializable]
@@ -173,6 +175,30 @@ namespace Crytex.Model.Models
         public Guid HostedWedApplicationId { get; set; }
     }
 
+    public abstract class BaseGameServerOptions : BaseOptions
+    {
+        public Guid GameServerId { get; set; }
+    }
+
+    [Serializable]
+    public class CreateGameServerOptions : BaseGameServerOptions
+    {
+        public int GameServerTariffId { get; set; }
+        public int GameHostId { get; set; }
+    }
+
+    [Serializable]
+    public class DeleteGameServerOptions : BaseGameServerOptions
+    {
+        
+    }
+
+    [Serializable]
+    public class ChangeGameServerStatusOptions : BaseGameServerOptions
+    {
+        public TypeChangeStatus TypeChangeStatus { get; set; }
+    }
+
     public enum TypeChangeStatus {
         Start,
         Stop,
@@ -182,7 +208,10 @@ namespace Crytex.Model.Models
 
     public enum ResourceType
     {
-        Vm = 0
+        SubscriptionVm = 0,
+        WebHosting = 1,
+        WebApp = 2,
+        GameServer = 3
     }
 }
 

@@ -195,8 +195,6 @@ namespace Crytex.Service.Service
             var task = this.GetTaskById(updateTask.Id);
 
             task.ResourceId = updateTask.ResourceId;
-            task.StatusTask = StatusTask.End;
-
             task.Options = updateTask.Options;
 
             this._taskV2Repo.Update(task);
@@ -255,7 +253,7 @@ namespace Crytex.Service.Service
                     var task = new TaskV2
                     {
                         Id = Guid.NewGuid(),
-                        ResourceType = ResourceType.Vm,
+                        ResourceType = ResourceType.SubscriptionVm,
                         ResourceId = vm.Id,
                         TypeTask = TypeTask.ChangeStatus,
                         Virtualization = vm.VirtualizationType,

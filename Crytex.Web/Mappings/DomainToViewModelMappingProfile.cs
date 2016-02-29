@@ -4,6 +4,7 @@ using AutoMapper;
 using Crytex.Core.Service;
 using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 using Crytex.Web.Models.JsonModels;
 using PagedList;
 using Crytex.Web.Models.ViewModels;
@@ -86,8 +87,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
             Mapper.CreateMap<GameServer, GameServerViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
-                .ForMember(x => x.Name, opt => opt.MapFrom(source => source.Vm.Name))
-                .ForMember(x => x.VmName, opt => opt.MapFrom(source => source.Vm.Name));
+                .ForMember(x => x.GameHostId, opt => opt.MapFrom(source => source.GameHost.Id));
             Mapper.CreateMap<SubscriptionVm, SubscriptionVmViewModel>()
                 .ForMember(x => x.UserName, opt => opt.MapFrom(source => source.User.UserName))
                 .ForMember(x => x.OperatingSystemId, opt => opt.MapFrom(source => source.UserVm.OperatingSystemId));
@@ -148,7 +148,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
-            Mapper.CreateMap<GameServerConfiguration, GameServerConfigurationView>();
+            Mapper.CreateMap<GameServerTariff, GameServerTariffView>();
 
             Mapper.CreateMap<BillingTransactionInfo, BillingTransactionInfoViewModel>()
                 .ForMember(x => x.BillingTransactionId, opt => opt.MapFrom(source => source.BillingTransaction.Id))
