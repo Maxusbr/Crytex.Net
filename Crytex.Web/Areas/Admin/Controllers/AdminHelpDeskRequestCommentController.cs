@@ -1,13 +1,7 @@
-﻿ using Crytex.Service.IService;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
+﻿using Crytex.Service.IService;
 using System.Web.Http;
- using System.Web.Http.Description;
- using Crytex.Web.Models.JsonModels;
-using Crytex.Model.Models;
- using PagedList;
+using System.Web.Http.Description;
+using Crytex.Web.Models.JsonModels;
 
 
 namespace Crytex.Web.Areas.Admin

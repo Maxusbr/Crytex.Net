@@ -3,7 +3,7 @@ using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Data.IRepository
 {
-    public interface IGameServerRepository : IRepository<GameServer>
+    public interface IGameRepository : IRepository<Game>
     {
     }
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
-using System.Web;
-using System.Web.Hosting;
 using Crytex.Core;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -12,6 +10,7 @@ using Crytex.Model.Enums;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using System.IO;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 using Crytex.Model.Models.Notifications;
 
 namespace Crytex.Data.Migrations
@@ -687,31 +686,17 @@ namespace Crytex.Data.Migrations
                 context.EmailInfos.Add(emailInfo);
             }
             context.Commit();
-            var template = serverTemplates[0].Id;
-            var gameServerConfig = context.GameServerConfigurations.FirstOrDefault(
-                g => g.ServerTemplateId == template);
+            var gameServerTariff = context.GameServerTariffs.FirstOrDefault();
 
-            if (gameServerConfig == null)
+            if (gameServerTariff == null)
             {
-                gameServerConfig = new GameServerConfiguration
+                gameServerTariff = new GameServerTariff
                 {
-                    ServerTemplateId = serverTemplates[0].Id,
                 };
-                context.GameServerConfigurations.Add(gameServerConfig);
+                context.GameServerTariffs.Add(gameServerTariff);
             }
 
             context.Commit();
-            var gameServer = new GameServer
-            {
-                PaymentType = ServerPaymentType.Slot,
-                VmId = allMachine[0].Id,
-                SlotCount = 5,
-                GameServerConfigurationId = gameServerConfig.Id,
-                UserId = allUsers[0].Id,
-                CreateDate = DateTime.UtcNow,
-                DateExpire = DateTime.UtcNow.AddMonths(1)
-            };
-            context.GameServers.Add(gameServer);
 
             var phServer1 = new PhysicalServer { ProcessorName = "Intel® Xeon™ 1 Core", Price = (decimal)45.5 };
             var phServer2 = new PhysicalServer { ProcessorName = "Intel® Xeon™ 2 Core", Price = (decimal)85.5 };

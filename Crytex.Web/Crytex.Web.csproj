@@ -273,7 +273,9 @@
     <Compile Include="Areas\Admin\Controllers\AdminEmailTemplateController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFileController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminFixedSubscriptionPaymentController.cs" />
-    <Compile Include="Areas\Admin\Controllers\AdminGameServerConfigurationController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminGameController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminGameHostController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminGameServerTariffController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentGameServerController.cs" />
@@ -310,7 +312,7 @@
     <Compile Include="Areas\User\Controllers\BillingTransactionController.cs" />
     <Compile Include="Areas\User\Controllers\OperatingSystemController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
-    <Compile Include="Areas\User\Controllers\GameServerConfigurationController.cs" />
+    <Compile Include="Areas\User\Controllers\GameServerTariffController.cs" />
     <Compile Include="Areas\User\Controllers\NewsController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentForecastController.cs" />
     <Compile Include="Areas\User\Controllers\PaymentGameServerController.cs" />
@@ -370,10 +372,12 @@
     <Compile Include="Models\JsonModels\EmailInfoesViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
-    <Compile Include="Models\JsonModels\GameServerConfigurationView.cs" />
+    <Compile Include="Models\JsonModels\GameHostViewModel.cs" />
+    <Compile Include="Models\JsonModels\GameServerTariffView.cs" />
     <Compile Include="Models\JsonModels\GameServerConfigViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerMachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
+    <Compile Include="Models\JsonModels\GameViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingTransactionInfoViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentViewModelBase.cs" />
