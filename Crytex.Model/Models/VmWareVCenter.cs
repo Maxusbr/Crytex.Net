@@ -12,5 +12,6 @@ namespace Crytex.Model.Models
         public string UserName { get; set; }
         public string Password { get; set; }
         public string ServerAddress { get; set; }
+        public string DefaultVmNetworkName { get; set; }
     }
 }
