@@ -14,7 +14,8 @@ namespace Crytex.Model.Models.GameServers
         public string UserId { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime DateExpire { get; set; }
-
+        public GameServerStatus Status { get; set; }
+        public bool AutoProlongation { get; set; }
 
         [ForeignKey("GameHostId")]
         public GameHost GameHost { get; set; }
@@ -23,5 +24,11 @@ namespace Crytex.Model.Models.GameServers
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
         public virtual ICollection<BillingTransaction> BillingTransaction { get; set; }
+    }
+    public enum GameServerStatus
+    {
+        WaitForPayment = 0,
+        Active = 1,
+        Deleted = 2
     }
 }

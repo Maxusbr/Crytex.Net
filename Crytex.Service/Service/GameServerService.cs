@@ -27,7 +27,7 @@ namespace Crytex.Service.Service
 
         public GameServerService(IGameServerRepository gameServerRepository, ITaskV2Service taskService,
             IGameServerTariffRepository gameServerTariffRepository, IBilingService billingService,
-            IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository, 
+            IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository,
             IGameHostService gameHostService, IUnitOfWork unitOfWork)
         {
             this._gameServerRepository = gameServerRepository;
@@ -94,20 +94,20 @@ namespace Crytex.Service.Service
                 }
             }
 
-            var page = this._paymentGameServerRepository.GetPage(new PageInfo(pageNumber, pageSize), where, (x => x.Date), true, x => x.User);
+            var page = _paymentGameServerRepository.GetPage(new PageInfo(pageNumber, pageSize), where, (x => x.Date), true, x => x.User);
 
             return page;
         }
 
-        public IEnumerable<PaymentGameServer> GetAllGameServers()
+        public IEnumerable<GameServer> GetAllGameServers()
         {
-            var subs = this._paymentGameServerRepository.GetAll();
+            var subs = _gameServerRepository.GetAll();
             return subs;
         }
 
-        public IEnumerable<PaymentGameServer> GetGameServerByStatus(GameServerStatus status)
+        public IEnumerable<GameServer> GetGameServerByStatus(GameServerStatus status)
         {
-            var subs = this._paymentGameServerRepository.GetMany(s => s.Status == status, s => s.User);
+            var subs = _gameServerRepository.GetMany(s => s.Status == status, s => s.User);
             return subs;
         }
 
@@ -129,10 +129,10 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException("ExpireMonthCount must be greater than 0");
             }
 
-            decimal amount =  this.GetSlotServerMonthPrice(server, options.SlotCount) * options.ExpireMonthCount;
+            decimal amount = this.GetSlotServerMonthPrice(server, options.SlotCount) * options.ExpireMonthCount;
 
             var gameServerVmTransaction = new BillingTransaction
-        {
+            {
                 CashAmount = -amount,
                 TransactionType = BillingTransactionType.GameServer,
                 UserId = options.UserId
@@ -142,7 +142,7 @@ namespace Crytex.Service.Service
             server = CreateServer(server, options);
 
             var gameServerPayment = new PaymentGameServer
-        {
+            {
                 BillingTransactionId = gameServerVmTransaction.Id,
                 Date = dateNow,
                 DateStart = dateNow,
@@ -151,8 +151,7 @@ namespace Crytex.Service.Service
                 Amount = amount,
                 UserId = server.UserId,
                 SlotCount = options.SlotCount,
-                MonthCount = options.ExpireMonthCount,
-                Status = GameServerStatus.Active
+                MonthCount = options.ExpireMonthCount
             };
             this._paymentGameServerRepository.Add(gameServerPayment);
             this._unitOfWork.Commit();
@@ -197,9 +196,9 @@ namespace Crytex.Service.Service
 
         public void UpdateStatusServer(Guid guid, GameServerStatus status)
         {
-            var gameserv = GetGameServerById(guid);
+            var gameserv = GetById(guid);
             gameserv.Status = status;
-            _paymentGameServerRepository.Update(gameserv);
+            _gameServerRepository.Update(gameserv);
             _unitOfWork.Commit();
         }
 
@@ -220,9 +219,9 @@ namespace Crytex.Service.Service
             };
             this._taskService.CreateTask(deleteTask, removeVmOptions);
 
-            var gameserv = GetGameServerById(guid);
+            var gameserv = GetById(guid);
             gameserv.Status = GameServerStatus.Deleted;
-            _paymentGameServerRepository.Update(gameserv);
+            _gameServerRepository.Update(gameserv);
             _unitOfWork.Commit();
         }
 
@@ -281,7 +280,7 @@ namespace Crytex.Service.Service
                 throw new TaskOperationException("Cannot find gamehost for new gameserver");
             }
             server.GameHostId = gameHost.Id;
-
+            server.Status = GameServerStatus.Active;
             this._gameServerRepository.Add(server);
             this._unitOfWork.Commit();
 
@@ -290,7 +289,7 @@ namespace Crytex.Service.Service
                 GameServerId = server.Id,
                 GameServerTariffId = server.GameServerTariffId,
                 GameHostId = server.GameHostId
-                };
+            };
             var newTask = new TaskV2
             {
                 StatusTask = StatusTask.Pending,
@@ -300,7 +299,7 @@ namespace Crytex.Service.Service
                 UserId = server.UserId
             };
 
-             _taskService.CreateTask<CreateGameServerOptions>(newTask, taskOptions);
+            _taskService.CreateTask<CreateGameServerOptions>(newTask, taskOptions);
 
             return server;
         }
@@ -360,19 +359,19 @@ namespace Crytex.Service.Service
         }
 
         private void EnableProlongateGameServer(Guid gameServerId, bool autoProlongation)
-            {
-            var gamesrv = GetGameServerById(gameServerId);
+        {
+            var gamesrv = GetById(gameServerId);
             gamesrv.AutoProlongation = autoProlongation;
-            _paymentGameServerRepository.Update(gamesrv);
+            _gameServerRepository.Update(gamesrv);
             _unitOfWork.Commit();
-            }
+        }
 
         private void ProlongateGameServerMonth(Guid gameServerId, int monthCount)
         {
             ProlongateGameServer(gameServerId, monthCount, BillingTransactionType.GameServer);
         }
         private decimal GetSlotServerMonthPrice(GameServer server, int slotCount)
-            {
+        {
             var serverTariff = server.GameServerTariff ?? this._gameServerTariffRepository.GetById(server.GameServerTariffId);
             var total = serverTariff.Slot * slotCount;
 
@@ -381,26 +380,25 @@ namespace Crytex.Service.Service
 
         private void ChangeGameServerMachineState(Guid serverId, TypeChangeStatus status)
         {
-            var gameserv = GetGameServerById(serverId);
+            var gameserv = GetById(serverId);
             if (gameserv.Status != GameServerStatus.Active)
             {
                 throw new InvalidOperationApplicationException("Cannot start GameServer. GameServer status is not Active");
             }
             else
             {
-                var srv = GetById(serverId);
                 var taskOptions = new ChangeGameServerStatusOptions
-            {
+                {
                     TypeChangeStatus = status,
-                    GameServerId = srv.Id
-            };
+                    GameServerId = gameserv.Id
+                };
                 var task = new TaskV2
-            {
+                {
                     TypeTask = TypeTask.GameServerChangeStatus,
-                    UserId = srv.UserId,
+                    UserId = gameserv.UserId,
                     ResourceType = ResourceType.GameServer,
-                    ResourceId = srv.Id
-            };
+                    ResourceId = gameserv.Id
+                };
                 this._taskService.CreateTask(task, taskOptions);
             }
         }

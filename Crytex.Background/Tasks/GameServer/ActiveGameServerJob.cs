@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 using Crytex.Notification;
 using Crytex.Service.IService;
 using Quartz;
@@ -27,13 +28,13 @@ namespace Crytex.Background.Tasks.GameServer
             var servers = _gameServerService.GetGameServerByStatus(GameServerStatus.Active);
             var currentDate = DateTime.UtcNow;
 
-            var outdateServers = servers.Where(o => o.DateEnd < currentDate);
+            var outdateServers = servers.Where(o => o.DateExpire < currentDate);
             foreach (var srv in outdateServers)
                 if (srv.AutoProlongation)
-                    _gameServerService.AutoProlongateGameServer(srv.GameServerId);
+                    _gameServerService.AutoProlongateGameServer(srv.Id);
                 else
                 {
-                    _gameServerService.UpdateStatusServer(srv.GameServerId, GameServerStatus.WaitForPayment);
+                    _gameServerService.UpdateStatusServer(srv.Id, GameServerStatus.WaitForPayment);
                     _notificationManager.SendGameServerPoweredOffEmail(srv.UserId);
                 }
         }

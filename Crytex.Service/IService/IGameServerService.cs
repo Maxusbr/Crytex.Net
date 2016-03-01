@@ -17,10 +17,10 @@ namespace Crytex.Service.IService
         GameServer BuyGameServer(GameServer server, BuyGameServerOption option);
         decimal GetGameServerMonthPrice(GameServer server);
         IPagedList<PaymentGameServer> GetPage(int pageNumber, int pageSize, SearchPaymentGameServerParams filter = null);
-        IEnumerable<PaymentGameServer> GetGameServerByStatus(GameServerStatus status);
+        IEnumerable<GameServer> GetGameServerByStatus(GameServerStatus status);
         void UpdateStatusServer(Guid gameServerId, GameServerStatus waitForPayment);
         void DeleteGameServer(Guid gameServerId);
-        IEnumerable<PaymentGameServer>  GetAllGameServers();
+        IEnumerable<GameServer>  GetAllGameServers();
         void UpdateGameServer(Guid serverId, GameServerConfigOptions options);
         void AutoProlongateGameServer(Guid gameServerId);
         void StartGameServer(Guid serverId);
