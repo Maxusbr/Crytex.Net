@@ -9,7 +9,7 @@ namespace Crytex.Web.Service
 {
     public class UserInfoProvider : IUserInfoProvider
     {
-        private IIdentity _identity;
+        private IIdentity _identity7;
         private ApplicationUserManager _userManager;
         public UserInfoProvider(IIdentity identity, ApplicationUserManager userManager)
         {
