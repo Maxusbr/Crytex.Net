@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Crytex.Background.Config;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 using Crytex.Notification;
 using Crytex.Service.IService;
 using Quartz;
@@ -34,7 +35,7 @@ namespace Crytex.Background.Tasks.GameServer
 
             foreach (var srv in servers)
             {
-                var srvDate = srv.DateEnd ?? new DateTime();
+                var srvDate = srv.DateExpire;
                 var daysToEnd = (srvDate - currentDate).Days;
                 if (currentDate < srvDate && daysToEnd == serverEndWarnPeriod)
                 {

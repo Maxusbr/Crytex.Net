@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Crytex.Background.Config;
 using Crytex.Model.Models.Biling;
+using Crytex.Model.Models.GameServers;
 using Crytex.Notification;
 using Crytex.Service.IService;
 using Quartz;
@@ -32,9 +33,9 @@ namespace Crytex.Background.Tasks.GameServer
             var currentDate = DateTime.UtcNow;
             var warnPeriod = _config.GetGameServerEndWarnPeriod();
 
-            var actionRequiredServer = servers.Where(srv => (currentDate - (srv.DateEnd ?? new DateTime())).Days >= warnPeriod);
+            var actionRequiredServer = servers.Where(srv => (currentDate - srv.DateExpire).Days >= warnPeriod);
             foreach (var srv in actionRequiredServer)
-                _gameServerService.DeleteGameServer(srv.GameServerId);
+                _gameServerService.DeleteGameServer(srv.Id);
         }
     }
 }
