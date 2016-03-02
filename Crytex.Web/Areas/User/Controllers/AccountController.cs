@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security.DataProtection;
 using System;
 using System.Collections.Generic;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -107,7 +108,7 @@ namespace Crytex.Web.Areas.User.Controllers
             if (ModelState.IsValid)
             {
 
-                var user = await  _userManager.FindByIdAsync(CrytexContext.UserInfoProvider.GetUserId());
+                var user = await _userManager.FindByIdAsync(CrytexContext.UserInfoProvider.GetUserId());
                 if (!user.PhoneNumberConfirmed)
                 {
                     return this.Conflict();
@@ -122,7 +123,7 @@ namespace Crytex.Web.Areas.User.Controllers
                 user.City = model.City;
                 user.Country = model.Country;
 
-                var result = await  _userManager.UpdateAsync(user);
+                var result = await _userManager.UpdateAsync(user);
                 var addRoleResult = await _userManager.RemoveFromRoleAsync(user.Id, "FirstStepRegister");
                 if (!addRoleResult.Succeeded)
                 {
@@ -144,6 +145,36 @@ namespace Crytex.Web.Areas.User.Controllers
             return this.Conflict();
         }
 
+        [HttpPost]
+        [Authorize(Roles = "User")]
+        public async Task<IHttpActionResult> EditUser(FullUserInfoViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                var user = await _userManager.FindByIdAsync(CrytexContext.UserInfoProvider.GetUserId());
+
+                user.Name = model.Name;
+                user.Lastname = model.LastName;
+                user.CodePhrase = model.CodePhrase;
+                user.Patronymic = model.Patronymic;
+                user.Region = model.Region;
+                user.Address = model.Address;
+                user.UserType = model.UserType;
+                user.City = model.City;
+                user.Country = model.Country;
+
+                var result = await _userManager.UpdateAsync(user);
+
+                if (!result.Succeeded)
+                {
+                    AddErrors(result);
+                }
+                return this.Ok();
+            }
+
+            return this.Conflict();
+        }
         [HttpPost]
         public IHttpActionResult AddPhoneNumber(AddPhoneNumberViewModel model)
         {
@@ -168,7 +199,7 @@ namespace Crytex.Web.Areas.User.Controllers
         [HttpPost]
         public IHttpActionResult VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
-         
+
             if (this.ModelState.IsValid)
             {
                 var result = UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code).Result;
@@ -233,7 +264,7 @@ namespace Crytex.Web.Areas.User.Controllers
 
         private async Task SendResetPasswordEmailForUser(ApplicationUser user)
         {
-            
+
             var code = await _userManager.GeneratePasswordResetTokenAsync(user.Id);
 
             var callbackUrl = $"{CrytexContext.ServerConfig.GetClientAddress()}#/account/resetPassword?userId={user.Id}&&code={Base64ForUrlEncode(code)}";
