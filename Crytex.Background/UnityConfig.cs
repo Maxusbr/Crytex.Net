@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Crytex.Background.Monitor;
 using Crytex.Background.Monitor.HyperV;
 using Crytex.Background.Monitor.Vmware;
@@ -11,6 +12,7 @@ using Microsoft.Practices.Unity;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Data.Repository;
+using Crytex.Model.Models;
 using Crytex.Notification.Senders.SigralRSender;
 using Crytex.Service.IService;
 using Crytex.Service.Service;
@@ -25,6 +27,7 @@ namespace Crytex.Background
 
     public class UnityConfig : UnityConfigBase
     {
+
         public static void Configure()
         {
             UnityConfigureFunc = unityContainer =>
@@ -43,7 +46,33 @@ namespace Crytex.Background
                 unityContainer.RegisterType<ISignalRSender, NetSignalRSender>();
 
                 unityContainer.RegisterType<ITaskHandlerManager, TaskHandlerManager>(new PerResolveLifetimeManager());
-                unityContainer.RegisterType<ITaskQueuePoolManager, TaskQueuePoolManager>(new ContainerControlledLifetimeManager());
+
+                TypeTask[] gameTaskTypes = new TypeTask[]
+                {
+                    TypeTask.CreateGameServer,
+                    TypeTask.DeleteGameServer,
+                    TypeTask.GameServerChangeStatus,
+                };
+                unityContainer.RegisterType<ITaskQueuePoolManager, TaskQueuePoolManager>("Game", new ContainerControlledLifetimeManager(), new InjectionProperty("TaskTypes", gameTaskTypes));
+                TypeTask[] nonGameTaskTypes = new TypeTask[]
+                {
+                    TypeTask.CreateVm,
+                    TypeTask.UpdateVm,
+                    TypeTask.ChangeStatus,
+                    TypeTask.RemoveVm,
+                    TypeTask.Backup,
+                    TypeTask.DeleteBackup,
+                    TypeTask.CreateSnapshot,
+                    TypeTask.DeleteSnapshot,
+                    TypeTask.LoadSnapshot,
+                    TypeTask.CreateWebHosting,
+                    TypeTask.StartWebApp,
+                    TypeTask.StopWebApp,
+                    TypeTask.RestartWebApp,
+                    TypeTask.DisableWebHosting,
+                    TypeTask.DeleteHosting,
+                };
+                unityContainer.RegisterType<ITaskQueuePoolManager, TaskQueuePoolManager>("NonGame", new ContainerControlledLifetimeManager(), new InjectionProperty("TaskTypes", nonGameTaskTypes));
             };
         }
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Background.Tasks
 {
@@ -15,9 +16,9 @@ namespace Crytex.Background.Tasks
     {
         private ITaskQueuePoolManager _taskManager;
 
-        public TaskExecutorUpdateJob(ITaskQueuePoolManager taskManager)
+        public TaskExecutorUpdateJob(IUnityContainer unityContainer, string executorName)
         {
-            this._taskManager = taskManager;
+            this._taskManager = unityContainer.Resolve<ITaskQueuePoolManager>(executorName);
         }
 
         public void Execute(IJobExecutionContext context)

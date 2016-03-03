@@ -209,9 +209,22 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public IEnumerable<TaskV2> GetPendingTasks()
+        public IEnumerable<TaskV2> GetPendingTasks(IEnumerable<TypeTask> taskTypes = null)
         {
-            var tasks = this._taskV2Repo.GetMany(t => t.StatusTask == StatusTask.Pending);
+            Expression<Func<TaskV2, bool>> where = t => t.StatusTask == StatusTask.Pending;
+
+            if (taskTypes != null && taskTypes.Any())
+            {
+                Expression<Func<TaskV2, bool>> taskTypeWhere = x => false;
+                foreach (var taskType in taskTypes)
+                {
+                    taskTypeWhere = taskTypeWhere.Or(x => x.TypeTask == taskType);
+                }
+
+                where = where.And(taskTypeWhere);
+            }
+
+            var tasks = this._taskV2Repo.GetMany(where);
 
             return tasks;
         }

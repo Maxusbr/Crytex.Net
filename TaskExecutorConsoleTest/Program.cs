@@ -11,6 +11,7 @@ using VmWareRemote.Implementations;
 using Crytex.Model.Models;
 using VmWareRemote.Model;
 using Crytex.ExecutorTask.Config;
+using Crytex.Service.IService;
 using VmWareRemote.Interface;
 
 namespace TaskExecutorConsoleTest
@@ -20,7 +21,12 @@ namespace TaskExecutorConsoleTest
         static void Main(string[] args)
         {
             UnityConfig.Configure();
-            var taskManager = UnityConfig.Resolve<ITaskQueuePoolManager>();
+            var taskService = UnityConfig.Resolve<ITaskV2Service>();
+            var tasks = taskService.GetPendingTasks(new TypeTask[] {TypeTask.CreateVm, TypeTask.UpdateVm,});
+            foreach (var taskV2 in tasks)
+            {
+                Console.WriteLine($"Task id ={taskV2.Id}");
+            }
         }
     }
 }

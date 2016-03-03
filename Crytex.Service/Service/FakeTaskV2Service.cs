@@ -56,7 +56,7 @@ namespace Crytex.Service.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<TaskV2> GetPendingTasks()
+        public IEnumerable<TaskV2> GetPendingTasks(IEnumerable<TypeTask> taskTypes = null)
         {
             throw new NotImplementedException();
         }
