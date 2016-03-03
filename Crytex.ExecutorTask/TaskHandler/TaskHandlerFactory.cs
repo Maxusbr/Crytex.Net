@@ -1,6 +1,4 @@
 ﻿using Crytex.ExecutorTask.Config;
-using Crytex.ExecutorTask.TaskHandler.HyperV;
-using Crytex.ExecutorTask.TaskHandler.VmWare;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Virtualization._VMware;
@@ -253,22 +251,6 @@ namespace Crytex.ExecutorTask.TaskHandler
             var handler = new LoadSnapshotTaskHandler(task, provider, vCenter.Id, this._snapshotVmService);
 
             return handler;
-        }
-
-        private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)
-        {
-      
-            var control = new FakeVmWareControl(null);
-
-            return control;
-        }
-
-        private IHyperVControl CreateHyperVControl(TaskV2 task, HyperVHost host)
-        {
-     
-            var control = new FakeHyperVControl(null);
-
-            return control;
         }
         #endregion // Private methods
     }
