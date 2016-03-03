@@ -4,19 +4,21 @@ using Microsoft.Practices.Unity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Crytex.Model.Models;
 
 namespace Crytex.ExecutorTask
 {
     public class TaskQueuePoolManager : ITaskQueuePoolManager
     {
+        public TypeTask[] TaskTypes { get; set; }
         private List<UserTaskQueueManager> _taskQueueManagers = new List<UserTaskQueueManager>();
         private readonly ITaskV2Service _taskService;
         private readonly IUnityContainer _unityContainer;
 
         public TaskQueuePoolManager(IUnityContainer unityContainer, ITaskV2Service taskService)
         {
-            this._taskService = taskService;
-            this._unityContainer = unityContainer;
+            _taskService = taskService;
+            _unityContainer = unityContainer;
         }
 
         public void UpdateTaskQueues()
@@ -28,7 +30,7 @@ namespace Crytex.ExecutorTask
             }
 
             // Get all pending tasks
-            var tasks = this._taskService.GetPendingTasks();
+            var tasks = this._taskService.GetPendingTasks(TaskTypes);
             // Group tasks by UserId
             var tasksGroupedByUserId = tasks.GroupBy(t => t.UserId);
 

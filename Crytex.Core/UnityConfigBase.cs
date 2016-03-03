@@ -49,6 +49,11 @@
             return container.Value.Resolve<T>();
         }
 
+        public static T Resolve<T>(string name)
+        {
+            return container.Value.Resolve<T>(name);
+        }
+
         public static void Dispose()
         {
             container.Value.Dispose();
