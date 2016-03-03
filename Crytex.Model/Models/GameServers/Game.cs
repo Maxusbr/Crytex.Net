@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Crytex.Model.Enums;
 
 namespace Crytex.Model.Models.GameServers
 {
@@ -11,8 +12,4 @@ namespace Crytex.Model.Models.GameServers
         public ICollection<GameHost> GameHosts { get; set; } 
     }
 
-    public enum GameFamily
-    {
-        CounterStrike = 0
-    }
 }

@@ -79,6 +79,7 @@
     <Compile Include="Enums\EmailResultStatus.cs" />
     <Compile Include="Enums\EmailTemplateType.cs" />
     <Compile Include="Enums\EnumApplicationType.cs" />
+    <Compile Include="Enums\GameFamily.cs" />
     <Compile Include="Enums\GameServerUpdateType.cs" />
     <Compile Include="Enums\PhysicalServerOptionType.cs" />
     <Compile Include="Enums\UrgencyLevel.cs" />

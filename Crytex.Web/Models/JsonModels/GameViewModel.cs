@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Crytex.Model.Enums;
 using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Models.JsonModels

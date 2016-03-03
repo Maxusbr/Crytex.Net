@@ -161,8 +161,8 @@ namespace Crytex.Web.Mappings
                 .Include<UsageSubscriptionPayment, UsageSubscriptionPaymentView>()
                 .Include<SubscriptionVmBackupPayment, SubscriptionVmBackupPaymentViewModel>()
                 .Include<PaymentGameServer, PaymentGameServerViewModel>()
-                .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();            
-
+                .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
+            Mapper.CreateMap<Game, GameViewModel>();
             Mapper.CreateMap<DhcpServer, DhcpServerView>()
                 .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));           
