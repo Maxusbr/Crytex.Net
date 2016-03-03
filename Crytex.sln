@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Virtualization.VMwar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.Virtualization.ProviderFactory", "Crytex.Virtualization.ProviderFactory\Crytex.Virtualization.ProviderFactory.csproj", "{9E584D98-4035-4DE4-A87D-070E0BC416F4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Crytex.GameServers", "..\crytex.gameservers\Crytex.GameServers.csproj", "{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -301,6 +303,22 @@ Global
 		{9E584D98-4035-4DE4-A87D-070E0BC416F4}.Release|x64.Build.0 = Release|Any CPU
 		{9E584D98-4035-4DE4-A87D-070E0BC416F4}.Release|x86.ActiveCfg = Release|Any CPU
 		{9E584D98-4035-4DE4-A87D-070E0BC416F4}.Release|x86.Build.0 = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|ARM.Build.0 = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|x64.Build.0 = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Debug|x86.Build.0 = Debug|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|ARM.ActiveCfg = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|ARM.Build.0 = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|x64.ActiveCfg = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|x64.Build.0 = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|x86.ActiveCfg = Release|Any CPU
+		{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
