@@ -22,6 +22,7 @@ namespace Crytex.Model.Models
         public DateTime DateAdded { get; set; }
         public Guid SystemCenterVirtualManagerId { get; set; }
         public bool Deleted { get; set; }
+        public string DefaultVmNetworkName { get; set; }
 
         [ForeignKey("SystemCenterVirtualManagerId")]
         public virtual SystemCenterVirtualManager VirtualManager { get; set; }

@@ -121,7 +121,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             var provider = this.GetProvider(host);
-            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, host.Id);
+            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, host.Id, host.DefaultVmNetworkName);
 
             return handler;
         }
@@ -129,7 +129,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             var provider = this.GetProvider(vCenter);
-            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, vCenter.Id);
+            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, vCenter.Id, vCenter.DefaultVmNetworkName);
 
             return handler;
         }
