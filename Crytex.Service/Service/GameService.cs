@@ -4,10 +4,12 @@ using System.Linq;
 using System.Linq.Expressions;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
+using Crytex.Model.Enums;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models.GameServers;
 using Crytex.Service.Extension;
 using Crytex.Service.IService;
+using PagedList;
 
 namespace Crytex.Service.Service
 {
@@ -49,6 +51,36 @@ namespace Crytex.Service.Service
             var games = _gameRepository.GetMany(where);
 
             return games;
+        }
+
+        public IPagedList<Game> GetPage(int pageNumber, int pageSize, GameFamily family)
+        {
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+            Expression<Func<Game, bool>> where = x => true;
+            if (family != GameFamily.Unknown)
+            {
+                where = where.And(p => p.Family == family);
+            }
+            var pagedList = _gameRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.GameHosts);
+
+            return pagedList;
+        }
+
+        public void Update(Game game)
+        {
+            var existGame = _gameRepository.GetById(game.Id);
+            if (existGame == null)
+            {
+                throw new ValidationException($"Game with Id={game.Id} not found");
+            }
+            if(!string.IsNullOrEmpty(game.Name))
+                existGame.Name = game.Name;       
+            if(!string.IsNullOrEmpty(game.Version))
+                existGame.Version = game.Version;                        
+            existGame.Family = game.Family;
+
+            _gameRepository.Update(game);
+            _unitOfWork.Commit();
         }
 
         private void ValidateGame(Game game)

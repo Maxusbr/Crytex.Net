@@ -310,6 +310,7 @@
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\BillingTransactionController.cs" />
+    <Compile Include="Areas\User\Controllers\GameController.cs" />
     <Compile Include="Areas\User\Controllers\OperatingSystemController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\GameServerTariffController.cs" />

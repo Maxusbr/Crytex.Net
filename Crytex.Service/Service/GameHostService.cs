@@ -8,6 +8,7 @@ using Crytex.Data.IRepository;
 using Crytex.Model.Models.GameServers;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
+using PagedList;
 
 namespace Crytex.Service.Service
 {
@@ -66,6 +67,50 @@ namespace Crytex.Service.Service
             var hosts = _gameHostRepository.GetMany(where);
 
             return hosts.FirstOrDefault();
+        }
+
+        public void Update(int id, GameHostCreateOptions option)
+        {
+            var host = _gameHostRepository.Get(x => x.Id == id, x => x.SupportedGames);
+            if (host == null)
+            {
+                throw new ValidationException($"GameHost with Id={id} not found");
+            }
+            if (option.GameServersMaxCount != 0)
+                host.GameServersMaxCount = option.GameServersMaxCount;
+            if (option.Port != 0)
+                host.Port = option.Port;
+            if (!string.IsNullOrEmpty(option.ServerAddress))
+                host.ServerAddress = option.ServerAddress;
+            if (!string.IsNullOrEmpty(option.UserName))
+                host.UserName = option.UserName;
+            if (!string.IsNullOrEmpty(option.Password))
+                host.Password = option.Password;
+            if (option.SupportedGamesIds != null && option.SupportedGamesIds.Any())
+            {
+                var hostGames = _gameSerice.GetGamesByIds(option.SupportedGamesIds);
+                if (hostGames.Count() != option.SupportedGamesIds.Length)
+                {
+                    throw new ValidationException("Some of supported games ids is invalid");
+                }
+                if(host.SupportedGames == null) host.SupportedGames = new List<Game>();
+                host.SupportedGames.Clear();
+                foreach (var game in hostGames)
+                    host.SupportedGames.Add(game);
+            }
+
+            _gameHostRepository.Update(host);
+            _unitOfWork.Commit();
+        }
+
+        public IPagedList<GameHost> GetPage(int pageNumber, int pageSize)
+        {
+            var pageInfo = new PageInfo(pageNumber, pageSize);
+            Expression<Func<GameHost, bool>> where = x => true;
+
+            var pagedList = _gameHostRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.SupportedGames);
+
+            return pagedList;
         }
 
         private void ValidateHostEntity(GameHost host)
