@@ -28,19 +28,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                 // Create delete task if snapshot is outdated
                 if((DateTime.UtcNow.Day - snapshot.Date.Day) > snapshotStoringDaysPeriod)
                 {
-                    var options = new DeleteSnapshotOptions
-                    {
-                        DeleteWithChildrens = false,
-                        SnapshotId = snapshot.Id,
-                        VmId = snapshot.VmId
-                    };
-                    var task = new TaskV2
-                    {
-                        TypeTask = TypeTask.DeleteSnapshot,
-                        ResourceId = snapshot.VmId,
-                        ResourceType = ResourceType.SubscriptionVm,
-                    };
-                    this._taskService.CreateTask(task, options);
+                    _snapshotVmService.PrepareSnapshotForDeletion(snapshot.Id, false);
                 }
             }
         }
