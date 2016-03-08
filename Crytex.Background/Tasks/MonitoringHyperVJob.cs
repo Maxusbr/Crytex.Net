@@ -1,34 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Management.Automation;
-using Crytex.Notification;
 using System.Threading.Tasks;
 using Crytex.Background.Monitor;
-using Crytex.Background.Monitor.HyperV;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using HyperVRemote;
 
 namespace Crytex.Background.Tasks
 {
     using System;
     using Quartz;
-    using Crytex.Background.Monitor.HyperV;
 
     [DisallowConcurrentExecution]
     public class MonitoringHyperVJob : IJob
     {
-        private IHyperVMonitorFactory _hyperVMonitorFactory { get; set; }
+        private IVmMonitorFactory _vmMonitorFactory { get; set; }
         private IStateMachineService _stateMachine { get; set; }
         private IUserVmService _userVm { get; set; }
         private ISystemCenterVirtualManagerService _systemCenter { get; set; }
 
-        public MonitoringHyperVJob (IHyperVMonitorFactory hyperVMonitorFactory,
+        public MonitoringHyperVJob (IVmMonitorFactory vmMonitorFactory,
             IStateMachineService stateMachine, 
             IUserVmService userVm,
             ISystemCenterVirtualManagerService systemCenter)
         {
-            this._hyperVMonitorFactory = hyperVMonitorFactory;
+            this._vmMonitorFactory = vmMonitorFactory;
             this._stateMachine = stateMachine;
             this._userVm = userVm;
             this._systemCenter = systemCenter;
@@ -51,17 +46,17 @@ namespace Crytex.Background.Tasks
 
         public void GetVmInfo(HyperVHost host, List<UserVm> allVMs)
         {
-            var hyperVMonitor = _hyperVMonitorFactory.CreateHyperVMonitor(host);
+            var hyperVMonitor = _vmMonitorFactory.GetHyperVMonitor(host);
             var hostVms = allVMs.Where(v=>v.VirtualizationType == TypeVirtualization.HyperV && v.HyperVHostId == host.Id);
 
             foreach (var vm in hostVms)
             {
-                var stateData = hyperVMonitor.GetVmByName(vm.Name);
+                var stateData = hyperVMonitor.GetMachineState(vm.Name);
 
                 StateMachine vmState = new StateMachine
                 {
-                    CpuLoad = stateData.CPUUsage,
-                    RamLoad = stateData.MemoryAssigned,
+                    CpuLoad = stateData.CpuUsage,
+                    RamLoad = stateData.RamUsage,
                     UpTime = stateData.Uptime,
                     Date = DateTime.UtcNow,
                     VmId = vm.Id

@@ -88,20 +88,13 @@
   <ItemGroup>
     <Compile Include="Config\BackgroundConfig.cs" />
     <Compile Include="Config\IBackgroundConfig.cs" />
-    <Compile Include="Monitor\HyperV\HyperVMonitorFactory.cs" />
-    <Compile Include="Monitor\HyperV\HyperVMonitor.cs" />
-    <Compile Include="Monitor\HyperV\FakeHyperVMonitorFactory.cs" />
-    <Compile Include="Monitor\Vmware\IVmWareMonitorFactory.cs" />
-    <Compile Include="Monitor\Vmware\VmWareMonitor.cs" />
-    <Compile Include="Monitor\Vmware\FakeVmWareProvider.cs" />
-    <Compile Include="Monitor\Vmware\FakeVmWareMonitor.cs" />
-    <Compile Include="Monitor\HyperV\FakeHyperVProvider.cs" />
-    <Compile Include="Monitor\Vmware\FakeVmWareMonitorFactory.cs" />
-    <Compile Include="Monitor\Vmware\VmWareMonitorFactory.cs" />
-    <Compile Include="Monitor\HyperV\FakeHyperVMonitor.cs" />
-    <Compile Include="Monitor\Vmware\IVmWareMonitor.cs" />
-    <Compile Include="Monitor\HyperV\IHyperVMonitor.cs" />
-    <Compile Include="Monitor\HyperV\IHyperVMonitorFactory.cs" />
+    <Compile Include="Monitor\Fake\FakeVmMonitor.cs" />
+    <Compile Include="Monitor\Fake\FakeVmMonitorFactory.cs" />
+    <Compile Include="Monitor\IVmMonitor.cs" />
+    <Compile Include="Monitor\IVmMonitorFactory.cs" />
+    <Compile Include="Monitor\VmMonitor.cs" />
+    <Compile Include="Monitor\VmMonitorFactory.cs" />
+    <Compile Include="Monitor\VmState.cs" />
     <Compile Include="Scheduler\ISchedulerJobs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -158,6 +151,14 @@
     <ProjectReference Include="..\..\crytex.virtualization.base\Crytex.Virtualization\Crytex.Virtualization.Base.csproj">
       <Project>{0c16dd67-e3eb-4b88-aaec-6784dcfda318}</Project>
       <Name>Crytex.Virtualization.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\crytex.virtualization.impl\Crytex.Virtualization.HyperV\Crytex.Virtualization.HyperV.csproj">
+      <Project>{23b93348-0b42-4e97-b86b-0fc5afb836f7}</Project>
+      <Name>Crytex.Virtualization.HyperV</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\crytex.virtualization.impl\Crytex.Virtualization.VMware\Crytex.Virtualization.VMware.csproj">
+      <Project>{08b6c1a9-5371-45bc-9e3a-960d8627db83}</Project>
+      <Name>Crytex.Virtualization.VMware</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\hyper-v-virtualization\HyperVRemote\HyperVRemote\HyperVRemote.csproj">
       <Project>{b955b2c6-0c37-4b95-965d-a1ac5e0ca284}</Project>

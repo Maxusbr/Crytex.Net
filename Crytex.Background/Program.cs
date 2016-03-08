@@ -64,7 +64,7 @@ namespace Crytex.Background
             //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.UsersWithLeastOneRunningMachine);
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
             //scheduler.ScheduleJob<MonitoringHyperVJob>("monitoring hyperv", "1/10 * * * * ?");
-            //scheduler.ScheduleJob<MonitoringVmWareJob>("monitoring vmware", "1/10 * * * * ?");
+            scheduler.ScheduleJob<MonitoringVmWareJob>("monitoring vmware", "1/10 * * * * ?");
             //scheduler.ScheduleJob<MonitoringVmActiveJob>("monitoring active vms", "1/10 * * * * ?");
 
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
