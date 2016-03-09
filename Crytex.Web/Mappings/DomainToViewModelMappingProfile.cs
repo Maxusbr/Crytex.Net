@@ -184,6 +184,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<VmBackup, VmBackupViewModel>();
             this.MapPagedList<UserLoginLogEntry, UserLoginLogEntryModel>();
             this.MapPagedList<GameServer, GameServerViewModel>();
+            this.MapPagedList<Game, GameViewModel>();
             this.MapPagedList<SubscriptionVm, SubscriptionVmViewModel>();
             this.MapPagedList<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>();
             this.MapPagedList<UsageSubscriptionPayment, UsageSubscriptionPaymentView>();
