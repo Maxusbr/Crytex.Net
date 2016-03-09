@@ -51,7 +51,7 @@ namespace Crytex.Background.Tasks
 
             foreach (var vm in vCenterVms)
             {
-                var stateData = vmWareMonitor.GetMachineState(vm.Name);
+                var stateData = vmWareMonitor.GetMachineState(vm.Id.ToString());
 
                 StateMachine vmState = new StateMachine
                 {
