@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Crytex.Virtualization.Base;
 
 namespace Crytex.Background.Monitor
@@ -17,12 +18,18 @@ namespace Crytex.Background.Monitor
             _virtualizationProvider.ConnectToServer();
 
             var vm = _virtualizationProvider.GetMachinesByName(machineName);
+
+            while(vm.ResourceAllocation.Update() == false)
+            {
+                Thread.Sleep(10000);    
+            }
+
             var vmResourceAlloc = vm.ResourceAllocation;
             var state = new VmState
             {
-                CpuUsage = (int) vmResourceAlloc.CPUUsagePersistent,
+                CpuUsage = (int) (vmResourceAlloc.CPUUsagePersistent * 100),
                 RamUsage = vmResourceAlloc.MemoryUsage,
-                Uptime = TimeSpan.MinValue, // TODO: Add Uptime
+                Uptime = TimeSpan.FromSeconds(10), // TODO: Add Uptime
             };
 
             _virtualizationProvider.Disconnect();
