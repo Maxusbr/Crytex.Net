@@ -73,6 +73,30 @@ namespace Crytex.Virtualization.Fake
             get; set;
         }
 
+        public IVMBackUp BackupManager
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IVMSnapshot SnapshotManager
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IResourceAllocation ResourceAllocation
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public ReturnedRezultes CloneMachine(string newMachineName, object specification)
         {
             throw new NotImplementedException();
@@ -157,6 +181,21 @@ namespace Crytex.Virtualization.Fake
             throw new NotImplementedException();
         }
 
+        public void UserIdentification(string IPAdress, string UserName, string Password, VMGuestOperationType OSType)
+        {
+            throw new NotImplementedException();
+        }
+
+        ReturnedRezultes IVMachine.RenameComputer(string NewComputerName)
+        {
+            throw new NotImplementedException();
+        }
+
+        ReturnedRezultes IVMachine.SetNewPassword(string NewPassword)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RenameComputer(string NewComputerName)
         {
             throw new NotImplementedException();
@@ -173,6 +212,16 @@ namespace Crytex.Virtualization.Fake
             this.GuestOSState = Crytex.Virtualization.Base.GuestOSState.Running;
 
             return new ReturnedRezultes();
+        }
+
+        public ReturnedRezultes Start(bool WaitForLoadOS, bool WaitGetIP)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ReturnedRezultes Reboot(bool WaitForLoadOS, bool WaitGetIP)
+        {
+            throw new NotImplementedException();
         }
     }
 }
