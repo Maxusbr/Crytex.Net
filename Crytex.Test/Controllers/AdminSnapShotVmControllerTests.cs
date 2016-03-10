@@ -42,8 +42,7 @@ namespace Crytex.Test.Controllers
             _userId = "userId";
             AutoMapperConfiguration.Configure();
             _snapshotVmService = Substitute.For<ISnapshotVmService>();
-            _userVmService = Substitute.For<IUserVmService>();
-            _snapShotVmController = new AdminSnapShotVmController(_snapshotVmService, _userVmService);
+            _snapShotVmController = new AdminSnapShotVmController(_snapshotVmService);
             _snapShotVmController.CrytexContext = Substitute.For<ICrytexContext>();
 
             _userInfoProvider = Substitute.For<IUserInfoProvider>();

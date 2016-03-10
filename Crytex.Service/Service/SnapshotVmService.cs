@@ -6,16 +6,22 @@ using Crytex.Service.IService;
 using PagedList;
 using Crytex.Model.Exceptions;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crytex.Service.Service
 {
     public class SnapshotVmService : ISnapshotVmService
     {
         private readonly ISnapshotVmRepository _snapshotVmRepository;
+        private readonly ITaskV2Service _taskService;
+        protected readonly IUserVmService _userVmService;
         private readonly IUnitOfWork _unitOfWork;
-        public SnapshotVmService(ISnapshotVmRepository snapshotVmRepository, IUnitOfWork unitOfWork)
+        public SnapshotVmService(ISnapshotVmRepository snapshotVmRepository, ITaskV2Service taskService, 
+            IUserVmService userVmService, IUnitOfWork unitOfWork)
         {
             _snapshotVmRepository = snapshotVmRepository;
+            _taskService = taskService;
+            _userVmService = userVmService;
             _unitOfWork = unitOfWork;
         }
 
@@ -34,8 +40,9 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
-        public SnapshotVm Create(SnapshotVm newSnapShot)
+        public virtual SnapshotVm Create(SnapshotVm newSnapShot)
         {
+            // Check vm snapshot limit 
             var vmSnapCount = this._snapshotVmRepository
                 .GetMany(ss => ss.VmId == newSnapShot.VmId && (ss.Status == SnapshotStatus.Active || ss.Status == SnapshotStatus.Creating))
                 .Count;
@@ -45,12 +52,37 @@ namespace Crytex.Service.Service
             {
                 throw new TaskOperationException("Cannot create new snapshot because of vm snapshot limit.");
             }
+            
+            // Check any another snapshot creating
+            var creatingSnaps =
+                _snapshotVmRepository.GetMany(ss => ss.VmId == newSnapShot.VmId && ss.Status == SnapshotStatus.Active);
+            if (creatingSnaps.Any())
+            {
+                throw new TaskOperationException("Cannot create new snashot while another snapshot is creating");
+            }
 
+            // Create new snapshot db entity
             newSnapShot.Date = DateTime.UtcNow;
             newSnapShot.Status = SnapshotStatus.Creating;
-
             this._snapshotVmRepository.Add(newSnapShot);
             this._unitOfWork.Commit();
+
+            // Create snapshot creating task
+            var vm = _userVmService.GetVmById(newSnapShot.VmId);
+            var task = new TaskV2
+            {
+                ResourceId = newSnapShot.VmId,
+                ResourceType = ResourceType.SubscriptionVm,
+                TypeTask = TypeTask.CreateSnapshot,
+                UserId = vm.UserId,
+                Virtualization = vm.VirtualizationType
+            };
+            var createSnapshotOptions = new CreateSnapshotOptions
+            {
+                VmId = newSnapShot.VmId,
+                SnapshotId = newSnapShot.Id
+            };
+            _taskService.CreateTask(task, createSnapshotOptions);
 
             return newSnapShot;
         }
@@ -63,7 +95,7 @@ namespace Crytex.Service.Service
             return snapshots;
         }
 
-        public SnapshotVm GetById(Guid snapshotId)
+        public virtual SnapshotVm GetById(Guid snapshotId)
         {
             var snapshot = this._snapshotVmRepository.Get(ss => ss.Id == snapshotId, ss => ss.Vm);
 
@@ -75,9 +107,24 @@ namespace Crytex.Service.Service
             return snapshot;
         }
 
-        public void PrepareSnapshotForDeletion(Guid snapshotId, bool deleteWithChildrens)
+        public virtual void PrepareSnapshotForDeletion(Guid snapshotId, bool deleteWithChildrens)
         {
             var targetSnapshot = this.GetById(snapshotId);
+
+            var options = new DeleteSnapshotOptions
+            {
+                DeleteWithChildrens = false,
+                SnapshotId = targetSnapshot.Id,
+                VmId = targetSnapshot.VmId
+            };
+            var task = new TaskV2
+            {
+                TypeTask = TypeTask.DeleteSnapshot,
+                ResourceId = targetSnapshot.VmId,
+                ResourceType = ResourceType.SubscriptionVm,
+            };
+            _taskService.CreateTask(task, options);
+
             var childSnapshots = this._snapshotVmRepository.GetMany(ss => ss.ParentSnapshotId == snapshotId);
 
             // If deleteWithChildrens is false - simply change child snapshots ParenSnapshotId pointer to target snapshot's ParenSnapshotId
@@ -132,6 +179,50 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
         }
 
+        public void LoadSnapshot(Guid snapshotId)
+        {
+            var snapshot = GetById(snapshotId);
+
+            var task = new TaskV2
+            {
+                ResourceId = snapshot.VmId,
+                ResourceType = ResourceType.SubscriptionVm,
+                TypeTask = TypeTask.LoadSnapshot,
+                Virtualization = snapshot.Vm.VirtualizationType,
+                UserId = snapshot.Vm.UserId
+            };
+
+            var loadSnapshotOptions = new LoadSnapshotOptions
+            {
+                VmId = snapshot.VmId,
+                SnapshotId = snapshot.Id,
+            };
+
+            _taskService.CreateTask(task, loadSnapshotOptions);
+        }
+        public void SetLoadedSnapshotActive(Guid snapshotId)
+        {
+            var snapshot = this.GetById(snapshotId);
+            snapshot.Vm.CurrentSnapshotId = snapshot.Id;
+            this._snapshotVmRepository.Update(snapshot);
+            this._unitOfWork.Commit();
+        }
+
+        public void RenameSnapshot(Guid id, string newName)
+        {
+            var snapshot = this.GetById(id);
+            snapshot.Name = newName;
+            _snapshotVmRepository.Update(snapshot);
+            _unitOfWork.Commit();
+        }
+
+        public IEnumerable<SnapshotVm> GetAllActive()
+        {
+            var snaps = this._snapshotVmRepository.GetMany(ss => ss.Status == SnapshotStatus.Active);
+
+            return snaps;
+        }
+
         // Change all snapshots statuses in snapshot branch. Return true if vm's current snapshot was found in branch
         private bool ChangeBranchSnapshotsStatus(SnapshotVm snapshot, SnapshotStatus newStatus)
         {
@@ -139,13 +230,13 @@ namespace Crytex.Service.Service
             snapshot.Status = newStatus;
             this._snapshotVmRepository.Update(snapshot);
 
-            if(snapshot.Vm.CurrentSnapshotId == snapshot.Id)
+            if (snapshot.Vm.CurrentSnapshotId == snapshot.Id)
             {
                 isVmCurrentSnapInBranch = true;
             }
 
             var childSnapshots = this._snapshotVmRepository.GetMany(ss => ss.ParentSnapshotId == snapshot.Id, ss => ss.Vm);
-            foreach(var child in childSnapshots)
+            foreach (var child in childSnapshots)
             {
                 var isVmCurrentSnapInChildBranch = this.ChangeBranchSnapshotsStatus(child, newStatus);
                 if (!isVmCurrentSnapInChildBranch)
@@ -155,21 +246,6 @@ namespace Crytex.Service.Service
             }
 
             return isVmCurrentSnapInBranch;
-        }
-
-        public void SetLoadedSnapshotActive(Guid snapshotId)
-        {
-            var snapshot = this.GetById(snapshotId);
-            snapshot.Vm.CurrentSnapshotId = snapshot.Id;
-            this._snapshotVmRepository.Update(snapshot);
-            this._unitOfWork.Commit();
-        }
-
-        public IEnumerable<SnapshotVm> GetAllActive()
-        {
-            var snaps = this._snapshotVmRepository.GetMany(ss => ss.Status == SnapshotStatus.Active);
-
-            return snaps;
         }
     }
 }

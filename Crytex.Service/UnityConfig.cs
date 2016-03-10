@@ -108,6 +108,7 @@ namespace Crytex.Service
             container.RegisterType<IFixedSubscriptionPaymentService, SecureFixedSubscriptionPaymentService>("Secured");
             container.RegisterType<IWebHostingService, SecureWebHostingService>("Secured");
             container.RegisterType<IHostedWebApplicationService, SecuredHostedWebApplicationService>("Secured");
+            container.RegisterType<ISnapshotVmService, SecureSnapshotVmService>("Secured");
 
             container.RegisterType<ILogRepository,LogRepository>();
             container.RegisterType<ILogService,LogService>();

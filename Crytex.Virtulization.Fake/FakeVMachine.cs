@@ -21,11 +21,19 @@ namespace Crytex.Virtualization.Fake
             }
         }
 
+        public IVMBackUp BackupManager { get; }
+        public IVMSnapshot SnapshotManager { get; }
+
         public GuestOSState GuestOSState { get; private set; }
 
         public long Memory
         {
             get; set;
+        }
+
+        public ReturnedRezultes Reboot(bool WaitForLoadOS, bool WaitGetIP)
+        {
+            throw new NotImplementedException();
         }
 
         public INetworkInformation Networks
@@ -52,6 +60,8 @@ namespace Crytex.Virtualization.Fake
                 return networks;
             }
         }
+
+        public IResourceAllocation ResourceAllocation { get; }
 
         public int NumCPU
         {
@@ -122,6 +132,11 @@ namespace Crytex.Virtualization.Fake
             this.GuestOSState = Crytex.Virtualization.Base.GuestOSState.Running;
 
             return new ReturnedRezultes();
+        }
+
+        public ReturnedRezultes Start(bool WaitForLoadOS, bool WaitGetIP)
+        {
+            throw new NotImplementedException();
         }
 
         public ReturnedRezultes Stop()
