@@ -1,11 +1,11 @@
 ﻿using System;
 using Crytex.Model.Models;
-using Crytex.Virtualization.Base;
 using Crytex.Service.IService;
+using Crytex.Virtualization.Base;
 
-namespace Crytex.ExecutorTask.TaskHandler
+namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 {
-    internal class LoadSnapshotTaskHandler : BaseNewTaskHandler
+    internal class LoadSnapshotTaskHandler : BaseVmTaskHandler
     {
         private readonly ISnapshotVmService _snapshotVmService;
 
@@ -16,7 +16,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._snapshotVmService = snapshotVmService;
         }
 
-        protected override TaskExecutionResult ExecuteLogic()
+        protected override TaskExecutionResult ExecuteVmLogic()
         {
             Console.WriteLine("Snapshot loading task");
             var result = new TaskExecutionResult();

@@ -175,7 +175,7 @@ namespace Crytex.Model.Models
         public Guid HostedWedApplicationId { get; set; }
     }
 
-    public abstract class BaseGameServerOptions : BaseOptions
+    public class BaseGameServerOptions : BaseOptions
     {
         public Guid GameServerId { get; set; }
     }

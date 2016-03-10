@@ -64,22 +64,24 @@
     <Compile Include="Config\ExecutorTaskConfig.cs" />
     <Compile Include="Config\IExecutorTaskConfig.cs" />
     <Compile Include="ITaskQueuePoolManager.cs" />
-    <Compile Include="TaskHandler\BaseTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Game\BaseGameTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Game\CreateGameServerTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\BaseVmTaskHandler.cs" />
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />
-    <Compile Include="TaskHandler\Implementation\BackupVmTaskHandler.cs" />
-    <Compile Include="TaskHandler\Implementation\CreateSnapshotTaskHandler.cs" />
-    <Compile Include="TaskHandler\Implementation\DeleteSnapshotTaskHandler.cs" />
-    <Compile Include="TaskHandler\Implementation\LoadSnapshotTaskHandler.cs" />
-    <Compile Include="TaskHandler\Implementation\CreateVmTaskHandler.cs" />
-    <Compile Include="TaskHandler\Implementation\DeleteVmBackupTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\BackupVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\CreateSnapshotTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\DeleteSnapshotTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\LoadSnapshotTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\CreateVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\DeleteVmBackupTaskHandler.cs" />
     <Compile Include="TaskHandler\Implementation\TestTaskHandler.cs" />
-    <Compile Include="TaskHandler\Implementation\UpdateVmTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\UpdateVmTaskHandler.cs" />
     <Compile Include="TaskHandler\TaskHandlerManager.cs" />
     <Compile Include="TaskHandler\ITaskHandler.cs" />
     <Compile Include="TaskHandler\TaskExecutionResult.cs" />
     <Compile Include="TaskHandler\TaskHandlerFactory.cs" />
-    <Compile Include="TaskHandler\Implementation\BaseNewTaskHandler.cs" />
-    <Compile Include="TaskHandler\Implementation\ChangeVmStateTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\BaseTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Vm\ChangeVmStateTaskHandler.cs" />
     <Compile Include="TaskQueuePoolManager.cs" />
     <Compile Include="TaskQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +89,10 @@
     <Compile Include="UnityConfig.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\crytex.gameservers\Crytex.GameServers.csproj">
+      <Project>{8D3FDBA1-8694-4CD7-ABB1-EF7CA3B26298}</Project>
+      <Name>Crytex.GameServers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\crytex.virtualization.base\Crytex.Virtualization\Crytex.Virtualization.Base.csproj">
       <Project>{0c16dd67-e3eb-4b88-aaec-6784dcfda318}</Project>
       <Name>Crytex.Virtualization.Base</Name>

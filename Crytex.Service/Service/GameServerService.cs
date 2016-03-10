@@ -41,7 +41,7 @@ namespace Crytex.Service.Service
         #region Get operations
         public virtual GameServer GetById(Guid guid)
         {
-            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.GameHost, x => x.GameServerTariff);
+            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.GameHost, x => x.GameServerTariff, x => x.GameServerTariff.Game);
 
             if (server == null)
             {
