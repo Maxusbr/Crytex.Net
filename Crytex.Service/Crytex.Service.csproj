@@ -196,6 +196,7 @@
     <Compile Include="Service\SecureService\SecureGameServerService.cs" />
     <Compile Include="Service\SecureService\SecureHelpDeskRequestService.cs" />
     <Compile Include="Service\SecureService\SecurePaymentService.cs" />
+    <Compile Include="Service\SecureService\SecureSnapshotVmService.cs" />
     <Compile Include="Service\SecureService\SecureStateMachineService.cs" />
     <Compile Include="Service\SecureService\SecureTaskV2Service.cs" />
     <Compile Include="Service\SecureService\SecureUserVmService.cs" />

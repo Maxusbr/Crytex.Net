@@ -1,27 +1,17 @@
-using System.Collections.Generic;
 using Crytex.Background.Monitor;
-using Crytex.Background.Monitor.HyperV;
-using Crytex.Background.Monitor.Vmware;
+using Crytex.Background.Monitor.Fake;
 using Crytex.Background.Scheduler;
-using Crytex.Background.Statistic;
-using Crytex.Background.Tasks;
 using Crytex.Notification;
 using Crytex.Core;
 using Crytex.Core.AppConfig;
 using Microsoft.Practices.Unity;
-using Crytex.Data.Infrastructure;
-using Crytex.Data.IRepository;
-using Crytex.Data.Repository;
 using Crytex.Model.Models;
 using Crytex.Notification.Senders.SigralRSender;
-using Crytex.Service.IService;
-using Crytex.Service.Service;
 
 namespace Crytex.Background
 {
     using Quartz.Spi;
     using Crytex.ExecutorTask.TaskHandler;
-    using Crytex.Background.Monitor.HyperV;
     using Crytex.ExecutorTask;
     using Crytex.Background.Config;
 
@@ -38,8 +28,8 @@ namespace Crytex.Background
                 unityContainer.RegisterType<IJobFactory, UnityJobFactory>();
                 unityContainer.RegisterType<IAppConfig, BackgroundConfig>();
                 unityContainer.RegisterType<IBackgroundConfig, BackgroundConfig>();
-                unityContainer.RegisterType<IHyperVMonitorFactory, FakeHyperVMonitorFactory>();
-                unityContainer.RegisterType<IVmWareMonitorFactory, FakeVmWareMonitorFactory>();
+                //unityContainer.RegisterType<IVmMonitorFactory, VmMonitorFactory>();
+                unityContainer.RegisterType<IVmMonitorFactory, FakeVmMonitorFactory>();
 
                 unityContainer.RegisterType<INotificationManager, NotificationManager>();
                 unityContainer.RegisterType<IEmailSender, EmailMandrillSender>();
