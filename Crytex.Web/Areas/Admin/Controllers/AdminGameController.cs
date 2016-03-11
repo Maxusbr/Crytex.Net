@@ -43,18 +43,18 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult Put(int id, GameViewModel model)
+        public IHttpActionResult Put(GameViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var game = Mapper.Map<Game>(model);
-            game.Id = id;
             _gameService.Update(game);
 
             return Ok();
         }
+
         [HttpPost]
         public IHttpActionResult Post(GameViewModel model)
         {
@@ -67,6 +67,19 @@ namespace Crytex.Web.Areas.Admin.Controllers
             game = _gameService.Create(game);
 
             return Ok(new {id = game.Id});
+        }
+
+        /// <summary>
+        /// Удаляем игру по полученному Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IHttpActionResult Delete(Int32 Id)
+        {
+            _gameService.Delete(Id);
+
+            return Ok();
         }
     }
 }

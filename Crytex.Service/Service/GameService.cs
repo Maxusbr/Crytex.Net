@@ -74,12 +74,26 @@ namespace Crytex.Service.Service
                 throw new ValidationException($"Game with Id={game.Id} not found");
             }
             if(!string.IsNullOrEmpty(game.Name))
-                existGame.Name = game.Name;       
+                existGame.Name = game.Name;
             if(!string.IsNullOrEmpty(game.Version))
-                existGame.Version = game.Version;                        
+                existGame.Version = game.Version;
+            if (!string.IsNullOrEmpty(game.VersionCode))
+                existGame.VersionCode = game.VersionCode;
             existGame.Family = game.Family;
 
-            _gameRepository.Update(game);
+            _gameRepository.Update(existGame);
+            _unitOfWork.Commit();
+        }
+
+        public void Delete(Int32 Id)
+        {
+            var existGame = _gameRepository.GetById(Id);
+            if (existGame == null)
+            {
+                throw new ValidationException($"Game with Id={Id} not found");
+            }
+
+            _gameRepository.Delete(existGame);
             _unitOfWork.Commit();
         }
 
