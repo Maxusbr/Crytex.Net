@@ -1,6 +1,6 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using AutoMapper;
-using Crytex.Model.Models.GameServers;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
@@ -51,11 +51,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <summary>
         /// Обновление GameHost
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult Put(int id, GameHostViewModel model)
+        public IHttpActionResult Put(GameHostViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -63,7 +62,25 @@ namespace Crytex.Web.Areas.Admin.Controllers
             }
 
             var options = Mapper.Map<GameHostCreateOptions>(model);
-            _gameHostService.Update(id, options);
+            _gameHostService.Update(model.Id, options);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Удаление GameHost
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IHttpActionResult Delete(Int32 id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _gameHostService.Delete(id);
 
             return Ok();
         }

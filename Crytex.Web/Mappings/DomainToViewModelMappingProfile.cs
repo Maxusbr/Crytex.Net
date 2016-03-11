@@ -163,6 +163,7 @@ namespace Crytex.Web.Mappings
                 .Include<PaymentGameServer, PaymentGameServerViewModel>()
                 .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
             Mapper.CreateMap<Game, GameViewModel>();
+            Mapper.CreateMap<GameHost, GameHostViewModel>();
             Mapper.CreateMap<DhcpServer, DhcpServerView>()
                 .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));           
@@ -185,6 +186,7 @@ namespace Crytex.Web.Mappings
             this.MapPagedList<UserLoginLogEntry, UserLoginLogEntryModel>();
             this.MapPagedList<GameServer, GameServerViewModel>();
             this.MapPagedList<Game, GameViewModel>();
+            this.MapPagedList<GameHost, GameHostViewModel>();
             this.MapPagedList<SubscriptionVm, SubscriptionVmViewModel>();
             this.MapPagedList<FixedSubscriptionPayment, FixedSubscriptionPaymentViewModel>();
             this.MapPagedList<UsageSubscriptionPayment, UsageSubscriptionPaymentView>();
