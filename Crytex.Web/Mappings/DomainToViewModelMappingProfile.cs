@@ -163,10 +163,11 @@ namespace Crytex.Web.Mappings
                 .Include<PaymentGameServer, PaymentGameServerViewModel>()
                 .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
             Mapper.CreateMap<Game, GameViewModel>();
-            Mapper.CreateMap<GameHost, GameHostViewModel>();
+            Mapper.CreateMap<GameHost, GameHostViewModel>()
+                .ForMember(x => x.SupportedGamesIds, opt => opt.MapFrom(source => source.SupportedGames.Select(g => g.Id)));
             Mapper.CreateMap<DhcpServer, DhcpServerView>()
                 .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
-                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));           
+                .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();
