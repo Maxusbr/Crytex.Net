@@ -50,58 +50,93 @@ namespace Crytex.Web.Areas.User.Controllers
             return this.Ok(pageModel);
         }
 
-        //[HttpPost]
-        //public IHttpActionResult Post(GameServerViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return BadRequest(ModelState);
-        //    }
-
-        //    var server = AutoMapper.Mapper.Map<GameServer>(model);
-        //    server.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
-
-        //    server = this._gameServerService.CreateServer(server);
-
-        //    return this.Ok(new { id = server.Id});
-        //}
-
         /// <summary>
         /// покупка игровых машин
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public IHttpActionResult Post([FromBody]GameServerViewModel model)
+        public IHttpActionResult Post([FromBody]GameServerBuyOptionsViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var server = AutoMapper.Mapper.Map<GameServer>(model);
             var options = AutoMapper.Mapper.Map<BuyGameServerOption>(model);
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
-            server.UserId = userId;
             options.UserId = userId;
 
-            server = this._gameServerService.BuyGameServer(server, options);
+            var server = this._gameServerService.BuyGameServer(options);
 
             return this.Ok(new { id = server.Id });
         }
 
         [HttpPut]
-        public IHttpActionResult ProlongateGameServer(ProlongateGameServerViewModel model)
+        public IHttpActionResult UpdateGameServerConfiguration(GameServerConfigViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
                 return this.BadRequest(this.ModelState);
             }
+            Guid serverId;
+            if (!Guid.TryParse(model.serverId, out serverId))
+            {
+                ModelState.AddModelError("id", "Invalid Guid format");
+                return BadRequest(ModelState);
+            }
             var serviceOptions = Mapper.Map<GameServerConfigOptions>(model);
-            serviceOptions.UpdateType = GameServerUpdateType.Prolongation;
-            _gameServerService.UpdateGameServer(model.ServerId.Value, serviceOptions);
+
+            switch (model.UpdateType)
+            {
+                case GameServerUpdateType.UpdateName:
+                    if (string.IsNullOrEmpty(model.ServerName)) return BadRequest("ServerName must be not empty");
+                    _gameServerService.UpdateGameServer(serverId, serviceOptions);
+                    break;
+                case GameServerUpdateType.Prolongation:
+                    if (model.MonthCount <= 0) return BadRequest("MonthCount must be greater than 0");
+                    _gameServerService.UpdateGameServer(serverId, serviceOptions);
+                    break;
+                case GameServerUpdateType.EnableAutoProlongation:
+                    if (model.AutoProlongation == null) return BadRequest("AutoProlongation must have value");
+                    _gameServerService.UpdateGameServer(serverId, serviceOptions);
+                    break;
+                default:
+                    return BadRequest("Invalid UpdateType");
+            }
+            return Ok();
+        }
+
+        [HttpPost]
+        public IHttpActionResult UpdateServerStatus(GameServerChangeStatusViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            UpdateServerStatus(model.ServerId.Value, model.ChangeStatusType.Value);
 
             return Ok();
+        }
+
+        private void UpdateServerStatus(Guid serverId, TypeChangeStatus status)
+        {
+            switch (status)
+            {
+                case TypeChangeStatus.Start:
+                    _gameServerService.StartGameServer(serverId);
+                    break;
+                case TypeChangeStatus.PowerOff:
+                    _gameServerService.PowerOffGameServer(serverId);
+                    break;
+                case TypeChangeStatus.Reload:
+                    _gameServerService.ResetGameServer(serverId);
+                    break;
+                case TypeChangeStatus.Stop:
+                    _gameServerService.StopGameServer(serverId);
+                    break;
+            }
         }
     }
 }

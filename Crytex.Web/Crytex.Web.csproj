@@ -374,6 +374,8 @@
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentSearchParamViewModel.cs" />
     <Compile Include="Models\JsonModels\FixedSubscriptionPaymentViewModel.cs" />
     <Compile Include="Models\JsonModels\GameHostViewModel.cs" />
+    <Compile Include="Models\JsonModels\GameServerBuyOptionsViewModel.cs" />
+    <Compile Include="Models\JsonModels\GameServerChangeStatusViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerTariffView.cs" />
     <Compile Include="Models\JsonModels\GameServerConfigViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerMachineConfigUpdateViewModel.cs" />

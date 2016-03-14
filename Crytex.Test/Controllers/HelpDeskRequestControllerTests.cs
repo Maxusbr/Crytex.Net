@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Results;
 using Crytex.Core.Service;
@@ -66,6 +67,8 @@ namespace Crytex.Test.Controllers
         [Test]
         public void GetResponseOkWithListDataWhenCallGetWithValidParams()
         {
+            // TODO: Refactor this test
+            throw new NotImplementedException();
             var pageSize = 5;
             var pageNumber = 1;
             var helpDeskRequests = new List<HelpDeskRequest>()

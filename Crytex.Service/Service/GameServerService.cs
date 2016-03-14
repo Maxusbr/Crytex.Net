@@ -117,13 +117,22 @@ namespace Crytex.Service.Service
         }
         #endregion
 
-        public GameServer BuyGameServer(GameServer server, BuyGameServerOption options)
+        public GameServer BuyGameServer(BuyGameServerOption options)
         {
             var dateNow = DateTime.UtcNow;
 
             // Create new GameServer
-            server.CreateDate = dateNow;
-            server.DateExpire = dateNow.AddMonths(options.ExpireMonthCount);
+            var server = new GameServer
+            {
+                CreateDate = dateNow,
+                DateExpire = dateNow.AddMonths(options.ExpireMonthCount),
+                GameServerTariffId = options.GameServerTariffId,
+                AutoProlongation = options.AutoProlongation,
+                Name = options.ServerName,
+                UserId = options.UserId,
+                SlotCount = options.SlotCount
+            };
+            
             if (options.ExpireMonthCount < 1)
             {
                 throw new InvalidIdentifierException("ExpireMonthCount must be greater than 0");
@@ -139,7 +148,7 @@ namespace Crytex.Service.Service
             };
             gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
 
-            server = CreateServer(server, options);
+            server = CreateServer(server);
 
             var gameServerPayment = new PaymentGameServer
             {
@@ -268,7 +277,7 @@ namespace Crytex.Service.Service
             _unitOfWork.Commit();
         }
         #region Private methods
-        private GameServer CreateServer(GameServer server, BuyGameServerOption options)
+        private GameServer CreateServer(GameServer server)
         {
             var gameServerTariff = this._gameServerTariffRepository.Get(tariff => tariff.Id == server.GameServerTariffId);
             if (gameServerTariff == null)
@@ -403,26 +412,6 @@ namespace Crytex.Service.Service
                 };
                 this._taskService.CreateTask(task, taskOptions);
             }
-        }
-
-        private void CreateUpdateGameServerTask(GameServer server, UpdateMachineConfigOptions options)
-        {
-            throw new NotImplementedException();
-            //var updateTask = new TaskV2
-            //{
-            //    TypeTask = TypeTask.UpdateVm,
-            //    UserId = server.UserId,
-            //    Virtualization = server.Vm.VirtualizationType
-            //};
-            //var taskUpdateOptions = new UpdateVmOptions
-            //{
-            //    Cpu = options.Cpu ?? server.Vm.CoreCount,
-            //    HddGB = server.Vm.HardDriveSize,
-            //    Ram = options.Ram ?? server.Vm.RamCount,
-            //    Name = server.Vm.Name,
-            //    VmId = server.Vm.Id
-            //};
-            //this._taskService.CreateTask(updateTask, taskUpdateOptions);
         }
         #endregion
     }

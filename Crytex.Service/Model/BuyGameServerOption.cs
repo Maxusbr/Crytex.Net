@@ -15,5 +15,7 @@ namespace Crytex.Service.Model
         public int SlotCount { get; set; }
         public int ExpireMonthCount { get; set; }
         public string UserId { get; set; }
+        public bool AutoProlongation { get; set; }
+        public string ServerName { get; set; }
     }
 }
