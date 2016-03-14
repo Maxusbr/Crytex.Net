@@ -83,30 +83,6 @@ namespace Crytex.Virtualization.Fake
             get; set;
         }
 
-        public IVMBackUp BackupManager
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public IVMSnapshot SnapshotManager
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public IResourceAllocation ResourceAllocation
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public ReturnedRezultes CloneMachine(string newMachineName, object specification)
         {
             throw new NotImplementedException();
@@ -227,16 +203,6 @@ namespace Crytex.Virtualization.Fake
             this.GuestOSState = Crytex.Virtualization.Base.GuestOSState.Running;
 
             return new ReturnedRezultes();
-        }
-
-        public ReturnedRezultes Start(bool WaitForLoadOS, bool WaitGetIP)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ReturnedRezultes Reboot(bool WaitForLoadOS, bool WaitGetIP)
-        {
-            throw new NotImplementedException();
         }
     }
 }

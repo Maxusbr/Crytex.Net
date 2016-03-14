@@ -249,6 +249,8 @@ namespace Crytex.Service.Service
 
         public GameServerTariff CreateGameServerTariff(GameServerTariff tariff)
         {
+            tariff.CreateDate = DateTime.UtcNow;
+
             _gameServerTariffRepository.Add(tariff);
             _unitOfWork.Commit();
             return tariff;
