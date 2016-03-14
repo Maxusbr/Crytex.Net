@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Virtualization.Base;
-using System.Linq;
-using System.Threading;
 using Crytex.Virtualization.Base.InfoAboutVM;
 
-namespace Crytex.ExecutorTask.TaskHandler
+namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 {
-    internal class CreateVmTaskHandler : BaseNewTaskHandler, ITaskHandler
+    internal class CreateVmTaskHandler : BaseVmTaskHandler
     {
         private IOperatingSystemsService _operatingSystemsService;
         private readonly string _deafultVmNetworkName;
@@ -20,7 +20,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             _deafultVmNetworkName = deafultVmNetworkName;
         }
 
-        protected override TaskExecutionResult ExecuteLogic()
+        protected override TaskExecutionResult ExecuteVmLogic()
         {
             Console.WriteLine($"Create task");
             var taskExecutionResult = new CreateVmTaskExecutionResult();

@@ -2,16 +2,16 @@
 using Crytex.Model.Models;
 using Crytex.Virtualization.Base;
 
-namespace Crytex.ExecutorTask.TaskHandler
+namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 {
-    internal class CreateSnapshotTaskHandler : BaseNewTaskHandler
+    internal class CreateSnapshotTaskHandler : BaseVmTaskHandler
     {
         public CreateSnapshotTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
             : base(task, virtualizationProvider, virtualizationServerEntityId)
         {
         }
 
-        protected override TaskExecutionResult ExecuteLogic()
+        protected override TaskExecutionResult ExecuteVmLogic()
         {
             Console.WriteLine("Snapshot creating task");
             var result = new CreateSnapshotExecutionResult();

@@ -6,6 +6,16 @@ using Crytex.Virtualization.Fake;
 using Crytex.Virtualization.HyperV;
 using System;
 using System.Collections.Generic;
+using Crytex.ExecutorTask.TaskHandler.Implementation.Game;
+using Crytex.ExecutorTask.TaskHandler.Implementation.Vm;
+using Crytex.GameServers.Fabric;
+using Crytex.GameServers.Interface;
+using Crytex.GameServers.Models;
+using Crytex.Model.Enums;
+using Crytex.Model.Models.GameServers;
+using VmWareRemote.Implementations;
+using VmWareRemote.Interface;
+using VmWareRemote.Model;
 using Crytex.Virtualization._VMware;
 
 namespace Crytex.ExecutorTask.TaskHandler
@@ -17,6 +27,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IOperatingSystemsService _operatingSystemService;
         private readonly ISnapshotVmService _snapshotVmService;
         private bool _useFakeProviders = false;
+        private IDictionary<TypeTask, Func<TaskV2, GameServer, ITaskHandler>> _gameTaskHandlerMappings;
 
         public TaskHandlerFactory(IOperatingSystemsService operatingSystemService, ISnapshotVmService snapshotVmService)
         {
@@ -48,6 +59,13 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.LoadSnapshot, this.GetLoadSnapshotTaskHandler }
             };
 
+            _gameTaskHandlerMappings = new Dictionary<TypeTask, Func<TaskV2, GameServer, ITaskHandler>>
+            {
+                {TypeTask.CreateGameServer, GetCreateGameServerTaskHandler},
+                {TypeTask.DeleteGameServer, GetDeleteGameServerTaskHandler},
+                {TypeTask.GameServerChangeStatus, GetChangeStatusGameServerTaskHandler},
+            };
+
             var config = new ExecutorTaskConfig();
             this._useFakeProviders = config.GetUseFakeProviders();
         }
@@ -66,6 +84,14 @@ namespace Crytex.ExecutorTask.TaskHandler
             var typeTask = task.TypeTask;
             var handler = this._vmWareTaskHandlerMappings[typeTask].Invoke(task, vCenter);
             //var handler = new TestTaskHandler(task);
+
+            return handler;
+        }
+
+        public ITaskHandler GetGameTaskHandler(TaskV2 task, GameServer gameServer)
+        {
+            var typeTask = task.TypeTask;
+            var handler = _gameTaskHandlerMappings[typeTask].Invoke(task, gameServer);
 
             return handler;
         }
@@ -93,7 +119,8 @@ namespace Crytex.ExecutorTask.TaskHandler
         }
         private IProviderVM GetProvider(VmWareVCenter vCenter)
         {
-            IProviderVM provider;
+            //throw new NotImplementedException();
+            IProviderVM provider = null;
             if (!this._useFakeProviders)
             {
                 AutorizationInfo userData = new AutorizationInfo
@@ -111,7 +138,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
             return provider;
         }
-        private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             var provider = this.GetProvider(host);
             var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, host.Id, host.DefaultVmNetworkName);
@@ -119,7 +146,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             var provider = this.GetProvider(vCenter);
             var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, vCenter.Id, vCenter.DefaultVmNetworkName);
@@ -127,7 +154,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private BaseNewTaskHandler GetUpdateVmTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetUpdateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             var provider = this.GetProvider(host);
             var handler = new UpdateVmTaskHandler(task, provider, host.Id);
@@ -135,7 +162,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private BaseNewTaskHandler GetUpdateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetUpdateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             var provider = this.GetProvider(vCenter);
             var handler = new UpdateVmTaskHandler(task, provider, vCenter.Id);
@@ -143,7 +170,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private BaseNewTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, HyperVHost host)
         {
             var provider = this.GetProvider(host);
             var handler = new ChangeVmStateTaskHandler(task, provider, host.Id);
@@ -151,7 +178,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private BaseNewTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetChangeVmStatusTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             var provider = this.GetProvider(vCenter);
             var handler = new ChangeVmStateTaskHandler(task, provider, vCenter.Id);
@@ -159,17 +186,17 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private BaseNewTaskHandler GetRemoveVmTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetRemoveVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             throw new NotImplementedException();
         }
 
-        private BaseNewTaskHandler GetRemoveVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetRemoveVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             throw new NotImplementedException();
         }
 
-        private BaseNewTaskHandler GetBackupVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
+        private BaseTaskHandler GetBackupVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             var provider = this.GetProvider(vCenter);
             var handler = new BackupVmTaskHandler(task, provider, vCenter.Id);
@@ -177,7 +204,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             return handler;
         }
 
-        private BaseNewTaskHandler GetBackupVmTaskHandler(TaskV2 task, HyperVHost host)
+        private BaseTaskHandler GetBackupVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             var provider = this.GetProvider(host);
             var handler = new BackupVmTaskHandler(task, provider, host.Id);
@@ -246,6 +273,32 @@ namespace Crytex.ExecutorTask.TaskHandler
             var handler = new LoadSnapshotTaskHandler(task, provider, vCenter.Id, this._snapshotVmService);
 
             return handler;
+        }
+
+        private ITaskHandler GetCreateGameServerTaskHandler(TaskV2 task, GameServer gameServer)
+        {
+            ConnectParam param = new ConnectParam
+            {
+                FamilyGame = gameServer.GameServerTariff.Game.Family,
+                SshIp = gameServer.GameHost.ServerAddress,
+                GameName = gameServer.GameServerTariff.Game.Name,
+                SshPort = gameServer.GameHost.Port,
+                SshPassword = gameServer.GameHost.Password,
+                SshUserName = gameServer.GameHost.UserName
+            };
+            IGameHost provider = GameServerFactory.Instance.Get(param);
+            var handler = new CreateGameServerTaskHandler(task, provider);
+
+            return handler;
+        }
+
+        private ITaskHandler GetChangeStatusGameServerTaskHandler(TaskV2 task, GameServer gameServer)
+        {
+            throw new NotFiniteNumberException();
+        }
+        private ITaskHandler GetDeleteGameServerTaskHandler(TaskV2 task, GameServer gameServer)
+        {
+            throw new NotFiniteNumberException();
         }
         #endregion // Private methods
     }

@@ -2,14 +2,14 @@
 using Crytex.Model.Models;
 using Crytex.Virtualization.Base;
 
-namespace Crytex.ExecutorTask.TaskHandler
+namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 {
-    internal class DeleteVmBackupTaskHandler : BaseNewTaskHandler
+    internal class BackupVmTaskHandler : BaseVmTaskHandler
     {
-        public DeleteVmBackupTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
+        public BackupVmTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
             : base(task, virtualizationProvider, virtualizationServerEntityId) { }
 
-        protected override TaskExecutionResult ExecuteLogic()
+        protected override TaskExecutionResult ExecuteVmLogic()
         {
             var result = new BackupTaskExecutionResult();
             var options = this.TaskEntity.GetOptions<BackupOptions>();
@@ -21,7 +21,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 var vm = this.VirtualizationProvider.GetMachinesByName(vmName);
 
                 var backupServerName = options.VmBackupId.ToString();
-                vm.BackupManager.RemoveBackup(backupServerName);
+                vm.BackupManager.StartBackup(backupServerName);
                 result.BackupGuid = options.VmBackupId;
 
                 result.Success = true;

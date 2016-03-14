@@ -1,18 +1,18 @@
 ﻿using System;
+using System.Linq;
 using Crytex.Model.Models;
 using Crytex.Virtualization.Base;
-using System.Linq;
 
-namespace Crytex.ExecutorTask.TaskHandler
+namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 {
-    internal class UpdateVmTaskHandler : BaseNewTaskHandler
+    internal class UpdateVmTaskHandler : BaseVmTaskHandler
     {
         public UpdateVmTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
             : base(task, virtualizationProvider, virtualizationServerEntityId)
         {
         }
 
-        protected override TaskExecutionResult ExecuteLogic()
+        protected override TaskExecutionResult ExecuteVmLogic()
         {
             Console.WriteLine("Update vm task VmWare");
             var taskExecutionResult = new CreateVmTaskExecutionResult();
