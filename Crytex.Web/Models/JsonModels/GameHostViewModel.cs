@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Web.Models.JsonModels
 {
     public class GameHostViewModel
     {
+        public Int32 Id { get; set; }
         [Required]
         public string ServerAddress { get; set; }
         [Required]
