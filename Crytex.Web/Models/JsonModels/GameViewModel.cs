@@ -19,5 +19,9 @@ namespace Crytex.Web.Models.JsonModels
         public string Version { get; set; }
 
         public string VersionCode { get; set; }
+        [Required]
+        public int ImageFileDescriptorId { get; set; }
+
+        public GameServerTariffView GameServerTariff { get; set; }
     }
 }

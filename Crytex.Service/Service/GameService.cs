@@ -16,11 +16,13 @@ namespace Crytex.Service.Service
     class GameService : IGameService
     {
         private readonly IGameRepository _gameRepository;
+        private readonly IGameServerTariffRepository _gameServerTariffRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public GameService(IGameRepository gameRepository, IUnitOfWork unitOfWork)
+        public GameService(IGameRepository gameRepository, IGameServerTariffRepository gameServerTariffRepository, IUnitOfWork unitOfWork)
         {
             this._gameRepository = gameRepository;
+            _gameServerTariffRepository = gameServerTariffRepository;
             this._unitOfWork = unitOfWork;
         }
 
@@ -30,6 +32,18 @@ namespace Crytex.Service.Service
 
             _gameRepository.Add(game);
             _unitOfWork.Commit();
+
+            return game;
+        }
+
+        public Game GetById(int id)
+        {
+            var game = _gameRepository.Get(g => g.Id == id, x => x.GameHosts);
+
+            if (game == null)
+            {
+                throw new InvalidIdentifierException($"Game with id={id} doesnt exist");
+            }
 
             return game;
         }
@@ -80,6 +94,7 @@ namespace Crytex.Service.Service
             if (!string.IsNullOrEmpty(game.VersionCode))
                 existGame.VersionCode = game.VersionCode;
             existGame.Family = game.Family;
+            existGame.ImageFileDescriptorId = game.ImageFileDescriptorId;
 
             _gameRepository.Update(existGame);
             _unitOfWork.Commit();
@@ -95,6 +110,21 @@ namespace Crytex.Service.Service
 
             _gameRepository.Delete(existGame);
             _unitOfWork.Commit();
+        }
+
+        public IEnumerable<GameServerTariff> GetLastTariffsForGames(IEnumerable<int> gamesIds)
+        {
+            Expression<Func<GameServerTariff, bool>> where = x => false;
+            foreach (var id in gamesIds)
+            {
+                where = where.Or(gt => gt.GameId == id);
+            }
+
+            var tariffs = _gameServerTariffRepository.GetMany(where);
+            var tariffsGroupedByGameId = tariffs.GroupBy(t => t.GameId);
+            var lastTariffs = tariffsGroupedByGameId.Select(g => g.OrderBy(t => t.CreateDate).Last());
+
+            return lastTariffs;
         }
 
         private void ValidateGame(Game game)

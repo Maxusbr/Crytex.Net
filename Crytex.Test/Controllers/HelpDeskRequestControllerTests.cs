@@ -74,7 +74,7 @@ namespace Crytex.Test.Controllers
                                             new HelpDeskRequest() {Id = 2},
                                             new HelpDeskRequest() {Id = 3},
                                     };
-            _helpDeskRequestService.GetPage(pageNumber, pageSize).Returns(new PagedList<HelpDeskRequest>(helpDeskRequests, pageNumber, pageSize));
+            //_helpDeskRequestService.GetPage(pageNumber, pageSize).Returns(new PagedList<HelpDeskRequest>(helpDeskRequests, pageNumber, pageSize));
 
             var actionResult = _helpDeskRequestController.Get(pageNumber, pageSize) as OkNegotiatedContentResult<PageModel<HelpDeskRequestViewModel>>;
 
@@ -83,7 +83,7 @@ namespace Crytex.Test.Controllers
             IsNotNull(model);
             That(helpDeskRequests.Select(x => x.Id), Is.EquivalentTo(model.Items.Select(x => x.Id).OrderBy(x => x)));
 
-            _helpDeskRequestService.Received(1).GetPage(pageNumber, pageSize);
+            //_helpDeskRequestService.Received(1).GetPage(pageNumber, pageSize);
             _helpDeskRequestService.ClearReceivedCalls();
         }
 
