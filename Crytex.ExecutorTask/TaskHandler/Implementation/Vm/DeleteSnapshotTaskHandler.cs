@@ -24,7 +24,8 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
                 var vm = this.VirtualizationProvider.GetMachinesByName(vmName);
 
                 var snapshotServerName = options.SnapshotId.ToString();
-                var deleteSnapshotResult = vm.DeleteSnapshot(snapshotServerName, options.DeleteWithChildrens);
+                var deleteSnapshotResult = vm.SnapshotManager.DeleteSnapshot(snapshotServerName,
+                    options.DeleteWithChildrens);
 
                 if (deleteSnapshotResult.IsError)
                 {

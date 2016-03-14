@@ -19,17 +19,15 @@ namespace Crytex.Service.Service
         private IUnitOfWork _unitOfWork;
         private readonly IUserVmService _userVmService;
         private readonly IVmBackupService _vmBackupService;
-        private readonly ISnapshotVmService _snapshotService;
         private readonly IOperatingSystemsService _operatingSystemService;
 
         public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmService userVmService, IUnitOfWork unitOfWork,
-            IVmBackupService vmBackupService, ISnapshotVmService snapshotService)
+            IVmBackupService vmBackupService)
         {
             this._taskV2Repo = taskV2Repo;
             this._userVmService = userVmService;
             this._unitOfWork = unitOfWork;
             this._vmBackupService = vmBackupService;
-            this._snapshotService = snapshotService;
         }
 
         public virtual TaskV2 GetTaskById(Guid id)
@@ -121,24 +119,6 @@ namespace Crytex.Service.Service
             {
                 var deleteBackuptOptions = task.GetOptions<BackupOptions>();
                 this._vmBackupService.MarkBackupAsDeleted(deleteBackuptOptions.VmBackupId);
-            }
-            if(task.TypeTask == TypeTask.CreateSnapshot)
-            {
-                var createSnapshotOptions = task.GetOptions<CreateSnapshotOptions>();
-                var newSnapShot = new SnapshotVm
-                {
-                    VmId = createSnapshotOptions.VmId,
-                    Name = createSnapshotOptions.Name
-                };
-                var snapShot = this._snapshotService.Create(newSnapShot);
-                createSnapshotOptions.SnapshotId = snapShot.Id;
-                task.SaveOptions(createSnapshotOptions);
-            }
-            if(task.TypeTask == TypeTask.DeleteSnapshot)
-            {
-                var deleteSnapshotOptions = task.GetOptions<DeleteSnapshotOptions>();
-                var snapshot = this._snapshotService.GetById(deleteSnapshotOptions.SnapshotId);
-                this._snapshotService.PrepareSnapshotForDeletion(deleteSnapshotOptions.SnapshotId, deleteSnapshotOptions.DeleteWithChildrens);
             }
         }
 

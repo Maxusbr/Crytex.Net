@@ -130,7 +130,6 @@ namespace Crytex.Model.Models
     {
         public Guid SnapshotId { get; set; }
         public Guid VmId { get; set; }
-        public string Name { get; set; }
     }
 
     [Serializable]

@@ -1,6 +1,5 @@
 ﻿using System;
-using Crytex.Background.Monitor.HyperV;
-using Crytex.Background.Monitor.Vmware;
+using Crytex.Background.Monitor;
 using Crytex.Notification;
 using Quartz;
 using Crytex.Service.IService;
@@ -13,15 +12,13 @@ namespace Crytex.Background.Tasks
     {
         private readonly IUserVmService _userVmService;
         private readonly INotificationManager _notificationManager;
-        private readonly IVmWareMonitorFactory _vmWareMonitorFactory;
-        private readonly IHyperVMonitorFactory _hyperVMonitorFactory;
+        private readonly IVmMonitorFactory _monitorFactory;
 
-        public MonitoringVmActiveJob(INotificationManager notificationManager, IVmWareMonitorFactory vmWareMonitorFactory,
-            IHyperVMonitorFactory hyperVMonitorFactory, IUserVmService userVmService)
+
+        public MonitoringVmActiveJob(INotificationManager notificationManager, IVmMonitorFactory monitorFactory, IUserVmService userVmService)
         {
-            this._hyperVMonitorFactory = hyperVMonitorFactory;
-            this._vmWareMonitorFactory = vmWareMonitorFactory;
             this._notificationManager = notificationManager;
+            _monitorFactory = monitorFactory;
             this._userVmService = userVmService;
         }
 
@@ -47,13 +44,13 @@ namespace Crytex.Background.Tasks
 
         private void SendHyperVStateMessage(UserVm vm)
         {
-            var monitor = this._hyperVMonitorFactory.CreateHyperVMonitor(vm.HyperVHost);
-            var info = monitor.GetVmByName(vm.Id.ToString());
+            var monitor = _monitorFactory.GetHyperVMonitor(vm.HyperVHost);
+            var info = monitor.GetMachineState(vm.Id.ToString());
 
             StateMachine vmState = new StateMachine
             {
-                CpuLoad = Convert.ToInt32(info.CPUUsage),
-                RamLoad = Convert.ToInt32(info.MemoryAssigned),
+                CpuLoad = Convert.ToInt32(info.CpuUsage),
+                RamLoad = Convert.ToInt32(info.RamUsage),
                 Date = DateTime.UtcNow,
                 VmId = vm.Id
             };
@@ -63,8 +60,8 @@ namespace Crytex.Background.Tasks
 
         private void SendVmWareStateMessage(UserVm vm)
         {
-            var monitor = this._vmWareMonitorFactory.CreateVmWareVMonitor(vm.VmWareCenter);
-            var info = monitor.GetVmByName(vm.Id.ToString());
+            var monitor = _monitorFactory.GetVmWareMonitor(vm.VmWareCenter);
+            var info = monitor.GetMachineState(vm.Id.ToString());
 
             StateMachine vmState = new StateMachine
             {

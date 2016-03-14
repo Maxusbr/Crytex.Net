@@ -173,7 +173,6 @@
     <Compile Include="Notification\NotificationManagerTest.cs" />
     <Compile Include="Notification\Hub\MonitorHubTest.cs" />
     <Compile Include="Notification\Hub\Test.cs" />
-    <Compile Include="Job\MonitorJobTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerConfigTests.cs" />
     <Compile Include="FileServiceTests.cs" />

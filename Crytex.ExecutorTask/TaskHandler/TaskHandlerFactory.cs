@@ -4,8 +4,6 @@ using Crytex.Service.IService;
 using Crytex.Virtualization.Base;
 using Crytex.Virtualization.Fake;
 using Crytex.Virtualization.HyperV;
-using HyperVRemote;
-using HyperVRemote.Source.Implementation;
 using System;
 using System.Collections.Generic;
 using Crytex.ExecutorTask.TaskHandler.Implementation.Game;
@@ -18,6 +16,7 @@ using Crytex.Model.Models.GameServers;
 using VmWareRemote.Implementations;
 using VmWareRemote.Interface;
 using VmWareRemote.Model;
+using Crytex.Virtualization._VMware;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -124,13 +123,13 @@ namespace Crytex.ExecutorTask.TaskHandler
             IProviderVM provider = null;
             if (!this._useFakeProviders)
             {
-                //AutorizationInfo userData = new AutorizationInfo
-                //{
-                //    ServerAddress = vCenter.ServerAddress,
-                //    UserName = vCenter.UserName,
-                //    UserPassword = vCenter.Password
-                //};
-                //provider = new ProviderWMware(userData);
+                AutorizationInfo userData = new AutorizationInfo
+                {
+                    ServerAddress = vCenter.ServerAddress,
+                    UserName = vCenter.UserName,
+                    UserPassword = vCenter.Password
+                };
+                provider = new ProviderWMware(userData);
             }
             else
             {

@@ -24,7 +24,7 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
                 var vm = this.VirtualizationProvider.GetMachinesByName(vmName);
 
                 var snapshotServerName = options.SnapshotId.ToString();
-                var createSnapshotResult = vm.CreateSnapshot(snapshotServerName);
+                var createSnapshotResult = vm.SnapshotManager.CreateSnapshot(snapshotServerName);
 
                 if (createSnapshotResult.IsError)
                 {
