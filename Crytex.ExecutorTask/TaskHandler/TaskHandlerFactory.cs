@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using Crytex.ExecutorTask.TaskHandler.Implementation.Game;
 using Crytex.ExecutorTask.TaskHandler.Implementation.Vm;
-using Crytex.GameServers.Enums;
 using Crytex.GameServers.Fabric;
 using Crytex.GameServers.Interface;
 using Crytex.GameServers.Models;
@@ -279,10 +278,9 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetCreateGameServerTaskHandler(TaskV2 task, GameServer gameServer)
         {
-            var familyGame = MapGameFamily(gameServer.GameServerTariff.Game.Family);
             ConnectParam param = new ConnectParam
             {
-                FamilyGame = familyGame,
+                FamilyGame = gameServer.GameServerTariff.Game.Family,
                 SshIp = gameServer.GameHost.ServerAddress,
                 GameName = gameServer.GameServerTariff.Game.Name,
                 SshPort = gameServer.GameHost.Port,
@@ -293,21 +291,6 @@ namespace Crytex.ExecutorTask.TaskHandler
             var handler = new CreateGameServerTaskHandler(task, provider);
 
             return handler;
-        }
-
-        private FamilyGame MapGameFamily(GameFamily family)
-        {
-            switch (family)
-            {
-                case GameFamily.Ark:
-                    return  FamilyGame.Ark;
-                case GameFamily.Arma3:
-                    return FamilyGame.Arma3;
-                case GameFamily.Bmdm:
-                    return FamilyGame.Bmdm;
-            }
-
-            throw new ApplicationException("Unknown gamefamily");
         }
 
         private ITaskHandler GetChangeStatusGameServerTaskHandler(TaskV2 task, GameServer gameServer)
