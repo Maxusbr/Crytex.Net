@@ -3,6 +3,8 @@ using System.Linq;
 using Crytex.Background.Statistic;
 using Crytex.Model.Models;
 using System.Threading;
+using Microsoft.Practices.Unity;
+
 namespace Crytex.Background
 {
     using Crytex.Core;
@@ -24,11 +26,17 @@ namespace Crytex.Background
             UnityConfig.Configure();
             var scheduler = UnityConfig.Resolve<ISchedulerJobs>();
 
-            var Thread = new Thread((() =>
+            var gameTaskManagerThread = new Thread((() =>
             {
-                var taskManager = UnityConfig.Resolve<ITaskQueuePoolManager>();
+                var taskManager = UnityConfig.Resolve<ITaskQueuePoolManager>("Game");
             }));
-            Thread.Start();
+            gameTaskManagerThread.Start();
+
+            var nonGameTaskManagerThread = new Thread((() =>
+            {
+                var taskManager = UnityConfig.Resolve<ITaskQueuePoolManager>("NonGame");
+            }));
+            nonGameTaskManagerThread.Start();
 
             scheduler.StartScheduler();
 
@@ -56,7 +64,7 @@ namespace Crytex.Background
             //statisticData[0] = new KeyValuePair<string, Object>("typeStatistic", TypeStatistic.UsersWithLeastOneRunningMachine);
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);
             //scheduler.ScheduleJob<MonitoringHyperVJob>("monitoring hyperv", "1/10 * * * * ?");
-            scheduler.ScheduleJob<MonitoringVmWareJob>("monitoring vmware", "1/10 * * * * ?");
+            //scheduler.ScheduleJob<MonitoringVmWareJob>("monitoring vmware", "1/10 * * * * ?");
             //scheduler.ScheduleJob<MonitoringVmActiveJob>("monitoring active vms", "1/10 * * * * ?");
 
             //scheduler.ScheduleJob<BillingJob>("billing", "*/3 * * * * ?");
@@ -64,7 +72,9 @@ namespace Crytex.Background
             //var emai = scheduler.ScheduleJob<EmailSendJob>("emailSending", "*/10 * * * * ?");
             //scheduler.TriggerJob(emai);
 
-            //scheduler.ScheduleJob<TaskExecutorUpdateJob>("task executor update", "1/5 * * * * ?");
+
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("non-game task executor update", "1/5 * * * * ?", new List<KeyValuePair<string, object>>() { new KeyValuePair<string, object>("taskExecutorName", "NonGame") });
+            scheduler.ScheduleJob<TaskExecutorUpdateJob>("game task executor update", "1/5 * * * * ?", new List<KeyValuePair<string, object>>() {new KeyValuePair<string, object>("taskExecutorName", "Game")});
             //scheduler.ScheduleJob<UsageSubscriptionVmJob>("ActiveStaticSubscriptionVmJob", "*/5 * * * * ?");
             //scheduler.ScheduleJob<BackupSubscriptionVmJob>("BackupSubscriptionVmJob", "*/5 * * * * ?");
             //scheduler.ScheduleJob<StatisticJob>("UsersWithLeastOneRunningMachine", "0 0 0 1/1 * ? *", statisticData);

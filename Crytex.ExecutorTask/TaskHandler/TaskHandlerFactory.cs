@@ -1,19 +1,12 @@
 ﻿using Crytex.ExecutorTask.Config;
-using Crytex.ExecutorTask.TaskHandler.HyperV;
-using Crytex.ExecutorTask.TaskHandler.VmWare;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using Crytex.Virtualization._VMware;
 using Crytex.Virtualization.Base;
 using Crytex.Virtualization.Fake;
 using Crytex.Virtualization.HyperV;
-using HyperVRemote;
-using HyperVRemote.Source.Implementation;
 using System;
 using System.Collections.Generic;
-using VmWareRemote.Implementations;
-using VmWareRemote.Interface;
-using VmWareRemote.Model;
+using Crytex.Virtualization._VMware;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -121,7 +114,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, HyperVHost host)
         {
             var provider = this.GetProvider(host);
-            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, host.Id);
+            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, host.Id, host.DefaultVmNetworkName);
 
             return handler;
         }
@@ -129,7 +122,7 @@ namespace Crytex.ExecutorTask.TaskHandler
         private BaseNewTaskHandler GetCreateVmTaskHandler(TaskV2 task, VmWareVCenter vCenter)
         {
             var provider = this.GetProvider(vCenter);
-            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, vCenter.Id);
+            var handler = new CreateVmTaskHandler(this._operatingSystemService, task, provider, vCenter.Id, vCenter.DefaultVmNetworkName);
 
             return handler;
         }
@@ -253,22 +246,6 @@ namespace Crytex.ExecutorTask.TaskHandler
             var handler = new LoadSnapshotTaskHandler(task, provider, vCenter.Id, this._snapshotVmService);
 
             return handler;
-        }
-
-        private IVmWareControl CreateVmWareControl(VmWareVCenter vCenter)
-        {
-      
-            var control = new FakeVmWareControl(null);
-
-            return control;
-        }
-
-        private IHyperVControl CreateHyperVControl(TaskV2 task, HyperVHost host)
-        {
-     
-            var control = new FakeHyperVControl(null);
-
-            return control;
         }
         #endregion // Private methods
     }

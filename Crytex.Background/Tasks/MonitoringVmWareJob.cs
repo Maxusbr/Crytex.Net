@@ -1,36 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Management.Automation;
-using Crytex.Notification;
 using System.Threading.Tasks;
 using Crytex.Background.Monitor;
-using Crytex.Background.Monitor.Vmware;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
-using HyperVRemote;
-using VmWareRemote.Model;
 
 namespace Crytex.Background.Tasks
 {
     using System;
     using Quartz;
-    using Crytex.Background.Monitor.Vmware;
 
     [DisallowConcurrentExecution]
     public class MonitoringVmWareJob : IJob
     {
-        private IVmWareMonitorFactory _vmWareMonitorFactory { get; set; }
-        private IStateMachineService _stateMachine { get; set; }
+        private readonly IVmMonitorFactory _monitorFactory;
+        private IStateMachineService _stateMachineService { get; set; }
         private IUserVmService _userVm { get; set; }
         private IVmWareVCenterService _vCenter { get; set; }
 
-        public MonitoringVmWareJob(IVmWareMonitorFactory vmWareMonitorFactory,
-            IStateMachineService stateMachine,
+        public MonitoringVmWareJob(IVmMonitorFactory monitorFactory,
+            IStateMachineService stateMachineService,
             IUserVmService userVm,
             IVmWareVCenterService vCenter)
         {
-            this._vmWareMonitorFactory = vmWareMonitorFactory;
-            this._stateMachine = stateMachine;
+            _monitorFactory = monitorFactory;
+            this._stateMachineService = stateMachineService;
             this._userVm = userVm;
             this._vCenter = vCenter;
         }
@@ -52,22 +46,22 @@ namespace Crytex.Background.Tasks
 
         public void GetVmInfo(VmWareVCenter vCenter, List<UserVm> allVMs)
         {
-            var vmWareMonitor = _vmWareMonitorFactory.CreateVmWareVMonitor(vCenter);
+            var vmWareMonitor = _monitorFactory.GetVmWareMonitor(vCenter);
             var vCenterVms = allVMs.Where(v => v.VirtualizationType == TypeVirtualization.VmWare && v.VmWareCenterId == vCenter.Id);
 
             foreach (var vm in vCenterVms)
             {
-                var stateData = vmWareMonitor.GetVmByName(vm.Name);
+                var stateData = vmWareMonitor.GetMachineState(vm.Id.ToString());
 
                 StateMachine vmState = new StateMachine
                 {
                     CpuLoad = Convert.ToInt32(stateData.CpuUsage),
                     RamLoad = Convert.ToInt32(stateData.RamUsage),
-                    UpTime = TimeSpan.FromSeconds(stateData.Uptime.Value),
+                    UpTime = stateData.Uptime,
                     Date = DateTime.UtcNow,
                     VmId = vm.Id
                 };
-                var newState = _stateMachine.CreateState(vmState);
+                _stateMachineService.CreateState(vmState);
             }
         }
     }
