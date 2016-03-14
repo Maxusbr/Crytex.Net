@@ -14,6 +14,5 @@ namespace Crytex.Web.Models.JsonModels
         public bool? AutoProlongation { get; set; }
         public int MonthCount { get; set; }
         public GameServerUpdateType UpdateType { get; set; }
-        public TypeChangeStatus? Status { get; set; }
     }
 }

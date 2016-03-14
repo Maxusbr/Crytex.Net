@@ -68,6 +68,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<DhcpServerView, DhcpServerOption>();
             Mapper.CreateMap<NewsViewModel, News>();
             Mapper.CreateMap<SnapshotVmViewModel, SnapshotVm>();
+            Mapper.CreateMap<GameServerBuyOptionsViewModel, BuyGameServerOption>();
         }
     }
 }

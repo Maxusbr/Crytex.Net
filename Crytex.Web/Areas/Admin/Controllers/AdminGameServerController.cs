@@ -48,7 +48,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         }
 
 
-        private bool UpdateMachineStatus(Guid serverId, TypeChangeStatus? status)
+        private void UpdateServerStatus(Guid serverId, TypeChangeStatus status)
         {
             switch (status)
             {
@@ -64,10 +64,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
                 case TypeChangeStatus.Stop:
                     _gameServerService.StopGameServer(serverId);
                     break;
-                default:
-                    return false;
             }
-            return true;
         }
 
         /// <summary>
@@ -102,15 +99,23 @@ namespace Crytex.Web.Areas.Admin.Controllers
                     if (model.AutoProlongation == null) return BadRequest("AutoProlongation must have value");
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;
-                case GameServerUpdateType.State:
-                    if(!UpdateMachineStatus(serverId, model.Status)) return BadRequest("Invalid status");
-                    break;
                 default:
                     return BadRequest("Invalid UpdateType");
             }
             return Ok();
         }
 
+        [HttpPost]
+        public IHttpActionResult UpdateServerStatus(GameServerChangeStatusViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            UpdateServerStatus(model.ServerId.Value, model.ChangeStatusType.Value);
+
+            return Ok();
+        }
     }
 }

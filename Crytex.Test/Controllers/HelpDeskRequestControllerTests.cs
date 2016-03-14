@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Results;
 using Crytex.Core.Service;
@@ -66,6 +67,8 @@ namespace Crytex.Test.Controllers
         [Test]
         public void GetResponseOkWithListDataWhenCallGetWithValidParams()
         {
+            // TODO: Refactor this test
+            throw new NotImplementedException();
             var pageSize = 5;
             var pageNumber = 1;
             var helpDeskRequests = new List<HelpDeskRequest>()
@@ -74,7 +77,7 @@ namespace Crytex.Test.Controllers
                                             new HelpDeskRequest() {Id = 2},
                                             new HelpDeskRequest() {Id = 3},
                                     };
-            _helpDeskRequestService.GetPage(pageNumber, pageSize).Returns(new PagedList<HelpDeskRequest>(helpDeskRequests, pageNumber, pageSize));
+            //_helpDeskRequestService.GetPage(pageNumber, pageSize).Returns(new PagedList<HelpDeskRequest>(helpDeskRequests, pageNumber, pageSize));
 
             var actionResult = _helpDeskRequestController.Get(pageNumber, pageSize) as OkNegotiatedContentResult<PageModel<HelpDeskRequestViewModel>>;
 
@@ -83,7 +86,7 @@ namespace Crytex.Test.Controllers
             IsNotNull(model);
             That(helpDeskRequests.Select(x => x.Id), Is.EquivalentTo(model.Items.Select(x => x.Id).OrderBy(x => x)));
 
-            _helpDeskRequestService.Received(1).GetPage(pageNumber, pageSize);
+            //_helpDeskRequestService.Received(1).GetPage(pageNumber, pageSize);
             _helpDeskRequestService.ClearReceivedCalls();
         }
 
