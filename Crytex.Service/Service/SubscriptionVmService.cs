@@ -591,7 +591,7 @@ namespace Crytex.Service.Service
             this._taskService.CreateTask(deleteTask, removeVmOptions);
 
             // Change subscription status to WaitForDeletion
-            sub.Status = SubscriptionVmStatus.Deleted;
+            sub.Status = SubscriptionVmStatus.WaitForDeletion;
             this._subscriptionVmRepository.Update(sub);
             this._unitOfWork.Commit();
 

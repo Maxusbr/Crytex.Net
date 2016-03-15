@@ -138,5 +138,13 @@ namespace Crytex.Web.Areas.User.Controllers
                     break;
             }
         }
+
+        [HttpDelete]
+        public IHttpActionResult DeleteGameServer(Guid id)
+        {
+            _gameServerService.DeleteGameServer(id);
+
+            return Ok();
+        }
     }
 }
