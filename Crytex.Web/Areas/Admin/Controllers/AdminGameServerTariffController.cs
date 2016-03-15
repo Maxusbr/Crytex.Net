@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
 using AutoMapper;
-using Crytex.Model.Enums;
-using Crytex.Model.Models;
 using Crytex.Model.Models.GameServers;
-using Crytex.Service.Model;
 
 namespace Crytex.Web.Areas.Admin.Controllers
 {

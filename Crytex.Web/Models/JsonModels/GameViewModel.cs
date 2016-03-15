@@ -23,5 +23,7 @@ namespace Crytex.Web.Models.JsonModels
         public int ImageFileDescriptorId { get; set; }
 
         public GameServerTariffView GameServerTariff { get; set; }
+
+        public FileDescriptorViewModel ImageFileDescriptor { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using Crytex.Model.Models;
+﻿using Crytex.Model.Models;
 
 namespace Crytex.Web.Models.JsonModels
 {
