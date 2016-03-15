@@ -10,7 +10,6 @@ namespace Crytex.Model.Enums
     {
         UpdateName = 0,
         Prolongation = 1,
-        EnableAutoProlongation = 2,
-        State = 3
+        EnableAutoProlongation = 2
     }
 }

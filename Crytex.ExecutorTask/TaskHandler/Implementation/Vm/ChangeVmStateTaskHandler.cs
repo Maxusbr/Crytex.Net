@@ -1,15 +1,15 @@
-﻿using Crytex.Model.Models;
+﻿using System;
+using Crytex.Model.Models;
 using Crytex.Virtualization.Base;
-using System;
 
-namespace Crytex.ExecutorTask.TaskHandler
+namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 {
-    internal class ChangeVmStateTaskHandler : BaseNewTaskHandler
+    internal class ChangeVmStateTaskHandler : BaseVmTaskHandler
     {
         public ChangeVmStateTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
             : base(task, virtualizationProvider, virtualizationServerEntityId) { }
 
-        protected override TaskExecutionResult ExecuteLogic()
+        protected override TaskExecutionResult ExecuteVmLogic()
         {
             var result = new TaskExecutionResult();
             var options = this.TaskEntity.GetOptions<ChangeStatusOptions>();

@@ -9,6 +9,7 @@ using Crytex.Notification.Models;
 using System.Linq;
 using Crytex.Core;
 using Crytex.Model.Enums;
+using Crytex.Model.Models.GameServers;
 
 namespace Crytex.ExecutorTask.TaskHandler
 {
@@ -23,13 +24,15 @@ namespace Crytex.ExecutorTask.TaskHandler
         private IVmBackupService _vmBackupService;
         private ITriggerService _triggerService;
         private readonly ISnapshotVmService _snapshotVmService;
+        private readonly IGameServerService _gameServerService;
 
         private IDictionary<TypeTask, Action<TaskV2, TaskExecutionResult>> _taskTypeSpecificProcessingFinishedActions;
 
         public TaskHandlerManager(ITaskV2Service taskService, IUserVmService userVmService,
             INotificationManager notificationManager, IVmWareVCenterService vmWareVCenterService,
             IOperatingSystemsService operatingSystemService, IHyperVHostService vmHyperVHostCenterService,
-            IVmBackupService vmBackupService, ITriggerService triggerService, ISnapshotVmService snapshotVmService)
+            IVmBackupService vmBackupService, ITriggerService triggerService, ISnapshotVmService snapshotVmService,
+            IGameServerService gameServerService)
         {
             this._handlerFactory = new TaskHandlerFactory(operatingSystemService, snapshotVmService);
             this._taskService = taskService;
@@ -40,6 +43,7 @@ namespace Crytex.ExecutorTask.TaskHandler
             this._vmBackupService = vmBackupService;
             this._triggerService = triggerService;
             this._snapshotVmService = snapshotVmService;
+            _gameServerService = gameServerService;
 
             this._taskTypeSpecificProcessingFinishedActions = new Dictionary<TypeTask, Action<TaskV2, TaskExecutionResult>>
             {
@@ -68,19 +72,28 @@ namespace Crytex.ExecutorTask.TaskHandler
             foreach (var task in tasks)
             {
                 ITaskHandler handler = null;
-                switch (task.Virtualization)
+                if (IsGameTask(task))
                 {
-                    case TypeVirtualization.HyperV:
-                        var hyperVHost = this.GetHyperVHostForTask(task);
-                        handler = this._handlerFactory.GetHyperVHandler(task, hyperVHost);
-                        break;
-                    case TypeVirtualization.VmWare:
-                        var vmWareVCenter = this.GetVmWareVCenterForTask(task);
-                        handler = this._handlerFactory.GetVmWareHandler(task, vmWareVCenter);
-                        break;
-                    default:
-                        throw new ApplicationException(string.Format("Unknown virtualization type {0}", task.Virtualization));
+                    var gameServer = GetGameServerForTask(task);
+                    handler = _handlerFactory.GetGameTaskHandler(task, gameServer);
                 }
+                else
+                {
+                    switch (task.Virtualization)
+                    {
+                        case TypeVirtualization.HyperV:
+                            var hyperVHost = this.GetHyperVHostForTask(task);
+                            handler = this._handlerFactory.GetHyperVHandler(task, hyperVHost);
+                            break;
+                        case TypeVirtualization.VmWare:
+                            var vmWareVCenter = this.GetVmWareVCenterForTask(task);
+                            handler = this._handlerFactory.GetVmWareHandler(task, vmWareVCenter);
+                            break;
+                        default:
+                            throw new ApplicationException(string.Format("Unknown virtualization type {0}", task.Virtualization));
+                    }
+                }
+                
                 handler.ProcessingStarted += this.ProcessingStartedEventHandler;
                 handler.ProcessingFinished += this.ProcessingFinishedEventHandler;
 
@@ -88,6 +101,23 @@ namespace Crytex.ExecutorTask.TaskHandler
                 }
 
             return handlerList;
+        }
+
+        private GameServer GetGameServerForTask(TaskV2 task)
+        {
+            var gameHost = _gameServerService.GetById((task.GetOptions<BaseGameServerOptions>()).GameServerId);
+
+            return gameHost;
+        }
+
+        private bool IsGameTask(TaskV2 task)
+        {
+            if (task.TypeTask == TypeTask.CreateGameServer ||
+                task.TypeTask == TypeTask.GameServerChangeStatus ||
+                task.TypeTask == TypeTask.DeleteGameServer)
+                return true;
+
+            return false;
         }
 
         private VmWareVCenter GetVmWareVCenterForTask(TaskV2 task)

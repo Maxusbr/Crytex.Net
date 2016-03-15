@@ -69,7 +69,7 @@ namespace Crytex.Service.Service
             return hosts.FirstOrDefault();
         }
 
-        public void Update(int id, GameHostCreateOptions option)
+        public void Update(Int32 id, GameHostCreateOptions option)
         {
             var host = _gameHostRepository.Get(x => x.Id == id, x => x.SupportedGames);
             if (host == null)
@@ -100,6 +100,18 @@ namespace Crytex.Service.Service
             }
 
             _gameHostRepository.Update(host);
+            _unitOfWork.Commit();
+        }
+
+        public void Delete(Int32 id)
+        {
+            var host = _gameHostRepository.Get(x => x.Id == id, x => x.SupportedGames);
+            if (host == null)
+            {
+                throw new ValidationException($"GameHost with Id={id} not found");
+            }
+
+            _gameHostRepository.Delete(host);
             _unitOfWork.Commit();
         }
 
