@@ -18,11 +18,13 @@ namespace Crytex.Service.Service
         private readonly IGameRepository _gameRepository;
         private readonly IGameServerTariffRepository _gameServerTariffRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IFileDescriptorRepository _fileDescriptorRepo;
 
-        public GameService(IGameRepository gameRepository, IGameServerTariffRepository gameServerTariffRepository, IUnitOfWork unitOfWork)
+        public GameService(IGameRepository gameRepository, IGameServerTariffRepository gameServerTariffRepository, IUnitOfWork unitOfWork, IFileDescriptorRepository fileDescriptorRepo)
         {
             this._gameRepository = gameRepository;
             _gameServerTariffRepository = gameServerTariffRepository;
+            this._fileDescriptorRepo = fileDescriptorRepo;
             this._unitOfWork = unitOfWork;
         }
 
@@ -38,7 +40,7 @@ namespace Crytex.Service.Service
 
         public Game GetById(int id)
         {
-            var game = _gameRepository.Get(g => g.Id == id, x => x.GameHosts);
+            var game = _gameRepository.Get(g => g.Id == id, x => x.GameHosts, x => x.ImageFileDescriptor);
 
             if (game == null)
             {
@@ -75,7 +77,7 @@ namespace Crytex.Service.Service
             {
                 where = where.And(p => p.Family == family);
             }
-            var pagedList = _gameRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.GameHosts);
+            var pagedList = _gameRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.GameHosts, x => x.ImageFileDescriptor);
 
             return pagedList;
         }

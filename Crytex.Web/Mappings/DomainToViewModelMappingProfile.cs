@@ -162,7 +162,9 @@ namespace Crytex.Web.Mappings
                 .Include<SubscriptionVmBackupPayment, SubscriptionVmBackupPaymentViewModel>()
                 .Include<PaymentGameServer, PaymentGameServerViewModel>()
                 .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
-            Mapper.CreateMap<Game, GameViewModel>();
+            Mapper.CreateMap<Game, GameViewModel>()
+            .AfterMap((source, dest) => dest.ImageFileDescriptor.Path = _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path);
+
             Mapper.CreateMap<GameHost, GameHostViewModel>()
                 .ForMember(x => x.SupportedGamesIds, opt => opt.MapFrom(source => source.SupportedGames.Select(g => g.Id)));
             Mapper.CreateMap<DhcpServer, DhcpServerView>()
