@@ -11,12 +11,16 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web;
 using System.Web.Http.Description;
+using Crytex.Core.Service;
+using Microsoft.Practices.Unity;
 
 namespace Crytex.Web.Areas.Admin
 {
     public class AdminFileController : AdminCrytexController
     {
         private readonly IFileService _fileService;
+        [Dependency]
+        public IServerConfig _serverConfig { get; set; }
 
         public AdminFileController(IFileService fileService)
         {
@@ -80,7 +84,18 @@ namespace Crytex.Web.Areas.Admin
 
                 File.Delete(file.LocalFileName);
 
-                return Ok(new { id = descriptor.Id, path = descriptor.Path });
+                String path = String.Empty;
+
+                if (fileType == FileType.Image)
+                {
+                    path = _serverConfig.GetImageFileSavePath() + "/small_" + descriptor.Path;
+                }
+                else
+                {
+                    path = descriptor.Path;
+                }
+
+                return Ok(new { id = descriptor.Id, path = path });
             }
 
             return BadRequest("No files to upload");
