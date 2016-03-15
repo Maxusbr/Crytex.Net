@@ -82,6 +82,7 @@
     <Compile Include="Enums\GameFamily.cs" />
     <Compile Include="Enums\GameServerUpdateType.cs" />
     <Compile Include="Enums\PhysicalServerOptionType.cs" />
+    <Compile Include="Enums\GameHostTypeStatus.cs" />
     <Compile Include="Enums\UrgencyLevel.cs" />
     <Compile Include="Enums\UsageSubscriptionPaymentGroupingTypes.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
@@ -93,6 +94,7 @@
     <Compile Include="Exceptions\SecurityException.cs" />
     <Compile Include="Exceptions\TaskOperationException.cs" />
     <Compile Include="Exceptions\TransactionFailedException.cs" />
+    <Compile Include="Exceptions\GameHostTypeError.cs" />
     <Compile Include="Exceptions\ValidationException.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
