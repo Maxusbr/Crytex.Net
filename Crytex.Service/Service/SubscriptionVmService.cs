@@ -839,7 +839,10 @@ namespace Crytex.Service.Service
             _subscriptionVmRepository.Update(sub);
 
             // Update uservm entity and create updateVm task
-            this.UpdateSubMachineConfig(sub, options);
+            if (UpdateVmTaskRequired(options))
+            {
+                this.UpdateSubMachineConfig(sub, options);
+            }
         }
 
         private void UpdateSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
@@ -928,8 +931,12 @@ namespace Crytex.Service.Service
                 sub.DailyBackupStorePeriodDays = oldBackupPeriod;
                 throw;
             }
+
             // Create task and update vm
-            this.UpdateSubMachineConfig(sub, options);
+            if (UpdateVmTaskRequired(options))
+            {
+                this.UpdateSubMachineConfig(sub, options);
+            }
 
             // Update subscription
             _subscriptionVmRepository.Update(sub);
@@ -989,6 +996,15 @@ namespace Crytex.Service.Service
                 this._backupPaymentRepo.Add(subscriptionBackupPayment);
                 this._unitOfWork.Commit();
             }
+        }
+
+        private bool UpdateVmTaskRequired(UpdateMachineConfigOptions options)
+        {
+            if (options.Cpu != null || options.Hdd != null || options.Ram != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
