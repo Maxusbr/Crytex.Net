@@ -12,6 +12,12 @@ namespace Crytex.Web.Models.JsonModels
         /// <summary>
         /// Стоимость слота
         /// </summary>
+        /// 
+        /// 
         public decimal Slot { get; set; }
+
+        public string Name { get; set; }
+
+        public int Performance { get; set; }
     }
 }
