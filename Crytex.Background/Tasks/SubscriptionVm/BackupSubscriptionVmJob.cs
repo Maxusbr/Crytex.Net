@@ -11,15 +11,12 @@ namespace Crytex.Background.Tasks.SubscriptionVm
     public class BackupSubscriptionVmJob : IJob
     {
         private readonly ISubscriptionVmService _subscriptionService;
-        private readonly ITaskV2Service _taskService;
         private readonly IVmBackupService _vmBackupService;
 
-        public BackupSubscriptionVmJob(ISubscriptionVmService subscriptionService, IVmBackupService vmBackupService,
-            ITaskV2Service taskService)
+        public BackupSubscriptionVmJob(ISubscriptionVmService subscriptionService, IVmBackupService vmBackupService)
         {
             this._subscriptionService = subscriptionService;
             this._vmBackupService = vmBackupService;
-            this._taskService = taskService;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -33,22 +30,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                 var todaysBackupExist = subVmBackups.Any(b => b.DateCreated.Day == DateTime.UtcNow.Day);
                 if (!todaysBackupExist)
                 {
-                    // create backup task
-                    var backupTask = new TaskV2
-                    {
-                        ResourceId = sub.Id,
-                        ResourceType = ResourceType.SubscriptionVm,
-                        TypeTask = TypeTask.Backup,
-                        Virtualization = sub.UserVm.VirtualizationType,
-                        UserId = sub.UserId
-                    };
-                    var backupTaskOptions = new BackupOptions
-                    {
-                        BackupName = "Automatic backup",
-                        VmId = sub.UserVm.Id
-                    };
-
-                    this._taskService.CreateTask(backupTask, backupTaskOptions);
+                    _vmBackupService.Create(sub.Id, "Automatic backup");
                 }
 
                 // Delete outdated backups
@@ -56,21 +38,7 @@ namespace Crytex.Background.Tasks.SubscriptionVm
                     && b.Status == VmBackupStatus.Active);
                 foreach(var backup in outdatedBackups)
                 {
-                    // delete backup
-                    var deleteBackupTask = new TaskV2
-                    {
-                        ResourceId = sub.Id,
-                        ResourceType = ResourceType.SubscriptionVm,
-                        TypeTask = TypeTask.DeleteBackup,
-                        Virtualization = sub.UserVm.VirtualizationType,
-                        UserId = sub.UserId
-                    };
-                    var deleteBackupTaskOptions = new DeleteBackupOptions
-                    {
-                        VmBackupId = backup.Id
-                    };
-
-                    this._taskService.CreateTask(deleteBackupTask, deleteBackupTaskOptions);
+                    _vmBackupService.Delete(backup.Id);
                 }
             }
         }

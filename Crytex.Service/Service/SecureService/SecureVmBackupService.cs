@@ -16,8 +16,8 @@ namespace Crytex.Service.Service.SecureService
     {
         private readonly IIdentity _userIdentity;
 
-        public SecureVmBackupService(IVmBackupRepository backupRepo, IUnitOfWork unitOfWork,
-            IIdentity userIdentity) : base(backupRepo, unitOfWork)
+        public SecureVmBackupService(IVmBackupRepository backupRepo, ITaskV2Service taskService, ISubscriptionVmService subscriptionVmService,
+            IUnitOfWork unitOfWork, IIdentity userIdentity) : base(backupRepo, taskService, subscriptionVmService, unitOfWork)
         {
             this._userIdentity = userIdentity;
         }

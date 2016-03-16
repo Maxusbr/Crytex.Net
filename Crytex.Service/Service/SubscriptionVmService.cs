@@ -812,17 +812,17 @@ namespace Crytex.Service.Service
             }
         }
 
-        public void UpdateSubscriptionMachineConfig(Guid subscriptionId, UpdateMachineConfigOptions options)
+        public void UpdateSubscriptionConfig(Guid subscriptionId, UpdateMachineConfigOptions options)
         {
             var sub = this.GetById(subscriptionId);
 
             switch (sub.SubscriptionType)
             {
                 case SubscriptionType.Fixed:
-                    this.UpdateFixedSubMachineConfig(sub, options);
+                    this.UpdateFixedSubConfig(sub, options);
                     break;
                 case SubscriptionType.Usage:
-                    this.UpdateUsageSubMachineConfig(sub, options);
+                    this.UpdateUsageSubConfig(sub, options);
                     break;
             }
         }
@@ -832,8 +832,13 @@ namespace Crytex.Service.Service
             _billingService.AddTestPeriod(options);
         }
 
-        private void UpdateUsageSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
+        private void UpdateUsageSubConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
         {
+            // Update sub entity
+            sub.DailyBackupStorePeriodDays = options.DailyBackupStorePretiodDays ?? sub.DailyBackupStorePeriodDays;
+            _subscriptionVmRepository.Update(sub);
+
+            // Update uservm entity and create updateVm task
             this.UpdateSubMachineConfig(sub, options);
         }
 
@@ -858,7 +863,7 @@ namespace Crytex.Service.Service
             this._taskService.CreateTask(updateTask, taskUpdateOptions);
         }
 
-        private void UpdateFixedSubMachineConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
+        private void UpdateFixedSubConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
         {
             var dateNow = DateTime.UtcNow;
 
@@ -884,10 +889,12 @@ namespace Crytex.Service.Service
             var oldCpu = userVm.CoreCount;
             var oldRam = userVm.RamCount;
             var oldHdd = userVm.HardDriveSize;
+            var oldBackupPeriod = sub.DailyBackupStorePeriodDays;
 
             userVm.CoreCount = options.Cpu ?? userVm.CoreCount;
             userVm.RamCount = options.Ram ?? userVm.RamCount;
             userVm.HardDriveSize = options.Hdd ?? userVm.HardDriveSize;
+            sub.DailyBackupStorePeriodDays = options.DailyBackupStorePretiodDays ?? sub.DailyBackupStorePeriodDays;
 
             // ... calculate subscroption price
             var subscriptionDayNewPrice = this.GetFixedSubscriptionMonthPrice(sub) / 30;
@@ -918,10 +925,14 @@ namespace Crytex.Service.Service
                 userVm.CoreCount = oldCpu;
                 userVm.RamCount = oldRam;
                 userVm.HardDriveSize = userVm.HardDriveSize;
+                sub.DailyBackupStorePeriodDays = oldBackupPeriod;
                 throw;
             }
             // Create task and update vm
             this.UpdateSubMachineConfig(sub, options);
+
+            // Update subscription
+            _subscriptionVmRepository.Update(sub);
 
             // Mark current and subsequent subscroption payments as ReturnedToUser
             var paymentsToMark = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
