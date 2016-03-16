@@ -138,6 +138,8 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException("ExpireMonthCount must be greater than 0");
             }
 
+            CheckGameHostAvailable(server);
+
             decimal amount = this.GetSlotServerMonthPrice(server, options.SlotCount) * options.ExpireMonthCount;
 
             var gameServerVmTransaction = new BillingTransaction
@@ -213,7 +215,7 @@ namespace Crytex.Service.Service
 
         public void DeleteGameServer(Guid guid)
         {
-            //throw new NotImplementedException();
+            // Create delete server task
             var srv = GetById(guid);
             var removeVmOptions = new DeleteGameServerOptions
             {
@@ -227,6 +229,43 @@ namespace Crytex.Service.Service
                 ResourceId = srv.Id
             };
             this._taskService.CreateTask(deleteTask, removeVmOptions);
+
+            var dateNow = DateTime.UtcNow;
+            // Calculate return money
+            if (srv.DateExpire > dateNow)
+            {
+                decimal returnMoneyAmount = 0;
+
+                // .. Get active payments
+                var paymentsToMarkReturned = _paymentGameServerRepository.GetMany(p => p.GameServerId == srv.Id && p.DateEnd > dateNow);
+                foreach (var payment in paymentsToMarkReturned)
+                {
+                    payment.ReturnDate = dateNow;
+                    payment.ReturnedToUser = true;
+                    // Если дата начала платежа больше текущей то возвращаем платёж полностью. Если нет, то частично
+                    if (payment.DateStart < dateNow)
+                    {
+                        returnMoneyAmount += payment.Amount *
+                                             ((payment.DateEnd - dateNow).Value.Ticks /
+                                              (decimal)(payment.DateEnd - payment.DateStart).Value.Ticks);
+                    }
+                    else
+                    {
+                        returnMoneyAmount += payment.Amount;
+                    }
+                }
+
+                // Return money
+                var returnMoneyTransaction = new BillingTransaction
+                {
+                    CashAmount = returnMoneyAmount,
+                    Date = DateTime.UtcNow,
+                    TransactionType = BillingTransactionType.ReturnMoneyForDeletedService,
+                    UserId = srv.UserId,
+                    Description = "Return money for deleted game server service"
+                };
+                _billingService.AddUserTransaction(returnMoneyTransaction);
+            }
 
             var gameserv = GetById(guid);
             gameserv.Status = GameServerStatus.Deleted;
@@ -276,7 +315,19 @@ namespace Crytex.Service.Service
             _gameServerTariffRepository.Update(serverConfig);
             _unitOfWork.Commit();
         }
+        
         #region Private methods
+        private void CheckGameHostAvailable(GameServer server)
+        {
+            var gameServerTariff = this._gameServerTariffRepository.Get(tariff => tariff.Id == server.GameServerTariffId);
+
+            var gameHost = _gameHostService.GetGameHostWithAvalailableSlot(gameServerTariff.GameId);
+            if (gameHost == null)
+            {
+                throw new TaskOperationException("Cannot find gamehost for new gameserver");
+            }
+        }
+
         private GameServer CreateServer(GameServer server)
         {
             var gameServerTariff = this._gameServerTariffRepository.Get(tariff => tariff.Id == server.GameServerTariffId);
@@ -286,10 +337,7 @@ namespace Crytex.Service.Service
             }
 
             var gameHost = _gameHostService.GetGameHostWithAvalailableSlot(gameServerTariff.GameId);
-            if (gameHost == null)
-            {
-                throw new TaskOperationException("Cannot find gamehost for new gameserver");
-            }
+
             server.GameHostId = gameHost.Id;
             server.Status = GameServerStatus.Active;
             this._gameServerRepository.Add(server);
