@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using AutoMapper;
 using Crytex.Model.Enums;
 using Crytex.Service.IService;
 using Crytex.Web.Areas.Admin;
@@ -19,6 +20,16 @@ namespace Crytex.Web.Areas.User.Controllers
             _gameService = gameService;
         }
 
+        [HttpGet]
+        public IHttpActionResult Get(int id)
+        {
+            var game = _gameService.GetById(id);
+
+            var gameModel = Mapper.Map<GameViewModel>(game);
+
+            return Ok(gameModel);
+        }
+
         /// <summary>
         /// Вывод  GameViewModel с пагинацией.
         /// </summary>
@@ -33,7 +44,7 @@ namespace Crytex.Web.Areas.User.Controllers
                 return BadRequest("PageNumber and PageSize must be equal or grater than 1");
 
             var page = _gameService.GetPage(pageNumber, pageSize, familyGame);
-            var pageModel = AutoMapper.Mapper.Map<PageModel<GameViewModel>>(page);
+            var pageModel = Mapper.Map<PageModel<GameViewModel>>(page);
 
             return this.Ok(pageModel);
         }

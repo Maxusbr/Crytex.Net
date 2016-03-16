@@ -40,7 +40,7 @@ namespace Crytex.Service.Service
 
         public Game GetById(int id)
         {
-            var game = _gameRepository.Get(g => g.Id == id, x => x.GameHosts, x => x.ImageFileDescriptor);
+            var game = _gameRepository.Get(g => g.Id == id, x => x.GameHosts, x => x.ImageFileDescriptor, x => x.GameServerTariffs);
 
             if (game == null)
             {
@@ -77,7 +77,7 @@ namespace Crytex.Service.Service
             {
                 where = where.And(p => p.Family == family);
             }
-            var pagedList = _gameRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.GameHosts, x => x.ImageFileDescriptor);
+            var pagedList = _gameRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.GameHosts, x => x.ImageFileDescriptor, x => x.GameServerTariffs);
 
             return pagedList;
         }
@@ -97,6 +97,8 @@ namespace Crytex.Service.Service
                 existGame.VersionCode = game.VersionCode;
             existGame.Family = game.Family;
             existGame.ImageFileDescriptorId = game.ImageFileDescriptorId;
+            existGame.Disabled = game.Disabled;
+            existGame.Description = game.Description;
 
             _gameRepository.Update(existGame);
             _unitOfWork.Commit();
