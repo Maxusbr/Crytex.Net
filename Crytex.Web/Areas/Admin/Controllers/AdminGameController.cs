@@ -23,14 +23,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         {
             var game = _gameService.GetById(id);
 
-            var gameLastTariff = _gameService.GetLastTariffsForGames(new int[] {id}).SingleOrDefault();
-
             var gameModel = Mapper.Map<GameViewModel>(game);
-
-            if (gameLastTariff != null)
-            {
-                gameModel.GameServerTariff = Mapper.Map<GameServerTariffView>(gameLastTariff);
-            }
 
             return Ok(gameModel);
         }
@@ -49,18 +42,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
                 return BadRequest("PageNumber and PageSize must be equal or grater than 1");
 
             var page = _gameService.GetPage(pageNumber, pageSize, familyGame);
-            var pageModel = AutoMapper.Mapper.Map<PageModel<GameViewModel>>(page);
-
-            var tariffs = _gameService.GetLastTariffsForGames(page.Select(g => g.Id));
-
-            foreach (var item in pageModel.Items)
-            {
-                var gameTariff = tariffs.SingleOrDefault(t => t.GameId == item.Id);
-                if (gameTariff != null)
-                {
-                    item.GameServerTariff = Mapper.Map<GameServerTariffView>(gameTariff);
-                }
-            }
+            var pageModel = Mapper.Map<PageModel<GameViewModel>>(page);
 
             return this.Ok(pageModel);
         }
