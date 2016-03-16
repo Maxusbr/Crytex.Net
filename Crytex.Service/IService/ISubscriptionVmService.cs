@@ -28,7 +28,7 @@ namespace Crytex.Service.IService
         void StopSubscriptionMachine(Guid subsciptionId);
         void PowerOffSubscriptionMachine(Guid subsciptionId);
         void ResetSubscriptionMachine(Guid subsciptionId);
-        void UpdateSubscriptionMachineConfig(Guid subscriptionId, UpdateMachineConfigOptions options);
+        void UpdateSubscriptionConfig(Guid subscriptionId, UpdateMachineConfigOptions options);
         void AddTestPeriod(TestPeriodOptions options);
         decimal GetUsageSubscriptionHourPriceTotal(SubscriptionVm sub);
         decimal GetFixedSubscriptionMonthPriceTotal(SubscriptionVm sub);

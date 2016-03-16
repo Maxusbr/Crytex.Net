@@ -18,16 +18,13 @@ namespace Crytex.Service.Service
         private ITaskV2Repository _taskV2Repo;
         private IUnitOfWork _unitOfWork;
         private readonly IUserVmService _userVmService;
-        private readonly IVmBackupService _vmBackupService;
         private readonly IOperatingSystemsService _operatingSystemService;
 
-        public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmService userVmService, IUnitOfWork unitOfWork,
-            IVmBackupService vmBackupService)
+        public TaskV2Service(ITaskV2Repository taskV2Repo, IUserVmService userVmService, IUnitOfWork unitOfWork)
         {
             this._taskV2Repo = taskV2Repo;
             this._userVmService = userVmService;
             this._unitOfWork = unitOfWork;
-            this._vmBackupService = vmBackupService;
         }
 
         public virtual TaskV2 GetTaskById(Guid id)
@@ -102,23 +99,6 @@ namespace Crytex.Service.Service
                 task.SaveOptions(createOptions);
 
                 this._userVmService.CreateVm(newVm);
-            }
-            if(task.TypeTask == TypeTask.Backup)
-            {
-                var backupOptions = task.GetOptions<BackupOptions>();
-                var newBackup = new VmBackup
-                {
-                    Name = backupOptions.BackupName,
-                    VmId = backupOptions.VmId
-                };
-                var vmBackup = this._vmBackupService.Create(newBackup);
-                backupOptions.VmBackupId = vmBackup.Id;
-                task.SaveOptions(backupOptions);
-            }
-            if(task.TypeTask == TypeTask.DeleteBackup)
-            {
-                var deleteBackuptOptions = task.GetOptions<BackupOptions>();
-                this._vmBackupService.MarkBackupAsDeleted(deleteBackuptOptions.VmBackupId);
             }
         }
 
