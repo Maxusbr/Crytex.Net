@@ -10,6 +10,5 @@ namespace Crytex.Web.Models.JsonModels
         public int? Cpu { get; set; }
         public int? Ram { get; set; }
         public int? Hdd { get; set; }
-        public int? DailyBackupStorePretiodDays { get; set; }
     }
 }
