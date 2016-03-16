@@ -14,29 +14,76 @@ namespace Crytex.Service.Service
     public class VmBackupService : IVmBackupService
     {
         private readonly IVmBackupRepository _backupRepository;
+        private readonly ITaskV2Service _taskService;
+        private readonly ISubscriptionVmService _subscriptionVmService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public VmBackupService(IVmBackupRepository backupRepo, IUnitOfWork unitOfWork)
+        public VmBackupService(IVmBackupRepository backupRepo, ITaskV2Service taskService, ISubscriptionVmService subscriptionVmService,
+            IUnitOfWork unitOfWork)
         {
             this._backupRepository = backupRepo;
+            _taskService = taskService;
+            _subscriptionVmService = subscriptionVmService;
             this._unitOfWork = unitOfWork;
         }
 
-        public VmBackup Create(VmBackup newBackupDbEntity)
+        public VmBackup Create(Guid subscriptionVmId, string name)
         {
-            newBackupDbEntity.DateCreated = DateTime.UtcNow;
-            newBackupDbEntity.Status = VmBackupStatus.Creting;
+            var sub = _subscriptionVmService.GetById(subscriptionVmId);
 
-            this._backupRepository.Add(newBackupDbEntity);
+            // create backup task
+            var backupTask = new TaskV2
+            {
+                ResourceId = sub.Id,
+                ResourceType = ResourceType.SubscriptionVm,
+                TypeTask = TypeTask.Backup,
+                Virtualization = sub.UserVm.VirtualizationType,
+                UserId = sub.UserId
+            };
+            var backupTaskOptions = new BackupOptions
+            {
+                BackupName = name,
+                VmId = sub.UserVm.Id
+            };
+            this._taskService.CreateTask(backupTask, backupTaskOptions);
+
+            var newBackup = new VmBackup
+            {
+                Name = name,
+                VmId = sub.UserVm.Id
+            };
+            newBackup.DateCreated = DateTime.UtcNow;
+            newBackup.Status = VmBackupStatus.Creting;
+
+            this._backupRepository.Add(newBackup);
             this._unitOfWork.Commit();
 
-            return newBackupDbEntity;
+            return newBackup;
         }
 
-        public void MarkBackupAsDeleted(Guid vmBackupId)
+        public void Delete(Guid vmBackupId)
         {
             var backup = this._backupRepository.GetById(vmBackupId);
             backup.Status = VmBackupStatus.Deleted;
+
+            var sub = _subscriptionVmService.GetById(backup.VmId);
+
+            // delete backup
+            var deleteBackupTask = new TaskV2
+            {
+                ResourceId = sub.Id,
+                ResourceType = ResourceType.SubscriptionVm,
+                TypeTask = TypeTask.DeleteBackup,
+                Virtualization = sub.UserVm.VirtualizationType,
+                UserId = sub.UserId
+            };
+            var deleteBackupTaskOptions = new DeleteBackupOptions
+            {
+                VmBackupId = backup.Id
+            };
+            this._taskService.CreateTask(deleteBackupTask, deleteBackupTaskOptions);
+
+            
             this._backupRepository.Update(backup);
             this._unitOfWork.Commit();
         }
