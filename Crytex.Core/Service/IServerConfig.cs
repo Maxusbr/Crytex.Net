@@ -11,5 +11,7 @@ namespace Crytex.Core.Service
         int GetBigImageSize();
         int GetSmallImageSize();
         String GetClientAddress();
+        string GetSmscruLogin();
+        string GetSmscruPassword();
     }
 }
