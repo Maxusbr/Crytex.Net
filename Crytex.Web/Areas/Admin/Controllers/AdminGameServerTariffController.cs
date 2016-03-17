@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System.Web.Http;
@@ -65,6 +66,18 @@ namespace Crytex.Web.Areas.Admin.Controllers
             var config = Mapper.Map<GameServerTariff>(model);
             _gameServerService.UpdateGameServerTariff(config);
 
+            return Ok();
+        }
+
+        /// <summary>
+        /// Удаление игрового тарифа
+        /// </summary>
+        /// <param name="id">id тарифа</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IHttpActionResult DeleteGameServerTariff(Int32 id)
+        {
+            _gameServerService.DeleteGameServerTariff(id);
             return Ok();
         }
     }

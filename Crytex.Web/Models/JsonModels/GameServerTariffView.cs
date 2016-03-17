@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -19,5 +16,7 @@ namespace Crytex.Web.Models.JsonModels
         public string Name { get; set; }
 
         public int Performance { get; set; }
+
+        public DateTime CreateDate { get; set; }
     }
 }
