@@ -1,7 +1,6 @@
 ﻿using System;
 using Crytex.Core.AppConfig;
 using Crytex.Core.Service;
-using Crytex.Model.Exceptions;
 
 namespace Crytex.Web.Service
 {
@@ -13,6 +12,9 @@ namespace Crytex.Web.Service
         private const string BIG_IMAGE_SIZE_KEY = "bigImageSize";
         private const string SMALL_IMAGE_SIZE_KEY = "smallImageSize";
         private const string CLIENT_ADDRESS = "clientAddress";
+        private const string SMSCRU_LOGIN = "smscruLogin";
+        private const string SMSCRU_PASSWORD = "smscruPassword";
+
         public string GetLoaderFileSavePath()
         {
             return this.GetValue<string>(LOADER_SAVE_PATH_KEY);
@@ -42,6 +44,16 @@ namespace Crytex.Web.Service
         public String GetClientAddress()
         {
             return this.GetValue<String>(CLIENT_ADDRESS);
+        }
+
+        public string GetSmscruLogin()
+        {
+            return this.GetValue<String>(SMSCRU_LOGIN);
+        }
+
+        public string GetSmscruPassword()
+        {
+            return this.GetValue<String>(SMSCRU_PASSWORD);
         }
     }
 }

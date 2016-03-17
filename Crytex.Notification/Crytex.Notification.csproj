@@ -110,6 +110,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -125,6 +126,9 @@
     <Compile Include="NotifyHub.cs" />
     <Compile Include="Senders\SigralRSender\AspNetSignalRSender.cs" />
     <Compile Include="Senders\SigralRSender\NetSignalRSender.cs" />
+    <Compile Include="Senders\SmsSender\FakeSmsSender.cs" />
+    <Compile Include="Senders\SmsSender\ISmsSender.cs" />
+    <Compile Include="Senders\SmsSender\SmscruSender.cs" />
     <Compile Include="Service\CrytexHub.cs" />
     <Compile Include="Service\INotificationManager.cs" />
     <Compile Include="Senders\EmailSender\EmailMandrillSender.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Crytex.Core.Service;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -8,6 +9,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.Security;
 using Crytex.Data;
 using Crytex.Model.Models;
+using Crytex.Notification;
 using Microsoft.Owin.Security.DataProtection;
 
 namespace Crytex.Web
@@ -23,9 +25,17 @@ namespace Crytex.Web
 
     public class SmsService : IIdentityMessageService
     {
+        private readonly ISmsSender _smsSender;
+
+        public SmsService(ISmsSender smsSender)
+        {
+            _smsSender = smsSender;
+        }
+
         public Task SendAsync(IdentityMessage message)
         {
-            // Подключите здесь службу SMS, чтобы отправить текстовое сообщение.
+            _smsSender.Send(message.Destination, message.Body);
+
             return Task.FromResult(0);
         }
     }
@@ -33,9 +43,12 @@ namespace Crytex.Web
     // Настройка диспетчера пользователей приложения. UserManager определяется в ASP.NET Identity и используется приложением.
     public class ApplicationUserManager : UserManager<ApplicationUser>
     {
-        public ApplicationUserManager(IUserStore<ApplicationUser> store)
+        private readonly IServerConfig _config;
+
+        public ApplicationUserManager(IUserStore<ApplicationUser> store, IServerConfig config)
             : base(store)
         {
+            _config = config;
 
 
             this.UserValidator = new UserValidator<ApplicationUser>(this)
@@ -71,7 +84,14 @@ namespace Crytex.Web
                 BodyFormat = "Ваш код безопасности: {0}"
             });
             this.EmailService = new EmailService();
-            this.SmsService = new SmsService();
+
+            var smscruLogin = _config.GetSmscruLogin();
+            var smscruPassword = _config.GetSmscruPassword();
+            this.SmsService = new SmsService(new SmscruSender(smscruLogin, smscruPassword));
+
+            // Uncomment if use fake sms sender
+            //this.SmsService = new SmsService(new FakeSmsSender());
+
             var provider = new DpapiDataProtectionProvider("TestWebAPI");
             this.UserTokenProvider = new DataProtectorTokenProvider<ApplicationUser>(protector: provider.Create("ASP.NET Identity"))
             {
