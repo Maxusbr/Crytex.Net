@@ -135,7 +135,7 @@ namespace Crytex.Service.Service
         public BillingTransaction UpdateUserBalance(UpdateUserBalance data)
         {
             var transactionType = BillingTransactionType.BalanceReplenishment;
-            var cashAmount = Math.Abs(data.Amount);
+            var cashAmount = data.Amount;
             var description = "Admin Transaction";
 
             var transaction = this.AddUserTransactionInner(transactionType, cashAmount, description, data.UserId);
