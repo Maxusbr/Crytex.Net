@@ -32,5 +32,6 @@ namespace Crytex.Service.IService
         void AddTestPeriod(TestPeriodOptions options);
         decimal GetUsageSubscriptionHourPriceTotal(SubscriptionVm sub);
         decimal GetFixedSubscriptionMonthPriceTotal(SubscriptionVm sub);
+        void UpdateSubscriptionBackupStoragePeriod(Guid subscriptionId, int newPeriodDays);
     }
 }

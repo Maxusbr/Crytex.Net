@@ -832,13 +832,104 @@ namespace Crytex.Service.Service
             _billingService.AddTestPeriod(options);
         }
 
-        private void UpdateUsageSubConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
+        public void UpdateSubscriptionBackupStoragePeriod(Guid subscriptionId, int newPeriodDays)
         {
-            // Update sub entity
-            sub.DailyBackupStorePeriodDays = options.DailyBackupStorePretiodDays ?? sub.DailyBackupStorePeriodDays;
+            var sub = this.GetById(subscriptionId);
+
+            switch (sub.SubscriptionType)
+            {
+                case SubscriptionType.Fixed:
+                    this.UpdateFixedSubscriptionBackupStoragePeriod(sub, newPeriodDays);
+                    break;
+                case SubscriptionType.Usage:
+                    this.UpdateUsageSubscriptionBackupStoragePeriod(sub, newPeriodDays);
+                    break;
+            }
+        }
+
+        private void UpdateUsageSubscriptionBackupStoragePeriod(SubscriptionVm sub, int newPeriodDays)
+        {
+            sub.DailyBackupStorePeriodDays = newPeriodDays;
+            _subscriptionVmRepository.Update(sub);
+            _unitOfWork.Commit();
+        }
+
+        private void UpdateFixedSubscriptionBackupStoragePeriod(SubscriptionVm sub, int newPeriodDays)
+        {
+            var dateNow = DateTime.UtcNow;
+
+            if (sub.DateEnd < DateTime.UtcNow)
+            {
+                throw new TaskOperationException("Updating expired subscription config is not supported");
+            }
+
+            var daysToSubEnd = (sub.DateEnd - dateNow).Days;
+
+            var subscriptionBackupDayOldPrice = this.GetFixedSubscriptionBackupMonthPrice(sub) / 30;
+            var daysToEndBackupOldCost = subscriptionBackupDayOldPrice * daysToSubEnd;
+
+            var oldBackupPeriod = sub.DailyBackupStorePeriodDays;
+            sub.DailyBackupStorePeriodDays = newPeriodDays;
+
+            var subscriptionBackupDayNewPrice = this.GetFixedSubscriptionBackupMonthPrice(sub) / 30;
+            var daysToEndBackupNewCost = subscriptionBackupDayNewPrice * daysToSubEnd;
+
+            var billingTransactionCashAmount = -(daysToEndBackupNewCost - daysToEndBackupOldCost);
+            var subsciptionVmTransaction = new BillingTransaction
+            {
+                CashAmount = billingTransactionCashAmount,
+                TransactionType = BillingTransactionType.FixedSubscriptionVmPayment,
+                UserId = sub.UserId,
+                Description = "Update fixed subscriptionVm vm configuration",
+                SubscriptionVmId = sub.Id
+            };
+
+            try
+            {
+                subsciptionVmTransaction = this._billingService.AddUserTransaction(subsciptionVmTransaction);
+            }
+            catch (TransactionFailedException)
+            {
+                sub.DailyBackupStorePeriodDays = oldBackupPeriod;
+                throw;
+            }
+
             _subscriptionVmRepository.Update(sub);
 
-            // Update uservm entity and create updateVm task
+            // Mark current and subsequent subscroption BACKUP payments as ReturnedToUser
+            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            foreach (var payment in backupPaymentsToMark)
+            {
+                payment.ReturnDate = dateNow;
+                payment.ReturnedToUser = true;
+            }
+
+            // Add new subdate backup payment
+            var backupPaymentRequired = daysToEndBackupNewCost > 0;
+            if (backupPaymentRequired)
+            {
+                decimal backupSubPaymentCashAmount = daysToEndBackupNewCost;
+
+                var subscriptionBackupPayment = new SubscriptionVmBackupPayment
+                {
+                    BillingTransactionId = subsciptionVmTransaction.Id,
+                    Date = DateTime.UtcNow,
+                    SubscriptionVmId = sub.Id,
+                    Amount = backupSubPaymentCashAmount,
+                    TariffId = sub.TariffId,
+                    DaysPeriod = sub.DailyBackupStorePeriodDays,
+                    Paid = true,
+                    DateStart = dateNow,
+                    DateEnd = sub.DateEnd
+                };
+                this._backupPaymentRepo.Add(subscriptionBackupPayment);
+            }
+
+            this._unitOfWork.Commit();
+        }
+
+        private void UpdateUsageSubConfig(SubscriptionVm sub, UpdateMachineConfigOptions options)
+        {
             this.UpdateSubMachineConfig(sub, options);
         }
 
@@ -889,12 +980,10 @@ namespace Crytex.Service.Service
             var oldCpu = userVm.CoreCount;
             var oldRam = userVm.RamCount;
             var oldHdd = userVm.HardDriveSize;
-            var oldBackupPeriod = sub.DailyBackupStorePeriodDays;
 
             userVm.CoreCount = options.Cpu ?? userVm.CoreCount;
             userVm.RamCount = options.Ram ?? userVm.RamCount;
             userVm.HardDriveSize = options.Hdd ?? userVm.HardDriveSize;
-            sub.DailyBackupStorePeriodDays = options.DailyBackupStorePretiodDays ?? sub.DailyBackupStorePeriodDays;
 
             // ... calculate subscroption price
             var subscriptionDayNewPrice = this.GetFixedSubscriptionMonthPrice(sub) / 30;
@@ -925,9 +1014,9 @@ namespace Crytex.Service.Service
                 userVm.CoreCount = oldCpu;
                 userVm.RamCount = oldRam;
                 userVm.HardDriveSize = userVm.HardDriveSize;
-                sub.DailyBackupStorePeriodDays = oldBackupPeriod;
                 throw;
             }
+
             // Create task and update vm
             this.UpdateSubMachineConfig(sub, options);
 
@@ -989,6 +1078,15 @@ namespace Crytex.Service.Service
                 this._backupPaymentRepo.Add(subscriptionBackupPayment);
                 this._unitOfWork.Commit();
             }
+        }
+
+        private bool UpdateVmTaskRequired(UpdateMachineConfigOptions options)
+        {
+            if (options.Cpu != null || options.Hdd != null || options.Ram != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

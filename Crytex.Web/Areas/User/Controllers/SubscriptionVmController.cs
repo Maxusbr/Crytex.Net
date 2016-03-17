@@ -197,6 +197,18 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return this.Ok();
         }
+
+        [HttpPost]
+        public IHttpActionResult UpdateSubscriptionBackupStoragePeriod(Guid subscriptionId, int newPeriodDays)
+        {
+            if (newPeriodDays < 0)
+            {
+                return BadRequest("Backup storage period cannot be negative");
+            }
+            _subscriptionVmService.UpdateSubscriptionBackupStoragePeriod(subscriptionId, newPeriodDays);
+
+            return this.Ok();
+        }
     }
 
 
