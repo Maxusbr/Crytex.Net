@@ -1,4 +1,6 @@
-﻿using Crytex.GameServers.Interface;
+﻿using System;
+using Crytex.GameServers.Interface;
+using Crytex.GameServers.Models;
 using Crytex.Model.Models;
 
 namespace Crytex.ExecutorTask.TaskHandler.Implementation.Game
@@ -11,7 +13,33 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Game
 
         protected override TaskExecutionResult ExecuteGameHostLogic()
         {
-            throw new System.NotImplementedException();
+            var result = new TaskExecutionResult();
+            var taskOptions = TaskEntity.GetOptions<CreateGameServerOptions>();
+
+            try
+            {
+                GameHost.Connect();
+                CreateParam createParam = new CreateParam
+                {
+                    
+                };
+
+                var createResult = GameHost.Create(createParam);
+                if (createResult.Succes == false)
+                {
+                    result.ErrorMessage = createResult.ErrorMessage;
+                    result.Success = false;
+                }
+
+                result.Success = true;
+            }
+            catch (Exception e)
+            {
+                result.Success = false;
+                result.ErrorMessage = e.Message;
+            }
+
+            return result;
         }
     }
 }

@@ -346,8 +346,7 @@ namespace Crytex.Service.Service
             var taskOptions = new CreateGameServerOptions
             {
                 GameServerId = server.Id,
-                GameServerTariffId = server.GameServerTariffId,
-                GameHostId = server.GameHostId
+                SlotCount = server.SlotCount
             };
             var newTask = new TaskV2
             {

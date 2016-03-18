@@ -182,8 +182,7 @@ namespace Crytex.Model.Models
     [Serializable]
     public class CreateGameServerOptions : BaseGameServerOptions
     {
-        public int GameServerTariffId { get; set; }
-        public int GameHostId { get; set; }
+        public int SlotCount { get; set; }
     }
 
     [Serializable]
