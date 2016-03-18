@@ -312,10 +312,26 @@ namespace Crytex.Service.Service
             }
 
             serverConfig.Slot = config.Slot;
+            serverConfig.Name = config.Name;
+            serverConfig.Performance = config.Performance;
+            serverConfig.Disabled = config.Disabled;
+
             _gameServerTariffRepository.Update(serverConfig);
             _unitOfWork.Commit();
         }
-        
+
+        public void DeleteGameServerTariff(Int32 id)
+        {
+            var existingTariff = _gameServerTariffRepository.GetById(id);
+            if (existingTariff == null)
+            {
+                throw new InvalidIdentifierException($"GameServerTariff with id={id} doesn't exist");
+            }
+
+            _gameServerTariffRepository.Delete(existingTariff);
+            _unitOfWork.Commit();
+        }
+
         #region Private methods
         private void CheckGameHostAvailable(GameServer server)
         {

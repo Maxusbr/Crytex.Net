@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Crytex.Model.Models;
 using Crytex.Model.Models.Biling;
 using Crytex.Model.Models.GameServers;
 using Crytex.Service.Model;
@@ -29,6 +27,7 @@ namespace Crytex.Service.IService
         void ResetGameServer(Guid serverId);
         GameServerTariff CreateGameServerTariff(GameServerTariff tariff);
         void UpdateGameServerTariff(GameServerTariff config);
+        void DeleteGameServerTariff(Int32 id);
         IEnumerable<GameServerTariff> GetGameServerTariffs();
     }
 }
