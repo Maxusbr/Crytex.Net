@@ -314,6 +314,7 @@ namespace Crytex.Service.Service
             serverConfig.Slot = config.Slot;
             serverConfig.Name = config.Name;
             serverConfig.Performance = config.Performance;
+            serverConfig.Disabled = config.Disabled;
 
             _gameServerTariffRepository.Update(serverConfig);
             _unitOfWork.Commit();

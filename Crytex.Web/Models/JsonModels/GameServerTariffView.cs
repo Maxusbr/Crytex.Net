@@ -18,5 +18,7 @@ namespace Crytex.Web.Models.JsonModels
         public int Performance { get; set; }
 
         public DateTime CreateDate { get; set; }
+
+        public bool Disabled { get; set; }
     }
 }
