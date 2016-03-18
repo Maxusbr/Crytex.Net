@@ -121,4 +121,18 @@ namespace Crytex.Web.Models
         [Display(Name = "Почта")]
         public string Email { get; set; }
     }
+
+
+    public class ChangePasswordModel
+    {
+        [Required]
+      
+        public string OldPassword { get; set; }
+
+        [Required]
+      
+        public string NewPassword { get; set; }
+
+    
+    }
 }
