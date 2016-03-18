@@ -183,6 +183,7 @@ namespace Crytex.Model.Models
     public class CreateGameServerOptions : BaseGameServerOptions
     {
         public int SlotCount { get; set; }
+        public int GameServerFirstPortInRange { get; set; }
     }
 
     [Serializable]
@@ -194,7 +195,9 @@ namespace Crytex.Model.Models
     [Serializable]
     public class ChangeGameServerStatusOptions : BaseGameServerOptions
     {
+        public string GameServerPassword { get; set; }
         public TypeChangeStatus TypeChangeStatus { get; set; }
+        public int GameServerPort { get; set; }
     }
 
     public enum TypeChangeStatus {

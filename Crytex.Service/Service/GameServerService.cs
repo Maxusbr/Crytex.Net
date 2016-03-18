@@ -115,6 +115,15 @@ namespace Crytex.Service.Service
         {
             return _gameServerTariffRepository.GetAll();
         }
+
+        public void UpdatePassword(Guid id, string serverNewPassword)
+        {
+            var server = GetById(id);
+            server.Password = serverNewPassword;
+            _gameServerRepository.Update(server);
+            _unitOfWork.Commit();
+        }
+
         #endregion
 
         public GameServer BuyGameServer(BuyGameServerOption options)
@@ -210,6 +219,14 @@ namespace Crytex.Service.Service
             var gameserv = GetById(guid);
             gameserv.Status = status;
             _gameServerRepository.Update(gameserv);
+            _unitOfWork.Commit();
+        }
+
+        public void UpdateServerState(Guid gameServerId, GameServerState newState)
+        {
+            var server = GetById(gameServerId);
+            server.ServerState = newState;
+            _gameServerRepository.Update(server);
             _unitOfWork.Commit();
         }
 
@@ -337,16 +354,21 @@ namespace Crytex.Service.Service
             }
 
             var gameHost = _gameHostService.GetGameHostWithAvalailableSlot(gameServerTariff.GameId);
+            int firstPortInRange = _gameHostService.GetFreePort(gameHost.Id);
 
             server.GameHostId = gameHost.Id;
             server.Status = GameServerStatus.Active;
+            server.PortRangeSize = 3;
+            server.FirstPortInRange = firstPortInRange;
+            server.ServerState = GameServerState.Creating;
             this._gameServerRepository.Add(server);
             this._unitOfWork.Commit();
 
             var taskOptions = new CreateGameServerOptions
             {
                 GameServerId = server.Id,
-                SlotCount = server.SlotCount
+                SlotCount = server.SlotCount,
+                GameServerFirstPortInRange = firstPortInRange
             };
             var newTask = new TaskV2
             {
@@ -448,7 +470,9 @@ namespace Crytex.Service.Service
                 var taskOptions = new ChangeGameServerStatusOptions
                 {
                     TypeChangeStatus = status,
-                    GameServerId = gameserv.Id
+                    GameServerId = gameserv.Id,
+                    GameServerPassword = gameserv.Password,
+                    GameServerPort = gameserv.FirstPortInRange
                 };
                 var task = new TaskV2
                 {

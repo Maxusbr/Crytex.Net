@@ -277,16 +277,7 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetCreateGameServerTaskHandler(TaskV2 task, GameServer gameServer)
         {
-            ConnectParam param = new ConnectParam
-            {
-                FamilyGame = gameServer.GameServerTariff.Game.Family,
-                SshIp = gameServer.GameHost.ServerAddress,
-                GameName = MapGameName(gameServer.GameServerTariff.Game.Family),
-                SshPort = gameServer.GameHost.Port,
-                SshPassword = gameServer.GameHost.Password,
-                SshUserName = gameServer.GameHost.UserName,
-                Path = "/home/vncuser/host"
-            };
+            ConnectParam param = GetGameHostConnectParam(gameServer);
             IGameHost provider = GameServerFactory.Instance.Get(param);
             var handler = new CreateGameServerTaskHandler(task, provider);
 
@@ -355,11 +346,31 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetChangeStatusGameServerTaskHandler(TaskV2 task, GameServer gameServer)
         {
-            throw new NotFiniteNumberException();
+            var param = GetGameHostConnectParam(gameServer);
+            IGameHost provider = GameServerFactory.Instance.Get(param);
+            var handler = new ChangeGameServerStatusTaskHandler(task, provider);
+
+            return handler;
         }
         private ITaskHandler GetDeleteGameServerTaskHandler(TaskV2 task, GameServer gameServer)
         {
             throw new NotFiniteNumberException();
+        }
+
+        private ConnectParam GetGameHostConnectParam(GameServer gameServer)
+        {
+            ConnectParam param = new ConnectParam
+            {
+                FamilyGame = gameServer.GameServerTariff.Game.Family,
+                SshIp = gameServer.GameHost.ServerAddress,
+                GameName = MapGameName(gameServer.GameServerTariff.Game.Family),
+                SshPort = gameServer.GameHost.Port,
+                SshPassword = gameServer.GameHost.Password,
+                SshUserName = gameServer.GameHost.UserName,
+                Path = "/home/vncuser/host"
+            };
+
+            return param;
         }
         #endregion // Private methods
     }

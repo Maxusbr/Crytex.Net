@@ -19,6 +19,7 @@ namespace Crytex.Service.IService
         IPagedList<PaymentGameServer> GetPage(int pageNumber, int pageSize, SearchPaymentGameServerParams filter = null);
         IEnumerable<GameServer> GetGameServerByStatus(GameServerStatus status);
         void UpdateStatusServer(Guid gameServerId, GameServerStatus waitForPayment);
+        void UpdateServerState(Guid gameServerId, GameServerState newState);
         void DeleteGameServer(Guid gameServerId);
         IEnumerable<GameServer>  GetAllGameServers();
         void UpdateGameServer(Guid serverId, GameServerConfigOptions options);
@@ -30,5 +31,6 @@ namespace Crytex.Service.IService
         GameServerTariff CreateGameServerTariff(GameServerTariff tariff);
         void UpdateGameServerTariff(GameServerTariff config);
         IEnumerable<GameServerTariff> GetGameServerTariffs();
+        void UpdatePassword(Guid id, string serverNewPassword);
     }
 }
