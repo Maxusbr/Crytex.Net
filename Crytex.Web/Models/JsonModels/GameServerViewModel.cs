@@ -1,7 +1,5 @@
 ﻿using System;
-using Crytex.Model.Models;
 using System.ComponentModel.DataAnnotations;
-using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Models.JsonModels
 {

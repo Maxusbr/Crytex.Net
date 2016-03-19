@@ -1,13 +1,8 @@
-﻿using Crytex.Model.Models;
-using Crytex.Service.IService;
+﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using Microsoft.Practices.Unity;
-using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using Crytex.Service.Model;
-using AutoMapper;
-using Crytex.Model.Enums;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
