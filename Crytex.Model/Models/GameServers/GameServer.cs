@@ -16,7 +16,10 @@ namespace Crytex.Model.Models.GameServers
         public DateTime DateExpire { get; set; }
         public GameServerStatus Status { get; set; }
         public bool AutoProlongation { get; set; }
+        //public Int32 GameId { get; set; }
 
+        //[ForeignKey("GameId")]
+        //public Game Game { get; set; }
         [ForeignKey("GameHostId")]
         public GameHost GameHost { get; set; }
         [ForeignKey("GameServerTariffId")]

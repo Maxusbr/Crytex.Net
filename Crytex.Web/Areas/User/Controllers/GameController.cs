@@ -6,6 +6,7 @@ using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
+    [AllowAnonymous]
     public class GameController : UserCrytexController
     {
         private readonly IGameService _gameService;

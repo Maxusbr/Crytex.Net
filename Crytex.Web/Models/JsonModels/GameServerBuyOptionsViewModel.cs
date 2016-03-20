@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -12,6 +13,8 @@ namespace Crytex.Web.Models.JsonModels
         public int? ExpireMonthCount { get; set; }
         [Required]
         public string ServerName { get; set; }
+        [Required]
+        public Int32 GameId { get; set; }
         public string UserId { get; set; }
         public bool? AutoProlongation { get; set; }
     }
