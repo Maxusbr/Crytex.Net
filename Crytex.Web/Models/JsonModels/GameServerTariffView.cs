@@ -2,7 +2,12 @@
 
 namespace Crytex.Web.Models.JsonModels
 {
-    public class GameServerTariffView
+    public class GameServerTariffView : GameServerTariffSimpleView
+    {
+        public GameSimpleViewModel Game { get; set; }
+    }
+
+    public class GameServerTariffSimpleView
     {
         public int Id { get; set; }
         public int GameId { get; set; }
