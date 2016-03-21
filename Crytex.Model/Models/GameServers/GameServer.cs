@@ -20,7 +20,10 @@ namespace Crytex.Model.Models.GameServers
         public int FirstPortInRange { get; set; }
         public int PortRangeSize { get; set; }
         public string Password { get; set; }
+        public Int32 GameId { get; set; }
 
+        [ForeignKey("GameId")]
+        public Game Game { get; set; }
         [ForeignKey("GameHostId")]
         public GameHost GameHost { get; set; }
         [ForeignKey("GameServerTariffId")]

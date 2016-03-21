@@ -2,12 +2,12 @@
 using AutoMapper;
 using Crytex.Model.Enums;
 using Crytex.Service.IService;
-using Crytex.Web.Areas.Admin;
 using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
-    public class GameController : AdminCrytexController
+    [AllowAnonymous]
+    public class GameController : UserCrytexController
     {
         private readonly IGameService _gameService;
 

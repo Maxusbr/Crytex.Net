@@ -1,7 +1,5 @@
 ﻿using System;
-using Crytex.Model.Models;
 using System.ComponentModel.DataAnnotations;
-using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -22,5 +20,8 @@ namespace Crytex.Web.Models.JsonModels
         public string UserName { get; set; }
 
         public int ExpireMonthCount { get; set; }
+
+        public Int32 GameId { get; set; }
+        public GameViewModel Game { get; set; }
     }
 }
