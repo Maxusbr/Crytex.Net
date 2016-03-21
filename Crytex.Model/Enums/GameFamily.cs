@@ -15,6 +15,6 @@
         L4D2,
         Minecraft,
         SaMp,
-        T2F, Bmdm, Cscz, Insurgency, JustCause2, Rust
+        T2F, Bmdm, Cscz, Insurgency, JustCause2, Rust, DontStarveTogether
     }
 }
