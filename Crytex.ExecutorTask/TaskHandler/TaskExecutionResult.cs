@@ -34,4 +34,9 @@ namespace Crytex.ExecutorTask.TaskHandler
     {
         public Guid SnapshotGuid { get; set; }
     }
+
+    public class CreateGameServerTaskExecutionResult : TaskExecutionResult
+    {
+        public string ServerNewPassword { get; set; }
+    }
 }

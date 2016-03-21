@@ -15,11 +15,15 @@ namespace Crytex.Model.Models.GameServers
         public DateTime CreateDate { get; set; }
         public DateTime DateExpire { get; set; }
         public GameServerStatus Status { get; set; }
+        public GameServerState ServerState { get; set; }
         public bool AutoProlongation { get; set; }
-        //public Int32 GameId { get; set; }
+        public int FirstPortInRange { get; set; }
+        public int PortRangeSize { get; set; }
+        public string Password { get; set; }
+        public Int32 GameId { get; set; }
 
-        //[ForeignKey("GameId")]
-        //public Game Game { get; set; }
+        [ForeignKey("GameId")]
+        public Game Game { get; set; }
         [ForeignKey("GameHostId")]
         public GameHost GameHost { get; set; }
         [ForeignKey("GameServerTariffId")]
@@ -33,5 +37,12 @@ namespace Crytex.Model.Models.GameServers
         WaitForPayment = 0,
         Active = 1,
         Deleted = 2
+    }
+
+    public enum GameServerState
+    {
+        Creating = 0,
+        Enable = 1,
+        Disable = 2
     }
 }
