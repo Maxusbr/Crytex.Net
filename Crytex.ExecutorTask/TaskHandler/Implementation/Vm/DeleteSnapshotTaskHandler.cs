@@ -2,16 +2,16 @@
 using Crytex.Model.Models;
 using Crytex.Virtualization.Base;
 
-namespace Crytex.ExecutorTask.TaskHandler
+namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 {
-    internal class DeleteSnapshotTaskHandler : BaseNewTaskHandler
+    internal class DeleteSnapshotTaskHandler : BaseVmTaskHandler
     {
         public DeleteSnapshotTaskHandler(TaskV2 task, IProviderVM virtualizationProvider, Guid virtualizationServerEntityId) 
             : base(task, virtualizationProvider, virtualizationServerEntityId)
         {
         }
 
-        protected override TaskExecutionResult ExecuteLogic()
+        protected override TaskExecutionResult ExecuteVmLogic()
         {
             Console.WriteLine("Snapshot deleting task");
             var result = new TaskExecutionResult();

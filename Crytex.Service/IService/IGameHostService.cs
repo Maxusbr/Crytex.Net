@@ -1,4 +1,5 @@
-﻿using Crytex.Model.Models.GameServers;
+﻿using System;
+using Crytex.Model.Models.GameServers;
 using Crytex.Service.Model;
 using PagedList;
 
@@ -8,7 +9,8 @@ namespace Crytex.Service.IService
     {
         GameHost Create(GameHostCreateOptions options);
         GameHost GetGameHostWithAvalailableSlot(int gameId);
-        void Update(int id, GameHostCreateOptions option);
+        void Update(Int32 id, GameHostCreateOptions option);
+        void Delete(Int32 id);
         IPagedList<GameHost> GetPage(int pageNumber, int pageSize);
     }
 }

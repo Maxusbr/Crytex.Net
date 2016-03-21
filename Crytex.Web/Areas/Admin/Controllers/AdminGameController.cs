@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Http;
 using AutoMapper;
 using Crytex.Model.Enums;
@@ -17,6 +18,23 @@ namespace Crytex.Web.Areas.Admin.Controllers
             _gameService = gameService;
         }
 
+        [HttpGet]
+        public IHttpActionResult Get(int id)
+        {
+            var game = _gameService.GetById(id);
+
+            var gameLastTariff = _gameService.GetLastTariffsForGames(new int[] {id}).SingleOrDefault();
+
+            var gameModel = Mapper.Map<GameViewModel>(game);
+
+            if (gameLastTariff != null)
+            {
+                gameModel.GameServerTariff = Mapper.Map<GameServerTariffView>(gameLastTariff);
+            }
+
+            return Ok(gameModel);
+        }
+
         /// <summary>
         /// Вывод  GameViewModel с пагинацией.
         /// </summary>
@@ -33,6 +51,17 @@ namespace Crytex.Web.Areas.Admin.Controllers
             var page = _gameService.GetPage(pageNumber, pageSize, familyGame);
             var pageModel = AutoMapper.Mapper.Map<PageModel<GameViewModel>>(page);
 
+            var tariffs = _gameService.GetLastTariffsForGames(page.Select(g => g.Id));
+
+            foreach (var item in pageModel.Items)
+            {
+                var gameTariff = tariffs.SingleOrDefault(t => t.GameId == item.Id);
+                if (gameTariff != null)
+                {
+                    item.GameServerTariff = Mapper.Map<GameServerTariffView>(gameTariff);
+                }
+            }
+
             return this.Ok(pageModel);
         }
 
@@ -43,18 +72,18 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult Put(int id, GameViewModel model)
+        public IHttpActionResult Put(GameViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             var game = Mapper.Map<Game>(model);
-            game.Id = id;
             _gameService.Update(game);
 
             return Ok();
         }
+
         [HttpPost]
         public IHttpActionResult Post(GameViewModel model)
         {
@@ -67,6 +96,19 @@ namespace Crytex.Web.Areas.Admin.Controllers
             game = _gameService.Create(game);
 
             return Ok(new {id = game.Id});
+        }
+
+        /// <summary>
+        /// Удаляем игру по полученному Id
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IHttpActionResult Delete(Int32 Id)
+        {
+            _gameService.Delete(Id);
+
+            return Ok();
         }
     }
 }
