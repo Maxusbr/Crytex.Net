@@ -148,6 +148,7 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
             Mapper.CreateMap<GameServerTariff, GameServerTariffView>();
+            Mapper.CreateMap<GameServerTariff, GameServerTariffSimpleView>();
 
             Mapper.CreateMap<BillingTransactionInfo, BillingTransactionInfoViewModel>()
                 .ForMember(x => x.BillingTransactionId, opt => opt.MapFrom(source => source.BillingTransaction.Id))
@@ -162,7 +163,9 @@ namespace Crytex.Web.Mappings
                 .Include<PaymentGameServer, PaymentGameServerViewModel>()
                 .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
             Mapper.CreateMap<Game, GameViewModel>()
-            .AfterMap((source, dest) => dest.ImageFileDescriptor.Path = _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path);
+                .AfterMap((source, dest) => dest.ImageFileDescriptor.Path = _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path);
+            Mapper.CreateMap<Game, GameSimpleViewModel>()
+                .AfterMap((source, dest) => dest.ImageFileDescriptor.Path = _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path);
 
             Mapper.CreateMap<GameHost, GameHostViewModel>()
                 .ForMember(x => x.SupportedGamesIds, opt => opt.MapFrom(source => source.SupportedGames.Select(g => g.Id)));

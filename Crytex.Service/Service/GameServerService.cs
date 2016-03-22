@@ -41,7 +41,8 @@ namespace Crytex.Service.Service
         #region Get operations
         public virtual GameServer GetById(Guid guid)
         {
-            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.GameHost, x => x.GameServerTariff, x => x.GameServerTariff.Game);
+            var server = this._gameServerRepository.Get(x => x.Id == guid, x => x.User, x => x.GameHost, x => x.GameServerTariff,
+                x => x.GameServerTariff.Game, x => x.GameServerTariff.Game.ImageFileDescriptor);
 
             if (server == null)
             {
@@ -61,7 +62,8 @@ namespace Crytex.Service.Service
                 where = where.And(x => x.UserId == userId);
             }
 
-            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.User, x => x.GameHost);
+            var pagedList = this._gameServerRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.User, x => x.GameHost,
+                x => x.GameServerTariff, x => x.GameServerTariff.Game, x => x.GameServerTariff.Game.ImageFileDescriptor);
 
             return pagedList;
         }
@@ -113,7 +115,7 @@ namespace Crytex.Service.Service
 
         public IEnumerable<GameServerTariff> GetGameServerTariffs()
         {
-            return _gameServerTariffRepository.GetAll();
+            return _gameServerTariffRepository.GetAll(x => x.Game, x => x.Game.ImageFileDescriptor);
         }
 
         public void UpdatePassword(Guid id, string serverNewPassword)

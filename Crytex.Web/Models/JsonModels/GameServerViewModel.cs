@@ -22,6 +22,6 @@ namespace Crytex.Web.Models.JsonModels
         public int ExpireMonthCount { get; set; }
 
         public Int32 GameId { get; set; }
-        public GameViewModel Game { get; set; }
+        public GameServerTariffView GameServerTariff { get; set; }
     }
 }
