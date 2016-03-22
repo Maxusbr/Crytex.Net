@@ -5,6 +5,7 @@ using Crytex.Service.IService;
 using System.Collections.Generic;
 using Crytex.Model.Models;
 using System.Linq;
+using System;
 
 namespace Crytex.Service.Service
 {
@@ -73,6 +74,70 @@ namespace Crytex.Service.Service
         {
             var replenishment = GetBobusBonusReplenishmentById(id);
             _bonusReplenishmentRepository.Delete(replenishment);
+            _unitOfWork.Commit();
+        }
+
+        public LongTermDiscount GetLongTermDiscountById(int id)
+        {
+            var discount = _longTermDiscountRepository.Get(d => d.Id == id);
+
+            if (discount == null)
+            {
+                throw new InvalidIdentifierException($"LongTermDiscount with id={id} doesn't exist.");
+            }
+
+            return discount;
+        }
+
+        public IEnumerable<LongTermDiscount> GetAllLongTermDiscounts()
+        {
+            var discounts = _longTermDiscountRepository.GetAll();
+
+            return discounts;
+        }
+
+        public LongTermDiscount CreateNewLongTermDiscount(LongTermDiscount newDiscount)
+        {
+            _longTermDiscountRepository.Add(newDiscount);
+            _unitOfWork.Commit();
+
+            return newDiscount;
+        }
+
+        public void UpdateLongTermDiscount(LongTermDiscount updatedDiscount)
+        {
+            var discountFromDb = GetLongTermDiscountById(updatedDiscount.Id);
+
+            discountFromDb.ResourceType = updatedDiscount.ResourceType;
+            discountFromDb.MonthCount = updatedDiscount.MonthCount;
+            discountFromDb.Disable = updatedDiscount.Disable;
+            discountFromDb.DiscountSize = updatedDiscount.DiscountSize;
+
+            _longTermDiscountRepository.Update(discountFromDb);
+            _unitOfWork.Commit();
+        }
+
+        public void DeleteLongTermDiscount(int id)
+        {
+            var discount = GetLongTermDiscountById(id);
+            _longTermDiscountRepository.Delete(discount);
+            _unitOfWork.Commit();
+        }
+
+        public decimal GetLongTermDiscountAmount(decimal priceWithoutDiscount, int monthCount, ResourceType resourceType)
+        {
+            var discounts =
+                _longTermDiscountRepository.GetMany(d => d.ResourceType == resourceType && d.MonthCount <= monthCount);
+
+            if (discounts.Any() == false)
+            {
+                return 0;
+            }
+
+            var discountsSortedByMonthCount = discounts.OrderBy(d => d.MonthCount);
+            var discountToApply = discountsSortedByMonthCount.Last();
+
+            return (priceWithoutDiscount/(decimal)100)*(decimal)(discountToApply.DiscountSize);
         }
     }
 }

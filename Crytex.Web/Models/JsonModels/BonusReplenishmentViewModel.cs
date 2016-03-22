@@ -6,9 +6,9 @@ namespace Crytex.Web.Models.JsonModels
     {
         public int? Id { get; set; }
         [Required]
-        public int UserReplenishmentSize { get; set; }
+        public int? UserReplenishmentSize { get; set; }
         [Required]
-        public double BonusSize { get; set; }
+        public double? BonusSize { get; set; }
         public bool Disable { get; set; }
     }
 }

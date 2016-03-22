@@ -71,6 +71,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<SnapshotVmViewModel, SnapshotVm>();
             Mapper.CreateMap<GameServerBuyOptionsViewModel, BuyGameServerOption>();
             Mapper.CreateMap<BonusReplenishmentViewModel, BonusReplenishment>();
+            Mapper.CreateMap<LongTermDiscountViewModel, LongTermDiscount>();
         }
     }
 }

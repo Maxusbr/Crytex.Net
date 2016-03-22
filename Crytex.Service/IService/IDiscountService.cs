@@ -11,5 +11,11 @@ namespace Crytex.Service.IService
         BonusReplenishment CreateNewBonusReplenishment(BonusReplenishment newReplenishment);
         void UpdateBonusReplenishment(BonusReplenishment updatedReplenishment);
         void DeleteBonusReplenishment(int id);
+        LongTermDiscount GetLongTermDiscountById(int id);
+        IEnumerable<LongTermDiscount> GetAllLongTermDiscounts();
+        LongTermDiscount CreateNewLongTermDiscount(LongTermDiscount newDiscount);
+        void UpdateLongTermDiscount(LongTermDiscount updatedDiscount);
+        void DeleteLongTermDiscount(int id);
+        decimal GetLongTermDiscountAmount(decimal priceWithoutDiscount, int monthCount, ResourceType resourceType);
     }
 }
