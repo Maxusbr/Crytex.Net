@@ -84,7 +84,7 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException($"CreditPaymentOrder with id = {id} doesn't exist.");
             }
             payment.AmountReal = cashAmount;
-            payment.AmountWithBonus = _discountService.GetBonusReplenishmentDiscount(cashAmount);
+            payment.AmountWithBonus = _discountService.GetBonusReplenishment(cashAmount);
             payment.Status = PaymentStatus.Success;
             _creditPaymentOrderRepository.Update(payment);
             _unitOfWork.Commit();
