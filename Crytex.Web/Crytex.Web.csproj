@@ -277,6 +277,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminGameHostController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminGameServerTariffController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminHyperVHostController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerBoughtController.cs" />

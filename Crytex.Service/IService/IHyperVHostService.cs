@@ -11,10 +11,11 @@ namespace Crytex.Service.IService
     {
         HyperVHost CreateHyperVHost(HyperVHost hyperVHost);
 
-        HyperVHost GetHyperVById(int id);
+        HyperVHost GetHyperVById(Guid id);
 
         IEnumerable<HyperVHost> GetAllHyperVHosts();
 
         void UpdateHyperVHost(HyperVHost hyperVHost);
+        void DeleteHost(Guid id);
     }
 }

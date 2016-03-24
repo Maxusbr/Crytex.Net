@@ -5,9 +5,6 @@ using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Crytex.Service.Service
 {
@@ -24,6 +21,10 @@ namespace Crytex.Service.Service
 
         public HyperVHost CreateHyperVHost(HyperVHost hyperVHost)
         {
+            hyperVHost.DateAdded = DateTime.UtcNow;
+            hyperVHost.Disabled = false;
+            hyperVHost.Valid = true;
+
             this._hyperVRepo.Add(hyperVHost);
             this._unitOfWork.Commit();
 
@@ -31,7 +32,7 @@ namespace Crytex.Service.Service
         }
 
 
-        public HyperVHost GetHyperVById(int id)
+        public HyperVHost GetHyperVById(Guid id)
         {
             var hyperVHost = this._hyperVRepo.GetById(id);
 
@@ -52,20 +53,27 @@ namespace Crytex.Service.Service
 
         public void UpdateHyperVHost(HyperVHost hyperVHost)
         {
-            var hyperVHostToUpdate = this._hyperVRepo.GetById(hyperVHost.Id);
+            var hyperVHostToUpdate = GetHyperVById(hyperVHost.Id);
 
-            if (hyperVHostToUpdate == null)
-            {
-                throw new InvalidIdentifierException(string.Format("hyperVHost with id={0} doesnt exist", hyperVHost.Id));
-            }
-
+            hyperVHostToUpdate.Name = hyperVHost.Name;
             hyperVHostToUpdate.Host = hyperVHost.Host;
+            hyperVHostToUpdate.CoreNumber = hyperVHost.CoreNumber;
+            hyperVHostToUpdate.RamSize = hyperVHost.RamSize;
             hyperVHostToUpdate.UserName = hyperVHost.UserName;
             hyperVHostToUpdate.Password = hyperVHost.Password;
+            hyperVHostToUpdate.DefaultVmNetworkName = hyperVHost.DefaultVmNetworkName;
+            hyperVHostToUpdate.Disabled = hyperVHost.Disabled;
 
 
             this._hyperVRepo.Update(hyperVHostToUpdate);
             this._unitOfWork.Commit();
+        }
+
+        public void DeleteHost(Guid id)
+        {
+            var host = GetHyperVById(id);
+            _hyperVRepo.Delete(host);
+            _unitOfWork.Commit();
         }
     }
 }
