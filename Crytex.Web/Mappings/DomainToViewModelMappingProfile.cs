@@ -81,7 +81,6 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
             Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
-            Mapper.CreateMap<Discount, DiscountViewModel>();
             Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
             Mapper.CreateMap<VmBackup, VmBackupViewModel>();
             Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
@@ -173,6 +172,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<DhcpServer, DhcpServerView>()
                 .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+            Mapper.CreateMap<BonusReplenishment, BonusReplenishmentViewModel>();
+            Mapper.CreateMap<LongTermDiscount, LongTermDiscountViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();

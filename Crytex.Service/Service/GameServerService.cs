@@ -24,20 +24,23 @@ namespace Crytex.Service.Service
         private readonly IPaymentGameServerRepository _paymentGameServerRepository;
         private readonly IGameHostService _gameHostService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IDiscountService _discountService;
 
         public GameServerService(IGameServerRepository gameServerRepository, ITaskV2Service taskService,
             IGameServerTariffRepository gameServerTariffRepository, IBilingService billingService,
             IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository,
-            IGameHostService gameHostService, IUnitOfWork unitOfWork)
+            IGameHostService gameHostService, IUnitOfWork unitOfWork, IDiscountService discountService)
         {
             this._gameServerRepository = gameServerRepository;
             this._taskService = taskService;
             this._gameServerTariffRepository = gameServerTariffRepository;
             this._unitOfWork = unitOfWork;
+            _discountService = discountService;
             _paymentGameServerRepository = paymentGameServerRepository;
             _gameHostService = gameHostService;
             _billingService = billingService;
         }
+
         #region Get operations
         public virtual GameServer GetById(Guid guid)
         {
@@ -152,10 +155,13 @@ namespace Crytex.Service.Service
             CheckGameHostAvailable(server);
 
             decimal amount = this.GetSlotServerMonthPrice(server, options.SlotCount) * options.ExpireMonthCount;
+            decimal discount = _discountService.GetLongTermDiscountAmount(amount, options.ExpireMonthCount,
+                ResourceType.GameServer);
+            decimal amountWithDiscount = amount - discount;
 
             var gameServerVmTransaction = new BillingTransaction
             {
-                CashAmount = -amount,
+                CashAmount = -amountWithDiscount,
                 TransactionType = BillingTransactionType.GameServer,
                 UserId = options.UserId
             };
@@ -170,7 +176,8 @@ namespace Crytex.Service.Service
                 DateStart = dateNow,
                 DateEnd = server.DateExpire,
                 GameServerId = server.Id,
-                Amount = amount,
+                Amount = amountWithDiscount,
+                AmountWithoutDiscounts = amount,
                 UserId = server.UserId,
                 SlotCount = options.SlotCount,
                 MonthCount = options.ExpireMonthCount
@@ -441,6 +448,7 @@ namespace Crytex.Service.Service
                 DateStart = serverExpired ? dateNow : serverDateExpireOld.AddTicks(1),
                 DateEnd = server.DateExpire,
                 Amount = totalPrice,
+                AmountWithoutDiscounts = totalPrice,
                 BillingTransactionId = gameServerVmTransaction.Id,
                 GameServerId = server.Id
             };

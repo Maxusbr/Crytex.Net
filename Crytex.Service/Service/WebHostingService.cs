@@ -65,6 +65,7 @@ namespace Crytex.Service.Service
             var newHostingPayment = new WebHostingPayment
             {
                 Amount = -totalPrice,
+                AmountWithoutDiscounts = -totalPrice,
                 BillingTransactionId = billingTransaction.Id,
                 WebHostingId = newHosting.Id,
                 Date = DateTime.UtcNow,
@@ -117,6 +118,7 @@ namespace Crytex.Service.Service
             var prolongateHostingPayment = new WebHostingPayment
             {
                 Amount = -totalPrice,
+                AmountWithoutDiscounts = -totalPrice,
                 BillingTransactionId = prolongateBillingTransaction.Id,
                 WebHostingId = webHosting.Id,
                 Date = DateTime.UtcNow,

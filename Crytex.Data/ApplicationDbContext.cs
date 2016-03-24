@@ -74,7 +74,6 @@ namespace Crytex.Data
         public DbSet<VmWareVCenter> VmWareVCenters { get; set; }
         public DbSet<OAuthClientApplication> OAuthClientApplications { get; set; }
         public DbSet<OAuthRefreshToken> OAuthRefreshTokens { get; set; }
-        public DbSet<Discount> Discounts { get; set; }
         public DbSet<PhoneCallRequest> PhoneCallRequests { get; set; }     
         public DbSet<NetTrafficCounter> NetTrafficCounters { get; set; }
         public DbSet<VmBackup> VmBackups { get; set; }
@@ -107,5 +106,7 @@ namespace Crytex.Data
         public DbSet<PhysicalServerOptionsAvailable> AvailableOptionsPhysicalServers { get; set; }
         public DbSet<PaymentSystem> PaymentSystems { get; set; }
         public DbSet<DhcpServer> DhcpServers { get; set; }
+        public DbSet<LongTermDiscount> LongTermDiscounts { get; set; }
+        public DbSet<BonusReplenishment> BonusReplenishments{ get; set; }
     }
 }
