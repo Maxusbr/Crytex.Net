@@ -268,7 +268,8 @@ namespace Crytex.Service.Service
                 DateEnd = dt.AddMonths(serverParam.CountMonth),
                 CountMonth = serverParam.CountMonth,
                 UserId = serverParam.UserId,
-                Amount = amaunt
+                Amount = amaunt,
+                AmountWithoutDiscounts = amaunt
             };
             var status = BoughtPhysicalServerStatus.New;
             try
@@ -567,6 +568,7 @@ namespace Crytex.Service.Service
             server.CountMonth = monthCount;
             server.DateEnd = DateTime.UtcNow.AddMonths(monthCount);
             server.Amount = totalPrice;
+            server.AmountWithoutDiscounts = totalPrice;
 
             _boughtServerRepository.Update(server);
             _uniOfWork.Commit();

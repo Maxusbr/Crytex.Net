@@ -8,8 +8,8 @@ namespace Crytex.Model.Enums
 {
     public enum GameServerUpdateType
     {
-        UpdateName = 0,
+        UpdateSettings = 0,
         Prolongation = 1,
-        EnableAutoProlongation = 2
+        UpdateSlotCount = 2
     }
 }

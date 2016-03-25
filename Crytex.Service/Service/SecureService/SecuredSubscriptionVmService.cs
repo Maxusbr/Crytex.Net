@@ -17,9 +17,9 @@ namespace Crytex.Service.Service.SecureService
             IBilingService billingService, ITariffInfoService tariffInfoService, IOperatingSystemsService operatingSystemService,
             IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo, IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepo,
             ISubscriptionBackupPaymentRepository backupPaymentRepo,
-            IIdentity userIdentity) 
+            IIdentity userIdentity, IDiscountService discountService) 
                     : base(unitOfWork, subVmRepo, taskService, billingService, tariffInfoService, operatingSystemService,
-                          usageSubscriptionPaymentRepo, fixedSubscriptionPaymentRepo, backupPaymentRepo)
+                          usageSubscriptionPaymentRepo, fixedSubscriptionPaymentRepo, backupPaymentRepo, discountService)
         {
             this._userIdentity = userIdentity;
         }

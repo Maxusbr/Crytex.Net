@@ -24,20 +24,23 @@ namespace Crytex.Service.Service
         private readonly IPaymentGameServerRepository _paymentGameServerRepository;
         private readonly IGameHostService _gameHostService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IDiscountService _discountService;
 
         public GameServerService(IGameServerRepository gameServerRepository, ITaskV2Service taskService,
             IGameServerTariffRepository gameServerTariffRepository, IBilingService billingService,
             IPaymentGameServerRepository paymentGameServerRepository, IServerTemplateRepository serverTemplateRepository,
-            IGameHostService gameHostService, IUnitOfWork unitOfWork)
+            IGameHostService gameHostService, IUnitOfWork unitOfWork, IDiscountService discountService)
         {
             this._gameServerRepository = gameServerRepository;
             this._taskService = taskService;
             this._gameServerTariffRepository = gameServerTariffRepository;
             this._unitOfWork = unitOfWork;
+            _discountService = discountService;
             _paymentGameServerRepository = paymentGameServerRepository;
             _gameHostService = gameHostService;
             _billingService = billingService;
         }
+
         #region Get operations
         public virtual GameServer GetById(Guid guid)
         {
@@ -132,11 +135,24 @@ namespace Crytex.Service.Service
         {
             var dateNow = DateTime.UtcNow;
 
+            DateTime dateExpire;
+            switch (options.CountingPeriodType)
+            {
+                case CountingPeriodType.Day:
+                    dateExpire = dateNow.AddDays(options.ExpirePeriod);
+                    break;
+                case CountingPeriodType.Month:
+                    dateExpire = dateNow.AddMonths(options.ExpirePeriod);
+                    break;
+                default:
+                    throw new ApplicationException($"Unsupported period type {options.CountingPeriodType}");
+            }
+
             // Create new GameServer
             var server = new GameServer
             {
                 CreateDate = dateNow,
-                DateExpire = dateNow.AddMonths(options.ExpireMonthCount),
+                DateExpire = dateExpire,
                 GameServerTariffId = options.GameServerTariffId,
                 AutoProlongation = options.AutoProlongation,
                 Name = options.ServerName,
@@ -144,18 +160,48 @@ namespace Crytex.Service.Service
                 SlotCount = options.SlotCount
             };
             
-            if (options.ExpireMonthCount < 1)
+            if (options.ExpirePeriod < 1)
             {
-                throw new InvalidIdentifierException("ExpireMonthCount must be greater than 0");
+                throw new ValidationException("ExpirePeriod must be greater than 0");
             }
 
             CheckGameHostAvailable(server);
 
-            decimal amount = this.GetSlotServerMonthPrice(server, options.SlotCount) * options.ExpireMonthCount;
+            decimal monthPrice = this.GetSlotServerMonthPrice(server, options.SlotCount);
+            decimal amount;
+
+            switch (options.CountingPeriodType)
+            {
+                case CountingPeriodType.Day:
+                    amount = (monthPrice / 30) * options.ExpirePeriod;
+                    break;
+                case CountingPeriodType.Month:
+                    amount = monthPrice * options.ExpirePeriod;
+                    break;
+                default:
+                    throw new ApplicationException($"Unsupported period type {options.CountingPeriodType}");
+            }
+
+            decimal discount;
+            switch (options.CountingPeriodType)
+            {
+                case CountingPeriodType.Day:
+                    discount = _discountService.GetLongTermDiscountAmount(amount, options.ExpirePeriod / 30,
+                        ResourceType.GameServer);
+                    break;
+                case CountingPeriodType.Month:
+                    discount = _discountService.GetLongTermDiscountAmount(amount, options.ExpirePeriod,
+                        ResourceType.GameServer);
+                    break;
+                default:
+                    throw new ApplicationException($"Unsupported period type {options.CountingPeriodType}");
+            }
+            
+            decimal amountWithDiscount = amount - discount;
 
             var gameServerVmTransaction = new BillingTransaction
             {
-                CashAmount = -amount,
+                CashAmount = -amountWithDiscount,
                 TransactionType = BillingTransactionType.GameServer,
                 UserId = options.UserId
             };
@@ -170,10 +216,12 @@ namespace Crytex.Service.Service
                 DateStart = dateNow,
                 DateEnd = server.DateExpire,
                 GameServerId = server.Id,
-                Amount = amount,
+                Amount = amountWithDiscount,
+                AmountWithoutDiscounts = amount,
                 UserId = server.UserId,
                 SlotCount = options.SlotCount,
-                MonthCount = options.ExpireMonthCount
+                ExpirePeriod = options.ExpirePeriod,
+                CountingPeriodType = options.CountingPeriodType
             };
             this._paymentGameServerRepository.Add(gameServerPayment);
             this._unitOfWork.Commit();
@@ -185,14 +233,14 @@ namespace Crytex.Service.Service
         {
             switch (options.UpdateType)
             {
-                case GameServerUpdateType.UpdateName:
-                    UpdateNameGameServerConfiguration(serverId, options);
-                    break;
-                case GameServerUpdateType.EnableAutoProlongation:
-                    EnableProlongateGameServer(serverId, options.AutoProlongation);
+                case GameServerUpdateType.UpdateSettings:
+                    UpdateGameServerSettings(serverId, options);
                     break;
                 case GameServerUpdateType.Prolongation:
-                    ProlongateGameServerMonth(serverId, options.MonthCount);
+                    ProlongateGameServer(options.ServerId, options.ProlongatePeriod, options.ProlongatePeriodType, BillingTransactionType.GameServer);
+                    break;
+                case GameServerUpdateType.UpdateSlotCount:
+                    UpdateGameServerSlotCount(options.ServerId, options.SlotCount);
                     break;
             }
         }
@@ -208,7 +256,7 @@ namespace Crytex.Service.Service
         {
             try
             {
-                ProlongateGameServer(guid, 1, BillingTransactionType.GameServer);
+                ProlongateGameServer(guid, 1, CountingPeriodType.Month, BillingTransactionType.GameServer);
             }
             catch (TransactionFailedException)
             {
@@ -256,7 +304,8 @@ namespace Crytex.Service.Service
                 decimal returnMoneyAmount = 0;
 
                 // .. Get active payments
-                var paymentsToMarkReturned = _paymentGameServerRepository.GetMany(p => p.GameServerId == srv.Id && p.DateEnd > dateNow);
+                var paymentsToMarkReturned = _paymentGameServerRepository.GetMany(p => p.GameServerId == srv.Id && p.DateEnd > dateNow
+                    && p.ReturnedToUser == false);
                 foreach (var payment in paymentsToMarkReturned)
                 {
                     payment.ReturnDate = dateNow;
@@ -411,14 +460,25 @@ namespace Crytex.Service.Service
             }
             return srv;
         }
-        private void ProlongateGameServer(Guid guid, int monthCount, BillingTransactionType transactionType)
+        private void ProlongateGameServer(Guid guid, int prololngatePeriod, CountingPeriodType periodType, BillingTransactionType transactionType)
         {
             var dateNow = DateTime.UtcNow;
             var server = this.GetById(guid);
 
-            decimal amount = GetSlotServerMonthPrice(server, server.SlotCount);
+            decimal monthPrice = GetSlotServerMonthPrice(server, server.SlotCount);
 
-            var totalPrice = amount * monthCount;
+            decimal totalPrice;
+            switch (periodType)
+            {
+                case CountingPeriodType.Day:
+                    totalPrice = (monthPrice/30) * prololngatePeriod;
+                    break;
+                case CountingPeriodType.Month:
+                    totalPrice = monthPrice * prololngatePeriod;
+                    break;
+                default:
+                    throw new ApplicationException($"Unsupported period type {periodType}");
+            }
             var gameServerVmTransaction = new BillingTransaction
             {
                 CashAmount = -totalPrice,
@@ -431,16 +491,32 @@ namespace Crytex.Service.Service
 
             var serverExpired = server.DateExpire < dateNow;
             var serverDateExpireOld = server.DateExpire;
-            server.DateExpire = serverExpired ? dateNow.AddMonths(monthCount) : server.DateExpire.AddMonths(monthCount);
+
+            DateTime dateExpireNew;
+            switch (periodType)
+            {
+                case CountingPeriodType.Day:
+                    dateExpireNew = serverExpired ? dateNow.AddDays(prololngatePeriod) : server.DateExpire.AddDays(prololngatePeriod);
+                    break;
+                case CountingPeriodType.Month:
+                    dateExpireNew = serverExpired ? dateNow.AddMonths(prololngatePeriod) : server.DateExpire.AddMonths(prololngatePeriod);
+                    break;
+                default:
+                    throw new ApplicationException($"Unsupported period type {periodType}");
+            }
+
+            server.DateExpire = dateExpireNew;
             _gameServerRepository.Update(server);
 
             var gameServerPayment = new PaymentGameServer
             {
-                MonthCount = monthCount,
+                ExpirePeriod = prololngatePeriod,
+                CountingPeriodType = periodType,
                 Date = dateNow,
                 DateStart = serverExpired ? dateNow : serverDateExpireOld.AddTicks(1),
                 DateEnd = server.DateExpire,
                 Amount = totalPrice,
+                AmountWithoutDiscounts = totalPrice,
                 BillingTransactionId = gameServerVmTransaction.Id,
                 GameServerId = server.Id
             };
@@ -448,26 +524,15 @@ namespace Crytex.Service.Service
             _paymentGameServerRepository.Add(gameServerPayment);
             _unitOfWork.Commit();
         }
-        private void UpdateNameGameServerConfiguration(Guid gameServerId, GameServerConfigOptions options)
+        private void UpdateGameServerSettings(Guid gameServerId, GameServerConfigOptions options)
         {
             var srv = GetById(gameServerId);
-            srv.Name = options.ServerName;
+            srv.Name = options.ServerName ?? srv.Name;
+            srv.AutoProlongation = options.AutoProlongation ?? srv.AutoProlongation;
             _gameServerRepository.Update(srv);
             _unitOfWork.Commit();
         }
 
-        private void EnableProlongateGameServer(Guid gameServerId, bool autoProlongation)
-        {
-            var gamesrv = GetById(gameServerId);
-            gamesrv.AutoProlongation = autoProlongation;
-            _gameServerRepository.Update(gamesrv);
-            _unitOfWork.Commit();
-        }
-
-        private void ProlongateGameServerMonth(Guid gameServerId, int monthCount)
-        {
-            ProlongateGameServer(gameServerId, monthCount, BillingTransactionType.GameServer);
-        }
         private decimal GetSlotServerMonthPrice(GameServer server, int slotCount)
         {
             var serverTariff = server.GameServerTariff ?? this._gameServerTariffRepository.GetById(server.GameServerTariffId);
@@ -502,6 +567,96 @@ namespace Crytex.Service.Service
                 this._taskService.CreateTask(task, taskOptions);
             }
         }
+        private void UpdateGameServerSlotCount(Guid serverId, int newSlotCount)
+        {
+            var server = GetById(serverId);
+            var dateNow = DateTime.UtcNow;
+
+            if (server.DateExpire < dateNow)
+            {
+                throw new TaskOperationException("Updating expired gameserver config is not supported");
+            }
+
+            var daysToServerExpire = (server.DateExpire - dateNow).Days;
+            var serverDayOldPrice = GetGameServerMonthPrice(server)/30;
+            var daysToEndOldCost = serverDayOldPrice*daysToServerExpire;
+
+            var oldSlotCount = server.SlotCount;
+
+            server.SlotCount = newSlotCount;
+            var serverDayNewPrice = GetGameServerMonthPrice(server)/30;
+            var daysToEndNewCost = serverDayNewPrice*daysToServerExpire;
+
+            var billingTransactionCashAmount = -(daysToEndNewCost - daysToEndOldCost);
+            var gameServerTransaction = new BillingTransaction
+            {
+                CashAmount = billingTransactionCashAmount,
+                TransactionType = BillingTransactionType.FixedSubscriptionVmPayment,
+                UserId = server.UserId,
+                Description = "Update game server slot count"
+            };
+
+            try
+            {
+                gameServerTransaction = this._billingService.AddUserTransaction(gameServerTransaction);
+            }
+            catch (TransactionFailedException)
+            {
+                // Restore UserVm ef entity state
+                server.SlotCount = oldSlotCount;
+                throw;
+            }
+
+            // Create update gameserver task
+            this.UpdateGameServerConfig(server, newSlotCount);
+
+            // Update game server
+            _gameServerRepository.Update(server);
+
+            // Mark current and subsequent gameserver payments as ReturnedToUser
+            var paymentsToMark = _paymentGameServerRepository.GetMany(p => p.GameServerId == server.Id && p.DateEnd > dateNow 
+                && p.ReturnedToUser == false);
+            foreach (var payment in paymentsToMark)
+            {
+                payment.ReturnDate = dateNow;
+                payment.ReturnedToUser = true;
+            }
+
+            // Add new gameserver payment
+            dateNow = DateTime.UtcNow;
+            var subscriptionPayment = new PaymentGameServer
+            {
+                BillingTransactionId = gameServerTransaction.Id,
+                Date = DateTime.UtcNow,
+                DateStart = dateNow,
+                DateEnd = server.DateExpire,
+                GameServerId = server.Id,
+                Amount = daysToEndNewCost,
+                AmountWithoutDiscounts = daysToEndNewCost,
+                UserId = server.UserId,
+                SlotCount = newSlotCount
+            };
+            _paymentGameServerRepository.Add(subscriptionPayment);
+            this._unitOfWork.Commit();
+        }
+
+        private void UpdateGameServerConfig(GameServer server, int newSlotCount)
+        {
+            var updateTask = new TaskV2
+            {
+                TypeTask = TypeTask.UpdateGameServer,
+                UserId = server.UserId,
+                ResourceId = server.Id,
+                ResourceType = ResourceType.GameServer
+            };
+            var taskUpdateOptions = new UpdateGameServerOptions
+            {
+                GameServerId = server.Id,
+                SlotCount = newSlotCount
+            };
+            this._taskService.CreateTask(updateTask, taskUpdateOptions);
+        }
+
         #endregion
     }
 }

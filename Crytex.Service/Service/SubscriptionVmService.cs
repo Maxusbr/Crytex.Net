@@ -29,11 +29,12 @@ namespace Crytex.Service.Service
         private readonly IUsageSubscriptionPaymentRepository _usageSubscriptionPaymentRepo;
         private readonly IFixedSubscriptionPaymentRepository _fixedSubscriptionPaymentRepo;
         private readonly ISubscriptionBackupPaymentRepository _backupPaymentRepo;
+        private readonly IDiscountService _discountService;
 
         public SubscriptionVmService(IUnitOfWork unitOfWork, ISubscriptionVmRepository subscriptionVmRepository, ITaskV2Service taskService,
             IBilingService billingService, ITariffInfoService tariffInfoService, IOperatingSystemsService operatingSystemService,
             IUsageSubscriptionPaymentRepository usageSubscriptionPaymentRepo, IFixedSubscriptionPaymentRepository fixedSubscriptionPaymentRepo,
-            ISubscriptionBackupPaymentRepository backupPaymentRepo)
+            ISubscriptionBackupPaymentRepository backupPaymentRepo, IDiscountService discountService)
         {
             this._unitOfWork = unitOfWork;
             this._subscriptionVmRepository = subscriptionVmRepository;
@@ -44,6 +45,7 @@ namespace Crytex.Service.Service
             this._usageSubscriptionPaymentRepo = usageSubscriptionPaymentRepo;
             this._fixedSubscriptionPaymentRepo = fixedSubscriptionPaymentRepo;
             this._backupPaymentRepo = backupPaymentRepo;
+            _discountService = discountService;
         }
 
         public SubscriptionVm BuySubscription(SubscriptionBuyOptions options)
@@ -69,18 +71,28 @@ namespace Crytex.Service.Service
             var os = this._operatingSystemService.GetById(options.OperatingSystemId);
             var tariff = this._tariffInfoService.GetTariffByType(options.Virtualization, os.Family);
             decimal transactionCashAmount = 0;
+            decimal fullPeriodPrice = 0;
+            decimal fullPeriodBackupPrice = 0;
             decimal backupTransactionCashAmount = 0;
             var backupPaymentRequired = options.DailyBackupStorePeriodDays > 1;
             if (!options.BoughtByAdmin)
             {
                 var tariffMonthPrice = this._tariffInfoService.CalculateTotalPrice(options.Cpu, options.Hdd,
                 options.SDD, options.Ram, 0, tariff); // TODO: SDD параметр пока участвует только в билинге. параметр load10percent пока 0
-                transactionCashAmount = tariffMonthPrice * options.SubscriptionsMonthCount;
+                fullPeriodPrice = tariffMonthPrice*options.SubscriptionsMonthCount;
+
+                var discount = _discountService.GetLongTermDiscountAmount(fullPeriodPrice, options.SubscriptionsMonthCount,
+                    ResourceType.SubscriptionVm);
+                transactionCashAmount = fullPeriodPrice - discount;
 
                 if (backupPaymentRequired)
                 {
-                    var backupMonthPrice = this._tariffInfoService.CalculateBackupPrice(options.Hdd, options.SDD, options.DailyBackupStorePeriodDays - 1, tariff);
-                    backupTransactionCashAmount = backupMonthPrice * options.SubscriptionsMonthCount;
+                    var backupMonthPrice = this._tariffInfoService.CalculateBackupPrice(options.Hdd, options.SDD,
+                        options.DailyBackupStorePeriodDays - 1, tariff);
+                    fullPeriodBackupPrice = backupMonthPrice * options.SubscriptionsMonthCount;
+                    var backupDiscount = _discountService.GetLongTermDiscountAmount(fullPeriodBackupPrice, options.SubscriptionsMonthCount,
+                            ResourceType.SubscriptionVm);
+                    backupTransactionCashAmount = fullPeriodBackupPrice - backupDiscount;
                 }
             }
 
@@ -113,6 +125,7 @@ namespace Crytex.Service.Service
                 HardDriveSize = options.Hdd,
                 RamCount = options.Ram,
                 Amount = transactionCashAmount,
+                AmountWithoutDiscounts = fullPeriodPrice,
                 TariffId = newSubscription.TariffId
             };
             this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
@@ -127,6 +140,7 @@ namespace Crytex.Service.Service
                     Date = dateNow,
                     SubscriptionVmId = newSubscription.Id,
                     Amount = backupTransactionCashAmount,
+                    AmountWithoutDiscounts = fullPeriodBackupPrice,
                     TariffId = newSubscription.TariffId,
                     DaysPeriod = options.DailyBackupStorePeriodDays,
                     Paid = true,
@@ -212,6 +226,7 @@ namespace Crytex.Service.Service
                 HardDriveSize = options.Hdd,
                 RamCount = options.Ram,
                 Amount = tariffHourPrice,
+                AmountWithoutDiscounts = tariffHourPrice,
                 TariffId = newSubscription.TariffId
             };
             this._usageSubscriptionPaymentRepo.Add(subscriptionPayment);
@@ -522,6 +537,7 @@ namespace Crytex.Service.Service
             var subPayment = new FixedSubscriptionPayment
             {
                 Amount = totalPrice,
+                AmountWithoutDiscounts = totalPrice,
                 BillingTransactionId = newTransaction.Id,
                 SubscriptionVmId = sub.Id,
                 TariffId = sub.TariffId,
@@ -721,6 +737,7 @@ namespace Crytex.Service.Service
                     SubscriptionVmId = sub.Id,
                     TariffId = subTariff.Id,
                     Amount = hourPrice,
+                    AmountWithoutDiscounts = hourPrice,
                     Date = currentTime,
                     RamCount = subVm.RamCount,
                     CoreCount = subVm.CoreCount,
@@ -729,6 +746,7 @@ namespace Crytex.Service.Service
                 var newBackupPayment = new SubscriptionVmBackupPayment
                 {
                     Amount = backupHourPrice,
+                    AmountWithoutDiscounts = backupHourPrice,
                     Date = currentTime,
                     DaysPeriod = sub.DailyBackupStorePeriodDays,
                     SubscriptionVmId = sub.Id,
@@ -897,7 +915,8 @@ namespace Crytex.Service.Service
             _subscriptionVmRepository.Update(sub);
 
             // Mark current and subsequent subscroption BACKUP payments as ReturnedToUser
-            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow
+                && p.ReturnedToUser == false);
             foreach (var payment in backupPaymentsToMark)
             {
                 payment.ReturnDate = dateNow;
@@ -916,6 +935,7 @@ namespace Crytex.Service.Service
                     Date = DateTime.UtcNow,
                     SubscriptionVmId = sub.Id,
                     Amount = backupSubPaymentCashAmount,
+                    AmountWithoutDiscounts = backupSubPaymentCashAmount,
                     TariffId = sub.TariffId,
                     DaysPeriod = sub.DailyBackupStorePeriodDays,
                     Paid = true,
@@ -1024,7 +1044,8 @@ namespace Crytex.Service.Service
             _subscriptionVmRepository.Update(sub);
 
             // Mark current and subsequent subscroption payments as ReturnedToUser
-            var paymentsToMark = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            var paymentsToMark = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow 
+                && p.ReturnedToUser == false);
             foreach (var payment in paymentsToMark)
             {
                 payment.ReturnDate = dateNow;
@@ -1044,13 +1065,15 @@ namespace Crytex.Service.Service
                 HardDriveSize = options.Hdd ?? userVm.HardDriveSize,
                 RamCount = options.Ram ?? userVm.RamCount, 
                 Amount = daysToEndNewCost,
+                AmountWithoutDiscounts = daysToEndNewCost,
                 TariffId = sub.TariffId
             };
             this._fixedSubscriptionPaymentRepo.Add(subscriptionPayment);
             this._unitOfWork.Commit();
 
             // Mark current and subsequent subscroption BACKUP payments as ReturnedToUser
-            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow
+                && p.ReturnedToUser == false);
             foreach (var payment in backupPaymentsToMark)
             {
                 payment.ReturnDate = dateNow;
@@ -1069,6 +1092,7 @@ namespace Crytex.Service.Service
                     Date = DateTime.UtcNow,
                     SubscriptionVmId = sub.Id,
                     Amount = backupSubPaymentCashAmount,
+                    AmountWithoutDiscounts = backupSubPaymentCashAmount,
                     TariffId = sub.TariffId,
                     DaysPeriod = sub.DailyBackupStorePeriodDays,
                     Paid = true,
@@ -1078,15 +1102,6 @@ namespace Crytex.Service.Service
                 this._backupPaymentRepo.Add(subscriptionBackupPayment);
                 this._unitOfWork.Commit();
             }
-        }
-
-        private bool UpdateVmTaskRequired(UpdateMachineConfigOptions options)
-        {
-            if (options.Cpu != null || options.Hdd != null || options.Ram != null)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

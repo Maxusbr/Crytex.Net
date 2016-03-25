@@ -7,6 +7,7 @@ namespace Crytex.Model.Models.Biling
     {
         public DateTime Date { get; set; }
         public decimal Amount { get; set; }
+        public decimal AmountWithoutDiscounts { get; set; }
         public Guid? BillingTransactionId { get; set; }
         public bool ReturnedToUser { get; set; }
         public DateTime? ReturnDate { get; set; }

@@ -34,7 +34,6 @@ namespace Crytex.Service
             container.RegisterType<IOAuthClientApplicationRepository, OAuthClientApplicationRepository>();
             container.RegisterType<IOAuthRefreshTokenRepository, OAuthRefreshTokenRepository>();
             container.RegisterType<ISubscriptionVmRepository, SubscriptionVmRepository>();
-            container.RegisterType<IDiscountRepository, DiscountRepository>();
             container.RegisterType<IPhoneCallRequestRepository, PhoneCallRequestRepository>();
             container.RegisterType<IUnitOfWork, UnitOfWork>(new TLifetimeManager());
             container.RegisterType<IDatabaseFactory, DatabaseFactory>(new TLifetimeManager());
@@ -124,6 +123,8 @@ namespace Crytex.Service
             container.RegisterType<ISubscriptionVmService, SubscriptionVmService>();
             container.RegisterType<IPhoneCallRequestService, PhoneCallRequestService>();
             container.RegisterType<IDiscountService, DiscountService>();
+            container.RegisterType<IBonusReplenishmentRepository, BonusReplenishmentRepository>();
+            container.RegisterType<ILongTermDiscountRepository, LongTermDiscountRepository>();
         }
     }
 }
