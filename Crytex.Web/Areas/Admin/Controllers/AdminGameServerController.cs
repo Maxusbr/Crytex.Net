@@ -87,16 +87,20 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             switch (model.UpdateType)
             {
-                case GameServerUpdateType.UpdateName:
-                    if (string.IsNullOrEmpty(model.ServerName)) return BadRequest("ServerName must be not empty");
+                case GameServerUpdateType.UpdateSettings:
+                    if (string.IsNullOrEmpty(model.ServerName) && model.AutoProlongation == null)
+                        return BadRequest("ServerName must be not empty");
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;
                 case GameServerUpdateType.Prolongation:
-                    if(model.MonthCount <= 0) return BadRequest("MonthCount must be greater than 0");
+                    if(model.ProlongatePeriod <= 0) return BadRequest("MonthCount must be greater than 0");
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;
-                case GameServerUpdateType.EnableAutoProlongation:
-                    if (model.AutoProlongation == null) return BadRequest("AutoProlongation must have value");
+                case GameServerUpdateType.UpdateSlotCount:
+                    if (model.SlotCount == null || model.SlotCount <= 0)
+                    {
+                        return BadRequest("SlotCount must be > 0");
+                    }
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;
                 default:

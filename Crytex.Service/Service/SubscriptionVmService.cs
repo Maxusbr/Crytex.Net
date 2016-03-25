@@ -915,7 +915,8 @@ namespace Crytex.Service.Service
             _subscriptionVmRepository.Update(sub);
 
             // Mark current and subsequent subscroption BACKUP payments as ReturnedToUser
-            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow
+                && p.ReturnedToUser == false);
             foreach (var payment in backupPaymentsToMark)
             {
                 payment.ReturnDate = dateNow;
@@ -1043,7 +1044,8 @@ namespace Crytex.Service.Service
             _subscriptionVmRepository.Update(sub);
 
             // Mark current and subsequent subscroption payments as ReturnedToUser
-            var paymentsToMark = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            var paymentsToMark = this._fixedSubscriptionPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow 
+                && p.ReturnedToUser == false);
             foreach (var payment in paymentsToMark)
             {
                 payment.ReturnDate = dateNow;
@@ -1070,7 +1072,8 @@ namespace Crytex.Service.Service
             this._unitOfWork.Commit();
 
             // Mark current and subsequent subscroption BACKUP payments as ReturnedToUser
-            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow);
+            var backupPaymentsToMark = this._backupPaymentRepo.GetMany(p => p.SubscriptionVmId == sub.Id && p.DateEnd > dateNow
+                && p.ReturnedToUser == false);
             foreach (var payment in backupPaymentsToMark)
             {
                 payment.ReturnDate = dateNow;
@@ -1099,15 +1102,6 @@ namespace Crytex.Service.Service
                 this._backupPaymentRepo.Add(subscriptionBackupPayment);
                 this._unitOfWork.Commit();
             }
-        }
-
-        private bool UpdateVmTaskRequired(UpdateMachineConfigOptions options)
-        {
-            if (options.Cpu != null || options.Hdd != null || options.Ram != null)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

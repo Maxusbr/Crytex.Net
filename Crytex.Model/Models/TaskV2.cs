@@ -69,6 +69,7 @@ namespace Crytex.Model.Models
         CreateGameServer = 15,
         DeleteGameServer = 16,
         GameServerChangeStatus = 17,
+        UpdateGameServer = 18,
 
 
 
@@ -198,6 +199,12 @@ namespace Crytex.Model.Models
         public string GameServerPassword { get; set; }
         public TypeChangeStatus TypeChangeStatus { get; set; }
         public int GameServerPort { get; set; }
+    }
+
+    [Serializable]
+    public class UpdateGameServerOptions : BaseGameServerOptions
+    {
+        public int? SlotCount { get; set; }
     }
 
     public enum TypeChangeStatus {

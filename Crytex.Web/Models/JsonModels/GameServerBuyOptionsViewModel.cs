@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Crytex.Model.Enums;
 
 namespace Crytex.Web.Models.JsonModels
 {
@@ -10,7 +11,9 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public int? SlotCount { get; set; }
         [Required]
-        public int? ExpireMonthCount { get; set; }
+        public int? ExpirePeriod { get; set; }
+        [Required]
+        public CountingPeriodType? CountingPeriodType { get; set; }
         [Required]
         public string ServerName { get; set; }
         [Required]
