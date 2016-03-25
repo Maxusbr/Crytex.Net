@@ -11,5 +11,6 @@ namespace Crytex.Model.Models.GameServers
         public int GameServersCount { get; set; }
         public int GameServersMaxCount { get; set; }
         public ICollection<Game> SupportedGames { get; set; }
+        public ICollection<GameServer> GameServers { get; set; } 
     }
 }

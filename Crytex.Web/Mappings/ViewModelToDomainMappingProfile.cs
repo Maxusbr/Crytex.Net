@@ -41,10 +41,10 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<PhoneCallRequestEditViewModel, PhoneCallRequest>();
             Mapper.CreateMap<AdminBillingSearchParamsViewModel, BillingSearchParams>();
             Mapper.CreateMap<BillingSearchParamsViewModel, BillingSearchParams>();
-            Mapper.CreateMap<DiscountViewModel, Discount>();
             Mapper.CreateMap<GameServerViewModel, GameServer>();
             Mapper.CreateMap<GameServerViewModel, BuyGameServerOption>();
-            Mapper.CreateMap<GameViewModel, Game>();
+            Mapper.CreateMap<GameViewModel, Game>()
+                .ForMember(dest => dest.ImageFileDescriptor, opt => opt.MapFrom(source => new FileDescriptor { Path = source.ImageFileDescriptor.Path, Id = source.ImageFileDescriptorId })); ;
             Mapper.CreateMap<GameHostViewModel, GameHost>();
             Mapper.CreateMap<GameHostViewModel, GameHostCreateOptions>();
             Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>()
@@ -70,6 +70,9 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<NewsViewModel, News>();
             Mapper.CreateMap<SnapshotVmViewModel, SnapshotVm>();
             Mapper.CreateMap<GameServerBuyOptionsViewModel, BuyGameServerOption>();
+            Mapper.CreateMap<HyperVHostViewModel, HyperVHost>();
+            Mapper.CreateMap<BonusReplenishmentViewModel, BonusReplenishment>();
+            Mapper.CreateMap<LongTermDiscountViewModel, LongTermDiscount>();
         }
     }
 }

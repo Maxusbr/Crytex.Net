@@ -1,10 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Crytex.Model.Enums;
 
 namespace Crytex.Web.Models.JsonModels
 {
-    public class GameViewModel
+    public class GameViewModel : GameSimpleViewModel
+    {
+        public IEnumerable<GameServerTariffSimpleView> GameServerTariffs { get; set; }
+    }
+
+    // Without GameServerTariffs property
+    public class GameSimpleViewModel
     {
         [Required]
         public Int32 Id { get; set; }
@@ -22,6 +29,9 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public int ImageFileDescriptorId { get; set; }
 
-        public GameServerTariffView GameServerTariff { get; set; }
+        public string Description { get; set; }
+        public bool Disabled { get; set; }
+
+        public FileDescriptorViewModel ImageFileDescriptor { get; set; }
     }
 }

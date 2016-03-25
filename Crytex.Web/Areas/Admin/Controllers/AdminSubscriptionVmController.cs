@@ -167,7 +167,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// Обновление характеристик машины
         /// </summary>
         [HttpPost]
-        public IHttpActionResult UpdateMachineConfiguration(MachineConfigUpdateViewModel model)
+        public IHttpActionResult UpdateSubscriptionConfiguration(MachineConfigUpdateViewModel model)
         {
             if (!this.ModelState.IsValid)
             {
@@ -175,9 +175,26 @@ namespace Crytex.Web.Areas.Admin.Controllers
             }
 
             var serviceOptions = Mapper.Map<UpdateMachineConfigOptions>(model);
-            this._subscriptionVmService.UpdateSubscriptionMachineConfig(model.SubscriptionId.Value, serviceOptions);
+            this._subscriptionVmService.UpdateSubscriptionConfig(model.SubscriptionId.Value, serviceOptions);
 
             return Ok();
+        }
+
+
+
+
+
+        [HttpPost]
+        public IHttpActionResult UpdateSubscriptionBackupStoragePeriod(UpdateSubscriptionBackupStoragePeriodModel model )
+        {
+            if (model.NewPeriodDays < 0)
+            {
+                return BadRequest("Backup storage period cannot be negative");
+            }
+
+            _subscriptionVmService.UpdateSubscriptionBackupStoragePeriod(model.SubscriptionId, model.NewPeriodDays);
+
+            return this.Ok();
         }
     }
 

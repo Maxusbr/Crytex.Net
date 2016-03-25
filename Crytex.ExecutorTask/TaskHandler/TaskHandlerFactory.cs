@@ -277,28 +277,100 @@ namespace Crytex.ExecutorTask.TaskHandler
 
         private ITaskHandler GetCreateGameServerTaskHandler(TaskV2 task, GameServer gameServer)
         {
-            ConnectParam param = new ConnectParam
-            {
-                FamilyGame = gameServer.GameServerTariff.Game.Family,
-                SshIp = gameServer.GameHost.ServerAddress,
-                GameName = gameServer.GameServerTariff.Game.Name,
-                SshPort = gameServer.GameHost.Port,
-                SshPassword = gameServer.GameHost.Password,
-                SshUserName = gameServer.GameHost.UserName
-            };
+            ConnectParam param = GetGameHostConnectParam(gameServer);
             IGameHost provider = GameServerFactory.Instance.Get(param);
             var handler = new CreateGameServerTaskHandler(task, provider);
 
             return handler;
         }
 
+        private string MapGameName(GameFamily family)
+        {
+            string gameName = null;
+
+            switch (family)
+            {
+                case GameFamily.Cs:
+                    gameName = "cs";
+                    break;
+                case GameFamily.Ark:
+                    gameName = "ark";
+                    break;
+                case GameFamily.Arma3:
+                    gameName = "arma3";
+                    break;
+                case GameFamily.Css:
+                    gameName = "css";
+                    break;
+                case GameFamily.CsGo:
+                    gameName = "csgo";
+                    break;
+                case GameFamily.Cure:
+                    gameName = "cure";
+                    break;
+                case GameFamily.Dods:
+                    gameName = "dods";
+                    break;
+                case GameFamily.GMod:
+                    gameName = "gmod";
+                    break;
+                case GameFamily.L4D:
+                    gameName = "l4d";
+                    break;
+                case GameFamily.L4D2:
+                    gameName = "l4d2";
+                    break;
+                case GameFamily.Minecraft:
+                    break;
+                case GameFamily.SaMp:
+                    break;
+                case GameFamily.T2F:
+                    gameName = "t2f";
+                    break;
+                case GameFamily.Bmdm:
+                    gameName = "bmdm";
+                    break;
+                case GameFamily.Cscz:
+                    gameName = "cscz";
+                    break;
+                case GameFamily.Insurgency:
+                    gameName = "ins";
+                    break;
+                case GameFamily.JustCause2:
+                    gameName = "jc2";
+                    break;
+            }
+
+            return gameName;
+        }
+
         private ITaskHandler GetChangeStatusGameServerTaskHandler(TaskV2 task, GameServer gameServer)
         {
-            throw new NotFiniteNumberException();
+            var param = GetGameHostConnectParam(gameServer);
+            IGameHost provider = GameServerFactory.Instance.Get(param);
+            var handler = new ChangeGameServerStatusTaskHandler(task, provider);
+
+            return handler;
         }
         private ITaskHandler GetDeleteGameServerTaskHandler(TaskV2 task, GameServer gameServer)
         {
             throw new NotFiniteNumberException();
+        }
+
+        private ConnectParam GetGameHostConnectParam(GameServer gameServer)
+        {
+            ConnectParam param = new ConnectParam
+            {
+                FamilyGame = gameServer.GameServerTariff.Game.Family,
+                SshIp = gameServer.GameHost.ServerAddress,
+                GameName = MapGameName(gameServer.GameServerTariff.Game.Family),
+                SshPort = gameServer.GameHost.Port,
+                SshPassword = gameServer.GameHost.Password,
+                SshUserName = gameServer.GameHost.UserName,
+                Path = "/host"//"/home/vncuser/host"
+            };
+
+            return param;
         }
         #endregion // Private methods
     }

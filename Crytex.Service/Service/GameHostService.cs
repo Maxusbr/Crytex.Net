@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
+using Crytex.Model.Exceptions;
 using Crytex.Model.Models.GameServers;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using PagedList;
+using ValidationException = System.ComponentModel.DataAnnotations.ValidationException;
 
 namespace Crytex.Service.Service
 {
@@ -25,6 +26,18 @@ namespace Crytex.Service.Service
             _unitOfWork = unitOfWork;
         }
 
+
+        public GameHost GetById(int id)
+        {
+            var host = _gameHostRepository.Get(x => x.Id == id, x => x.GameServers);
+
+            if (host == null)
+            {
+                throw new InvalidIdentifierException($"GameHost with id={id} doesnt exist");
+            }
+
+            return host;
+        }
 
         public GameHost Create(GameHostCreateOptions options)
         {
@@ -123,6 +136,34 @@ namespace Crytex.Service.Service
             var pagedList = _gameHostRepository.GetPage(pageInfo, where, x => x.Id, false, x => x.SupportedGames);
 
             return pagedList;
+        }
+
+        public int GetFreePort(int id)
+        {
+            var host = GetById(id);
+            var gameServersSortedByPort = host.GameServers.OrderBy(gs => gs.FirstPortInRange).ToList();
+
+            var newPort = 10000;
+            foreach (var gameServer in gameServersSortedByPort)
+            {
+                if (newPort >= gameServer.FirstPortInRange &&
+                    newPort <= gameServer.FirstPortInRange + gameServer.PortRangeSize - 1)
+                {
+                    newPort = gameServer.FirstPortInRange + gameServer.PortRangeSize;
+                    continue;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            if (newPort > 65000)
+            {
+                throw new ApplicationException("no ports available");
+            }
+
+            return newPort;
         }
 
         private void ValidateHostEntity(GameHost host)

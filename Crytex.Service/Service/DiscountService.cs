@@ -5,94 +5,139 @@ using Crytex.Service.IService;
 using System.Collections.Generic;
 using Crytex.Model.Models;
 using System.Linq;
+using System;
 
 namespace Crytex.Service.Service
 {
     class DiscountService : IDiscountService
     {
-        private readonly IDiscountRepository _discountRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IBonusReplenishmentRepository _bonusReplenishmentRepository;
+        private readonly ILongTermDiscountRepository _longTermDiscountRepository;
 
-        public DiscountService(IUnitOfWork unitOfWork, IDiscountRepository discountRepository)
+        public DiscountService(IUnitOfWork unitOfWork, IBonusReplenishmentRepository bonusReplenishmentRepository,
+            ILongTermDiscountRepository longTermDiscountRepository)
         {
             this._unitOfWork = unitOfWork;
-            this._discountRepository = discountRepository;
+            _bonusReplenishmentRepository = bonusReplenishmentRepository;
+            _longTermDiscountRepository = longTermDiscountRepository;
         }
 
-        public IEnumerable<Discount> GetAllDiscounts()
+
+        public decimal GetBonusReplenishment(decimal amount)
         {
-            var discounts = this._discountRepository.GetAll();
+            var discounts = _bonusReplenishmentRepository.GetMany(x => x.UserReplenishmentSize < amount).OrderBy(x => x.UserReplenishmentSize);
+            if (!discounts.Any()) return amount;
+            return amount * (decimal)discounts.Last().BonusSize / 100;
+        }
+
+        public BonusReplenishment GetBobusBonusReplenishmentById(int id)
+        {
+            var replenishment = _bonusReplenishmentRepository.Get(r => r.Id == id);
+
+            if (replenishment == null)
+            {
+                throw new InvalidIdentifierException($"BonusReplenishment with id={id} doesn't exist");
+            }
+
+            return replenishment;
+        }
+
+        public IEnumerable<BonusReplenishment> GetAllBonusReplenishments()
+        {
+            var replenishments = _bonusReplenishmentRepository.GetAll();
+
+            return replenishments;
+        }
+
+        public BonusReplenishment CreateNewBonusReplenishment(BonusReplenishment newReplenishment)
+        {
+            _bonusReplenishmentRepository.Add(newReplenishment);
+            _unitOfWork.Commit();
+
+            return newReplenishment;
+        }
+
+        public void UpdateBonusReplenishment(BonusReplenishment updatedReplenishment)
+        {
+            var replenishmentFromDb = GetBobusBonusReplenishmentById(updatedReplenishment.Id);
+
+            replenishmentFromDb.BonusSize = updatedReplenishment.BonusSize;
+            replenishmentFromDb.Disable = updatedReplenishment.Disable;
+            replenishmentFromDb.UserReplenishmentSize = updatedReplenishment.UserReplenishmentSize;
+
+            _bonusReplenishmentRepository.Update(replenishmentFromDb);
+            _unitOfWork.Commit();
+        }
+
+        public void DeleteBonusReplenishment(int id)
+        {
+            var replenishment = GetBobusBonusReplenishmentById(id);
+            _bonusReplenishmentRepository.Delete(replenishment);
+            _unitOfWork.Commit();
+        }
+
+        public LongTermDiscount GetLongTermDiscountById(int id)
+        {
+            var discount = _longTermDiscountRepository.Get(d => d.Id == id);
+
+            if (discount == null)
+            {
+                throw new InvalidIdentifierException($"LongTermDiscount with id={id} doesn't exist.");
+            }
+
+            return discount;
+        }
+
+        public IEnumerable<LongTermDiscount> GetAllLongTermDiscounts()
+        {
+            var discounts = _longTermDiscountRepository.GetAll();
+
             return discounts;
         }
 
-        public Discount GetDiscountById(int id)
+        public LongTermDiscount CreateNewLongTermDiscount(LongTermDiscount newDiscount)
         {
-            var discount = this._discountRepository.GetById(id);
+            _longTermDiscountRepository.Add(newDiscount);
+            _unitOfWork.Commit();
 
-            if (discount == null)
+            return newDiscount;
+        }
+
+        public void UpdateLongTermDiscount(LongTermDiscount updatedDiscount)
+        {
+            var discountFromDb = GetLongTermDiscountById(updatedDiscount.Id);
+
+            discountFromDb.ResourceType = updatedDiscount.ResourceType;
+            discountFromDb.MonthCount = updatedDiscount.MonthCount;
+            discountFromDb.Disable = updatedDiscount.Disable;
+            discountFromDb.DiscountSize = updatedDiscount.DiscountSize;
+
+            _longTermDiscountRepository.Update(discountFromDb);
+            _unitOfWork.Commit();
+        }
+
+        public void DeleteLongTermDiscount(int id)
+        {
+            var discount = GetLongTermDiscountById(id);
+            _longTermDiscountRepository.Delete(discount);
+            _unitOfWork.Commit();
+        }
+
+        public decimal GetLongTermDiscountAmount(decimal priceWithoutDiscount, int monthCount, ResourceType resourceType)
+        {
+            var discounts =
+                _longTermDiscountRepository.GetMany(d => d.ResourceType == resourceType && d.MonthCount <= monthCount);
+
+            if (discounts.Any() == false)
             {
-                throw new InvalidIdentifierException(string.Format("Discount with Id={0} doesn't exists", id));
+                return 0;
             }
 
-            return discount;
-        }
-        public Discount CreateDiscount(Discount discount)
-        {
-            this._discountRepository.Add(discount);
-            this._unitOfWork.Commit();
+            var discountsSortedByMonthCount = discounts.OrderBy(d => d.MonthCount);
+            var discountToApply = discountsSortedByMonthCount.Last();
 
-            return discount;
-        }
-
-        public void UpdateDiscount(Discount discountUpdate)
-        {
-            var discount = this._discountRepository.GetById(discountUpdate.Id);
-
-            if (discount == null)
-            {
-                throw new InvalidIdentifierException(string.Format("Discount width Id={0} doesn't exists", discountUpdate.Id));
-            }
-
-            discount.Count = discountUpdate.Count;
-            discount.Disable = discountUpdate.Disable;
-            discount.DiscountSize = discountUpdate.DiscountSize;
-            discount.DiscountType = discountUpdate.DiscountType;
-            discount.ResourceType = discountUpdate.ResourceType;
-
-            this._discountRepository.Update(discount);
-            this._unitOfWork.Commit();
-        }
-
-        public void DeleteDiscountById(int id)
-        {
-            var discount = this._discountRepository.GetById(id);
-
-            if (discount == null)
-            {
-                throw new InvalidIdentifierException(string.Format("Discount with Id={0} doesn't exists", id));
-            }
-
-            this._discountRepository.Delete(discount);
-            this._unitOfWork.Commit();
-        }
-
-        public void UpdateDisable(bool disable, TypeDiscount discountType)
-        {
-            var discounts = this._discountRepository.GetMany(d => d.DiscountType == discountType);
-            for (int i = 0; i < discounts.Count; i++)
-            {
-                discounts[i].Disable = disable;
-            }
-
-            this._unitOfWork.Commit();
-        }
-
-        public decimal GetBonusReplenishmentDiscount(decimal amount)
-        {
-            var discounts = this._discountRepository.GetMany(d => d.DiscountType == TypeDiscount.BonusReplenishment &&
-                d.Count <= amount).OrderBy(x => x.Count);
-            if (!discounts.Any()) return amount;
-            return amount * (decimal)discounts.Last().DiscountSize / 100;
+            return (priceWithoutDiscount/(decimal)100)*(decimal)(discountToApply.DiscountSize);
         }
     }
 }

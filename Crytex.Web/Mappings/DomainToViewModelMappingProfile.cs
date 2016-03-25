@@ -81,7 +81,6 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<VmWareVCenter, VmWareVCenterViewModel>();
             Mapper.CreateMap<EmailInfo, EmailInfoesViewModel>();
             Mapper.CreateMap<Statistic, StatisticViewModel>();
-            Mapper.CreateMap<Discount, DiscountViewModel>();
             Mapper.CreateMap<PhoneCallRequest, PhoneCallRequestViewModel>();
             Mapper.CreateMap<VmBackup, VmBackupViewModel>();
             Mapper.CreateMap<UserLoginLogEntry, UserLoginLogEntryModel>();
@@ -149,6 +148,7 @@ namespace Crytex.Web.Mappings
 
             Mapper.CreateMap<BoughtPhysicalServerOption, PhysicalServerOptionViewModel>();
             Mapper.CreateMap<GameServerTariff, GameServerTariffView>();
+            Mapper.CreateMap<GameServerTariff, GameServerTariffSimpleView>();
 
             Mapper.CreateMap<BillingTransactionInfo, BillingTransactionInfoViewModel>()
                 .ForMember(x => x.BillingTransactionId, opt => opt.MapFrom(source => source.BillingTransaction.Id))
@@ -162,12 +162,18 @@ namespace Crytex.Web.Mappings
                 .Include<SubscriptionVmBackupPayment, SubscriptionVmBackupPaymentViewModel>()
                 .Include<PaymentGameServer, PaymentGameServerViewModel>()
                 .Include<BoughtPhysicalServer, BoughtPhysicalServerViewModel>();
-            Mapper.CreateMap<Game, GameViewModel>();
+            Mapper.CreateMap<Game, GameViewModel>()
+                .AfterMap((source, dest) => dest.ImageFileDescriptor.Path = _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path);
+            Mapper.CreateMap<Game, GameSimpleViewModel>()
+                .AfterMap((source, dest) => dest.ImageFileDescriptor.Path = _serverConfig.GetImageFileSavePath() + "/small_" + source.ImageFileDescriptor.Path);
+
             Mapper.CreateMap<GameHost, GameHostViewModel>()
                 .ForMember(x => x.SupportedGamesIds, opt => opt.MapFrom(source => source.SupportedGames.Select(g => g.Id)));
             Mapper.CreateMap<DhcpServer, DhcpServerView>()
                 .ForMember(x => x.Ip, opt => opt.MapFrom(source => source.Ip.ToString()))
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
+            Mapper.CreateMap<BonusReplenishment, BonusReplenishmentViewModel>();
+            Mapper.CreateMap<LongTermDiscount, LongTermDiscountViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();

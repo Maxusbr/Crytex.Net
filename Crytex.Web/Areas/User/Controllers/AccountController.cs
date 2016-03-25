@@ -52,6 +52,7 @@ namespace Crytex.Web.Areas.User.Controllers
 
 
                     var addRoleResult = await _userManager.AddToRoleAsync(user.Id, "FirstStepRegister");
+                   
                     if (addRoleResult.Succeeded)
                     {
                         return this.Ok();
@@ -144,7 +145,24 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return this.Conflict();
         }
+      
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            IdentityResult result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword,
+                model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                return InternalServerError();
+            }
+
+            return Ok();
+        }
         [HttpPost]
         [Authorize(Roles = "User")]
         public async Task<IHttpActionResult> EditUser(FullUserInfoViewModel model)

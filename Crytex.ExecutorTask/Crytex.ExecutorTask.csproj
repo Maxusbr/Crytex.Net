@@ -65,6 +65,7 @@
     <Compile Include="Config\IExecutorTaskConfig.cs" />
     <Compile Include="ITaskQueuePoolManager.cs" />
     <Compile Include="TaskHandler\Implementation\Game\BaseGameTaskHandler.cs" />
+    <Compile Include="TaskHandler\Implementation\Game\ChangeGameServerStatusTaskHandler.cs" />
     <Compile Include="TaskHandler\Implementation\Game\CreateGameServerTaskHandler.cs" />
     <Compile Include="TaskHandler\Implementation\Vm\BaseVmTaskHandler.cs" />
     <Compile Include="TaskHandler\ITaskHandlerManager.cs" />

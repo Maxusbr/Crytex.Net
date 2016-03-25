@@ -3,12 +3,10 @@ using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using Microsoft.Practices.Unity;
 using System;
-using System.Collections.Generic;
 using System.Web.Http;
 using Crytex.Service.Model;
 using AutoMapper;
 using Crytex.Model.Enums;
-using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Areas.User.Controllers
 {
@@ -58,11 +56,12 @@ namespace Crytex.Web.Areas.User.Controllers
         [HttpPost]
         public IHttpActionResult Post([FromBody]GameServerBuyOptionsViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+            model.ExpirePeriod = 30;
+            model.CountingPeriodType = CountingPeriodType.Day;
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
             var options = AutoMapper.Mapper.Map<BuyGameServerOption>(model);
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             options.UserId = userId;
@@ -89,16 +88,20 @@ namespace Crytex.Web.Areas.User.Controllers
 
             switch (model.UpdateType)
             {
-                case GameServerUpdateType.UpdateName:
-                    if (string.IsNullOrEmpty(model.ServerName)) return BadRequest("ServerName must be not empty");
+                case GameServerUpdateType.UpdateSettings:
+                    if (string.IsNullOrEmpty(model.ServerName) && model.AutoProlongation == null)
+                        return BadRequest("ServerName must be not empty");
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;
                 case GameServerUpdateType.Prolongation:
-                    if (model.MonthCount <= 0) return BadRequest("MonthCount must be greater than 0");
+                    if (model.ProlongatePeriod <= 0) return BadRequest("ProlongatePeriod must be greater than 0");
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;
-                case GameServerUpdateType.EnableAutoProlongation:
-                    if (model.AutoProlongation == null) return BadRequest("AutoProlongation must have value");
+                case GameServerUpdateType.UpdateSlotCount:
+                    if (model.SlotCount == null || model.SlotCount <= 0)
+                    {
+                        return BadRequest("SlotCount must be > 0");
+                    }
                     _gameServerService.UpdateGameServer(serverId, serviceOptions);
                     break;
                 default:
@@ -137,6 +140,14 @@ namespace Crytex.Web.Areas.User.Controllers
                     _gameServerService.StopGameServer(serverId);
                     break;
             }
+        }
+
+        [HttpDelete]
+        public IHttpActionResult DeleteGameServer(Guid id)
+        {
+            _gameServerService.DeleteGameServer(id);
+
+            return Ok();
         }
     }
 }

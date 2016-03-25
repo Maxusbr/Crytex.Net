@@ -55,7 +55,9 @@ namespace Crytex.ExecutorTask.TaskHandler
                 {TypeTask.RemoveVm, this.RemoveVmProcessingFinished},
                 {TypeTask.CreateSnapshot, this.CreateSnapshotProcessingFinished},
                 {TypeTask.DeleteSnapshot, this.DeleteSnapshotProcessingFinished},
-                {TypeTask.LoadSnapshot, this.LoadSnapshotProcessingFinished}
+                {TypeTask.LoadSnapshot, this.LoadSnapshotProcessingFinished},
+                {TypeTask.CreateGameServer,  CreateGameServerProcessingFinished},
+                {TypeTask.GameServerChangeStatus,  GameServerChangeStatusProcessingFinished}
             };
         }
 
@@ -276,6 +278,32 @@ namespace Crytex.ExecutorTask.TaskHandler
             var userVm = this._userVmService.GetVmById(createTaskExecResult.TaskEntity.GetOptions<CreateVmOptions>().UserVmId);
             this._notificationManager.SendNewVmCreationEndEmail(taskEntity.UserId, userVm.Name, userVm.OperatingSystem.DefaultAdminName, userVm.OperatingSystemPassword);
         }
+
+
+        private void CreateGameServerProcessingFinished(TaskV2 task, TaskExecutionResult executionResult)
+        {
+            var createServerExecResult = (CreateGameServerTaskExecutionResult) executionResult;
+            var taskOptions = task.GetOptions<CreateGameServerOptions>();
+
+            _gameServerService.UpdatePassword(taskOptions.GameServerId, createServerExecResult.ServerNewPassword);
+            _gameServerService.UpdateServerState(taskOptions.GameServerId, GameServerState.Disable);
+        }
+
+
+        private void GameServerChangeStatusProcessingFinished(TaskV2 task, TaskExecutionResult res)
+        {
+            var taskOptions = task.GetOptions<ChangeGameServerStatusOptions>();
+            switch (taskOptions.TypeChangeStatus)
+            {
+                case TypeChangeStatus.Start:
+                    _gameServerService.UpdateServerState(taskOptions.GameServerId, GameServerState.Enable);
+                    break;
+                case TypeChangeStatus.Stop:
+                    _gameServerService.UpdateServerState(taskOptions.GameServerId, GameServerState.Disable);
+                    break;
+            }
+        }
+
 
         #endregion
 
