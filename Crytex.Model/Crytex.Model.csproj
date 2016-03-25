@@ -121,6 +121,7 @@
     <Compile Include="Models\HelpDeskRequestComment.cs" />
     <Compile Include="Models\HyperVHost.cs" />
     <Compile Include="Models\HyperVHostResource.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\LongTermDiscount.cs" />
     <Compile Include="Models\Message.cs" />

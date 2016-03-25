@@ -18,12 +18,15 @@ namespace Crytex.Service.Service
         private readonly IGameService _gameSerice;
         private readonly IGameHostRepository _gameHostRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILocationService _locationService;
 
-        public GameHostService(IGameService gameSerice, IGameHostRepository gameHostRepository, IUnitOfWork unitOfWork)
+        public GameHostService(IGameService gameSerice, IGameHostRepository gameHostRepository, IUnitOfWork unitOfWork,
+            ILocationService locationService)
         {
             _gameSerice = gameSerice;
             _gameHostRepository = gameHostRepository;
             _unitOfWork = unitOfWork;
+            _locationService = locationService;
         }
 
 
@@ -48,14 +51,18 @@ namespace Crytex.Service.Service
                 UserName = options.UserName,
                 Password = options.Password,
                 GameServersMaxCount = options.GameServersMaxCount,
-                GameServersCount = 0
+                GameServersCount = 0,
+                LocationId = options.LocationId
             };
 
             this.ValidateHostEntity(host);
 
+            var hostLocation = _locationService.GetById(options.LocationId);
+            host.Location = hostLocation;
             if (options.SupportedGamesIds != null && options.SupportedGamesIds.Any())
             {
                 var hostGames = _gameSerice.GetGamesByIds(options.SupportedGamesIds);
+
                 if (hostGames.Count() != options.SupportedGamesIds.Length)
                 {
                     throw new ValidationException("Some of supported games ids is invalid");
@@ -99,6 +106,8 @@ namespace Crytex.Service.Service
                 host.UserName = option.UserName;
             if (!string.IsNullOrEmpty(option.Password))
                 host.Password = option.Password;
+            var hostLocation = _locationService.GetById(option.LocationId);
+            host.Location = hostLocation;
             if (option.SupportedGamesIds != null && option.SupportedGamesIds.Any())
             {
                 var hostGames = _gameSerice.GetGamesByIds(option.SupportedGamesIds);

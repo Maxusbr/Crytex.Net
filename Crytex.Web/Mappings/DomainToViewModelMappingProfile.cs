@@ -174,6 +174,7 @@ namespace Crytex.Web.Mappings
                 .ForMember(x => x.Id, opt => opt.MapFrom(src => src.Id.ToString()));
             Mapper.CreateMap<BonusReplenishment, BonusReplenishmentViewModel>();
             Mapper.CreateMap<LongTermDiscount, LongTermDiscountViewModel>();
+            Mapper.CreateMap<Location, LocationViewModel>();
 
             this.MapPagedList<HelpDeskRequest, HelpDeskRequestViewModel>();
             this.MapPagedList<HelpDeskRequestComment, HelpDeskRequestCommentViewModel>();

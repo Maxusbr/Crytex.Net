@@ -73,6 +73,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<HyperVHostViewModel, HyperVHost>();
             Mapper.CreateMap<BonusReplenishmentViewModel, BonusReplenishment>();
             Mapper.CreateMap<LongTermDiscountViewModel, LongTermDiscount>();
+            Mapper.CreateMap<LocationViewModel, Location>();
         }
     }
 }

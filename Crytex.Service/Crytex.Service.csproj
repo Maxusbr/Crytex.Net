@@ -96,6 +96,7 @@
     <Compile Include="IService\IGameServerService.cs" />
     <Compile Include="IService\IHelpDeskRequestService.cs" />
     <Compile Include="IService\IHostedWebApplicationService.cs" />
+    <Compile Include="IService\ILocationService.cs" />
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
     <Compile Include="IService\INewsService.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Service\HelpDeskRequestService.cs" />
     <Compile Include="Service\HostedWebApplicationService.cs" />
     <Compile Include="IService\IGameService.cs" />
+    <Compile Include="Service\LocationService.cs" />
     <Compile Include="Service\LogService.cs" />
     <Compile Include="Service\NetTrafficCounterService.cs" />
     <Compile Include="Service\NewsService.cs" />
