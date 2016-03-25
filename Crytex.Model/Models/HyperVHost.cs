@@ -13,6 +13,7 @@ namespace Crytex.Model.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
+        public string Name { get; set; }
         public string Host { get; set; }
         public int CoreNumber { get; set; }
         public int RamSize { get; set; }
@@ -20,8 +21,10 @@ namespace Crytex.Model.Models
         public string Password { get; set; }
         public bool Valid { get; set; }
         public DateTime DateAdded { get; set; }
-        public Guid SystemCenterVirtualManagerId { get; set; }
+        public Guid? SystemCenterVirtualManagerId { get; set; }
         public bool Deleted { get; set; }
+        public bool CreatedManual { get; set; }
+        public bool Disabled { get; set; }
         public string DefaultVmNetworkName { get; set; }
 
         [ForeignKey("SystemCenterVirtualManagerId")]

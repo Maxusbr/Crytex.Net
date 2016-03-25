@@ -70,6 +70,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<NewsViewModel, News>();
             Mapper.CreateMap<SnapshotVmViewModel, SnapshotVm>();
             Mapper.CreateMap<GameServerBuyOptionsViewModel, BuyGameServerOption>();
+            Mapper.CreateMap<HyperVHostViewModel, HyperVHost>();
             Mapper.CreateMap<BonusReplenishmentViewModel, BonusReplenishment>();
             Mapper.CreateMap<LongTermDiscountViewModel, LongTermDiscount>();
         }
