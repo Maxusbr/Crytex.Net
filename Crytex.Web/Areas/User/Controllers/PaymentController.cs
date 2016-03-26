@@ -1,10 +1,7 @@
-﻿using System.Linq;
-using Crytex.Service.IService;
+﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;

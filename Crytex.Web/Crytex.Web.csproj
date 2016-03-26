@@ -282,6 +282,7 @@
     <Compile Include="Areas\Admin\Controllers\AdminLongTermDiscountController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentGameServerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminPaymentSystemController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerBoughtController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerOptionsController.cs" />

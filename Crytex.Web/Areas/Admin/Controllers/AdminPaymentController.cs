@@ -1,9 +1,6 @@
 ﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;
@@ -85,57 +82,6 @@ namespace Crytex.Web.Areas.Admin
                 return BadRequest(ModelState);
             }
             this._paymentService.DeleteCreditPaymentOrderById(guid);
-
-            return Ok();
-        }
-
-        // GET: api/AdminPayment/PaymentSystems
-        /// <summary>
-        /// Получить список доступных платежных систем
-        /// </summary>
-        /// <returns></returns>
-        public IHttpActionResult PaymentSystems()
-        {
-            var systems = _paymentService.GetPaymentSystems();
-            var model = AutoMapper.Mapper.Map<IEnumerable<PaymentSystemView>>(systems);
-
-            return Ok(model);
-        }
-
-        // POST: api/AdminPayment/EnablePaymentSystem
-        /// <summary>
-        /// Включить платежную систему 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public IHttpActionResult EnablePaymentSystem(string id)
-        {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
-            {
-                ModelState.AddModelError("Id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            _paymentService.EnableDisablePaymentSystem(guid, true);
-
-            return Ok();
-        }
-
-        // POST: api/AdminPayment/EnablePaymentSystem
-        /// <summary>
-        /// Выключить платежную систему 
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public IHttpActionResult DisablePaymentSystem(string id)
-        {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
-            {
-                ModelState.AddModelError("Id", "Invalid Guid format");
-                return BadRequest(ModelState);
-            }
-            _paymentService.EnableDisablePaymentSystem(guid, false);
 
             return Ok();
         }

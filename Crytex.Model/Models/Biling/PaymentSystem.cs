@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Crytex.Model.Models.Biling
 {
@@ -10,5 +6,9 @@ namespace Crytex.Model.Models.Biling
     {
         public string Name { get; set; }
         public bool IsEnabled { get; set; }
+        public PaymentSystemType PaymentType { get; set; }
+        public int ImageFileDescriptorId { get; set; }
+        [ForeignKey("ImageFileDescriptorId")]
+        public FileDescriptor ImageFileDescriptor { get; set; }
     }
 }

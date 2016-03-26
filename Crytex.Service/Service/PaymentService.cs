@@ -2,7 +2,6 @@
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
-using Crytex.Model.Models;
 using Crytex.Service.IService;
 using System;
 using System.Collections.Generic;
