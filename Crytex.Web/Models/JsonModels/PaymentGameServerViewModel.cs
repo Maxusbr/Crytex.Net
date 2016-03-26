@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Web;
-using Crytex.Model.Models;
-using Crytex.Model.Models.Biling;
-using Crytex.Model.Models.GameServers;
 
 namespace Crytex.Web.Models.JsonModels
 {

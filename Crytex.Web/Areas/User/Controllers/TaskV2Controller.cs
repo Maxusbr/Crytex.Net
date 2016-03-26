@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
-using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using PagedList;
 using Microsoft.Practices.Unity;
