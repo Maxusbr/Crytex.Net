@@ -8,5 +8,7 @@
         public string Password { get; set; }
         public int[] SupportedGamesIds { get; set; }
         public int GameServersMaxCount { get; set; }
+        public string Path { get; set; }
+        public int RangePortStart { get; set; }
     }
 }

@@ -48,7 +48,9 @@ namespace Crytex.Service.Service
                 UserName = options.UserName,
                 Password = options.Password,
                 GameServersMaxCount = options.GameServersMaxCount,
-                GameServersCount = 0
+                GameServersCount = 0,
+                Path = options.Path,
+                RangePortStart = options.RangePortStart
             };
 
             this.ValidateHostEntity(host);
@@ -143,7 +145,7 @@ namespace Crytex.Service.Service
             var host = GetById(id);
             var gameServersSortedByPort = host.GameServers.OrderBy(gs => gs.FirstPortInRange).ToList();
 
-            var newPort = 10000;
+            var newPort = host.RangePortStart;//10000;
             foreach (var gameServer in gameServersSortedByPort)
             {
                 if (newPort >= gameServer.FirstPortInRange &&

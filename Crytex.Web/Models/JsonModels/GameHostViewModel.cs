@@ -17,5 +17,7 @@ namespace Crytex.Web.Models.JsonModels
         [Required]
         public uint GameServersMaxCount { get; set; }
         public int[] SupportedGamesIds { get; set; }
+        public string Path { get; set; }
+        public int RangePortStart { get; set; }
     }
 }
