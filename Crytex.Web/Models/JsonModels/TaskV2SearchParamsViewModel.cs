@@ -15,12 +15,9 @@ namespace Crytex.Web.Models.JsonModels
         public StatusTask[] StatusTasks { get; set; }
         [EnumDataType(typeof(TypeVirtualization))]
         public TypeVirtualization? Virtualization { get; set; }
-    }
 
-    public class AdminTaskV2SearchParamsViewModel: TaskV2SearchParamsViewModel
-    {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public DateTime DateFrom { get; set; }
+        public DateTime DateTo { get; set; }
         [EnumDataType(typeof(TypeDate))]
         public TypeDate? TypeDate { get; set; }
     }

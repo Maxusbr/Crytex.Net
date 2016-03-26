@@ -367,14 +367,14 @@ namespace Crytex.Service.Service
                 where = where.And(x => x.SubscriptionVm.UserId == userId);
             }
 
-            if (searchParams.FromDate != null)
+            if (searchParams.DateFrom != null)
             {
-                where = where.And(x => x.Date >= searchParams.FromDate);
+                where = where.And(x => x.Date >= searchParams.DateFrom);
             }
 
-            if (searchParams.ToDate != null)
+            if (searchParams.DateTo != null)
             {
-                where = where.And(x => x.Date <= searchParams.ToDate);
+                where = where.And(x => x.Date <= searchParams.DateTo);
             }
 
             if (searchParams.SubscriptionVmId != null)
