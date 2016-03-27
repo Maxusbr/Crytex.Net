@@ -60,7 +60,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public IHttpActionResult CreatePaymentSystem(PaymentSystemView model)
+        public IHttpActionResult Post(PaymentSystemView model)
         {
             if (!ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]
-        public IHttpActionResult UpdatePaymentSystem(GameViewModel model)
+        public IHttpActionResult UpdatePaymentSystem(PaymentSystemView model)
         {
             if (!ModelState.IsValid)
             {

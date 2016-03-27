@@ -30,7 +30,8 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<ApplicationUserViewModel, ApplicationUser>();
             Mapper.CreateMap<RegionViewModel, Region>();
             Mapper.CreateMap<TaskV2ViewModel, TaskV2>();
-            Mapper.CreateMap<PaymentSystemView, PaymentSystem>();
+            Mapper.CreateMap<PaymentSystemView, PaymentSystem>()
+                .ForMember(dest => dest.ImageFileDescriptor, opt => opt.MapFrom(source => new FileDescriptor { Path = source.ImageFileDescriptor.Path, Id = source.ImageFileDescriptorId }));
             Mapper.CreateMap<ServerTemplateEditViewModel,ServerTemplate>();
             Mapper.CreateMap<VmWareVCenterViewModel, VmWareVCenter>();
             Mapper.CreateMap<UserVmSearchParamsViewModel, UserVmSearchParams>();
@@ -45,7 +46,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<GameServerViewModel, GameServer>();
             Mapper.CreateMap<GameServerViewModel, BuyGameServerOption>();
             Mapper.CreateMap<GameViewModel, Game>()
-                .ForMember(dest => dest.ImageFileDescriptor, opt => opt.MapFrom(source => new FileDescriptor { Path = source.ImageFileDescriptor.Path, Id = source.ImageFileDescriptorId })); ;
+                .ForMember(dest => dest.ImageFileDescriptor, opt => opt.MapFrom(source => new FileDescriptor { Path = source.ImageFileDescriptor.Path, Id = source.ImageFileDescriptorId }));
             Mapper.CreateMap<GameHostViewModel, GameHost>();
             Mapper.CreateMap<GameHostViewModel, GameHostCreateOptions>();
             Mapper.CreateMap<SubscriptionBuyOptionsAdminViewModel, SubscriptionBuyOptions>()

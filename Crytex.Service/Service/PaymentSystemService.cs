@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
@@ -26,7 +27,7 @@ namespace Crytex.Service.Service
             Expression<Func<PaymentSystem, Boolean>> where = x => true;
             if (searchEnabled)
                 where = where.And(x => x.IsEnabled);
-            var list = _paymentSystemRepository.GetMany(where);
+            var list = _paymentSystemRepository.GetMany(where, x => x.ImageFileDescriptor);
             return list;
         }
 
