@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 using AutoMapper;
 using Crytex.Model.Enums;
@@ -50,7 +49,6 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// <summary>
         /// Обновление Game
         /// </summary>
-        /// <param name="id"></param>
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPut]

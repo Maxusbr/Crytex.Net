@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using AutoMapper;
@@ -7,6 +6,7 @@ using Crytex.Model.Models;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using Crytex.Service.Model;
 using System.Linq;
+using Crytex.Model.Models.Biling;
 using Crytex.Model.Models.GameServers;
 using Crytex.Model.Models.WebHostingModels;
 
@@ -30,6 +30,7 @@ namespace Crytex.Web.Mappings
             Mapper.CreateMap<ApplicationUserViewModel, ApplicationUser>();
             Mapper.CreateMap<RegionViewModel, Region>();
             Mapper.CreateMap<TaskV2ViewModel, TaskV2>();
+            Mapper.CreateMap<PaymentSystemView, PaymentSystem>();
             Mapper.CreateMap<ServerTemplateEditViewModel,ServerTemplate>();
             Mapper.CreateMap<VmWareVCenterViewModel, VmWareVCenter>();
             Mapper.CreateMap<UserVmSearchParamsViewModel, UserVmSearchParams>();

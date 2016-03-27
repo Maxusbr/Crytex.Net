@@ -20,13 +20,13 @@ namespace Crytex.Service.Service
         private readonly IBilingService _bilingService;
         private readonly IDiscountService _discountService;
         private readonly ICreditPaymentOrderRepository _creditPaymentOrderRepository;
-        private readonly IPaymentSystemRepository _paymentSystemRepository;
         private readonly IWebHostingPaymentRepository _webHostingPaymentRepo;
         private readonly IFixedSubscriptionPaymentRepository _fixedSubscriptionPaymentRepository;
         private readonly IUsageSubscriptionPaymentRepository _usageSubscriptionPaymentRepository;
         private readonly ISubscriptionBackupPaymentRepository _subscriptionBackupPaymentRepository;
         private readonly IBoughtPhysicalServerRepository _physicalServerPaymentRepository;
         private readonly IPaymentGameServerRepository _gameServerPaymentRepository;
+        private readonly IPaymentSystemRepository _paymentSystemRepository;
 
         public PaymentService(IUnitOfWork unitOfWork, IBillingTransactionRepository billingRepo,
             ICreditPaymentOrderRepository creditPaymentOrderRepo, IPaymentSystemRepository paymentSystemRepository, 
@@ -38,7 +38,7 @@ namespace Crytex.Service.Service
             this._unitOfWork = unitOfWork;
             this._billingTransactionRepository = billingRepo;
             this._creditPaymentOrderRepository = creditPaymentOrderRepo;
-            _paymentSystemRepository = paymentSystemRepository;
+            this._paymentSystemRepository = paymentSystemRepository;
             _discountService = discountService;
             _bilingService = bilingService;
             this._webHostingPaymentRepo = webHostingPaymentRepo;
@@ -110,7 +110,6 @@ namespace Crytex.Service.Service
             _unitOfWork.Commit();
         }
 
-
         public void DeleteCreditPaymentOrderById(Guid id)
         {
             var orderToDelete = this.GetCreditPaymentOrderById(id);
@@ -118,7 +117,6 @@ namespace Crytex.Service.Service
             this._creditPaymentOrderRepository.Delete(orderToDelete);
             this._unitOfWork.Commit();
         }
-
 
         public virtual Payment GetCreditPaymentOrderById(Guid guid)
         {
@@ -130,7 +128,6 @@ namespace Crytex.Service.Service
 
             return order;
         }
-
 
         public IPagedList<Payment> GetPage(int pageNumber, int pageSize, SearchPaymentParams filter = null)
         {
@@ -170,27 +167,6 @@ namespace Crytex.Service.Service
                 x => x.User, x => x.PaymentSystem);
 
             return page;
-        }
-
-        public void EnableDisablePaymentSystem(Guid id, bool enable)
-        {
-            var paymentSystem = _paymentSystemRepository.GetById(id);
-            if (paymentSystem == null)
-            {
-                throw new InvalidIdentifierException($"Payment System with id = {id} doesn't exist.");
-            }
-            paymentSystem.IsEnabled = enable;
-            _paymentSystemRepository.Update(paymentSystem);
-            _unitOfWork.Commit();
-        }
-
-        public IEnumerable<PaymentSystem> GetPaymentSystems(bool searchEnabled = false)
-        {
-            Expression<Func<PaymentSystem, bool>> where = x => true;
-            if(searchEnabled)
-                where = where.And(x => x.IsEnabled);
-            var list = _paymentSystemRepository.GetMany(where);
-            return list;
         }
 
         public IPagedList<BillingTransactionInfo> GetUserBillingTransactionInfosPage(string userId, int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null)

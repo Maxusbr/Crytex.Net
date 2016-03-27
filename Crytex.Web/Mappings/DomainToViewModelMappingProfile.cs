@@ -11,9 +11,7 @@ using Crytex.Web.Models.ViewModels;
 using Crytex.Model.Models.Notifications;
 using Crytex.Service.Model;
 using Crytex.Web.Models;
-using Crytex.Web.Service;
 using Microsoft.Practices.Unity;
-using WebGrease.Css.Extensions;
 using OperatingSystem = Crytex.Model.Models.OperatingSystem;
 using Crytex.Model.Models.WebHostingModels;
 

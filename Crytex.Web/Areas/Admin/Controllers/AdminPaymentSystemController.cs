@@ -1,21 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
+using AutoMapper;
+using Crytex.Model.Models.Biling;
 using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 
 namespace Crytex.Web.Areas.Admin.Controllers
 {
-    public class AdminPaymentSystemController : ApiController
+    /// <summary>
+    /// Операции с системами платажей
+    /// </summary>
+    public class AdminPaymentSystemController : AdminCrytexController
     {
-        private readonly IPaymentService _paymentService;
+        private readonly IPaymentSystemService _paymentSystemService;
 
-        public AdminPaymentSystemController(IPaymentService paymentService)
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="paymentSystemService"></param>
+        public AdminPaymentSystemController(IPaymentSystemService paymentSystemService)
         {
-            this._paymentService = paymentService;
+            _paymentSystemService = paymentSystemService;
         }
-
 
         /// <summary>
         /// Получить список доступных платежных систем
@@ -26,30 +33,79 @@ namespace Crytex.Web.Areas.Admin.Controllers
         [ResponseType(typeof(IEnumerable<PaymentSystemView>))]
         public IHttpActionResult PaymentSystems()
         {
-            var systems = _paymentService.GetPaymentSystems();
+            var systems = _paymentSystemService.GetPaymentSystems();
             var model = AutoMapper.Mapper.Map<IEnumerable<PaymentSystemView>>(systems);
 
             return Ok(model);
         }
 
-        // Put: api/AdminPaymentSystem
         /// <summary>
-        /// Изменение состояния платежной системы
+        /// Получить платежную систему
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPut]
-        public IHttpActionResult ChangeStatePaymentSystem(string id)
+        /// GET: api/AdminPaymentSystem
+        [HttpGet]
+        [ResponseType(typeof(PaymentSystemView))]
+        public IHttpActionResult PaymentSystem(string id)
         {
-            Guid guid;
-            if (!Guid.TryParse(id, out guid))
+            var paymentSystem = _paymentSystemService.GetPaymentSystemById(id);
+
+            return Ok(paymentSystem);
+        }
+
+        /// <summary>
+        /// Создание платёжной системы
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IHttpActionResult CreatePaymentSystem(PaymentSystemView model)
+        {
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("Id", "Invalid Guid format");
                 return BadRequest(ModelState);
             }
-            _paymentService.EnableDisablePaymentSystem(guid, true);
+
+            var paymentSystem = Mapper.Map<PaymentSystem>(model);
+            paymentSystem = _paymentSystemService.Create(paymentSystem);
+
+            return Ok(new { id = paymentSystem.Id });
+        }
+
+        /// <summary>
+        /// Обновление платёжной системы
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut]
+        public IHttpActionResult UpdatePaymentSystem(GameViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var paymentSystem = Mapper.Map<PaymentSystem>(model);
+            _paymentSystemService.Update(paymentSystem);
 
             return Ok();
         }
+
+        /// <summary>
+        /// Удаление платёжной системы
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        public IHttpActionResult DeletePaymentSystem(string id)
+        {
+            _paymentSystemService.Delete(id);
+
+            return Ok();
+        }
+
+
+
+
     }
 }

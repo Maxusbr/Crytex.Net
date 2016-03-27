@@ -1,7 +1,5 @@
 ﻿using PagedList;
-using Crytex.Model.Models;
 using System;
-using System.Collections.Generic;
 using Crytex.Model.Models.Biling;
 using Crytex.Service.Model;
 
@@ -18,9 +16,6 @@ namespace Crytex.Service.IService
         Payment GetCreditPaymentOrderById(Guid guid);
 
         IPagedList<Payment> GetPage(int pageNumber, int pageSize, SearchPaymentParams filter = null);
-
-        void EnableDisablePaymentSystem(Guid id, bool enable);
-        IEnumerable<PaymentSystem> GetPaymentSystems(bool searchEnabled = false);
 
         IPagedList<BillingTransactionInfo> GetUserBillingTransactionInfosPage(string userId, int pageNumber, int pageSize, DateTime? from = null, DateTime? to = null);
     }
