@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Description;
 using AutoMapper;
@@ -31,9 +32,9 @@ namespace Crytex.Web.Areas.Admin.Controllers
         /// GET: api/AdminPaymentSystem
         [HttpGet]
         [ResponseType(typeof(IEnumerable<PaymentSystemView>))]
-        public IHttpActionResult PaymentSystems()
+        public IHttpActionResult PaymentSystems(Boolean searchEnabled = false)
         {
-            var systems = _paymentSystemService.GetPaymentSystems();
+            var systems = _paymentSystemService.GetPaymentSystems(searchEnabled);
             var model = AutoMapper.Mapper.Map<IEnumerable<PaymentSystemView>>(systems);
 
             return Ok(model);
