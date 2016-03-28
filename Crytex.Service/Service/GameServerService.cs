@@ -570,6 +570,12 @@ namespace Crytex.Service.Service
         private void UpdateGameServerSlotCount(Guid serverId, int newSlotCount)
         {
             var server = GetById(serverId);
+
+            if (server.SlotCount == newSlotCount)
+            {
+                throw new ConfigNotChangedException("Current server slot count is same as provided new value");
+            }
+
             var dateNow = DateTime.UtcNow;
 
             if (server.DateExpire < dateNow)
