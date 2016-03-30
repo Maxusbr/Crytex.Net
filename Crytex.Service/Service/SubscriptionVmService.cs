@@ -286,7 +286,7 @@ namespace Crytex.Service.Service
 
         public virtual SubscriptionVm GetById(Guid guid)
         {
-            var sub = this._subscriptionVmRepository.Get(s => s.Id == guid, s => s.UserVm.OperatingSystem, s => s.User, s => s.UserVm.IpAdresses);
+            var sub = this._subscriptionVmRepository.Get(s => s.Id == guid, s => s.UserVm, s => s.UserVm.OperatingSystem, s => s.User, s => s.UserVm.IpAdresses);
 
             if (sub == null)
             {
@@ -834,6 +834,13 @@ namespace Crytex.Service.Service
         {
             var sub = this.GetById(subscriptionId);
 
+            // Check if any config parameter changed
+            var configChanged = CheckConfigChanged(sub.UserVm, options);
+            if(!configChanged)
+            {
+                throw new ConfigNotChangedException("Provided new config values are not changing current config state.");
+            }
+
             switch (sub.SubscriptionType)
             {
                 case SubscriptionType.Fixed:
@@ -845,6 +852,18 @@ namespace Crytex.Service.Service
             }
         }
 
+        private bool CheckConfigChanged(UserVm userVm, UpdateMachineConfigOptions options)
+        {
+            if ((options.Cpu == null || options.Cpu.Value == userVm.CoreCount) &&
+                (options.Hdd == null || options.Hdd.Value == userVm.HardDriveSize) &&
+                (options.Ram == null || options.Ram.Value == userVm.RamCount))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void AddTestPeriod(TestPeriodOptions options)
         {
             _billingService.AddTestPeriod(options);
@@ -853,6 +872,11 @@ namespace Crytex.Service.Service
         public void UpdateSubscriptionBackupStoragePeriod(Guid subscriptionId, int newPeriodDays)
         {
             var sub = this.GetById(subscriptionId);
+
+            if (sub.DailyBackupStorePeriodDays == newPeriodDays)
+            {
+                throw new ConfigNotChangedException("Backup period doesnt is the same as provided new value");
+            }
 
             switch (sub.SubscriptionType)
             {

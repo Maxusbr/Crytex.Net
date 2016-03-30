@@ -13,6 +13,7 @@ namespace Crytex.Web.Helpers
         IncorrectPassword = 2,
         UserBlocked =3,
         NotValidateEmail=4,
-        NotEnoughMoney=5
+        NotEnoughMoney=5,
+        ConfigNotChanged = 6
     }
 }

@@ -29,7 +29,13 @@ namespace Crytex.Web.Helpers
 
         Task<HttpResponseMessage> IHttpActionResult.ExecuteAsync(CancellationToken cancellationToken)
         {
-            var response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+            var response = GetHttpResponseMessage();
+            return Task.FromResult(response);
+        }
+
+        public HttpResponseMessage GetHttpResponseMessage()
+        {
+            var responseMessage = new HttpResponseMessage(HttpStatusCode.InternalServerError)
             {
                 Content = new StringContent(JsonConvert.SerializeObject(new Dictionary<String, Object>()
                 {
@@ -44,9 +50,9 @@ namespace Crytex.Web.Helpers
                     }
                 }))
             };
-            return Task.FromResult(response);
-        }
 
+            return responseMessage;
+        }
     }
 
 }

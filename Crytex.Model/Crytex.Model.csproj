@@ -86,6 +86,7 @@
     <Compile Include="Enums\UrgencyLevel.cs" />
     <Compile Include="Enums\UsageSubscriptionPaymentGroupingTypes.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
+    <Compile Include="Exceptions\ConfigNotChangedException.cs" />
     <Compile Include="Exceptions\CreateVmException.cs" />
     <Compile Include="Exceptions\DbUpdateApplicationException.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
