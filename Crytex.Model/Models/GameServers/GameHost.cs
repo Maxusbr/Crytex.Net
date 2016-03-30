@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Crytex.Model.Models.GameServers
 {
@@ -10,6 +12,10 @@ namespace Crytex.Model.Models.GameServers
         public string Password { get; set; }
         public int GameServersCount { get; set; }
         public int GameServersMaxCount { get; set; }
+        public Guid LocationId { get; set; }
+
+        [ForeignKey("LocationId")]
+        public Location Location { get; set; }
         public ICollection<Game> SupportedGames { get; set; }
         public ICollection<GameServer> GameServers { get; set; } 
     }
