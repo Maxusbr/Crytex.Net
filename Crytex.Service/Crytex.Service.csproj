@@ -99,6 +99,7 @@
     <Compile Include="IService\ILogService.cs" />
     <Compile Include="IService\INetTrafficCounterService.cs" />
     <Compile Include="IService\INewsService.cs" />
+    <Compile Include="IService\IPaymentSystemService.cs" />
     <Compile Include="IService\IPhysicalServerService.cs" />
     <Compile Include="IService\ITriggerService.cs" />
     <Compile Include="IService\IUserLoginLogService.cs" />
@@ -187,6 +188,7 @@
     <Compile Include="Service\NewsService.cs" />
     <Compile Include="Service\OAuthService.cs" />
     <Compile Include="Service\PaymentForecastService.cs" />
+    <Compile Include="Service\PaymentSystemService.cs" />
     <Compile Include="Service\PhoneCallRequestService.cs" />
     <Compile Include="Service\DiscountService.cs" />
     <Compile Include="Service\PhysicalServerService.cs" />
