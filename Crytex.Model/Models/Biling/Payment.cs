@@ -32,7 +32,8 @@ namespace Crytex.Model.Models.Biling
         Interkassa = 2,
         PayPal = 3,
         WebMoney = 4,
-        YandexMoney = 5
+        YandexMoney = 5,
+        TestSystem
     }
 
     public enum PaymentStatus

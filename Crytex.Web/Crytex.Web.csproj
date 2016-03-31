@@ -279,9 +279,11 @@
     <Compile Include="Areas\Admin\Controllers\AdminGameServerTariffController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminGameServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminHyperVHostController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminLocationController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminLongTermDiscountController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminNewsController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPaymentGameServerController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminPaymentSystemController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerBoughtController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerController.cs" />
     <Compile Include="Areas\Admin\Controllers\AdminPhysicalServerOptionsController.cs" />
@@ -330,6 +332,7 @@
     <Compile Include="Areas\User\Controllers\SubscriptionVmController.cs" />
     <Compile Include="Areas\User\Controllers\UserController.cs" />
     <Compile Include="Areas\User\Controllers\UserCrytexController.cs" />
+    <Compile Include="Areas\User\Controllers\UserPaymentSystemController.cs" />
     <Compile Include="Areas\User\Controllers\VmBackupController.cs" />
     <Compile Include="Areas\User\Controllers\WebHostingController.cs" />
     <Compile Include="Areas\User\Controllers\WebHostingPaymentController.cs" />
@@ -383,6 +386,7 @@
     <Compile Include="Models\JsonModels\GameServerMachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\GameViewModel.cs" />
+    <Compile Include="Models\JsonModels\LocationViewModel.cs" />
     <Compile Include="Models\JsonModels\LongTermDiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
     <Compile Include="Models\JsonModels\BillingTransactionInfoViewModel.cs" />

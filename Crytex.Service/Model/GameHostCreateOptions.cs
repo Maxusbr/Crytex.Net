@@ -1,4 +1,6 @@
-﻿namespace Crytex.Service.Model
+﻿using System;
+
+namespace Crytex.Service.Model
 {
     public class GameHostCreateOptions
     {
@@ -8,5 +10,6 @@
         public string Password { get; set; }
         public int[] SupportedGamesIds { get; set; }
         public int GameServersMaxCount { get; set; }
+        public Guid LocationId { get; set; }
     }
 }

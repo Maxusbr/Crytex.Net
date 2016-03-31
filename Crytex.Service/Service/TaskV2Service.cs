@@ -141,7 +141,7 @@ namespace Crytex.Service.Service
  
                     if (searchParams.TypeDate == TypeDate.StartedAt)
                     {
-                        where = where.And(x => x.StartedAt >= searchParams.StartDate && x.StartedAt <= searchParams.EndDate);
+                        where = where.And(x => x.StartedAt >= searchParams.DateFrom && x.StartedAt <= searchParams.DateTo);
                     }                   
                 }
             }

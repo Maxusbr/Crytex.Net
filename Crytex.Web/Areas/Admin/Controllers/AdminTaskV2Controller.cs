@@ -34,7 +34,7 @@ namespace Crytex.Web.Areas.Admin
         /// <returns></returns>
         // GET: api/TaskV2
         [ResponseType(typeof(PageModel<TaskV2ViewModel>))]
-        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]AdminTaskV2SearchParamsViewModel searchParams = null)
+        public IHttpActionResult Get(int pageNumber, int pageSize, [FromUri]TaskV2SearchParamsViewModel searchParams = null)
         {
             if (pageNumber <= 0 || pageSize <= 0)
                 return BadRequest("PageNumber and PageSize must be grater than 1");

@@ -89,9 +89,9 @@ namespace Crytex.Service.Service
                     where = where.And(p => p.UserId == filter.UserId);
                 }
 
-                if (filter.FromDate != null && filter.ToDate != null)
+                if (filter.DateFrom != null && filter.DateTo != null)
                 {
-                    where = where.And(x => x.Date >= filter.FromDate && x.Date <= filter.ToDate);
+                    where = where.And(x => x.Date >= filter.DateFrom && x.Date <= filter.DateTo);
                 }
                 if (!string.IsNullOrEmpty(filter.ServerId))
                 {
@@ -570,6 +570,12 @@ namespace Crytex.Service.Service
         private void UpdateGameServerSlotCount(Guid serverId, int newSlotCount)
         {
             var server = GetById(serverId);
+
+            if (server.SlotCount == newSlotCount)
+            {
+                throw new ConfigNotChangedException("Current server slot count is same as provided new value");
+            }
+
             var dateNow = DateTime.UtcNow;
 
             if (server.DateExpire < dateNow)

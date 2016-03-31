@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using Crytex.Web.Models.JsonModels;
-using Microsoft.Ajax.Utilities;
 using Newtonsoft.Json;
 using PagedList;
 using Microsoft.Practices.Unity;
@@ -47,15 +43,8 @@ namespace Crytex.Web.Areas.User
 
             searchParams.UserId = this.CrytexContext.UserInfoProvider.GetUserId();
 
-            if (searchParams != null)
-            {
-                var taskV2Params = AutoMapper.Mapper.Map<TaskV2SearchParams>(searchParams);
-                tasks = _taskService.GetPageTasks(pageNumber, pageSize, taskV2Params);
-            }
-            else
-            {
-                tasks = _taskService.GetPageTasks(pageNumber, pageSize);
-            }
+            var taskV2Params = AutoMapper.Mapper.Map<TaskV2SearchParams>(searchParams);
+            tasks = _taskService.GetPageTasks(pageNumber, pageSize, taskV2Params);
 
             var viewTasks = AutoMapper.Mapper.Map<PageModel<TaskV2ViewModel>>(tasks);
             return Ok(viewTasks);
