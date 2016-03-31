@@ -48,6 +48,11 @@ namespace Crytex.Model.Models
         public string ContactPerson { get; set; }
         public decimal Balance { get; set; }
         public string Region { get; set; }
+        public string CompanyName { get; set; }
+        public string INN { get; set; }
+        public string KPP { get; set; }
+        public string JuridicalAddress { get; set; }
+        public string MailAddress { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }

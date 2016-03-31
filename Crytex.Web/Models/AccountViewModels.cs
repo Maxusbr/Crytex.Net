@@ -75,6 +75,11 @@ namespace Crytex.Web.Models
         public string City { get; set; }
         public String Address { get; set; }
         public String CodePhrase { get; set; }
+        public string CompanyName { get; set; }
+        public string INN { get; set; }
+        public string KPP { get; set; }
+        public string JuridicalAddress { get; set; }
+        public string MailAddress { get; set; }
     }
 
 
