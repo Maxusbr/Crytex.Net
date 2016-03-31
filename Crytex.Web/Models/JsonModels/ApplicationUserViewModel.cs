@@ -32,6 +32,18 @@ namespace Crytex.Web.Models.JsonModels
 
             return true;
         }
+        public string CompanyName { get; set; }
+        public string INN { get; set; }
+        public string KPP { get; set; }
+        public string JuridicalAddress { get; set; }
+        public string MailAddress { get; set; }
+        public bool ValidateForJuridicalInfo()
+        {
+            if (UserType == TypeUser.PhysicalPerson) return true;
+            return !string.IsNullOrEmpty(CompanyName) && !string.IsNullOrEmpty(INN) &&
+                   !string.IsNullOrEmpty(KPP) && !string.IsNullOrEmpty(JuridicalAddress) &&
+                   !string.IsNullOrEmpty(MailAddress);
+        }
 
         public bool ValidateForEditingScenario()
         {
