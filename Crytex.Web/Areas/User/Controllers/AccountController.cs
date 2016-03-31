@@ -201,7 +201,19 @@ namespace Crytex.Web.Areas.User.Controllers
                 user.UserType = model.UserType;
                 user.City = model.City;
                 user.Country = model.Country;
-
+                if (user.UserType == TypeUser.JuridicalPerson)
+                {
+                    if (!ValidateJuridicalUser(model))
+                    {
+                        ModelState.AddModelError("", "Failed to verify juridical info");
+                        return BadRequest(ModelState);
+                    }
+                    user.CompanyName = model.CompanyName;
+                    user.INN = model.INN;
+                    user.KPP = model.KPP;
+                    user.JuridicalAddress = model.JuridicalAddress;
+                    user.MailAddress = model.MailAddress;
+                }
                 var result = await _userManager.UpdateAsync(user);
 
                 if (!result.Succeeded)
