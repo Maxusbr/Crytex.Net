@@ -6,6 +6,7 @@ using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models.GameServers;
+using Crytex.Service.Extension;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using PagedList;
@@ -87,6 +88,15 @@ namespace Crytex.Service.Service
             var hosts = _gameHostRepository.GetMany(where);
 
             return hosts.FirstOrDefault();
+        }
+
+        public IEnumerable<GameHost> GetGameHostsByGameId(int gameId)
+        {
+            Expression<Func<GameHost, bool>> where = x => x.GameServersCount < x.GameServersMaxCount;
+            if (gameId != 0)
+                where.And(x => x.SupportedGames.Any(y => y.Id == gameId));
+            var hosts = _gameHostRepository.GetMany(where, host => host.Location);
+            return hosts;
         }
 
         public void Update(Int32 id, GameHostCreateOptions option)
