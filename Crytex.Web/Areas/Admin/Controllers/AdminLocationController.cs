@@ -45,16 +45,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
         [ResponseType(typeof(IEnumerable<LocationFullViewModel>))]
         public IHttpActionResult Get(int gameId)
         {
-            var hosts = _gameHostService.GetGameHostsByGameId(gameId).ToList();
-            var models =
-                    Mapper.Map<IEnumerable<LocationFullViewModel>>(hosts.GroupBy(o => o.Location).Select(x => x.Key));
-            var locationFullViewModels = models as IList<LocationFullViewModel> ?? models.ToList();
-            foreach (var el in locationFullViewModels)
-            {
-                el.GameHosts = Mapper.Map<IEnumerable<GameHostViewModel>>(hosts.Where(o => o.Location.Id == el.Id));
-            }
+            var locations = _locationService.GetLocationsByGameId(gameId);
+            var models = Mapper.Map<IEnumerable<LocationFullViewModel>>(locations);
 
-            return Ok(locationFullViewModels);
+            return Ok(models);
         }
 
 
