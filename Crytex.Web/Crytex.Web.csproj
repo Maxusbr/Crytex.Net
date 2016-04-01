@@ -315,6 +315,7 @@
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\BillingTransactionController.cs" />
     <Compile Include="Areas\User\Controllers\GameController.cs" />
+    <Compile Include="Areas\User\Controllers\LocationController.cs" />
     <Compile Include="Areas\User\Controllers\OperatingSystemController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\GameServerTariffController.cs" />
@@ -386,6 +387,7 @@
     <Compile Include="Models\JsonModels\GameServerMachineConfigUpdateViewModel.cs" />
     <Compile Include="Models\JsonModels\GameServerViewModel.cs" />
     <Compile Include="Models\JsonModels\GameViewModel.cs" />
+    <Compile Include="Models\JsonModels\LocationFullViewModel.cs" />
     <Compile Include="Models\JsonModels\LocationViewModel.cs" />
     <Compile Include="Models\JsonModels\LongTermDiscountViewModel.cs" />
     <Compile Include="Models\JsonModels\PaymentForecastViewModel.cs" />
@@ -534,6 +536,7 @@
     <Folder Include="Areas\Admin\Views\AdminPhysicalServer\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\User\Models\" />
+    <Folder Include="Areas\User\Views\Location\" />
     <Folder Include="Areas\User\Views\PaymentGameServer\" />
     <Folder Include="Areas\User\Views\PhysicalServer\" />
     <Folder Include="Areas\User\Views\Shared\" />

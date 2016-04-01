@@ -11,5 +11,6 @@ namespace Crytex.Service.IService
         Location CreateNewLocation(Location location);
         void UpdateLocation(Location location);
         void Delete(Guid id);
+        IEnumerable<Location> GetLocationsByGameId(int gameId);
     }
 }

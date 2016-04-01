@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models;
+using Crytex.Model.Models.GameServers;
+using Crytex.Service.Extension;
 using Crytex.Service.IService;
 
 namespace Crytex.Service.Service
@@ -11,12 +15,14 @@ namespace Crytex.Service.Service
     public class LocationService : ILocationService
     {
         private readonly ILocationRepository _locationRepository;
+        private readonly IGameHostRepository _gameHostRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public LocationService(ILocationRepository locationRepository, IUnitOfWork unitOfWork)
+        public LocationService(ILocationRepository locationRepository, IGameHostRepository gameHostRepository, IUnitOfWork unitOfWork)
         {
             _locationRepository = locationRepository;
             _unitOfWork = unitOfWork;
+            _gameHostRepository = gameHostRepository;
         }
 
         public Location GetById(Guid id)
@@ -66,6 +72,20 @@ namespace Crytex.Service.Service
             var location = GetById(id);
             _locationRepository.Delete(location);
             _unitOfWork.Commit();
+        }
+
+        public IEnumerable<Location> GetLocationsByGameId(int gameId)
+        {
+            var locations = _locationRepository.GetAll();
+            Expression<Func<GameHost, bool>> where = x => x.GameServersCount < x.GameServersMaxCount;
+            if (gameId != 0)
+                @where.And(x => x.SupportedGames.Any(y => y.Id == gameId));
+            var hosts = _gameHostRepository.GetMany(@where, host => host.Location);
+
+            foreach (var el in locations)
+                el.GameHosts = hosts.Where(x => x.Location == el);
+
+            return gameId == 0? locations: locations.Where(x => x.GameHosts != null);
         }
     }
 }

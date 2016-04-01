@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Description;
 using AutoMapper;
 using Crytex.Model.Models;
 using Crytex.Service.IService;
@@ -11,13 +13,16 @@ namespace Crytex.Web.Areas.Admin.Controllers
     public class AdminLocationController : AdminCrytexController
     {
         private readonly ILocationService _locationService;
+        private readonly IGameHostService _gameHostService;
 
-        public AdminLocationController(ILocationService locationService)
+        public AdminLocationController(ILocationService locationService, IGameHostService gameHostService)
         {
             _locationService = locationService;
+            _gameHostService = gameHostService;
         }
 
         [HttpGet]
+        [ResponseType(typeof(IEnumerable<LocationViewModel>))]
         public IHttpActionResult Get()
         {
             var locations = _locationService.GetAllLocations();
@@ -27,6 +32,7 @@ namespace Crytex.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
+        [ResponseType(typeof(LocationViewModel))]
         public IHttpActionResult Get(Guid id)
         {
             var location = _locationService.GetById(id);
@@ -34,6 +40,17 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             return Ok(model);
         }
+
+        [HttpGet]
+        [ResponseType(typeof(IEnumerable<LocationFullViewModel>))]
+        public IHttpActionResult Get(int gameId)
+        {
+            var locations = _locationService.GetLocationsByGameId(gameId);
+            var models = Mapper.Map<IEnumerable<LocationFullViewModel>>(locations);
+
+            return Ok(models);
+        }
+
 
         [HttpPost]
         public IHttpActionResult Post(LocationViewModel model)
