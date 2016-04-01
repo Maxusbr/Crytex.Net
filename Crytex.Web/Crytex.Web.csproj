@@ -314,8 +314,10 @@
     <Compile Include="Areas\AreaRegistrationWithRoute.cs" />
     <Compile Include="Areas\User\Controllers\AccountController.cs" />
     <Compile Include="Areas\User\Controllers\BillingTransactionController.cs" />
+    <Compile Include="Areas\User\Controllers\BonusReplenishmentController.cs" />
     <Compile Include="Areas\User\Controllers\GameController.cs" />
     <Compile Include="Areas\User\Controllers\LocationController.cs" />
+    <Compile Include="Areas\User\Controllers\LongTermDiscountController.cs" />
     <Compile Include="Areas\User\Controllers\OperatingSystemController.cs" />
     <Compile Include="Areas\User\Controllers\FixedSubscriptionPaymentController.cs" />
     <Compile Include="Areas\User\Controllers\GameServerTariffController.cs" />
@@ -536,7 +538,9 @@
     <Folder Include="Areas\Admin\Views\AdminPhysicalServer\" />
     <Folder Include="Areas\Admin\Views\Shared\" />
     <Folder Include="Areas\User\Models\" />
+    <Folder Include="Areas\User\Views\BonusReplenishment\" />
     <Folder Include="Areas\User\Views\Location\" />
+    <Folder Include="Areas\User\Views\LongTermDiscount\" />
     <Folder Include="Areas\User\Views\PaymentGameServer\" />
     <Folder Include="Areas\User\Views\PhysicalServer\" />
     <Folder Include="Areas\User\Views\Shared\" />
