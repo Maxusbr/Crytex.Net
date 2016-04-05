@@ -23,7 +23,7 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Game
 
                 ChangeStatusParam changeStatusParam = new ChangeStatusParam
                 {
-                    GameServerId = taskOptions.GameServerId.ToString(),
+                    GameServerId = taskOptions.GameServerId.ToString().Replace("-", ""),
                     GamePassword = taskOptions.GameServerPassword,
                     GamePort = taskOptions.GameServerPort,
                     TypeStatus = MapChangeStatusType(taskOptions.TypeChangeStatus)

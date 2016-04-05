@@ -17,6 +17,8 @@ namespace Crytex.Model.Models.GameServers
         [ForeignKey("LocationId")]
         public Location Location { get; set; }
         public ICollection<Game> SupportedGames { get; set; }
-        public ICollection<GameServer> GameServers { get; set; } 
+        public ICollection<GameServer> GameServers { get; set; }
+        public string Path { get; set; }
+        public int RangePortStart { get; set; }
     }
 }

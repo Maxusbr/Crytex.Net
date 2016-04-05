@@ -367,7 +367,7 @@ namespace Crytex.ExecutorTask.TaskHandler
                 SshPort = gameServer.GameHost.Port,
                 SshPassword = gameServer.GameHost.Password,
                 SshUserName = gameServer.GameHost.UserName,
-                Path = "/home/vncuser/host"
+                Path = gameServer.GameHost.Path//"/home/vncuser/host"
             };
 
             return param;

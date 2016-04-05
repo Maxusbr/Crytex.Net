@@ -22,7 +22,7 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Game
                 string gameServerPassword = System.Web.Security.Membership.GeneratePassword(6, 0);
                 CreateParam createParam = new CreateParam
                 {
-                    GameServerId = taskOptions.GameServerId.ToString(),
+                    GameServerId = taskOptions.GameServerId.ToString().Replace("-",""),
                     GamePassword = gameServerPassword,
                     GamePort = taskOptions.GameServerFirstPortInRange,
                     Slots = taskOptions.SlotCount

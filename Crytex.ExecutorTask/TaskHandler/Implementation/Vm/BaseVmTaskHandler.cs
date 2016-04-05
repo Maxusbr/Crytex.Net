@@ -21,7 +21,7 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
         }
 
         protected override TaskExecutionResult ExecuteLogic()
-        {
+            {
             var taskResult = ExecuteVmLogic();
 
             taskResult.VirtualizationServerEnitityId = this.VirtualizationServerEnitityId;

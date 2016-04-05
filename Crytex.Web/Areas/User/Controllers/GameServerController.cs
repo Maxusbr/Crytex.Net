@@ -56,11 +56,12 @@ namespace Crytex.Web.Areas.User.Controllers
         [HttpPost]
         public IHttpActionResult Post([FromBody]GameServerBuyOptionsViewModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
+            model.ExpirePeriod = 30;
+            model.CountingPeriodType = CountingPeriodType.Day;
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
             var options = AutoMapper.Mapper.Map<BuyGameServerOption>(model);
             var userId = this.CrytexContext.UserInfoProvider.GetUserId();
             options.UserId = userId;
