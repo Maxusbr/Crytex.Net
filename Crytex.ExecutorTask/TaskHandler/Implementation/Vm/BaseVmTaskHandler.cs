@@ -26,6 +26,8 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
 
             taskResult.VirtualizationServerEnitityId = this.VirtualizationServerEnitityId;
 
+            VirtualizationProvider.Disconnect();
+
             return taskResult;
         }
 

@@ -230,20 +230,6 @@ namespace Crytex.Data.Migrations
                     context.Tariffs.Add(tariff);
             }
 
-            var onpay = new PaymentSystem { Name = "Onpay", IsEnabled = true };
-            var sprypay = new PaymentSystem { Name = "Sprypay", IsEnabled = true };
-            var interkassa = new PaymentSystem { Name = "Interkassa", IsEnabled = true };
-            var payPal = new PaymentSystem { Name = "PayPal", IsEnabled = true };
-            var webMoney = new PaymentSystem { Name = "WebMoney", IsEnabled = true };
-            var yandexMoney = new PaymentSystem { Name = "YandexMoney", IsEnabled = true };
-            context.PaymentSystems.Add(onpay);
-            context.PaymentSystems.Add(sprypay);
-            context.PaymentSystems.Add(interkassa);
-            context.PaymentSystems.Add(payPal);
-            context.PaymentSystems.Add(webMoney);
-            context.PaymentSystems.Add(yandexMoney);
-            context.Commit();
-
             if (this.CreateFakeEntriesEnabled)
             {
                 this.CreateFakeEntries(context, manager);
@@ -545,6 +531,20 @@ namespace Crytex.Data.Migrations
                         context.UserVms.Add(vm);
                 }
             }
+
+            var onpay = new PaymentSystem { Name = "Onpay", IsEnabled = true };
+            var sprypay = new PaymentSystem { Name = "Sprypay", IsEnabled = true };
+            var interkassa = new PaymentSystem { Name = "Interkassa", IsEnabled = true };
+            var payPal = new PaymentSystem { Name = "PayPal", IsEnabled = true };
+            var webMoney = new PaymentSystem { Name = "WebMoney", IsEnabled = true };
+            var yandexMoney = new PaymentSystem { Name = "YandexMoney", IsEnabled = true };
+            context.PaymentSystems.Add(onpay);
+            context.PaymentSystems.Add(sprypay);
+            context.PaymentSystems.Add(interkassa);
+            context.PaymentSystems.Add(payPal);
+            context.PaymentSystems.Add(webMoney);
+            context.PaymentSystems.Add(yandexMoney);
+            context.Commit();
 
             for (int i = 1; i < 5; i++)
             {
