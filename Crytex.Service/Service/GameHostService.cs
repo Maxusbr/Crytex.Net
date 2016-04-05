@@ -6,6 +6,7 @@ using Crytex.Data.Infrastructure;
 using Crytex.Data.IRepository;
 using Crytex.Model.Exceptions;
 using Crytex.Model.Models.GameServers;
+using Crytex.Service.Extension;
 using Crytex.Service.IService;
 using Crytex.Service.Model;
 using PagedList;
@@ -18,12 +19,15 @@ namespace Crytex.Service.Service
         private readonly IGameService _gameSerice;
         private readonly IGameHostRepository _gameHostRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ILocationService _locationService;
 
-        public GameHostService(IGameService gameSerice, IGameHostRepository gameHostRepository, IUnitOfWork unitOfWork)
+        public GameHostService(IGameService gameSerice, IGameHostRepository gameHostRepository, IUnitOfWork unitOfWork,
+            ILocationService locationService)
         {
             _gameSerice = gameSerice;
             _gameHostRepository = gameHostRepository;
             _unitOfWork = unitOfWork;
+            _locationService = locationService;
         }
 
 
@@ -48,16 +52,22 @@ namespace Crytex.Service.Service
                 UserName = options.UserName,
                 Password = options.Password,
                 GameServersMaxCount = options.GameServersMaxCount,
-                GameServersCount = 0,
+
+
                 Path = options.Path,
-                RangePortStart = options.RangePortStart
+                RangePortStart = options.RangePortStart,
+                GameServersCount = 0,
+                LocationId = options.LocationId
             };
 
             this.ValidateHostEntity(host);
 
+            var hostLocation = _locationService.GetById(options.LocationId);
+            host.Location = hostLocation;
             if (options.SupportedGamesIds != null && options.SupportedGamesIds.Any())
             {
                 var hostGames = _gameSerice.GetGamesByIds(options.SupportedGamesIds);
+
                 if (hostGames.Count() != options.SupportedGamesIds.Length)
                 {
                     throw new ValidationException("Some of supported games ids is invalid");
@@ -84,6 +94,15 @@ namespace Crytex.Service.Service
             return hosts.FirstOrDefault();
         }
 
+        public IEnumerable<GameHost> GetGameHostsByGameId(int gameId)
+        {
+            Expression<Func<GameHost, bool>> where = x => x.GameServersCount < x.GameServersMaxCount;
+            if (gameId != 0)
+                where.And(x => x.SupportedGames.Any(y => y.Id == gameId));
+            var hosts = _gameHostRepository.GetMany(where, host => host.Location);
+            return hosts;
+        }
+
         public void Update(Int32 id, GameHostCreateOptions option)
         {
             var host = _gameHostRepository.Get(x => x.Id == id, x => x.SupportedGames);
@@ -101,6 +120,8 @@ namespace Crytex.Service.Service
                 host.UserName = option.UserName;
             if (!string.IsNullOrEmpty(option.Password))
                 host.Password = option.Password;
+            var hostLocation = _locationService.GetById(option.LocationId);
+            host.Location = hostLocation;
             if (option.SupportedGamesIds != null && option.SupportedGamesIds.Any())
             {
                 var hostGames = _gameSerice.GetGamesByIds(option.SupportedGamesIds);

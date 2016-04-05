@@ -108,5 +108,6 @@ namespace Crytex.Data
         public DbSet<DhcpServer> DhcpServers { get; set; }
         public DbSet<LongTermDiscount> LongTermDiscounts { get; set; }
         public DbSet<BonusReplenishment> BonusReplenishments{ get; set; }
+        public DbSet<Location> Locations { get; set; }
     }
 }

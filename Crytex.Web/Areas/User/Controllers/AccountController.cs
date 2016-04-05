@@ -123,7 +123,20 @@ namespace Crytex.Web.Areas.User.Controllers
                 user.UserType = model.UserType;
                 user.City = model.City;
                 user.Country = model.Country;
-
+                if (user.UserType == TypeUser.JuridicalPerson)
+                {
+                    if(!ValidateJuridicalUser(model))
+                    {
+                        ModelState.AddModelError("", "Failed to verify juridical info");
+                        return BadRequest(ModelState);
+                    }
+                    user.CompanyName = model.CompanyName;
+                    user.INN = model.INN;
+                    user.KPP = model.KPP;
+                    user.JuridicalAddress = model.JuridicalAddress;
+                    user.MailAddress = model.MailAddress;
+                }
+                
                 var result = await _userManager.UpdateAsync(user);
                 var addRoleResult = await _userManager.RemoveFromRoleAsync(user.Id, "FirstStepRegister");
                 if (!addRoleResult.Succeeded)
@@ -145,7 +158,14 @@ namespace Crytex.Web.Areas.User.Controllers
 
             return this.Conflict();
         }
-      
+
+        private bool ValidateJuridicalUser(FullUserInfoViewModel model)
+        {
+            return !string.IsNullOrEmpty(model.CompanyName) && !string.IsNullOrEmpty(model.INN) &&
+                   !string.IsNullOrEmpty(model.KPP) && !string.IsNullOrEmpty(model.JuridicalAddress) &&
+                   !string.IsNullOrEmpty(model.MailAddress);
+        }
+
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordModel model)
         {
             if (!ModelState.IsValid)
@@ -181,7 +201,19 @@ namespace Crytex.Web.Areas.User.Controllers
                 user.UserType = model.UserType;
                 user.City = model.City;
                 user.Country = model.Country;
-
+                if (user.UserType == TypeUser.JuridicalPerson)
+                {
+                    if (!ValidateJuridicalUser(model))
+                    {
+                        ModelState.AddModelError("", "Failed to verify juridical info");
+                        return BadRequest(ModelState);
+                    }
+                    user.CompanyName = model.CompanyName;
+                    user.INN = model.INN;
+                    user.KPP = model.KPP;
+                    user.JuridicalAddress = model.JuridicalAddress;
+                    user.MailAddress = model.MailAddress;
+                }
                 var result = await _userManager.UpdateAsync(user);
 
                 if (!result.Succeeded)

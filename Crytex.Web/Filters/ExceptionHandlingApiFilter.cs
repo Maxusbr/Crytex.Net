@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using Crytex.Core;
 using Crytex.Model.Exceptions;
 using System;
+using Crytex.Web.Helpers;
 
 namespace Crytex.Web.Filters
 {
@@ -37,6 +38,11 @@ namespace Crytex.Web.Filters
                 if(context.Exception is InvalidIdentifierException)
                 {
                     context.Response = context.Request.CreateResponse(HttpStatusCode.NotFound, new { errorMessage = context.Exception.Message });
+                    return;
+                }
+                if (context.Exception is ConfigNotChangedException)
+                {
+                    context.Response = new CrytexResult(ServerTypesResult.ConfigNotChanged).GetHttpResponseMessage();
                     return;
                 }
             }

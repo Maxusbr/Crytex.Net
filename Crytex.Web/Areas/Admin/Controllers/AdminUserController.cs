@@ -100,6 +100,18 @@ namespace Crytex.Web.Areas.Admin
                 Payer = model.Payer,
 				RegisterDate = DateTime.UtcNow
             };
+            if (model.UserType == TypeUser.JuridicalPerson)
+            {
+                if (!model.ValidateForJuridicalInfo())
+                {
+                    return BadRequest("Some params in juridical info are empty.");
+                }
+                newUser.CompanyName = model.CompanyName;
+                newUser.INN = model.INN;
+                newUser.KPP = model.KPP;
+                newUser.JuridicalAddress = model.JuridicalAddress;
+                newUser.MailAddress = model.MailAddress;
+            }
 
             var creationResult = this.UserManager.CreateAsync(newUser, model.Password).Result;
             if (!creationResult.Succeeded)
@@ -124,6 +136,7 @@ namespace Crytex.Web.Areas.Admin
             {
                 return BadRequest("Some params are empty. UserName or Password or Email are required");
             }
+            
             // If password is set - update password using UserManager
             if (!string.IsNullOrEmpty(model.Password) && model.ChangePassword)
             {
@@ -159,7 +172,18 @@ namespace Crytex.Web.Areas.Admin
                 user.Country = model.Country;
                 user.ContactPerson = model.ContactPerson;
                 user.Payer = model.Payer;
-
+                if (model.UserType == TypeUser.JuridicalPerson)
+                {
+                    if (!model.ValidateForJuridicalInfo())
+                    {
+                        return BadRequest("Some params in juridical info are empty.");
+                    }
+                    user.CompanyName = model.CompanyName;
+                    user.INN = model.INN;
+                    user.KPP = model.KPP;
+                    user.JuridicalAddress = model.JuridicalAddress;
+                    user.MailAddress = model.MailAddress;
+                }
                 var updateResult = this.UserManager.Update(user);
 
                 if (!updateResult.Succeeded)

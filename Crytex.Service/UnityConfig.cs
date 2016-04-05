@@ -43,6 +43,7 @@ namespace Crytex.Service
             container.RegisterType<IOperatingSystemsService, OperatingSystemService>();
             container.RegisterType<IServerTemplateService, ServerTemplateService>();
             container.RegisterType<IPaymentService, PaymentService>();
+            container.RegisterType<IPaymentSystemService, PaymentSystemService>();
             container.RegisterType<IUserVmService, UserVmService>();
             container.RegisterType<ISnapshotVmService, SnapshotVmService>();
             container.RegisterType<IEmailTemplateRepository, EmailTemplateRepository>();
@@ -95,6 +96,9 @@ namespace Crytex.Service
             container.RegisterType<IPaymentSystemRepository, PaymentSystemRepository>();
             container.RegisterType<IDhcpServerRepository, DhcpServerRepository>();
             container.RegisterType<IDhcpServerService, DhcpServerService>();
+            container.RegisterType<ILocationRepository, LocationRepository>();
+            container.RegisterType<ILocationService, LocationService>();
+
             // secure services
             container.RegisterType<IHelpDeskRequestService, SecureHelpDeskRequestService>("Secured");
             container.RegisterType<IPaymentService, SecurePaymentService>("Secured");

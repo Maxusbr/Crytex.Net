@@ -1,10 +1,6 @@
-﻿using System.Linq;
-using Crytex.Service.IService;
+﻿using Crytex.Service.IService;
 using Crytex.Web.Models.JsonModels;
 using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Crytex.Service.Model;
@@ -93,19 +89,6 @@ namespace Crytex.Web.Areas.User
             this._paymentService.DeleteCreditPaymentOrderById(guid);
 
             return Ok();
-        }
-
-        // GET: api/Payment/PaymentSystems
-        /// <summary>
-        /// Получить список доступных платежных систем
-        /// </summary>
-        /// <returns></returns>
-        public IHttpActionResult PaymentSystems()
-        {
-            var systems = _paymentService.GetPaymentSystems(true);
-            var model = AutoMapper.Mapper.Map<IEnumerable<PaymentSystemView>>(systems);
-
-            return Ok(model);
         }
 
         [HttpGet]

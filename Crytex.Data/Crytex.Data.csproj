@@ -65,6 +65,7 @@
     <Compile Include="IRepository\IHelpDeskRequestRepository.cs" />
     <Compile Include="IRepository\IHyperVHostRepository.cs" />
     <Compile Include="IRepository\IHyperVHostResourceRepository.cs" />
+    <Compile Include="IRepository\ILocationRepository.cs" />
     <Compile Include="IRepository\ILogRepository.cs" />
     <Compile Include="IRepository\INetTrafficCounterRepository.cs" />
     <Compile Include="IRepository\INewsRepository.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Repository\HostedWebApplicationRepository.cs" />
     <Compile Include="Repository\HyperVHostRepository.cs" />
     <Compile Include="Repository\HyperVHostResourceRepository.cs" />
+    <Compile Include="Repository\LocationRepository.cs" />
     <Compile Include="Repository\LogRepository.cs" />
     <Compile Include="Repository\LongTermDiscountRepository.cs" />
     <Compile Include="Repository\MessageRepository.cs" />

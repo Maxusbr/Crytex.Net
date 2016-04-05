@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Crytex.Model.Enums;
 using Crytex.Model.Models.GameServers;

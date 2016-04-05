@@ -86,6 +86,7 @@
     <Compile Include="Enums\UrgencyLevel.cs" />
     <Compile Include="Enums\UsageSubscriptionPaymentGroupingTypes.cs" />
     <Compile Include="Exceptions\ApplicationConfigException.cs" />
+    <Compile Include="Exceptions\ConfigNotChangedException.cs" />
     <Compile Include="Exceptions\CreateVmException.cs" />
     <Compile Include="Exceptions\DbUpdateApplicationException.cs" />
     <Compile Include="Exceptions\InvalidIdentifierException.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Models\HelpDeskRequestComment.cs" />
     <Compile Include="Models\HyperVHost.cs" />
     <Compile Include="Models\HyperVHostResource.cs" />
+    <Compile Include="Models\Location.cs" />
     <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\LongTermDiscount.cs" />
     <Compile Include="Models\Message.cs" />
