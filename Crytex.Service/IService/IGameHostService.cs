@@ -16,5 +16,6 @@ namespace Crytex.Service.IService
         void Delete(Int32 id);
         IPagedList<GameHost> GetPage(int pageNumber, int pageSize);
         int GetFreePort(int id);
+        bool CanCreateServerOnHost(int gameHostId, int gameId);
     }
 }

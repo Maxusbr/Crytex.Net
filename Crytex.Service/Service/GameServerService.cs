@@ -207,7 +207,7 @@ namespace Crytex.Service.Service
             };
             gameServerVmTransaction = this._billingService.AddUserTransaction(gameServerVmTransaction);
 
-            server = CreateServer(server);
+            server = CreateServer(server, options.GameHostId);
 
             var gameServerPayment = new PaymentGameServer
             {
@@ -412,7 +412,7 @@ namespace Crytex.Service.Service
             }
         }
 
-        private GameServer CreateServer(GameServer server)
+        private GameServer CreateServer(GameServer server, int? gameHostId = null)
         {
             var gameServerTariff = this._gameServerTariffRepository.Get(tariff => tariff.Id == server.GameServerTariffId);
             if (gameServerTariff == null)
@@ -420,10 +420,22 @@ namespace Crytex.Service.Service
                 throw new InvalidIdentifierException($"GameServerTariff with id={server.GameServerTariffId} doesn't exist");
             }
 
-            var gameHost = _gameHostService.GetGameHostWithAvalailableSlot(gameServerTariff.GameId);
-            int firstPortInRange = _gameHostService.GetFreePort(gameHost.Id);
+            if (gameHostId != null)
+            {
+                var canCreateOnHost = _gameHostService.CanCreateServerOnHost(gameHostId.Value, gameServerTariff.GameId);
+                if (!canCreateOnHost)
+                {
+                    gameHostId = _gameHostService.GetGameHostWithAvalailableSlot(gameServerTariff.GameId).Id;
+                }
+            }
+            else
+            {
+                gameHostId = _gameHostService.GetGameHostWithAvalailableSlot(gameServerTariff.GameId).Id;
+            }
+            
+            int firstPortInRange = _gameHostService.GetFreePort(gameHostId.Value);
 
-            server.GameHostId = gameHost.Id;
+            server.GameHostId = gameHostId.Value;
             server.Status = GameServerStatus.Active;
             server.PortRangeSize = 3;
             server.FirstPortInRange = firstPortInRange;

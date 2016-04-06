@@ -22,10 +22,10 @@ namespace Crytex.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [ResponseType(typeof(IEnumerable<LocationViewModel>))]
-        public IHttpActionResult Get()
+        [ResponseType(typeof(IEnumerable<LocationFullViewModel>))]
+        public IHttpActionResult Get(int? gameId = null)
         {
-            var locations = _locationService.GetAllLocations();
+            var locations = _locationService.GetLocationsByGameId(gameId);
             var models = Mapper.Map<IEnumerable<LocationViewModel>>(locations);
 
             return Ok(models);
@@ -40,17 +40,6 @@ namespace Crytex.Web.Areas.Admin.Controllers
 
             return Ok(model);
         }
-
-        [HttpGet]
-        [ResponseType(typeof(IEnumerable<LocationFullViewModel>))]
-        public IHttpActionResult Get(int gameId)
-        {
-            var locations = _locationService.GetLocationsByGameId(gameId);
-            var models = Mapper.Map<IEnumerable<LocationFullViewModel>>(locations);
-
-            return Ok(models);
-        }
-
 
         [HttpPost]
         public IHttpActionResult Post(LocationViewModel model)

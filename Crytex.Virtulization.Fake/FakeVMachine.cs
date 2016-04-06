@@ -21,7 +21,8 @@ namespace Crytex.Virtualization.Fake
             }
         }
 
-        public IVMBackUp BackupManager { get; }
+        IVMBackUP IVMachine.BackupManager { get; }
+
         public IVMSnapshot SnapshotManager { get; }
 
         public GuestOSState GuestOSState { get; private set; }
@@ -69,6 +70,8 @@ namespace Crytex.Virtualization.Fake
         }
 
         public PowerState PowerStateMachine { get; private set; }
+
+        public TimeSpan Uptime { get; }
 
         public ProviderVirtualization typeOfProvider
         {
