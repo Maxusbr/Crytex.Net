@@ -74,18 +74,16 @@ namespace Crytex.Service.Service
             _unitOfWork.Commit();
         }
 
-        public IEnumerable<Location> GetLocationsByGameId(int gameId)
+        public IEnumerable<Location> GetLocationsByGameId(int? gameId)
         {
             var locations = _locationRepository.GetAll();
             Expression<Func<GameHost, bool>> where = x => x.GameServersCount < x.GameServersMaxCount;
-            if (gameId != 0)
-                @where.And(x => x.SupportedGames.Any(y => y.Id == gameId));
-            var hosts = _gameHostRepository.GetMany(@where, host => host.Location);
+            if (gameId != null)
+                where = where.And(x => x.SupportedGames.Any(y => y.Id == gameId.Value));
+            var hosts = _gameHostRepository.GetMany(@where, host => host.Location, host => host.SupportedGames);
+            locations = locations.Where(l => hosts.Any(h => h.LocationId == l.Id)).ToList();
 
-            foreach (var el in locations)
-                el.GameHosts = hosts.Where(x => x.Location == el);
-
-            return gameId == 0? locations: locations.Where(x => x.GameHosts != null);
+            return locations;
         }
     }
 }
