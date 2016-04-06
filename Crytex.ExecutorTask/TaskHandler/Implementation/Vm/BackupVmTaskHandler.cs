@@ -21,7 +21,9 @@ namespace Crytex.ExecutorTask.TaskHandler.Implementation.Vm
                 var vm = this.VirtualizationProvider.GetMachinesByName(vmName);
 
                 var backupServerName = options.VmBackupId.ToString();
-                vm.BackupManager.StartBackup(backupServerName);
+                throw new NotImplementedException();
+                // TODO : Refactor this!
+                //vm.BackupManager.StartBackup(backupServerName);
                 result.BackupGuid = options.VmBackupId;
 
                 result.Success = true;

@@ -59,6 +59,8 @@ namespace Crytex.Virtualization.Fake
             }
         }
 
+        public TimeSpan Uptime { get; set; }
+
         public List<NetworkInfo> Networks
         {
             get
