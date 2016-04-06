@@ -11,5 +11,6 @@ namespace Crytex.Service.Model
         public string UserId { get; set; }
         public bool AutoProlongation { get; set; }
         public string ServerName { get; set; }
+        public int? GameHostId { get; set; }
     }
 }

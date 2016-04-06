@@ -33,7 +33,7 @@ namespace Crytex.Service.Service
 
         public GameHost GetById(int id)
         {
-            var host = _gameHostRepository.Get(x => x.Id == id, x => x.GameServers);
+            var host = _gameHostRepository.Get(x => x.Id == id, x => x.GameServers, x => x.SupportedGames);
 
             if (host == null)
             {
@@ -187,6 +187,18 @@ namespace Crytex.Service.Service
             }
 
             return newPort;
+        }
+
+        public bool CanCreateServerOnHost(int gameHostId, int gameId)
+        {
+            var host = GetById(gameHostId);
+            if (host.SupportedGames.SingleOrDefault(x => x.Id == gameId) != null &&
+                host.GameServersCount < host.GameServersMaxCount)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void ValidateHostEntity(GameHost host)

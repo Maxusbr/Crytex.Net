@@ -18,6 +18,8 @@ namespace Crytex.Web.Models.JsonModels
         public string ServerName { get; set; }
         [Required]
         public Int32 GameId { get; set; }
+
+        public int? GameHostId { get; set; }
         public string UserId { get; set; }
         public bool? AutoProlongation { get; set; }
     }
