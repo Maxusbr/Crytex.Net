@@ -25,7 +25,8 @@ namespace Crytex.Web.Areas.Admin.Controllers
         [ResponseType(typeof(IEnumerable<LocationFullViewModel>))]
         public IHttpActionResult Get(int? gameId = null)
         {
-            var locations = _locationService.GetLocationsByGameId(gameId);
+            var locations = gameId == null ? _locationService.GetAllLocations() :
+                _locationService.GetLocationsByGameId(gameId);
             var models = Mapper.Map<IEnumerable<LocationViewModel>>(locations);
 
             return Ok(models);
