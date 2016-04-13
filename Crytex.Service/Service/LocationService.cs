@@ -82,7 +82,11 @@ namespace Crytex.Service.Service
                 where = where.And(x => x.SupportedGames.Any(y => y.Id == gameId.Value));
             var hosts = _gameHostRepository.GetMany(@where, host => host.Location, host => host.SupportedGames);
             locations = locations.Where(l => hosts.Any(h => h.LocationId == l.Id)).ToList();
-
+            if (hosts == null || !hosts.Any()) return locations;
+            foreach (var loc in locations)
+            {
+                loc.GameHosts = hosts.Where(o => o.Location.Id == loc.Id);
+            }
             return locations;
         }
     }
