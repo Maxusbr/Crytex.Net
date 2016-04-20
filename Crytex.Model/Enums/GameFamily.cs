@@ -16,6 +16,6 @@
         Minecraft,
         SaMp,
         T2F, Bmdm, Cscz, Insurgency, JustCause2, Rust, DontStarveTogether, DoubleAction, FistfulofFrags, Hurtworld,
-        KillingFloor, Ns2
+        KillingFloor, Ns2, Nmrih, Opfor, Pvkii, Ql
     }
 }
